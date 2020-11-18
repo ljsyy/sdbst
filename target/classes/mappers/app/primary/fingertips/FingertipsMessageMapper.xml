@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.fingertips.FingertipsMessageMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.fingertips.FingertipsMessage">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="MATTERID" jdbcType="VARCHAR" property="matterid" />
+    <result column="CASEID" jdbcType="VARCHAR" property="caseid" />
+    <result column="CASECREATE_DATE" jdbcType="TIMESTAMP" property="casecreatedate" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="STATUSCHANGETIME" jdbcType="TIMESTAMP" property="statuschangetime" />
+    <result column="MESSAGE_TIME" jdbcType="TIMESTAMP" property="messagetime" />
+    <result column="MESSAGE_STATU" jdbcType="DECIMAL" property="messagestatu" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="AGENT_CERTIFICATENUM" jdbcType="VARCHAR" property="agentCertificatenum" />
+    <result column="COUNT" jdbcType="DECIMAL" property="count" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="COL1" jdbcType="VARCHAR" property="col1" />
+    <result column="COL2" jdbcType="VARCHAR" property="col2" />
+    <result column="COL3" jdbcType="VARCHAR" property="col3" />
+    <result column="AGENT_PHONE" jdbcType="VARCHAR" property="agentphone" />
+    <result column="CASENAME" jdbcType="VARCHAR" property="caseName" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.fingertips.FingertipsMessage">
+    insert into APP_FINGERTIPS_MESSAGE (ID, MATTERID, CASEID, 
+      CASECREATE_DATE, "STATUS", STATUSCHANGETIME, 
+      MESSAGE_TIME, MESSAGE_STATU, "NAME", 
+      PHONE, AGENT_CERTIFICATENUM, "COUNT", 
+      REMARK, COL1, COL2, 
+      COL3, AGENT_PHONE)
+    values (#{id,jdbcType=VARCHAR}, #{matterid,jdbcType=VARCHAR}, #{caseid,jdbcType=VARCHAR}, 
+      #{casecreatedate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{statuschangetime,jdbcType=TIMESTAMP},
+      #{messagetime,jdbcType=TIMESTAMP}, #{messagestatu,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{agentCertificatenum,jdbcType=VARCHAR}, #{count,jdbcType=DECIMAL},
+      #{remark,jdbcType=VARCHAR}, #{col1,jdbcType=VARCHAR}, #{col2,jdbcType=VARCHAR}, 
+      #{col3,jdbcType=VARCHAR}, #{agentphone,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByCaseid">
+    UPDATE APP_FINGERTIPS_MESSAGE t
+    <trim prefix="set" suffixOverrides=",">
+      <if test="status!=null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="statuschangetime!=null">
+        STATUSCHANGETIME = #{statuschangetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messagetime!=null">
+        MESSAGE_TIME = #{messagetime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="caseName!=null">
+        CASENAME = #{caseName,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectNeedUpdate" resultMap="BaseResultMap">
+    select * from APP_FINGERTIPS_MESSAGE t
+    where
+    t.statuschangetime is null or t.statuschangetime &lt; t.message_time
+  </select>
+
+  <select id="needSend"  resultMap="BaseResultMap">
+    select * from APP_FINGERTIPS_MESSAGE t
+    where t.statuschangetime is null
+    or t.statuschangetime > t.message_time or t.message_time is null
+  </select>
+
+  <insert id="insertSelective" parameterType="com.unifs.sdbst.app.bean.fingertips.FingertipsMessage">
+    insert into APP_FINGERTIPS_MESSAGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="matterid != null">
+        MATTERID,
+      </if>
+      <if test="caseid != null">
+        CASEID,
+      </if>
+      <if test="casecreateDate != null">
+        CASECREATE_DATE,
+      </if>
+      <if test="status != null">
+        "STATUS",
+      </if>
+      <if test="statuschangetime != null">
+        STATUSCHANGETIME,
+      </if>
+      <if test="messageTime != null">
+        MESSAGE_TIME,
+      </if>
+      <if test="messageStatu != null">
+        MESSAGE_STATU,
+      </if>
+      <if test="name != null">
+        "NAME",
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="agentCertificatenum != null">
+        AGENT_CERTIFICATENUM,
+      </if>
+      <if test="count != null">
+        "COUNT",
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="col1 != null">
+        COL1,
+      </if>
+      <if test="col2 != null">
+        COL2,
+      </if>
+      <if test="col3 != null">
+        COL3,
+      </if>
+      <if test="agentPhone != null">
+        AGENT_PHONE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="matterid != null">
+        #{matterid,jdbcType=VARCHAR},
+      </if>
+      <if test="caseid != null">
+        #{caseid,jdbcType=VARCHAR},
+      </if>
+      <if test="casecreateDate != null">
+        #{casecreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="statuschangetime != null">
+        #{statuschangetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messagetime != null">
+        #{messagetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messageStatu != null">
+        #{messageStatu,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="agentCertificatenum != null">
+        #{agentCertificatenum,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="col1 != null">
+        #{col1,jdbcType=VARCHAR},
+      </if>
+      <if test="col2 != null">
+        #{col2,jdbcType=VARCHAR},
+      </if>
+      <if test="col3 != null">
+        #{col3,jdbcType=VARCHAR},
+      </if>
+      <if test="agentPhone != null">
+        #{agentPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+
+</mapper>

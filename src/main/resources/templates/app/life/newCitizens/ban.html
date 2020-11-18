@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>一票否决</title>
+    <meta name="decorator" content="blank"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+
+
+    <style>
+        body, dd, dl, html, ol, p, ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 750px;
+        }
+
+        html, .container {
+            height: 98%;
+        }
+
+        html {
+        }
+
+        body {
+            background: #F3F3F3;
+            height: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .container {
+        }
+
+        .text {
+            background: #fff;
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 25px;
+            height: 78%;
+        }
+
+        b {
+            font-size: 18px;
+        }
+
+        p {
+        }
+
+        .button {
+            bottom: 10px;
+            position: absolute;
+            width: 100%;
+        }
+
+        button {
+            border: 0;
+            color: #fff;
+            height: 50px;
+            line-height: 50px;
+            width: 90%;
+            background: #4b90f8;
+            font-size: 17px;
+            margin-top: 8%;
+            border-radius: 5px;
+        }
+
+        .button_left {
+            background: #4b90f8;
+        }
+
+        .button_right {
+            background: #4b90f8;
+        }
+
+        .part {
+            line-height: 24px;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+        });
+
+
+    </script>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="text">
+        <b>一票否决指标</b>
+        <div class="part">
+            <p>1. 申请材料造假:新市民伪造或提供虚假申请资料的，或作虚假承诺的，一经发现，取消当年积分申请资格；取得入户资格的，取消其相应资格，所得积分清零；且2年内不得申请积分。</p>
+            <p>核定部门：镇（街道）流管办</p>
+        </div>
+        <div class="part">
+            <p>2. 刑事犯罪（仅用于积分入户）:有严重刑事犯罪记录，故意犯罪记录和过失犯罪情节严重记录的，不能申请积分入户。</p>
+            <p>核定部门：镇（街道）派出所</p>
+        </div>
+    </div>
+    <center>
+        <button onclick="window.location.href='life/newCitizens/calc'">确 定</button>
+    </center>
+</div>
+
+</body>
+</html>

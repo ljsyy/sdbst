@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="mui/js/mui.min.js"></script>
+
+    <title>企业直通车登陆</title>
+
+    <style>
+
+        body, dd, dl, html, ol, p, ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 750px;
+        }
+
+        html, .container {
+            height: 100%;
+        }
+
+        html {
+            background: #edeef0;
+        }
+
+        body {
+            background: #edeef0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .container {
+        }
+
+        .banner {
+            width: 100%;
+        }
+
+        .main {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        input {
+            width: 100%;
+            border: solid 1px #cccccc;
+            height: 40px;
+            line-height: 40px;
+            margin-bottom: 20px;
+            padding-left: 10px;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        #userName {
+        }
+
+        #password {
+        }
+
+        button {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        #login {
+            background: #4b90f8;
+            border: solid 1px #3c73c6;
+        }
+
+        #register {
+            background: #4b90f8;
+            border: solid 1px #3c73c6;
+        }
+    </style>
+
+
+    <!-- 登陆 -->
+    <script type="text/javascript" th:inline="javascript">
+        var type = [[${type}]];
+        var userName;//用户名
+        var password;//密码
+        function loginClick() {
+            userName = $("#userName").val();//用户名
+            password = $("#password").val();//密码
+            if (password == "" || userName == "") {
+                //alert("请填入内容");
+                webToast("请填入内容", "middle", 1000);
+                return;
+            }
+
+            $.ajax({
+                url: basePath() + "/qy/train/login?userName=" + userName + "&password=" + password,
+                type: "get",
+                dataType: "json",
+                async: true,
+                success: function (result) {
+                    if (result.code == 200) {
+                        //alert("登陆成功");
+                        webToast("登录成功", "middle", 1000);
+                        if (type == "zcpp") {	//政策匹配
+                            window.location.href = basePath() + "/qy/train/loginList";
+                        } else if (type == "zxts") {	//提交咨询
+                            window.location.href = basePath() + "/qy/train/question";
+                        } else {	//用户信息
+                            window.location.href = basePath() + "/qy/train/personInfo";
+                        }
+                    } else {
+                        //alert(result.errorMsg);
+                        webToast(result.msg, "middle", 1000);
+                        return;
+                    }
+
+                }
+            });
+        }
+
+        function toRegister() {
+            window.location.href = basePath() + "/qy/train/registerPage"
+        }
+
+    </script>
+
+   <!-- &lt;!&ndash; IOS专用 &ndash;&gt;
+    <script type="text/javascript">
+        var call = function () {
+            var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+            tianbai.getCall(callInfo);
+        }
+        var Callback = function (str) {
+            str1 = str;
+            return str1;
+        }
+        var alerCallback = function () {
+            alert('成功');
+        }
+    </script>-->
+
+</head>
+<body>
+
+<img class="banner" src="img/person/QyTrainBanner.png"/>
+<center>
+    <h4>企业直通车</h4>
+</center>
+<div class="main">
+    <input type="text" id="userName" placeholder="请输入用户名"/>
+    <input type="password" id="password" placeholder="请输入密码"/>
+
+    <center>
+        <button id="login" onclick="loginClick()">登 录</button>
+    </center>
+    <!--<center>
+        <button id="register" onclick="toRegister()">注 册</button>
+    </center>-->
+</div>
+
+</body>
+</html>

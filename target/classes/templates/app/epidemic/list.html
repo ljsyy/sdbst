@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1,er-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>疫情新闻列表</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/base.js}"></script>
+    <script th:src="@{/js/app/echarts/echarts.js}"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            user-select: none;
+            -webkit-user-select: none;
+            height: 100%;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        .flexDiv {
+            display: flex;
+            align-items: center;
+        }
+
+        .showMore > span {
+            display: block;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .articlelist {
+            margin-left: 25px;
+        }
+
+        .articlelist > li {
+            height: 44px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .articlelist > li:last-child {
+            border-bottom: none;
+        }
+
+        .articlelist > li > .focus {
+            font-size: 12px;
+            width: 34px;
+            min-width: 34px;
+            height: 21px;
+            line-height: 20px;
+            border: 1px solid #F3A953;
+            color: #F3A953;
+            border-radius: 4px;
+            text-align: center;
+            margin-right: 6px;
+        }
+
+        .articlelist > li > .con {
+            font-size: 14px;
+            color: #000;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            padding-right: 30px;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .leftArrow > img {
+            width: 26px;
+            height: 26px;
+        }
+        .rightArrow > img {
+            width: 26px;
+            height: 26px;
+        }
+
+        .indicatorUl > li {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            margin-left: 3px;
+            margin-right: 3px;
+            background: #C6C3CE;
+            border-radius: 50%;
+        }
+
+        .indicatorUl > li.active {
+            background: #595867;
+        }
+
+        .menulist {
+            margin-left: 25px;
+        }
+
+        .menulist > li {
+            height: 44px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .menulist > li:last-child {
+            border-bottom: none;
+        }
+
+        .menulist > li > img {
+            width: 20px;
+            height: 20px;
+            margin-left: 16px;
+            margin-right: 20px;
+        }
+
+        .menulist > li > span {
+            color: #252525;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <ul class="articlelist">
+        <li class="flexDiv">
+            <span class="con">连夜作战！全面狙击活禽和野生动物违法连夜作战！全面狙击活禽和野生动物违法</span>
+        </li>
+        <li class="flexDiv">
+            <span class="con">区市场监管局和经促局深入北滘镇开展疫情防</span>
+        </li>
+        <li class="flexDiv">
+            <span class="con">郭文海:复工开学前全面排查企业员工和师生</span>
+        </li>
+        <li class="flexDiv">
+            <span class="con">顺德确诊病例出现病症期间曾逗留过的小区…</span>
+        </li>
+        <li class="flexDiv">
+            <span class="con">『我现在感觉很好！』佛山首位确诊新冠康复</span>
+        </li>
+    </ul>
+</div>
+</body>
+<script>
+    $(function () {
+        initArticle();
+    })
+
+    //初始化新闻列表
+    function initArticle() {
+        $.ajax({
+            url: basePath() + "/epidemic/articleList",
+            data: {categoryId: "2596146f7dfd4e06af57d3cbfb4c72b0"},
+            type: "get",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                console.log(result)
+                if (result.code == 200) {
+                    var str = "";
+                    for (var i = 0; i < result.data.length; i++) {
+                        str += " <li class=\"flexDiv\">\n";
+                        str += "<span class=\"con\" ><a href='" + result.data[i].link + "'>" + result.data[i].title + "</a></span>\n" +
+                            "</li>"
+                    }
+                    $(".articlelist").empty();
+                    $(".articlelist").append(str);
+                }
+            }
+        })
+    }
+</script>
+</html>

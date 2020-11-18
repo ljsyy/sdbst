@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.appinfo.AppVersionMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.appinfo.AppVersion">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="VERSION" jdbcType="VARCHAR" property="version" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+    <result column="APP_URL" jdbcType="VARCHAR" property="appUrl" />
+    <result column="START_UP" jdbcType="VARCHAR" property="startUp" />
+    <result column="MIN_VERSION" jdbcType="VARCHAR" property="minVersion" />
+    <result column="IS_UPDATE" jdbcType="VARCHAR" property="isUpdate" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from APP_VERSION
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.appinfo.AppVersion">
+    insert into APP_VERSION (ID, NAME, VERSION, 
+      CREATE_DATE, CREATE_BY, UPDATE_DATE, 
+      REMARKS, UPDATE_BY, APP_URL, 
+      START_UP, MIN_VERSION, IS_UPDATE,
+      TYPE)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{remarks,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{appUrl,jdbcType=VARCHAR}, 
+      #{startUp,jdbcType=VARCHAR}, #{minVersion,jdbcType=VARCHAR}, #{isUpdate,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.appinfo.AppVersion">
+    update APP_VERSION
+    set NAME = #{name,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      CREATE_BY = #{createBy,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      REMARKS = #{remarks,jdbcType=VARCHAR},
+      UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+      APP_URL = #{appUrl,jdbcType=VARCHAR},
+      START_UP = #{startUp,jdbcType=VARCHAR},
+      MIN_VERSION = #{minVsersion,jdbcType=VARCHAR},
+      IS_UPDATE = #{isUpdate,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ID, NAME, VERSION, CREATE_DATE, CREATE_BY, UPDATE_DATE, REMARKS, UPDATE_BY, 
+    APP_URL, START_UP, MIN_VERSION, IS_UPDATE, TYPE
+    from APP_VERSION
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, NAME, VERSION, CREATE_DATE, CREATE_BY, UPDATE_DATE, REMARKS, UPDATE_BY, 
+    APP_URL, START_UP, MIN_VERSION, IS_UPDATE, TYPE
+    from APP_VERSION
+  </select>
+
+  <select id="findList" resultMap="BaseResultMap">
+    SELECT
+    *<!--<include refid="appVersionColumns" />-->
+    FROM app_version a
+    <where>
+
+      <if test="name != null and name != ''">
+        AND a.name LIKE
+        '%'||#{name}||'%'
+      </if>
+
+      <if test="type != null and type != ''">
+        AND  a.TYPE=#{type}
+      </if>
+
+      <if test="startUp != null and startUp != ''">
+        AND  a.START_UP=#{startUp}
+      </if>
+
+    </where>
+      ORDER BY a.start_up DESC
+  </select>
+
+  <select id="findAndroid" resultMap="BaseResultMap">
+    SELECT
+    *<!--<include refid="appVersionColumns" />-->
+    FROM app_version a
+    <where>
+
+      <if test="name != null and name != ''">
+        AND a.name LIKE
+        '%'||#{name}||'%'
+      </if>
+
+        AND  a.TYPE='1'
+
+      <if test="startUp != null and startUp != ''">
+        AND  a.START_UP=#{startUp}
+      </if>
+
+    </where>
+    ORDER BY UPDATE_DATE desc,a.start_up DESC
+  </select>
+</mapper>

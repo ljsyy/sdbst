@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.cms.ArticleMapper">
+    <select id="findListByParentCategory" parameterType="com.unifs.sdbst.app.bean.cms.Category"
+            resultType="com.unifs.sdbst.app.bean.cms.Article">
+		select
+			a.id AS "id",
+			a.category_id AS "category.id",
+			a.title AS "title",
+			a.link AS "link",
+			a.image AS "image",
+			a.description AS "description",
+			a.weight AS "weight",
+			a.hits AS "hits",
+			a.goods AS "goods",
+			a.create_date AS "createDate",
+			a.update_date AS "updateDate",
+			a.link_type as linkType,
+			a.type as type
+
+		from CMS_ARTICLE a where category_id in
+		(
+			select id from CMS_CATEGORY
+			where parent_ids like '%'||#{id}||'%'
+			or id=#{id}
+		)
+		ORDER BY a.update_date DESC,a.weight DESC
+	</select>
+
+    <select id="findListByCategory" parameterType="com.unifs.sdbst.app.bean.cms.Category"
+            resultType="com.unifs.sdbst.app.bean.cms.Article">
+		SELECT
+			a.id AS "id",
+			a.category_id AS "category.id",
+			a.title AS "title",
+			a.link AS "link",
+			a.image AS "image",
+			a.description AS "description",
+			a.weight AS "weight",
+			a.hits AS "hits",
+			a.goods AS "goods",
+			a.create_date AS "createDate",
+			a.update_date AS "updateDate"
+
+		FROM cms_article a
+			LEFT JOIN cms_category c ON c.id = a.category_id
+		WHERE a.category_id = #{id}
+		ORDER BY a.weight DESC, a.update_date DESC
+	</select>
+
+    <update id="updateHitsAddOne">
+		update cms_article set
+		hits = hits+1
+		WHERE id = #{id}
+	</update>
+
+    <sql id="cmsArticleColumn">
+		a.id AS "id",
+		a.category_id AS "category.id",
+		a.title AS
+		"title",
+		a.link AS "link",
+		a.link_type AS "linkType",
+		a.color AS "color",
+		a.image AS "image",
+		a.is_hot AS "isHot",
+		a.release_to AS "releaseTo",
+		a.release_type AS "releaseType",
+		a.keywords AS "keywords",
+		a.description AS "description",
+		a.weight AS "weight",
+		a.weight_date AS
+		"weightDate",
+		a.hits AS "hits",
+		a.goods AS "goods",
+		a.posid AS "posid",
+		a.custom_content_view AS "customContentView",
+		a.view_config AS
+		"viewConfig",
+		a.create_by AS "createBy.id",
+		a.create_date AS
+		"createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS
+		"updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.ios AS "ios",
+		a.android AS "android",
+		a.wx AS "wx",
+		c.name AS
+		"category.name",
+		u.name AS "user.name"
+	</sql>
+    <select id="get" resultType="com.unifs.sdbst.app.bean.cms.Article">
+        SELECT
+        <include refid="cmsArticleColumn"/>
+        FROM cms_article a
+        JOIN cms_category c ON c.id = a.category_id
+        JOIN
+        sys_user u ON u.id = a.create_by
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="selectById" parameterType="String" resultType="com.unifs.sdbst.app.bean.cms.Article">
+		select * from cms_article where id=#{_parameter}
+	</select>
+
+    <select id="selectByTitle" parameterType="String" resultType="com.unifs.sdbst.app.bean.cms.Article">
+		select * from cms_article where title=#{_parameter}
+	</select>
+
+    <select id="findByCategoryId" parameterType="String" resultType="com.unifs.sdbst.app.bean.cms.Article">
+		select * from cms_article  where category_id=#{_parameter} order by create_date desc
+	</select>
+
+    <select id="findList" resultType="com.unifs.sdbst.app.bean.cms.Article">
+        SELECT
+        <include refid="cmsArticleColumn"/>
+        FROM cms_article a
+        JOIN sys_user u ON u.id = a.create_by
+        JOIN
+        cms_category c ON c.id = a.category_id
+        <where>
+            a.del_flag = #{delFlag}
+            <if test="title != null and title != ''">
+                AND a.title LIKE
+                '%'||#{title}||'%'
+            </if>
+            <if test="posid != null and posid != ''">
+                AND a.posid LIKE
+                '%'||#{posid}||'%'
+            </if>
+            <if test="category.id != null and category.id != ''">
+                AND a.category_id = #{category.id}
+            </if>
+            <if test="categoryList != null ">
+                AND a.category_id in
+                <foreach collection="categoryList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item.category.id}
+                </foreach>
+            </if>
+
+            <if test="image != null and image != ''">
+                AND a.image like
+                '%'||#{image}||'%'
+            </if>
+            <if test="createDate != null and createDate != ''">
+                AND a.create_date like
+                '%'||substr(#{createDate},0,10)||'%'
+            </if>
+            <if test="createBy != null and createBy.id != null and createBy.id != ''">
+                AND a.create_by = #{createBy.id}
+            </if>
+            <if test="releaseTo !=null and releaseTo != ''">
+                AND a.release_to=#{releaseTo}
+            </if>
+            <if test="releaseType != null and releaseType != ''">
+                AND a.release_type like
+                '%'||#{releaseType}||'%'
+            </if>
+            <if test="isHot != null and isHot != ''">
+                OR a.is_hot = #{isHot}
+            </if>
+        </where>
+        ORDER BY a.weight DESC, a.create_date DESC
+
+    </select>
+
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.cms.Article">
+		insert into cms_article (id,title,link,link_type,create_date,category_id,type,del_flag,weight,posid)
+		values(#{id},#{title},#{link},#{linkType},#{createDate},#{categoryId},#{type},#{delFlag},#{weight},#{posid})
+	</insert>
+</mapper>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="app/css/base.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/app/list.js"></script>
+    <script src="js/app/lib/md5.min.js"></script>
+    <script src="js/app/base64.js"></script>
+
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <title>项目审批系统登录</title>
+
+    <style>
+
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background:#fff;}
+        body{background: #F3F3F3;}
+        a{text-decoration:none;color: #000;}
+        .container{text-align: center;}
+
+        .main{background: #fff;width: 100%;}
+        .line{padding: 10px;border-bottom: solid 1px #ececec;}
+        .line .input{
+            width: 100%;
+            padding: 5px 0;
+            font-size: 16px;
+            border: 0;
+        }
+        .button{
+            margin-top: 10px;
+            width: 90%;
+            border: 0;
+            border-radius: 5px;
+            padding: 8px;
+            font-size: 18px;
+            color: #fff;
+            background: red;
+        }
+
+    </style>
+    <script>
+        var base = new Base64();	//加密解密
+        $(document).ready(function(){
+            choose();
+        });
+
+        var username;	//初始化用户名
+        var password;	//初始化密码
+        function login(){
+            username =$("#username").val();
+            password =$("#password").val();
+            //binding();
+            bindJKJ();	//调用经科局绑定接口
+
+        }
+
+        var loginId; //登录返回值（统一）
+        var str1;	//IOS登录返回值
+
+        //查询绑定信息
+        function searchBind(){
+            $.ajax({
+                url:"${ct}/sys/userOthers/getpaw",
+                data:"type=2&userId="+loginId+"&mobileLogin=true",
+                type: "POST",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    console.log(result);
+                    if(result.msg == "false" && result.data == "请登录账号密码"){	//未登录
+                        chooseLogin();
+                    }else if($("#username").val() != "" && $("#password").val() != ""){	//输入框有值
+                        bindJKJ();
+                    }else if(result.msg == "false" && result.data == "没有保存账号密码"){		//已登录，但没有绑定账号
+                        return;
+                    }else if(result.data.username == "" || result.data.username == undefined || result.data.username == null || result.data.password == "" || result.data.password == undefined || result.data.password == null ){
+                        bindJKJ();
+                    }else{	//已登录并查询到绑定信息
+                        user = base.decode(result.data.username);
+                        pwd = base.decode(result.data.password);
+                        window.location.href="${ct}/app/menu/project/queryProgress?username="+user+"&password="+pwd;
+                    }
+                }
+            });
+        }
+
+        //判断系统	跳转登录
+        function chooseLogin(){
+            var u = navigator.userAgent;
+            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            //if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+            if("${param.client}" == "wx"){
+                //alert("wx");
+                window.location.href ="${ct}/person/login?type=project&noHead=${param.noHead}";
+            }else{
+                if (isAndroid) {
+                    //alert("Android");
+                    myobj.updateshow();	//跳到安卓登录页，登陆后刷新页面
+                }else if (isiOS) {
+                    //alert("ios");
+                    aaa.pushViewControllerTitle('SecondViewController','secondPushedFromJS');	//跳到IOS登录页，登陆后刷新页面
+                }
+            }
+        }
+
+        //绑定账号(百事通)
+        function binding(){
+            $.ajax({
+                url:"${ct}/sys/userOthers/saveuserOthers",
+                data:"username="+username+"&password="+password+"&type=2&userId="+loginId+"&mobileLogin=true",
+                type: "POST",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    console.log(result)
+                    if(result.data == "保存成功"){
+                        window.location.href="${ct}/app/menu/project/queryProgress?username="+username+"&password="+password;
+                    }else{
+                        //alert("绑定失败！");
+                        webToast("绑定失败！","middle",600);
+                        return;
+                    }
+                }
+            });
+        }
+
+        //绑定账号(经科局)
+        function bindJKJ(){
+            var args={"appAcc":username,"appPwd":hex_md5(password+"zjcmd5key&*"),"userId":loginId};
+            $.ajax({
+                url:"${ct}/app/menu/getDemo?url=http://19.200.90.199/webapi.do?unimethod*funccode=bindAccount*access_token=${access_token}",
+                type:"post",
+                dataType:"json",
+                data:{"param": JSON.stringify(args)},
+                success:function(result){
+                    console.log(result);
+                    if(result.code == 0){
+                        binding();
+                        webToast(result.msg,"middle",600);
+                        //alert(result.msg);
+                    }else{
+                        //alert(result.msg);
+                        webToast(result.msg,"middle",600);
+                        return;
+                    }
+                }
+            });
+        }
+
+    </script>
+    <!-- IOS专用 -->
+    <script type="text/javascript">
+        var call = function(){
+            var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+            tianbai.getCall(callInfo);
+        }
+        var Callback = function(str){
+            str1 = str;
+            return str1;
+        }
+        var alerCallback = function(){
+            alert('成功');
+        }
+    </script>
+
+</head>
+<body>
+<div class="main">
+    <div class="line">
+        <input type="text" class="input" id="username" placeholder="请输入账户名" />
+    </div>
+    <div class="line">
+        <input type="password" class="input" id="password" placeholder="请输入登录口令" />
+    </div>
+    <center><button class="button" onclick="login()">登录</button></center>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.other.QyPollsMapper">
+	
+    <sql id="qyPollsThemeColumns">
+    	a.id AS "id",
+    	a.title AS "title",
+    	a.sort AS "sort",
+    	a.create_date AS "createDate",
+    	a.del_flag AS "delFlag"
+    </sql>
+    
+    <sql id="qyPollsThemeJoins">
+    </sql>
+	
+	<select id="get" resultType="com.unifs.sdbst.app.bean.other.QyPollsTheme">
+		SELECT
+			<include refid="qyPollsThemeColumns"/>
+		FROM QY_POLLS_THEME a
+			<include refid="qyPollsThemeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.other.QyPollsTheme">
+		SELECT
+			<include refid="qyPollsThemeColumns" />
+		FROM QY_POLLS_THEME a
+			<include refid="qyPollsThemeJoins" />
+		<where>
+			a.del_flag = #{_parameter,jdbcType=VARCHAR}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="getMaxSort" resultType="Integer">
+		select max(sort) from QY_POLLS_THEME where del_flag = '0'
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO QY_POLLS_THEME(
+			id,
+	    	title,
+	    	sort,
+	    	create_date,
+	    	del_flag
+		) VALUES (
+			#{id,jdbcType=VARCHAR},
+			#{title,jdbcType=VARCHAR},
+			#{sort,jdbcType=INTEGER},
+			#{createDate,jdbcType=TIMESTAMP},
+			#{delFlag,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE QY_POLLS_THEME SET 
+			title = #{title},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSort">
+		UPDATE QY_POLLS_THEME SET 
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE QY_POLLS_THEME SET 
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

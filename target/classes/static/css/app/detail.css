@@ -1,0 +1,64 @@
+
+/* #007aff */
+*{padding:0px;margin:0px;font-size:16px;}
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;	font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+
+body{background-color: #f4f6f8;}
+p{vertical-align: middle;}
+a{text-decoration: none;color:#545454;}
+.pad10{padding:10px;}
+
+.unit{border-bottom:8px solid #f4f6f8;}
+.title{border-bottom:2px solid #f4f6f8;line-height:30px;color: #333333;padding: 0 10px;}
+.content{color: #888888;padding: 5px 10px;}
+.img{height: 25px;width: 20px;margin-right:10px;vertical-align: middle;}
+
+
+
+/*  列表显示样式  */
+#show{background:#fff;}
+
+#show p img{padding:10px 0;}
+/* 带时间列表 */
+.list {border-bottom: 1px solid #eee;clear: both;padding: 10px; padding-right: 40px;font-size: 16px;
+min-height: 44px; position: relative;}
+.list span {float: right;color: #888;text-align: right;min-width: 30%;position: absolute; right: 40px;bottom: 8px;}
+#show .list  img{position: absolute;right: 10px;top: 19px;width: 12px;} 
+#show .list p{font-size:16px;}
+/* 无时间列表 */
+.simplelist {border-bottom: 1px solid #eee;clear: both;padding:12px 40px 12px 10px;font-size: 16px; 
+position: relative;}
+.simplelist span {float: right;color: #888;text-align: right;min-width: 30%;position: absolute; right: 40px;bottom: 8px;}
+.simplelist  img{position: absolute;right: 10px;top: 10px;width: 15px;} 
+
+
+
+
+/* 列表样式 */
+#title{margin-bottom:8px; display:flex; align-items:center; text-align:center;}
+#title div{flex:1;display:inline-block;text-align:center;line-height: 45px;color:#888;}
+.dt{padding-left: 20px;line-height: 30px;border-bottom: 2px solid #f4f6f8;line-height: 50px;background: #fff;}
+.dt .img1{padding-right: 10px;vertical-align: middle;}
+.dt .img2{float:right;padding-right: 20px;padding-top: 20px;}
+.dd{background-color:#f4f6f8;padding-left:28px;line-height:50px;border-bottom: #d4d6d8 1px solid;}
+.dd img{padding-right:10px;}
+
+/* 文章详情 */
+#show.detailpad{padding:10px;}
+
+
+/* 查询 输入框 样式 */
+#head{position:fixed; top:0;width:100%;z-index:10;background-color:#007aff;line-height: 50px;font-size: 22px;
+text-align: center; height: 50px;
+    overflow: hidden;}
+/* #h50{height:50px;} */
+#left{width:50px;height:49px;float:left;}
+#content{background-color: #007aff;color:white;font-size: 16px;}
+#right{width:50px;height:49px;float:right;}
+#button{text-align: center;padding-top: 20px;}
+#button span{background-color: #007aff;color:white;padding:5px 40px;margin:0 5px;line-height:35px;border-radius: 25px;}
+#search{position:fixed;width:100%;border-bottom: 10px solid #f4f6f8;}
+#search div{border-bottom:#f4f6f8 2px solid;padding-left:15px;}
+#search div input{height:30px;line-height: 30px;text-align: right;float:right;width:65%;margin-right:28px;margin-top: 11px;border:none;}
+
+

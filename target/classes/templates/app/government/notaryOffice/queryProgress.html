@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>办证进度查询</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <script src="js/app/base64.js"></script>
+
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        body{background: #F3F3F3;}
+        a{text-decoration:none;color: #000;}
+        .main{width: 100%;}
+        .first{padding: 0 10px;}
+        .first-p{
+            font-size: 20px;
+            padding: 10px 0;
+        }
+        input{
+            width: 100%;
+            border: 0;
+            margin: 10px 0;
+            padding: 10px;
+            display: -webkit-inline-box;
+            box-sizing: border-box;
+        }
+        button{
+            border: 0;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 17px;
+            padding: 10px 0;
+            margin-top: 55px;
+            color: #fff;
+            background: #4281cd;
+        }
+        #showdata{
+            display:none;
+            padding: 0 10px;
+        }
+        .result{
+            background: #fff;
+            margin: 20px 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .result-img{height: 110px;}
+        .result-p{
+            padding: 10px 0;
+            font-size: 35px;
+            color: #eb423b;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var base = new Base64();	//base64加密解密
+
+        $(document).ready(function(){
+            //console.log(base.decode("6YOt56uL576k"))
+        });
+
+        function query(){
+            var num = $("#num").val();
+            var name = $("#name").val();
+            console.log(name);
+            if(num == "" || name == ""){
+                webToast("请输入查询条件","middle",500);
+                return;
+            }
+            name = base.encode(name);
+
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url: basePath()+"/government/gzc/interface?num="+num+"&name="+name,
+                type:"get",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    load_ani.remove();
+                    var data = base.decode(result.data);
+                    if(data == "没有查询到记录，请检查输入条件"){
+                        webToast(data,"middle",500);
+                        return;
+                    }else if(result.ret == "true"){
+                        //console.log(data)
+                        $(".first").css("display","none");
+                        $("#showdata").css("display","block");
+                        $(".result").append(
+                            '<img class="result-img" src="'+basePath()+'/img/new/dui.png" />'+
+                            '<p class="result-p">'+data+'</p>	'
+                        );
+                    }else{
+                        webToast("查询失败","middle",500);
+                        return;
+                    }
+
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="main">
+    <div class="first">
+        <b><p class="first-p">公证处办证进度查询</p></b>
+        <input type="text" id="num" placeholder="请输入卷宗号" />
+        <input type="text" id="name" placeholder="请输入申请人姓名" />
+        <center><button onclick="query()">查询</button></center>
+    </div>
+
+    <!-- 内容 -->
+    <div id="showdata">
+        <div class="result">
+            <%-- <img class="result-img" src="${ctxStatic}/modules/app/img/new/dui.png" />
+            <p class="result-p">已发证</p> --%>
+        </div>
+        <center><button onclick="location.reload()">返回</button></center>
+    </div>
+
+</div>
+</body>
+</html>

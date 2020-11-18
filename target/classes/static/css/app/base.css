@@ -1,0 +1,54 @@
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;	font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+body{background:#f6f6f6;margin:0 auto;width: 100%;}
+/* @media screen and (min-width: 800px) {
+    body,.list-footer {
+        max-width:670px;
+    }
+} */
+p{background:#fff;}
+a{ text-decoration: none;}
+.red-background{background:#eb3f29 !important;	}
+.red-border{color:#eb3f29;border-bottom:solid 4px #eb3f29;}
+.flex{position:relative;flex: 1;}
+/*总体内容*/
+.container {padding:0;}
+/*不能选中*/
+.no-select{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
+/*头部格式*/
+.list-title {width: 100%;height: 43px;overflow: hidden;}
+.list-title.bg-red{background:#eb413d;	}
+.list-title .search-bg{height: 50px;line-height: 50px;font-size: 18px;color: white;text-align: center;}
+.list-title .retrun-icon{position: absolute;display: block;height: 20px;width: 20px;left: 25px;top: 15px;border-left: solid 3px #fff;border-bottom: solid 3px #fff;transform: rotate(45deg);-ms-transform: rotate(45deg);-webkit-transform: rotate(45deg);border-radius:1px;}
+
+header{height: 50px;background: #eb413d;text-align: center;color: #fff;line-height: 50px;overflow: hidden;}
+header .icon{margin-top: -3px;}    
+#head .icon{margin-top:8px;}
+header span{font-size:18px;}
+header input{background: rgba(0,0,0,0.1);border-radius: 5px;border: none;width: 55%;line-height: 30px;color: #eee;padding: 0 10px;}
+.headl{float: left;/* margin-left: 15px; */width: 50px;height: 50px;}
+@media only screen and (min-width: 100px) and (max-width: 340px) {
+	header input{background: rgba(0,0,0,0.1);width: 50%;}
+}
+.headr{float: right;/* margin-right: 15px; */width: 50px;height: 50px;}
+/*首页底部*/
+.list-footer{position:fixed;height:55px;width:100%;display:flex;bottom:0;background:#FFF;box-shadow:0px 20px 50px 5px rgba(0,0,0,0.4);	}
+.list-footer .flex a{cursor:pointer;position: relative;height: 100%;width: 100%;    display: block;text-align: center;}
+.list-footer img{    position: relative;    width: 22px;height: 22px;margin-top: 10px;}
+.list-footer a:after{content: attr(data-font);position: absolute;color: #6e6e6e;width: 100%;font-size: 15px;    top: 33px;left: 0;}
+.list-footer .red-font:after{color:#eb413d;}	
+.footer-bg-red{filter:hue-rotate(10deg);-webkit-filter:hue-rotate(10deg);}
+
+.icon {
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+    fill: currentColor;
+    overflow: hidden;
+    font-size:15px;
+        }
+/* 底部icon */
+.flex .icon{color:#999;width: 1.5em;padding-top: 3px;}
+.flex .red-font .icon {color:#eb413d;}
+
+
+

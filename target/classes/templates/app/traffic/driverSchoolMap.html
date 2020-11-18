@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+ <base th:href="${#request.getContextPath()}+'/'">
+
+ <style type="text/css">
+body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+#allmap{width:100%;height:100%;}
+p{margin-left:5px; font-size:14px;}
+  
+#location{    
+    position: absolute;
+    bottom: 34px;
+    left: 18px;
+    background: #eaeaea;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    display: block;
+    /* background-color: #fff; */
+    filter: Alpha(Opacity=50);
+    -moz-opacity: 0.5;
+    opacity: 0.8;
+}
+
+.submit{    
+	position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #D68E00;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+</style>
+ 
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+<script src="js/app/plug/alertPopShow.js"></script>
+<script src="js/load-ani.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+ <script th:src="@{/js/base.js}"></script>
+
+<title>顺德驾校</title>
+</head>
+<body>
+
+<!-- 地图 -->
+<div id="allmap" style="display:block;"></div>
+<a id="submit" class="submit" th:href="@{/traffic/driverSchool?lng=&lat=}">列表</a>
+
+<!-- 定位按钮 -->
+<div id="location" onclick="start()"><img src="img/map/localicon.png" height="30"/></div>
+  
+</body>
+</html>
+
+<!-- IOS定位专用 -->
+<script>
+var callLocationOfLatAndLong = function(){
+    var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+    aaa.getCall(callInfo);
+}
+
+var CallbackLocationOfLatAndLong = function(str){
+    str1 = str;	
+    return str1;
+}
+var alerCallback = function(){
+    alert('成功');
+}
+</script>
+
+<script type="text/javascript">
+var runEnviron='${runEnviron}';	//初始化运行环境
+//var runEnviron='wx';	//初始化运行环境
+var str1;	//ios坐标
+var lng;	//初始化经度
+var lat;	//初始化纬度
+var data_info = new Array();
+var map;
+var point;
+var navigationControl;
+
+var num = 10;	//初始化显示数量
+var zoom = 15;
+
+$(document).ready(function(){	
+	start();
+});
+
+function listen(){
+	//移动地图监听
+	map.addEventListener("dragend", function(){ 
+		map.clearOverlays();  
+	    var center = map.getCenter();    
+	    //alert("地图中心点变更为：" + center.lng + ", " + center.lat);    
+	    lng = center.lng;
+	    lat = center.lat;
+	    showListen();
+	});
+	
+	//缩放地图监听
+	map.addEventListener("zoomend", function(){ 
+		map.clearOverlays(); 
+		//var getz = parseInt(map.getZoom());
+		zoom = parseInt(map.getZoom());  
+	    console.log(zoom);
+	    if(zoom >= 15){
+	    	num = 10;
+	    }else if(zoom == 14){
+	    	num = 25;
+	    }else if(zoom == 13){
+	    	num = 50;
+	    }else if(zoom <= 12){
+	    	num = 75;
+	    }
+	    //alert(num);
+	    showListen();
+	});
+}
+
+//操作地图标记
+function showListen(){
+	// load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+	var pt = new BMap.Point(lng, lat);
+	map.addOverlay(marker2);	// 将定位标注添加到地图中
+	//坐标逆解析
+	var addComp;
+	var geoc = new BMap.Geocoder();  
+	geoc.getLocation(pt, function(rs){
+		var addComp = rs.addressComponents;
+		if(addComp.district != "顺德区"){
+			webToast("请在顺德范围内使用","middle",500);
+		}else{
+			tag();
+		} 
+	});
+}
+
+//标记
+var toast;
+var sw;
+var ne;
+function tag(){
+	// load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+	$.ajax({
+		url:basePath()+"/api/map/getNearbyTarget",
+		data:"lng="+lng+"&lat="+lat+"&type=driverSchool",
+		type: "POST",
+		dataType:"json",
+		async:false,
+		success:function(result){
+			load_ani.remove();
+			console.log(result)
+			var json = result.list;
+			
+			var bounds = map.getBounds();
+			//console.log(bounds);
+			toast = "该区域暂无驾校";
+			sw = bounds.getSouthWest();
+			ne = bounds.getNorthEast();
+			
+			for(var j=0;j<=num;j++){
+				data_info.push([json[j].oldLng,json[j].oldLat,json[j].address,json[j].servicepoint]);
+				area(json[j]);
+			}
+			
+		}
+	});
+	var opts = {
+		width : 0,     // 信息窗口宽度
+		height: 0,     // 信息窗口高度
+		title : "" , // 信息窗口标题
+		enableMessage:true//设置允许信息窗发送短息
+  	};
+	for(var i=0;i<data_info.length;i++){
+ 		var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+ 		var content = "站点："+ data_info[i][3] +"<br> 地址："+ data_info[i][2];
+ 		map.addOverlay(marker);               // 将标注添加到地图中
+ 		addClickHandler(content,marker);
+ 	}
+	//alert("标记成功！");
+	function addClickHandler(content,marker){
+  		marker.addEventListener("click",function(e){
+  			openInfo(content,e)}
+  		);
+  	}
+  	function openInfo(content,e){
+  		var p = e.target;
+  		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+  		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+  		map.openInfoWindow(infoWindow,point); //开启信息窗口
+  	}
+  	function area(o){
+		var ln = o.oldLng;
+		var la = o.oldLat;
+		if(sw.lng < ln && ne.lng > ln && sw.lat < la && ne.lat > la ){
+			toast = "加载成功";
+		}
+	}
+  	webToast(toast,"middle",500);
+}
+
+function start(){
+	// load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+	
+	//百度地图API功能
+	map = new BMap.Map("allmap");
+	point = new BMap.Point(113.303526, 22.80993);
+	map.centerAndZoom(point,14);
+	
+	map.setMinZoom(11);
+	map.setMaxZoom(15);
+	
+	//添加带有定位的导航控件
+	navigationControl = new BMap.NavigationControl({
+	  // 靠左上角位置
+	  anchor: BMAP_ANCHOR_TOP_LEFT,
+	  // LARGE类型
+	  type: BMAP_NAVIGATION_CONTROL_LARGE,
+	  // 启用显示定位
+	  enableGeolocation: true
+	});
+	map.addControl(navigationControl);
+	
+	listen();
+	
+	var u = navigator.userAgent; 
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端 
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+	if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+		//alert("wx");
+		wx();
+	}else{
+		if (isAndroid) {
+			//alert("Android");
+         window.setTimeout(function(){
+          android()
+         },500);
+		}else if (isiOS) {
+			//alert("ios");
+		  	// window.setTimeout("ios()",500);
+         var geolocation = new BMap.Geolocation();
+         geolocation.getCurrentPosition(function(r){
+          if(this.getStatus() == BMAP_STATUS_SUCCESS){
+           ios(r.point.lat,r.point.lng);
+          }else {
+           alert('failed'+this.getStatus());
+          }
+         });
+		}
+	}
+}
+
+function wx(){
+	var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){
+		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+			//var mk = new BMap.Marker(r.point);
+			//map.addOverlay(mk);
+			map.panTo(r.point);
+			//alert('您的位置：'+r.point.lng+','+r.point.lat);
+			lng = r.point.lng;
+			lat = r.point.lat;
+			show();
+		}
+		else {
+			alert('failed'+this.getStatus());
+		}        
+	},{enableHighAccuracy: true})
+}
+
+function android(){
+	// var paramArray = myobj.show().split(",");
+	// lng = paramArray[0];
+	// lat = paramArray[1];
+    if (typeof myobj == "object") {
+     if(myobj.show() == null){
+      lng =  22.80613;//22.927904;
+      lat = 113.289986;//113.15105;
+     }else{
+      var paramArray = myobj.show().split(",");
+      lng = paramArray[0];
+      lat = paramArray[1];
+     }
+    }else {
+     lng =  22.80613;//22.927904;
+     lat = 113.289986;//113.15105;
+    }
+    if(lat == "" || lng == ""){
+     // alert("请确保网络通畅并打开手机定位与权限");
+     webToast("请确保网络通畅并打开手机定位与权限","middle",3000);
+    }
+	var ggPoint = new BMap.Point(lat,lng);
+	//坐标转换完之后的回调函数
+	translateCallback = function (data){
+		if(data.status === 0) {
+	    	var marker = new BMap.Marker(data.points[0]);
+	      	if(lat == "" || lng == ""){
+	      		webToast("请确保网络通畅并打开手机定位与权限","middle",3000);
+	    	  	lng = "113.303526";
+	    	  	lat = "22.80993";
+	      	}else{
+	    	  	map.setCenter(data.points[0]);
+		      	lng = data.points[0].lng;
+		      	lat = data.points[0].lat;
+	      	}
+	      	show();
+	    }
+	}
+	setTimeout(function(){
+		var convertor = new BMap.Convertor();
+		var pointArr = [];
+		pointArr.push(ggPoint);
+		convertor.translate(pointArr, 1, 5, translateCallback)
+	}, 1000); 
+}
+
+function ios(lat,lng){
+	// aaa.callLocationOfLatAndLong();	//调用IOS调用返回值
+	// //alert("APP传值："+str1);
+	// var paramArray = str1.split(",");
+	// lat = paramArray[0];
+	// lng = paramArray[1];
+
+	var ggPoint = new BMap.Point(lng,lat);
+	//坐标转换完之后的回调函数
+	translateCallback = function (data){
+		if(data.status === 0) {
+			var marker = new BMap.Marker(data.points[0]);
+			if(lat == "" || lng == ""){
+				lng = "113.303526";
+	    	  	lat = "22.80993";
+	      	}else{
+	    	  	map.setCenter(data.points[0]);
+		      	lng = data.points[0].lng;
+		      	lat = data.points[0].lat;
+		     	//alert("转换完成")
+	      	}
+			show();
+		}
+	}
+	// setTimeout(function(){
+	// 	var convertor = new BMap.Convertor();
+	// 	var pointArr = [];
+	// 	pointArr.push(ggPoint);
+	// 	convertor.translate(pointArr, 1, 5, translateCallback)
+	// }, 1000);
+ translateCallback({points:[ggPoint],status:0});
+}
+
+var marker2;
+function show(){
+	var pt = new BMap.Point(lng, lat);
+	var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+	marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建定位标注
+	map.addOverlay(marker2);              // 将定位标注添加到地图中
+	load_ani.remove();
+	//alert("定位成功！");
+	var url = basePath()+"/traffic/driverSchool?lng="+lng+"&lat="+lat
+	$("#submit").attr("href",url)
+	
+	//坐标逆解析
+	var addComp;
+	var geoc = new BMap.Geocoder();  
+	geoc.getLocation(pt, function(rs){
+		var addComp = rs.addressComponents;
+		//alert(addComp.district);
+		if(addComp.district != "顺德区"){
+			webToast("请在顺德范围内使用","middle",500);
+		}else{
+			tag();
+		} 
+	});
+	
+	
+	
+}
+</script>
+
+

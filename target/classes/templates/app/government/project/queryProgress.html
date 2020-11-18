@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <title>项目审批系统登录</title>
+</head>
+
+<link rel="stylesheet" href="mui/css/mui.css">
+<link rel="stylesheet" href="mui/css/mui.loading.css">
+<script src="js/jquery.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+<script src="js/base.js"></script>
+<style>
+
+</style>
+<body>
+<div style="text-align: center;height: 50px;line-height: 50px">查询账户关联的项目审批进度信息</div>
+<div style="text-align: center;height: 50px;line-height: 50px">请登录经科局系统</div>
+<form class="mui-input-group" id="form">
+    <div class="mui-input-row">
+        <label>用户名</label>
+        <input type="text" class="mui-input-clear" id="yhm" placeholder="请输入用户名">
+    </div>
+    <div class="mui-input-row">
+        <label>密码</label>
+        <input type="password" class="mui-input-password" id="mm" placeholder="请输入密码">
+    </div>
+    <div class="mui-button-row">
+        <button type="button" class="mui-btn mui-btn-primary" onclick="checkInfo()">确认</button>
+        <!--<button type="button" class="mui-btn mui-btn-danger" >取消</button>-->
+    </div>
+</form>
+<script type="text/javascript" th:inline="javascript">
+    var user = $("#yhm").val();
+    var pwd =  $("#mm").val();
+    var page = 1;
+    console.log(user)
+    console.log(pwd)
+    console.log(page)
+    var token = [[${access_token}]];
+    console.log(token)
+
+    function checkInfo() {
+        var check = true;
+        mui("#form input").each(function() {
+//若当前input为空，则alert提醒
+            if(!this.value || this.value.trim() == "") {
+                var label = this.previousElementSibling;
+                mui.alert(label.innerText + "不允许为空");
+                check = false;
+                return false;
+            }
+        }); //校验通过，继续执行业务逻辑
+        console.log(check);
+        if(check){
+            mui.alert('验证通过!');
+            var user = $("#yhm").val();
+            var pwd =  $("#mm").val();
+            load(user,pwd);
+        }
+    }
+
+
+    function load(user,pwd){
+        var args={"appAcc":user,"appPwd":hex_md5(pwd + "zjcmd5key&*"),"pageIndex":page,"pageSize":5};
+
+        $.ajax({
+            url:basePath()+"/app/menu/getDemo?url=http://19.200.90.199/webapi.do?unimethod*funccode=queryStatus*access_token="+token,
+            type:"post",
+            dataType:"json",
+            data:{"param": JSON.stringify(args)},
+            success:function(result){
+                console.log(result);
+                if(result.code == 0){
+                    var list = result.data.list;
+                    for(var i in list){
+                        var href = basePath()+"/app/menu/project/queryOpinion?username="+user+"&password="+pwd+"&id="+list[i].id;
+                        var prevHandleNote;
+                        if(list[i].prevHandleNote == "" || list[i].prevHandleNote == null || list[i].prevHandleNote == undefined){
+                            prevHandleNote = "暂无数据";
+                        }else{
+                            prevHandleNote = list[i].prevHandleNote;
+                        }
+                        var checkStage;
+                        if(list[i].checkStage == "" || list[i].checkStage == null || list[i].checkStage == undefined){
+                            checkStage = "暂无数据";
+                        }else{
+                            checkStage = list[i].checkStage;
+                        }
+                        $(".main").append(
+                            '<div class="block">'+
+                            '<div class="title">'+list[i].projectName+'</div>'+
+                            '<div class="content">'+
+                            '<div class="line">'+
+                            '<p class="left">业务类别</p>'+
+                            '<p class="right">'+list[i].businessName+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">单位名称</p>'+
+                            '<p class="right">'+list[i].companyName+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">申请日期</p>'+
+                            '<p class="right">'+list[i].applyTime+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">项目阶段</p>'+
+                            '<p class="right">'+list[i].projectStage+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">审批环节</p>'+
+                            '<p class="right">'+checkStage+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">处理日期</p>'+
+                            '<p class="right">'+list[i].prevHandleTime+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">处理人</p>'+
+                            '<p class="right">'+list[i].prevHandler+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">处理方式、意见</p>'+
+                            '<p class="right">'+prevHandleNote+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="left">初审结果</p>'+
+                            '<p class="right">'+list[i].isAuditPassKsgzry+'</p>'+
+                            '</div>'+
+                            /* '<div class="line">'+
+                                '<p class="left">流程实例ID</p>'+
+                                '<p class="right">'+list[i].processInstanceId+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                                '<p class="left">申报项目主键ID</p>'+
+                                '<p class="right">'+list[i].id+'</p>'+
+                            '</div>'+ */
+                            '<a class="line" href= "'+href+'" style="text-align: -webkit-right;color: cornflowerblue;">'+
+                            '<p>项目审批流转意见查询</p>'+
+                            '</a>'+
+                            '</div>	'+
+                            '</div>'
+                        );
+                    }
+                }else{
+                    //alert(result.msg);
+                    webToast(result.msg,"middle",600);
+                }
+                $(".main").bind("scroll",function(){
+                    var bottom=$(this).scrollTop() + $(this).height();
+                    if(bottom==$(this)[0].scrollHeight){
+                        page = page + 1;
+                        load();
+                    }
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+</head>
+<body>
+    <div>
+        <input id="file" type="file" name="imgFile" value="请选择图片">
+        <button th:id="upload" value="上传" onclick="upload()">上传</button>
+        <button onclick="test()">电子表单</button>
+    </div>
+</body>
+<script>
+   function upload() {
+       var imgFile = document.querySelector("#file").files[0];
+       var formData = new FormData();  // 创建form对象
+       formData.append('file', imgFile);  // 通过append向form对象添加数据
+       formData.append('other', 'other')  // 如果还需要传替他参数的话
+       $.ajax({
+           url: basePath()+"/app/fingertips/common/upload", //请求的接口地址
+           type: 'POST',
+           cache: false, //上传文件不需要缓存
+           data: formData,
+           processData: false, // 不要去处理发送的数据
+           contentType: false, // 不要去设置Content-Type请求头
+           success: function(data){
+               console.log(data);
+               materialElectricFileBaseVO.fileName = res.fileName;
+               materialElectricFileBaseVO.fileSize = res.fileSize;
+               materialElectricFileBaseVO.storeUrl = res.sourceType;
+               materialElectricFileBaseVOList.push(materialElectricFileBaseVO);
+           },
+           error: function(err){
+               console.log(err)
+           }
+       })
+   }
+   
+   function test() {
+       $.ajax({
+           type: "post",
+           url: basePath()+"/app/fingertips/case/getFormUrl",
+           dataType: "json",
+           data: {
+               "formId": 123,
+               "caseId": 3213,
+               "materialId": 32,
+               "urlType": 0,
+               "dfrom": 2,
+               "idCardNo": "12"
+           },
+           success:function(result){
+               console.log(result)
+
+           }
+       });
+   }
+
+</script>
+</html>

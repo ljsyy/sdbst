@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0, user-scalable=yes">
+
+	<script src="js/jquery.min.js"></script>
+	<link rel="stylesheet" href="mui/css/mui.min.css" />
+	<script src="mui/js/mui.min.js"></script>
+	<style type="text/css">
+		body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+		.content{
+			overflow: scroll;
+		}
+		.list .title{
+			border-bottom: solid 1px #e5e5e5;
+			height: 40px;
+			line-height: 40px;
+			padding: 5px 10px;
+		}
+		.list .title .xiala{
+			float: right;
+			margin-top: 16px;
+		}
+		.list .title .xiala.up{
+			transform: rotate(180deg);
+			-ms-transform: rotate(180deg);
+			-moz-transform: rotate(180deg);
+			-webkit-transform: rotate(180deg);
+			-o-transform: rotate(180deg);
+		}
+		.list .info.close{
+			display:none;
+
+		}
+		.icon{vertical-align: middle;   float: left;}
+		.info{background: #fff;}
+		.info .phone{
+			border-bottom: solid 1px #E5E5E5;
+			font-size: 17px;
+			padding: 14px 0;
+		}
+		.info .phone.many{
+			display: flex;
+			align-items: center;
+		}
+		.info .phone.many .rightSide{
+			width: 60%;
+			display: inline-block;
+		}
+		.info .phone.many .rightSide .rightSide-right{
+			display: flex;
+			align-items: center;
+			float: right;
+			text-align: center;
+			background: #7DC05F;
+			border-radius: 16px;
+			color: white;
+			font-size: 14px;
+			padding: 6px 7px 6px 15px;
+			margin-left: 8px;
+			margin-bottom: 5px;
+		}
+		.info .phone.many .rightSide .rightSide-right:last-child{margin-bottom: 0;}
+		.left{
+			width: 40%;
+			display: inline-block;
+			margin-left: 3px;
+			font-size: 14px;
+		}
+		.right{
+			position: absolute;
+			right: 56px;
+		}
+		.num{display: inline-block;}
+		.call{
+			height: 19px;
+			float: right;
+			margin-left: 5px;
+		}
+		.title span{
+			margin-left: 10px;
+			font-size: 17px;
+		}
+		li{
+			padding: 16px;
+		}
+		.mui-navigate-right{
+			padding: 5px 14px !important;
+			margin: 0 !important;
+			font-weight: 500;
+
+		}
+
+		.mui-table-view-cell.mui-collapse.mui-active{
+			margin-top: 0;
+		}
+	</style>
+	<title>服务电话</title>
+	<script>
+		$(document).ready(function(){
+			$(".list .title").click(function(){
+				if($(this).parent().find(".info").hasClass("open")){
+					$(this).parent().find(".info").removeClass("open").addClass("close");
+					$(this).find(".xiala").removeClass("up");
+				}else{
+					$(this).parent().find(".info").removeClass("close").addClass("open");
+					$(this).find(".xiala").addClass("up");
+
+				}
+
+			});
+		});
+
+		//运行环境
+		var runEnviron='';
+
+		function getPhone(my){
+			var phone = my.prev().text();
+			//var aa = my.document.getElementsByClassName("right").attr.text;
+			console.log(phone);
+
+			//window.location.href="tel:"+phone;
+
+			//alert(right);
+			//onclick="window.location.href='tel:10086'"
+			//aaa.makeATelephoneCallToOthers('12121')
+
+			/* var u = navigator.userAgent;
+            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){ */
+
+			var u = navigator.userAgent;
+			var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+			var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+			if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+				//alert("wx");
+				window.location.href="tel:"+phone;
+			}else{
+				if (isAndroid) {
+					//alert("Android");
+					// myobj.callServerPhone(phone);
+					window.location.href="tel:"+phone;
+				}else if (isiOS) {
+					//alert("ios");
+					window.location.href="tel:"+phone;
+				}
+			}
+		}
+
+	</script>
+</head>
+<body>
+
+<div class="container">
+
+	<!-- 生活常用类 -->
+	<div class="list">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/life.png" height="30">
+				<a class="mui-navigate-right" href="#">生活常用类</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">天气预报</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12121</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">96121</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">全国铁路客服中心</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12306</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">号码查询</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">114</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">声讯服务</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">160</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">长途话费查询</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">170</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">邮政编码查询</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">187</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">国际长途查询</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">106</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">民航信息查询</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">2580</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">铁路信息查询</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">2585</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">气象综合信息</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">221</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/phone.png" height="30">
+				<a class="mui-navigate-right" href="#">紧急电话</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">民警、匪警</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">110</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">急救中心</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">120</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">火灾、火警</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">119</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">交通事故、交警</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">122</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">公安短信报警</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12110</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">森林火警</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95119</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">水上救援电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12395</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">红十字会急救台</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">999</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/bst.png" height="30">
+				<a class="mui-navigate-right" href="#">办事大厅</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">区发展规划和统计局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835688</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区发展规划和统计局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22836080</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区经济和科技促进局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22833908</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区经济和科技促进局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22831391</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22835653</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22831213</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22835669</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区教育局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22830252</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区教育局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835800</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区民政宗教和外事侨务局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22832368</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22832332</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区民政宗教和外事侨务局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835520</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区公安局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22838180</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区公安局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22835101</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区司法局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22830122</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区司法局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22830122</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区财税局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12366-2</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22835586</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区财税局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12366-2</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区人力资源和社会保障局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22838180</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区人力资源和社会保障局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22838180</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区国土城建和水利局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22836170</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区国土城建和水利局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22836090</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区文化体育局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835712</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区文化体育局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835855</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">顺德区卫生和计划生育局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22833336</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">顺德区卫生和计划生育局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22833332</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22835531</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区市场安全监管局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22803327</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22803332</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区市场安全监管局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835845</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区环境运输和城市管理局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22838180</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区环境运输和城市管理局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22838180</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区档案局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-12319</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区档案局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区国家税务局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12366</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区国家税务局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12366</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区气象局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22836950</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区气象局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22836970</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区公路局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-29828198</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区公路局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-29828136</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">区住房公积金顺德管理局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-12319</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">烟草专卖局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22222231</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">烟草专卖局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-2313525</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">佛山海关驻顺德办事处投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-26626292</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">佛山海关驻顺德办事处咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835068</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22835051</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">出入境检验检疫局投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-26621344</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">出入境检验检疫局咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-26383522</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">顺德海事处投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-83870771</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">顺德海事处咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-26629047</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">消防大队投诉电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22836952</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">消防大队咨询电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22836952</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+							<div class="rightSide-right">
+								<span class="num">0757-22836963</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/complain.png" height="30">
+				<a class="mui-navigate-right" href="#">监督投诉</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">电力系统客服电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95598</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">文化市场统一举报电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12318</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">消费者投诉举报专线电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12315</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">价格监督举报电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12358</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">质量监督电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12365</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">机构编制违规举报热线</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12310</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">环保局监督电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12369</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">民工维权热线电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12333</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">政府公益服务接入网</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12345</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">公共卫生环境投诉</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">12320</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/tx.png" height="30">
+				<a class="mui-navigate-right" href="#">通信机构</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">中国电信客户服务热线</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">10000</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国联通客服热线</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">10010</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国移动客服热线</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">10086</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国电信IP电话卡</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">17900</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国联通IP号码</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">17911</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国移动IP号码</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">17951</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国联通的“电话导航”业务</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">116114</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国电信号码百事通</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">118114</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">铁通客户服务</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">10050</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中国垃圾短信投诉号码快递电话</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">10086999</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/kd.png" height="30">
+				<a class="mui-navigate-right" href="#">快递电话</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">邮政特快专递</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">11185</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">申通快递</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95543</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">顺丰速运</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95338</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">韵达快递</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95546</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">圆通快递</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95554</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中通快递</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95311</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">德邦物流</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">95353</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">百世汇通</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">4009565656</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+			<li class="mui-table-view-cell mui-collapse">
+				<img class="icon" src="img/govenment/ks.png" height="30">
+				<a class="mui-navigate-right" href="#">考试成绩查询</a>
+				<div class="mui-collapse-content info close">
+					<div class="phone many">
+						<span class="left">普通高考</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835789</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">中招考试</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835777</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">成人高考</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835397</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+					<div class="phone many">
+						<span class="left">自学考试</span>
+						<div class="rightSide">
+							<div class="rightSide-right">
+								<span class="num">0757-22835788</span>
+								<img class="call" src="img/govenment/tel.png" onclick="getPhone($(this))" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+		</ul>
+
+
+	</div>
+
+
+
+</div>
+
+</body>
+</html>

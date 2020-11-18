@@ -1,0 +1,625 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<style type="text/css">
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+.container {padding: 0;max-width: 750px;}
+html{height:100%;}
+body{background:#F4F6F8;height:100%;}
+a{text-decoration:none;    color: #000;    display: block;}
+header{font-size: 18px;height: 50px;background: #eb413d;text-align: center;color: #fff;line-height: 50px;overflow: hidden;}
+.headl{float: left;width: 50px;height: 50px;}
+@media only screen and (min-width: 100px) and (max-width: 340px) {header input{background: rgba(0,0,0,0.1);width: 50%;}}
+.headr{float: right;margin-right: 15px;width: 50px;height: 50px;}
+/*搜索*/
+#search,#search-details{background: #fff;position: relative;padding: 10px 15px;}
+#search-details p{margin-bottom: 10px;color:#3A3A3A;padding:0 15px;} 
+#search-details div{color:#3A3A3A;padding:0 15px;}
+#search-details div li{display: inline-block;border: solid 2px #999999;margin: 0 10px 10px 0; padding:2px 10px;    border-radius: 5px;}
+#search-details .details-botton{padding: 8px 0;margin: 0 20px 0 0;flex: 1;background: #EB413D;color: white;border-radius: 5px;}
+#search-details .choose{background: #999;color: #fff;}
+/*搜索内容*/
+#search_content div{background:#fff;}
+#search_content div .div{margin: 0 15px;padding-top:5px;white-space: nowrap;}
+#search_content div li{vertical-align: middle;display: inline;}
+#search_content div img{vertical-align: middle;margin-right: 5px;}
+#search_content div a{border-bottom:1px solid #eee;}
+li.navli{font-size: 18px;margin-right: 5px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display: inline-block !important;}
+#search_content div .area{ vertical-align: top;padding: 3px 5px;background: #000;color: #fff;border-radius: 5px;font-size: 12px;line-height: 23px;}
+#search_content div .bottom{color: #8A8A8A;padding-right: 20px;font-size:14px;max-width: 180px;height: 22px;display: inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}  
+.icon {
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+    fill: currentColor;
+    overflow: hidden;
+    font-size: 15px;
+}    
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+	#r-result{height:100%;width:20%;float:left;}
+	.submit{    
+		position: absolute;
+	    top: 10px;
+	    right: 10px;
+	    background: #D68E00;
+	    color: white;
+	    padding: 5px;
+	    border-radius: 5px;
+    }
+.image{left: 7px;position: relative;}
+.one{display: flex; align-items: center;border-bottom: solid 1px #F1F1F1;}
+
+#location{
+    position: absolute;
+    bottom: 34px;
+    left: 18px;
+    background: #eaeaea;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    display: block;
+    /* background-color: #fff; */
+    filter: Alpha(Opacity=50);
+    -moz-opacity: 0.5;
+    opacity: 0.8;
+}
+</style>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/base.js"></script>
+	<link rel="stylesheet" th:href="@{/js/app/plug/alertPopShow.css}">
+	<script th:src="@{/js/app/plug/alertPopShow.js}"></script>
+	<script th:src="@{/js/load-ani.js}"></script>
+<!--<link rel="stylesheet" href="${ctxStatic}/modules/app/css/base.css" />-->
+	<script th:src="@{/js/list.js}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+
+<title>市民之窗终端</title>
+
+</head>
+<body>
+	<script>
+		load_ani.open();
+	 	document.onreadystatechange = function () {      
+	        if(document.readyState=="complete") {
+		       	setTimeout("load_ani.remove();",1310);
+	        }
+	    }
+	</script>
+	<!-- 地图 -->
+	<div id="allmap"></div>
+	<div id="submit" class="submit" type="submit" onClick="list()">列表</div>
+
+	<!-- 定位按钮 -->
+	<div id="location" onclick="choose()"><img src="img/map/localicon.png" height="30"/></div>
+		
+	<div class="container">
+	   	
+		<!--列表-->
+		<div id="search-list" style="display:none;position: relative;">
+		
+			<div id="search-choose" style="margin-bottom: 10px;display:none;">
+				<div id="search">
+					<div style="background: #F4F6F8;border-radius: 5px;">
+						<img src="img/map/sousuo.jpg" height="30" style="vertical-align: middle;margin: 0 5px;padding: 5px;"/>
+						<span style="color: #ABA9AB;background: transparent;font-size: 17px;vertical-align: middle;">请选择搜索条件</span>
+					</div>
+				</div>
+				<div id="search-details" style="padding:0;display:none;">
+					<p>终端类型</p>
+					<div class="first">
+						<li class="choose">全部</li>
+						<li>农行白色机器</li>
+						<li>金赋黑色机器</li>
+					</div>
+					<p>终端发布</p>
+					<div class="second">
+						<li class="choose">全部</li>
+						<li>大良</li>
+						<li>容桂</li>
+						<li>北滘</li>
+						<li>陈村</li>
+						<li>乐从</li>
+						<li>均安</li>
+						<li>伦教</li>
+						<li>勒流</li>
+						<li>龙江</li>
+						<li>杏坛</li>
+					</div>
+					<hr style="margin: 0;background:#F1F1F1;">
+					<div style="display: flex;text-align: center;padding: 10px 15px;">
+						<div id="search-button" class="details-botton">查询</div><div id="cancel" class="details-botton">取消</div>
+					</div>
+				</div>
+			</div>
+			
+			<!--内容-->
+			<div id="search_content" style="overflow:scroll;">
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<!-- IOS定位专用 -->
+<script>
+var callLocationOfLatAndLong = function(){
+    var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+    aaa.getCall(callInfo);
+}
+
+var CallbackLocationOfLatAndLong = function(str){
+    str1 = str;	
+    return str1;
+}
+var alerCallback = function(){
+    alert('成功');
+}
+	
+</script>
+
+<script type="text/javascript">
+
+
+//运行环境
+var runEnviron='${runEnviron}';
+var lng;
+var lat;
+var mlng;
+var mlat;
+var str1;
+var map;
+var navigationControl;
+var mypoint;//我的位置
+$(document).ready(function(){
+	windowSizeFn();
+	search=$("#search");
+	details=$("#search-details");
+	detailscon=$("#search_content");
+	find=$("#find");
+	cancel=$("#cancel");
+	search.bind("click",function(){details.fadeIn();windowSizeFn();});
+	cancel.bind("click",function(){details.fadeOut();setTimeout('windowSizeFn();',450);});
+	//类型
+	$("#search-details .first li").bind("click",function(){
+		$("#search-details .first li").attr("class","");
+		$(this).attr("class","choose");
+	});
+	//发布
+	$("#search-details .second li").bind("click",function(){
+		$("#search-details .second li").attr("class","");
+		$(this).attr("class","choose");
+		if($(this).text()!='全部')
+			url="http://202.104.25.196/RXWSSTWeb/m_smzcTerminal.web?getListByPage&pageSize=10&word="+$(this).text()+"&pageIndex=";
+		else
+			url="http://202.104.25.196/RXWSSTWeb/m_smzcTerminal.web?getListByNear&pageIndex=";
+	
+	});
+	//查询
+	$("#search-button").bind("click",function(){
+		jsonListNum=1;
+		$("#search_content").empty();
+		getJsonDataList();
+		//console.log(1)
+	});
+	//滚轮
+	$("#search_content").bind("scroll",function(){
+		var bottom=$(this).scrollTop()+$(this).height();
+		if(bottom==$(this)[0].scrollHeight){
+			getJsonDataList();
+			//console.log(2)
+		}	
+	});
+	choose();
+});
+
+//移动地图监听
+function dragzoom(drag){
+	map.clearOverlays();
+	var center = map.getCenter();    
+    //alert("地图中心点变更为：" + center.lng + ", " + center.lat);    
+    mlng = center.lng;
+    mlat = center.lat;
+    if(drag){
+    	var pt = new BMap.Point(mlng,mlat);
+    	var geoc = new BMap.Geocoder();
+    	geoc.getLocation(pt, function(rs){
+    		var addComp = rs.addressComponents;
+    		if(addComp.district == "顺德区")
+    			showListen();
+    		else
+    			webToast("显示该区域未开通，敬请期待","middle",800);
+    	}); 
+    }else{
+    	showListen();
+    }
+}
+function listen(){
+	map.addEventListener("dragend", function(){    
+		dragzoom(true);
+	});
+	map.addEventListener("zoomend", function(){ 
+		dragzoom(false);
+	});
+}
+//移动地图标记
+function showListen(){
+	function getAttra(json){
+		window.location.href=basePath()+"/government/publicwindow/publicdetails?id="+json.oldId+"&title=市民之窗终端";
+  	}
+	load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+  	$.ajax({
+		url:basePath()+"/api/map/getNearbyTarget",
+		data:"lng=" + mlng + "&lat=" + mlat + "&type=window",
+		type: "POST",
+		dataType:"json",
+		async:true,
+		success:function(result){
+			//alert(1);
+			var json = result.list;
+			var bounds = map.getBounds();
+			var sw = bounds.getSouthWest();
+			var ne = bounds.getNorthEast();
+			var toast = "显示该区域未开通，敬请期待";
+			var json = result.list;
+			var getz = parseInt(map.getZoom());
+			var openshow = 10;
+			if(getz >= 16){
+				openshow = 40;
+			}
+			if(getz == 15){
+				openshow = 60;
+			}
+			if(getz == 14){
+				openshow = 80;
+			}
+			if(getz == 13){
+				openshow = 100;
+			}
+			if(json.length < openshow){
+				openshow = json.length;
+			}
+			//alert(getz + " " + openshow + " " + json.length)
+			load_ani.remove();
+			for(var i = 0;i<openshow;i++){
+				// 编写自定义函数,创建标注
+				function addMarker(point,index){
+				  	var marker = new BMap.Marker(near);
+				 	map.addOverlay(marker);
+				 	marker.onclick=function(){
+				 		getAttra(json[index]);
+				 	}
+				}
+				var near = new BMap.Point(json[i].oldLng, json[i].oldLat);
+				addMarker(near,i);
+				area(json[i]);
+			}
+			function area(o){
+				var ln = o.oldLng;
+				var la = o.oldLat;
+				if(sw.lng < ln && ne.lng > ln && sw.lat < la && ne.lat > la ){
+					toast = "发现市民之窗终端";
+				}
+			}
+			webToast(toast,"middle",800);
+			if(mypoint != undefined)
+				map.addOverlay(mypoint);
+		}
+	});
+}
+function choose(){	//判断系统
+	//初始化百度地图
+	map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(113.303526, 22.80993), 15);
+	// 添加缩放地图控件
+	navigationControl = new BMap.NavigationControl({
+	  // 靠左上角位置
+	  anchor: BMAP_ANCHOR_TOP_LEFT,
+	  // LARGE类型
+	  type: BMAP_NAVIGATION_CONTROL_LARGE,
+	  // 启用显示定位
+	  enableGeolocation: false
+	});
+	map.addControl(navigationControl);
+	map.setMinZoom(13);
+	//map.setMaxZoom(16);
+	listen();
+	var u = navigator.userAgent; 
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端 
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+	
+	if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+		//alert("wx");
+		wx();
+	}else{
+		if (isAndroid) {
+			//alert("Android");
+			android();
+		}else if (isiOS) {
+			//alert("ios");
+			window.setTimeout("ios()",500);
+		}
+	}
+}
+function ios(){	//IOS使用
+	aaa.callLocationOfLatAndLong();	//调用IOS调用返回值
+	//alert("APP传值："+str1);
+	var paramArray = str1.split(",");
+	lat = paramArray[0];
+	lng = paramArray[1];
+	
+	if(lat == "" || lng == ""){
+		//alert("请确保网络通畅并打开手机定位与权限");
+		webToast("请确保网络通畅并打开手机定位与权限","middle",3000);
+	}
+	
+	var ggPoint = new BMap.Point(lng,lat);
+
+	 //坐标转换完之后的回调函数
+	translateCallback = function (data){
+	  if(data.status === 0) {
+	    var marker = new BMap.Marker(data.points[0]);
+	    
+	    if(lat == "" || lng == ""){
+		 	mlng = "113.303526";
+		 	mlat = "22.80993";
+		}else{
+		 	map.setCenter(data.points[0]);
+			mlng = data.points[0].lng;
+		 	mlat = data.points[0].lat;
+		 	//alert("转换完成")
+		}
+	    
+	    window.lng = mlng;
+	    window.lat = mlat;
+	    getJsonDataList();
+	    
+	    function getAttra(json){
+			window.location.href=basePath()+"/government/publicwindow/publicdetails?id="+json.oldId+"&title=市民之窗终端";
+
+		}
+	    $.ajax({	//附近10个
+			url:basePath()+"/api/map/getNearbyTarget",
+			data:"lng=" + mlng + "&lat=" + mlat + "&type=window",
+			type: "POST",
+			dataType:"json",
+			async:false,
+			success:function(result){
+				var json = result.list;
+				for(var i = 0;i<60;i++){
+				//for(var i in json){
+					// 编写自定义函数,创建标注
+					function addMarker(point,index){
+					  	var marker = new BMap.Marker(near);
+					  	map.addOverlay(marker);
+					 	marker.onclick=function(){
+					 		getAttra(json[index]);
+					 	}
+					}
+					var near = new BMap.Point(json[i].oldLng, json[i].oldLat);
+					addMarker(near,i);
+				}
+			}
+		}); 
+	    var pt = new BMap.Point(mlng, mlat);
+	    var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+	    mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+		map.addOverlay(mypoint);              // 将标注添加到地图中
+	    //alert("标注完成");
+	  }
+	}
+
+	setTimeout(function(){
+	    var convertor = new BMap.Convertor();
+	    var pointArr = [];
+	    pointArr.push(ggPoint);
+	    convertor.translate(pointArr, 1, 5, translateCallback)
+	}, 1000); 
+
+}
+  
+function android(){	//安卓使用
+	//alert("请确保已打开手机定位与权限");
+	
+	var paramArray = myobj.show().split(",");
+	lng = paramArray[0];
+	lat = paramArray[1];
+	
+	if(lat == "" || lng == ""){
+		//alert("请确保网络通畅并打开手机定位与权限");
+		webToast("请确保网络通畅并打开手机定位与权限","middle",3000);
+	}
+	
+	var ggPoint = new BMap.Point(lat,lng);
+
+	 //坐标转换完之后的回调函数
+	translateCallback = function (data){
+	  if(data.status === 0) {
+	    var marker = new BMap.Marker(data.points[0]);
+		  
+	    /* map.setCenter(data.points[0]);
+	    var mlng = data.points[0].lng;
+	    var mlat = data.points[0].lat; */
+	    
+	    if(lat == "" || lng == ""){
+		 	mlng = "113.303526";
+		 	mlat = "22.80993";
+		}else{
+		 	map.setCenter(data.points[0]);
+			mlng = data.points[0].lng;
+		 	mlat = data.points[0].lat;
+		}
+	    
+	    window.lng = mlng;
+	    window.lat = mlat;
+	    getJsonDataList();
+	    //console.log(5)
+	    
+	    function getAttra(json){
+			window.location.href=basePath()+"/government/publicwindow/publicdetails?id="+json.oldId+"&title=市民之窗终端";
+	    }
+	    $.ajax({	//附近10个
+			url:basePath()+"/api/map/getNearbyTarget",
+			data:"lng=" + mlng + "&lat=" + mlat + "&type=window",
+			type: "POST",
+			dataType:"json",
+			async:false,
+			success:function(result){
+				//alert(4);
+				
+				var json = result.list;
+				for(var i = 0;i<60;i++){
+				//for(var i in json){
+					// 编写自定义函数,创建标注
+					function addMarker(point,index){
+					  	var marker = new BMap.Marker(near);
+					  	map.addOverlay(marker);
+					 	marker.onclick=function(){
+					 		getAttra(json[index]);
+					 	}
+					}
+					var near = new BMap.Point(json[i].oldLng, json[i].oldLat);
+					addMarker(near,i);
+				}
+			}
+		  }); 
+	    
+	    var pt = new BMap.Point(mlng, mlat);
+	    var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+	    mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+		map.addOverlay(mypoint);              // 将标注添加到地图中
+	  }
+	}
+
+	setTimeout(function(){
+	    var convertor = new BMap.Convertor();
+	    var pointArr = [];
+	    pointArr.push(ggPoint);
+	    convertor.translate(pointArr, 1, 5, translateCallback)
+	}, 1000); 
+
+}
+function wx(){
+	var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){
+		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+			//var mk = new BMap.Marker(r.point);
+			//map.addOverlay(mk);
+			map.panTo(r.point);
+			//alert('您的位置：'+r.point.lng+','+r.point.lat);
+			var pt = new BMap.Point(r.point.lng, r.point.lat);
+			var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+			mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+			map.addOverlay(mypoint);              // 将标注添加到地图中
+			window.lng = r.point.lng;
+			window.lat = r.point.lat;
+			getJsonDataList();
+			
+			function getAttr(json){
+				window.location.href=basePath()+"/government/publicwindow/publicdetails?id="+json.oldId+"&title=市民之窗终端";
+			}
+			
+			//获取最近的十个坐标
+			$.ajax({
+				url:basePath()+"/api/map/getNearbyTarget",
+				data:"&lng=" + r.point.lng + "&lat=" + r.point.lat + "&type=window",
+				type: "POST",
+				dataType:"json",
+				async:false,
+				success:function(result){
+					//alert(3);
+					
+					var json = result.list;
+					for(var i = 0;i<60;i++){
+					//for(var i in json){
+						// 编写自定义函数,创建标注
+						function addMarker(point,index){
+						  	var marker = new BMap.Marker(near);
+						 	map.addOverlay(marker);
+						 	marker.onclick=function(){
+						 		getAttr(json[index]);
+						 	}
+						}
+						var near = new BMap.Point(json[i].oldLng, json[i].oldLat);
+						addMarker(near,i);
+					}
+				}
+			});
+			
+			
+		}
+		else {
+			//alert('failed'+this.getStatus());
+			webToast("failed"+this.getStatus(),"middle",3000);
+		}        
+	});
+}
+function list(){	
+	$("#search-list").css("display","block");//显示列表
+	$("#allmap").css("display","none");//隐藏地图
+	$("#submit").css("display","none");//隐藏列表按钮
+	$("#az").css("display","none");//隐藏定位按钮
+}
+
+function backPageFn() {
+	window.history.back();
+};
+$(window).resize(windowSizeFn);
+function windowSizeFn(){
+ 	var h=$(window).height();
+	var con=$("#search-choose").outerHeight()+10;
+	if('${param.noHead}'){
+		$("#search_content").height(h-con);
+	}else{
+		$("#search_content").height(h-60-con);
+	}
+
+};
+var search,details,detailscon,find,cancel;
+var url="";
+function getJsonDataList(){
+	url=basePath()+"/api/map/getNearbyTarget?lng="+lng+"&lat="+lat+"&type=window";
+	//console.log(url)
+	var urlnew=encodeURI(url);
+
+		$.getJSON(urlnew,function(result){
+			//console.log(result)
+			var obj=result.list;
+			if(obj.length!=0){
+				var str='<div style="border-bottom: solid 1px #F1F1F1;">';
+				for(var x in obj){
+					var cssTop=$(window).width()-30-23-35-10,
+					cssBottom=$(window).width()-30-110*2,
+					distance=(obj[x].distance/1000).toFixed(2)+"km",
+					typeName=obj[x].typeName.substring(0,2),typeNameColor='';
+					if(typeName=="农行"){
+						typeNameColor="#5E9631";
+					}
+					var dhref = "window.location.href='"+basePath()+"/traffic/map?PARK_X="+obj[x].oldLng+"&PARK_Y="+obj[x].oldLat+"'";
+					var da = basePath()+"/government/publicwindow/publicdetails?id="+obj[x].oldId;
+					str+='<div class="one"><div class="image"><img onclick="'+dhref+'" src="img/map/maplogn.jpg" height="30"/></div>' +
+							'<a href='+da+'>' +
+							'<div class="rightsize"><div class="div"><li class="navli" style="max-width:'+cssTop+'px;">'+obj[x].servicePoint+'</li><li class="area" style=background:'+typeNameColor+'>'+typeName+'</li></div>'+
+						/*  '<div class="div" style="padding-bottom:10px"><li class="bottom">'+distance+'</li><li style="max-width:'+cssBottom+'px" class="bottom">'+obj[x].address+'</li><li  class="bottom" style="padding-right:0px;">'+obj[x].openingHours+'</li></div></a>';
+	 */	
+					 '<div class="div" style="padding-bottom:5px"><li  class="bottom">'+obj[x].openingHours+'</li><li class="bottom">'+obj[x].address+'</li></div></div></a></div>';
+					}
+				str+='</div>';
+				$("#search_content").html(str);
+			}
+		});
+		//jsonListNum++;
+	
+}
+
+</script>
+
+
+
+
+

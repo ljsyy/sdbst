@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.medical.HospitalClinicMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.medical.HospitalClinic" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ID_CODE" property="idCode" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="VARCHAR" />
+    <result column="HOSPITAL" property="hospital" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="FROM_WUHAN" property="fromWuhan" jdbcType="VARCHAR" />
+    <result column="FROM_HUBEI" property="fromHubei" jdbcType="VARCHAR" />
+    <result column="FROM_OTHER" property="fromOther" jdbcType="VARCHAR" />
+    <result column="ILL_TIME" property="illTime" jdbcType="TIMESTAMP" />
+    <result column="DOCTOR_TIME" property="doctorTime" jdbcType="TIMESTAMP" />
+    <result column="DIAGNOSIS" property="diagnosis" jdbcType="VARCHAR" />
+    <result column="TEMPERATURE" property="temperature" jdbcType="VARCHAR" />
+    <result column="RESPIRATORY" property="respiratory" jdbcType="VARCHAR" />
+    <result column="DIGESTIVE" property="digestive" jdbcType="VARCHAR" />
+    <result column="TRAFFIC" property="traffic" jdbcType="VARCHAR" />
+    <result column="CONTACTS" property="contacts" jdbcType="VARCHAR" />
+    <result column="TO_GUANGDONG" property="toGuangdong" jdbcType="VARCHAR" />
+    <result column="CLINIC" property="clinic" jdbcType="VARCHAR" />
+    <result column="NO_CLINIC" property="noClinic" jdbcType="VARCHAR" />
+    <result column="INSERT_DATE" property="insertDate" jdbcType="TIMESTAMP" />
+    <result column="OPER_NO" property="operNo" jdbcType="VARCHAR" />
+    <result column="OPER_NAME" property="operName" jdbcType="VARCHAR" />
+    <result column="COL1" property="col1" jdbcType="VARCHAR" />
+    <result column="COL2" property="col2" jdbcType="VARCHAR" />
+    <result column="COL3" property="col3" jdbcType="VARCHAR" />
+    <result column="COL4" property="col4" jdbcType="VARCHAR" />
+    <result column="COL5" property="col5" jdbcType="VARCHAR" />
+    <result column="COL6" property="col6" jdbcType="VARCHAR" />
+    <result column="BAK_TIME1" property="bakTime1" jdbcType="TIMESTAMP" />
+    <result column="BAK_TIME2" property="bakTime2" jdbcType="TIMESTAMP" />
+    <result column="BAK_TIME3" property="bakTime3" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.medical.HospitalClinic" >
+    insert into HOSPITAL_CLINIC_DETAIL (ID, NAME, ID_CODE, 
+      SEX, AGE, HOSPITAL, 
+      PHONE, FROM_WUHAN, FROM_HUBEI, 
+      FROM_OTHER, ILL_TIME, DOCTOR_TIME, 
+      DIAGNOSIS, TEMPERATURE, RESPIRATORY, 
+      DIGESTIVE, TRAFFIC, CONTACTS, 
+      TO_GUANGDONG, CLINIC, NO_CLINIC, 
+      INSERT_DATE, OPER_NO, OPER_NAME, 
+      COL1, COL2, COL3, COL4, 
+      COL5, COL6, BAK_TIME1, 
+      BAK_TIME2, BAK_TIME3)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{idCode,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, #{hospital,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{fromWuhan,jdbcType=VARCHAR}, #{fromHubei,jdbcType=VARCHAR}, 
+      #{fromOther,jdbcType=VARCHAR}, #{illTime,jdbcType=TIMESTAMP}, #{doctorTime,jdbcType=TIMESTAMP}, 
+      #{diagnosis,jdbcType=VARCHAR}, #{temperature,jdbcType=VARCHAR}, #{respiratory,jdbcType=VARCHAR}, 
+      #{digestive,jdbcType=VARCHAR}, #{traffic,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}, 
+      #{toGuangdong,jdbcType=VARCHAR}, #{clinic,jdbcType=VARCHAR}, #{noClinic,jdbcType=VARCHAR}, 
+      #{insertDate,jdbcType=TIMESTAMP}, #{operNo,jdbcType=VARCHAR}, #{operName,jdbcType=VARCHAR}, 
+      #{col1,jdbcType=VARCHAR}, #{col2,jdbcType=VARCHAR}, #{col3,jdbcType=VARCHAR}, #{col4,jdbcType=VARCHAR}, 
+      #{col5,jdbcType=VARCHAR}, #{col6,jdbcType=VARCHAR}, #{bakTime1,jdbcType=TIMESTAMP}, 
+      #{bakTime2,jdbcType=TIMESTAMP}, #{bakTime3,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="update" parameterType="com.unifs.sdbst.app.bean.life.medical.HospitalClinic" >
+        update HOSPITAL_CLINIC_DETAIL set COL5=#{col5,jdbcType=VARCHAR}
+        where ID=#{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, NAME, substr(ID_CODE,0,3)||'****'||substr(ID_CODE,-4,4) ID_CODE, SEX, AGE, HOSPITAL, PHONE, FROM_WUHAN, FROM_HUBEI, FROM_OTHER,
+    ILL_TIME, DOCTOR_TIME, DIAGNOSIS, TEMPERATURE, RESPIRATORY, DIGESTIVE, TRAFFIC, CONTACTS, 
+    TO_GUANGDONG, CLINIC, NO_CLINIC, INSERT_DATE, OPER_NO, OPER_NAME, COL1, COL2, COL3, 
+    COL4, COL5, COL6, BAK_TIME1, BAK_TIME2, BAK_TIME3
+    from HOSPITAL_CLINIC_DETAIL
+  </select>
+
+<!--  <select id="selectClilnic" parameterType="com.unifs.sdbst.app.bean.life.medical.HospitalClinic" resultMap="BaseResultMap" >-->
+  <select id="selectClilnic" resultMap="BaseResultMap" >
+    select ID, NAME, ID_CODE||'''' ID_CODE, SEX, AGE, HOSPITAL, PHONE, FROM_WUHAN, FROM_HUBEI, FROM_OTHER,
+    ILL_TIME, DOCTOR_TIME, DIAGNOSIS, TEMPERATURE, RESPIRATORY, DIGESTIVE, TRAFFIC, CONTACTS,
+    TO_GUANGDONG, CLINIC, NO_CLINIC, INSERT_DATE, OPER_NO, OPER_NAME, COL1, COL2, COL3,
+    COL4, COL5, COL6, BAK_TIME1, BAK_TIME2, BAK_TIME3
+    from HOSPITAL_CLINIC_DETAIL
+    <where>
+      <if test="operNo!=null and operNo!=''">
+        OPER_NO = #{operNo,jdbcType=VARCHAR}
+      </if>
+      <if test="doctorTime!=null ">
+        and DOCTOR_TIME >= #{doctorTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="name!=null and name!=''">
+        and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="idCode!=null and idCode!=''">
+        and ID_CODE = #{idCode,jdbcType=VARCHAR}
+      </if>
+        and COL5 = 1
+    </where>
+    order by INSERT_DATE desc
+  </select>
+</mapper>

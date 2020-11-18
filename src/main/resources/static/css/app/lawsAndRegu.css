@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+body, dd, dl, html, ol, p, ul { margin: 0;padding: 0;list-style-type: none;	font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti; }
+
+.container { padding:0; margin:0px; max-width:750px; overflow:scroll; background-color:#fff; }
+.container #head { height:50px; background:#eb413d; text-align:center; color:#fff; 
+				   line-height:50px;  font-size:16px; font-weight:500;
+				   position:fixed; left:0px; top:0px; right:0px; z-index: 10000;}
+.container #head .headl .icon{margin-top:8px;}
+#head .headr img { vertical-align:middle; width:41px; height:42px; margin: 2px;}
+
+
+/* 法律法规 */
+.container #lawsAndRegu-content .list { height:90px; }
+.container #lawsAndRegu-content .list a { text-decoration:none; color:#000; display:block;  width:100%; }
+.container #lawsAndRegu-content .list div { border-bottom:1px solid #BBB; }
+.container #lawsAndRegu-content .list .list-l { width:85%; float:left; text-align:left; height:90px; }
+.container #lawsAndRegu-content .list .list-l div { line-height:30px; padding:0px 10px; border:0px;
+											   		font-family:"楷体"; font-size:18px; font-weight:500;}										   
+.container #lawsAndRegu-content .list .list-r { width:15%; float:left; text-align:center; 
+										   		height:90px; line-height:90px; }
+.container #lawsAndRegu-content .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+
+
+/* 规范性文件 */
+/* .container #normativeFile-content { margin-top: 50px; } */
+.container #normativeFile-content .list { height:50px; }
+.container #normativeFile-content .list a { text-decoration:none; color:#000; display:block;  width:100%; }
+.container #normativeFile-content .list div { border-bottom:1px solid #BBB; }
+.container #normativeFile-content .list .list-l { width:85%; float:left; text-align:left; height:50px; }
+.container #normativeFile-content .list .list-l div { line-height:50px; padding:0px 10px; border:0px;
+											   		  font-family:"楷体"; font-size:18px; font-weight:500;}										   
+.container #normativeFile-content .list .list-r { width:15%; float:left; text-align:center; 
+										   		  height:50px; line-height:50px; }
+.container #normativeFile-content .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+

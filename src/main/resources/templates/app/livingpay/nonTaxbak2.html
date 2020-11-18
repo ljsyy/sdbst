@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="css/app/life/livingpay/appthird.css">
+    <link rel="stylesheet" href="css/app/life/livingpay/colorOne.css">
+    <link rel="stylesheet" href="css/app/life/livingpay/common.css">
+    <script th:src="@{/js/jquery.js}" ></script>
+    <script th:src="@{/js/base.js}"></script>
+    <script th:src="@{/js/app/plug/alertPopShow.js}"></script>
+    <script th:src="@{/js/load-ani.js}"></script>
+    <script th:src="@{/js/list.js}"></script>
+    <script type="application/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+    <!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+    <script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+    <script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <title>非税缴费</title>
+
+    <style>
+        .inputSty{
+            outline-style: none ;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            height: 2.05rem;
+            width: 99%;
+            font-size: 14px;
+            font-family: "Microsoft soft";
+        }
+        input:focus{
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+        }
+
+
+
+        .divcss6{
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 15px;
+        }
+
+        .divcss7{
+            height: 2.05rem;
+            /*flex 布局*/
+            display: flex;
+            /*实现垂直居中*/
+            align-items: center;
+            /*实现水平居中*/
+            /*justify-content: center;*/
+            text-align: justify;
+        }
+
+
+
+    </style>
+</head>
+<body style="height: 685.75px; overflow: hidden; margin-top: -0.5rem; padding-top: 0.5rem; box-sizing: border-box;">
+
+<div class="result resultCss">
+    <div class="" id="searchDiv">
+        <div class="HistoryInfo ptb thirdtypeold" style="">
+            <div class="clearfix pt5 lh" style="margin-top: 15px">
+                <input class="inputSty" style="-webkit-user-select:text !important" id="tzsbh" name="tzsbh" placeholder="请输入通知书号"/>
+            </div>
+
+            <!--
+            <div class="clearfix pt5 lh" style="margin-top: 15px">
+                <input class="inputSty" id="zxdwbh" placeholder="请输入执行单位编码"/>
+            </div>
+            -->
+
+            <div  class="clearfix pt5 lh divcss6 divcss7" style="justify-content: center">
+                &nbsp;
+                <input type="radio" name="jylx"  value="1" />行政事业收费
+                &nbsp;
+                &nbsp;
+                <input type="radio"  name="jylx"  value="2"  />行政事业处罚
+
+
+            </div>
+
+            <!--            <div  class="clearfix pt5 lh divcss5" style="margin-top: 15px">-->
+            <!--                &nbsp;-->
+            <!--                    <input type="radio" name="platform"  value="0" checked />-->
+            <!--                    &nbsp;-->
+            <!--                    <img src="img/life/wxzf.jpg" style="height: 1.05rem; width: 1.05rem;" />-->
+            <!--                    微信支付-->
+            <!--                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+            <!--                    <input type="radio"  name="platform"  value="1"  />&nbsp;-->
+            <!--                    <img src="img/life/zfb.png" style=" height: 1.05rem; width: 1.05rem;" />-->
+            <!--                    支付宝支付-->
+
+            <!--            </div>-->
+
+            <!--
+            <div class="divcss6">
+                <div  class="divcss7" style="position:relative;" onclick="selectPlatform('wx')">
+                    <img src="img/life/wxzf.jpg" style="height: 1.25rem; width: 1.25rem;" />
+                    <span style="margin-left: 2px"> 微信支付</span>
+                    <input type="radio" name="platform" id="wx"  value="0" checked  style="position:absolute; right:5px;"/>
+                </div>
+                <hr color="#ccc" size="1px"/>
+                <div  class="divcss7" style="position:relative" onclick="selectPlatform('zfb')">
+                    <img src="img/life/zfb.png" style=" height: 1.15rem; width: 1.15rem;margin-left: 2px" />
+                    <span style="margin-left: 2px">支付宝支付</span>
+                    <input type="radio"  name="platform" id="zfb"  value="1" style="position:absolute; right:5px;" />
+                </div>
+            </div>
+            -->
+            <div style="margin-top: 1px">
+                    <span style="color: red;font-size: 12px">
+                        提示:请正确选择通知书类型，否则将会导致缴费失败。行政事业收费(例如学费、身份证工本费等)， 行政事业处罚(例如交罚、行政处罚等)。
+                    </span>
+
+            </div>
+
+            <div  style="margin-top: 15px; display: none">
+                <a href="javascript:void(0)" class="explain">声明</a>
+            </div>
+            <div class="payB pt3" style="margin-top: 15px">
+                <button class="submit" id="PayOrder" onclick="search()">查询</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="" id="detailDiv" style="display: none">
+        <div class="HistoryInfo ptb thirdtypeold" style="">
+            <div>
+                缴费人：<span></span>
+            </div>
+            <div>
+                通知书号：<span></span>
+            </div>
+            <div>
+                执收单位：<span></span>
+            </div>
+            <div>
+               收费项目：<span></span>
+            </div>
+            <div>
+                收费项目：<span></span>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
+    提示:。
+</div>
+<!--
+<div class="alert_bg alert" style="display: none;">
+    <div class="alert_content">
+        <p class="alert_info">
+            提示:
+        </p>
+        <button class="alert_btn Btop" style="height: 2rem">确定</button>
+    </div>
+</div>
+-->
+</body>
+<script>
+
+    /*
+    $(function(){
+        $(".alert_btn").click(function(){
+            $(".alert").hide();
+        });
+        $(".explain").click(function(){
+            $(".alert").show();
+        });
+    })
+*/
+
+
+    function  search() {
+        var NoticeNo = $("#tzsbh").val();
+        NoticeNo = NoticeNo.trim().replace(/\s/g,"");
+        if(NoticeNo == ""){
+            mui.alert("请输入通知书编号","提示");
+            return;
+        }
+
+        var NoticeType = $("input[name='jylx']:checked").val();
+        if(NoticeType == "" || NoticeType == undefined){
+            mui.alert("请选择缴费类型","提示");
+            return;
+        }
+
+        $.post(basePath() + "/livingPay/payQuery",{"NoticeNo":NoticeNo,"NoticeType":NoticeType,"queryType":"iPayForNontaxFeeQry"},function(result){
+           // console.log(result);
+            console.log(result.data);
+             if(result.code == 200){
+                 var mesg = result.data;
+               if(mesg.indexOf("Error") > -1){
+                   mui.alert(mesg.substring(mesg.indexOf("Error>")+6,mesg.indexOf("</")),"提示");
+                   return;
+               }
+               $("#searchDiv").hide();
+               $("#detailDiv").show();
+
+            }
+        });
+    }
+    /*
+    function search() {
+        var tzsbh = $("#tzsbh").val();
+        tzsbh = tzsbh.trim().replace(/\s/g,"");
+        var zxdwbh = $("#zxdwbh").val();
+        zxdwbh = zxdwbh.trim().replace(/\s/g,"");
+
+        var jylx = $("input[name='jylx']:checked").val();
+        var platform = $("input[name='platform']:checked").val();
+        //调用app方法
+        //判断系统
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+        var message={
+            'tzsbh':tzsbh,
+            'zxdwbh':zxdwbh,
+            'jylx':jylx,
+            'xmbh':"440606",
+            'sqlybm':'400023',
+            'md5key':'66jhtyd0t3kyt6p',
+            'url':'https://gz.nontax.cn/NonTaxPayMent_test/thirdaccess/getinfo.do',
+            "isProduction":'false',
+            'platform':platform
+        };
+        var messJson = JSON.stringify(message);//转为json数据
+        $("#PayOrder").attr("disabled", true);
+        if(isAndroid){
+            try{
+                //调用安卓方法
+                var result =  window.NonTaxSdk.nonTaxPay(messJson);
+                if(result && result.indexOf("err")<0){
+                    var phone = getQueryVariable(result,"currentPhone");
+                    var sourceType = getQueryVariable(result,"currentPayType");
+                    var idNum = getQueryVariable(result,"currentIdNum");
+                    var ddbh = getQueryVariable(result,"ddbh");
+                    var saveOrderUrl = getQueryVariable(result,"saveOrderUrl");
+                    $.post(basePath() + "/livingPay/"+saveOrderUrl,{phone:phone,idNum:idNum,sourceType:sourceType,ddbh:ddbh,client:"android"},function(data){
+
+                    });
+                    toPayPage(result);
+                }else{
+                    $("#PayOrder").attr("disabled", false);
+                }
+            }catch(e){
+                console.log(e.message);
+                alert("网络异常");
+                $("#PayOrder").attr("disabled", false);
+            }
+        }else if(isiOS){
+            window.location.href="&nonTaxPay&data="+messJson;
+            //lert("isiOS");
+        }
+    }
+    
+     */
+
+    function selectPlatform(typeId){
+        if(document.getElementById(typeId)){
+            $("#"+typeId).attr("checked",true);
+        }
+    }
+
+    function toPayPage(url){
+        window.location = url;
+    }
+    function getQueryVariable(url,variable) {
+        try{
+            var vars = url.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+        }catch (e) {
+
+        }
+        return null;
+    }
+</script>
+</html>
+
+
+
+

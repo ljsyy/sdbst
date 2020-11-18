@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.data.CateringServiceUnitMapper">
+    <resultMap id="base" type="com.unifs.sdbst.app.bean.data.CateringServiceUnitEntity">
+        <result column="id" property="id" jdbcType="VARCHAR"></result>
+        <result column="unit_name" property="unitName" jdbcType="VARCHAR"></result>
+        <result column="unit_address" property="unitAddress" jdbcType="VARCHAR"></result>
+        <result column="detailed_address" property="detailedAddress" jdbcType="VARCHAR"></result>
+        <result column="grade" property="grade" jdbcType="VARCHAR"></result>
+        <result column="lng" property="lng" jdbcType="VARCHAR"></result>
+        <result column="lat" property="lat" jdbcType="VARCHAR"></result>
+        <result column="poi" property="poi" jdbcType="VARCHAR"></result>
+        <result column="town" property="town" jdbcType="VARCHAR"></result>
+        <result column="category" property="category" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="selectListByFactor" resultMap="base">
+        select * from (select e.*,rownum as row_num from CATERING_SERVICE_UNIT e
+        <where>
+            RECORD_STATUS = 1
+            <if test="objzjname!=null and objzjname!=''">
+                and (e.UNIT_NAME like #{objzjname}||'%')
+            </if>
+            <if test="objjyjname!=null and objjyjname!=''">
+                and (e.town like #{objjyjname}||'%')
+            </if>
+            <if test="gradename!=null and gradename!=''">
+                and (e.grade like #{gradename}||'%')
+            </if>
+        </where>
+        ) where row_num between #{start} and #{end}
+    </select>
+
+</mapper>

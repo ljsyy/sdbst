@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.fingertips.FingertipsMapper">
+
+    <select id="findUserHistoryByPhone" parameterType="com.unifs.sdbst.app.bean.fingertips.UserHistoryVO" resultType="Integer">
+        select count(*) from user_history where agentPhone=#{agentPhone}
+    </select>
+
+    <insert id="addUserHistory" parameterType="com.unifs.sdbst.app.bean.fingertips.UserHistoryVO">
+        insert into user_history (id,agentCertificateNum,agentName,agentPhone,applicantName,applicantCertificateNum,applicantPhone,applicantType,enApplicantName,
+        enApplicantCertificateNum,enApplicantPhone)
+        values (#{id,jdbcType=VARCHAR},#{agentCertificateNum},#{agentName},#{agentPhone},#{applicantName},#{applicantCertificateNum},#{applicantPhone},#{applicantType},
+        #{enApplicantName},#{enApplicantCertificateNum},#{enApplicantPhone})
+    </insert>
+
+    <update id="updateUserHistoryByPhone" parameterType="com.unifs.sdbst.app.bean.fingertips.UserHistoryVO">
+        update user_history set agentCertificateNum=#{agentCertificateNum},agentName=#{agentName},applicantName=#{applicantName,jdbcType=VARCHAR},
+        applicantCertificateNum=#{applicantCertificateNum,jdbcType=VARCHAR},applicantPhone=#{applicantPhone,jdbcType=VARCHAR},applicantType=#{applicantType},
+        enApplicantName=#{enApplicantName,jdbcType=VARCHAR}, enApplicantCertificateNum=#{enApplicantCertificateNum,jdbcType=VARCHAR},
+        enApplicantPhone=#{enApplicantPhone,jdbcType=VARCHAR}
+        where agentPhone=#{agentPhone}
+    </update>
+
+    <select id="findUserHistory" parameterType="String" resultType="com.unifs.sdbst.app.bean.fingertips.UserHistoryVO">
+        select * from user_history where agentPhone=#{phone,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="findUserAddressCountByAgentPhone" resultType="Integer" parameterType="map">
+        select count(*) from user_address where agentPhone=#{agentPhone}
+    </select>
+
+    <update id="updateUserAddress" parameterType="map">
+        update user_address set provinceName=#{provinceName},province=#{province},cityName=#{cityName},city=#{city},districtName=#{districtName},
+        district=#{district},detail=#{detail},postcode=#{postcode}
+        where agentPhone=#{agentPhone}
+    </update>
+
+    <insert id="addUserAddress" parameterType="map">
+        insert into user_address (id,agentPhone,provinceName,province,cityName,city,districtName,district,detail,postcode,flag)
+        values (#{id,jdbcType=VARCHAR},#{agentPhone},#{provinceName},#{province},#{cityName},#{city},#{districtName},#{district},#{detail},#{postcode},#{flag})
+    </insert>
+
+    <select id="findUserAddressByAgentPhone" parameterType="String" resultType="map">
+        select AGENTPHONE AS "agentPhone",ID AS "id",PROVINCENAME AS "provinceName",PROVINCE AS "province",CITYNAME AS "cityName",CITY AS "city",
+         DISTRICTNAME AS "districtName",DISTRICT AS "district",DETAIL AS "detail",POSTCODE AS "postcode"  from user_address
+         where agentPhone=#{agentPhone} and rownum=1
+    </select>
+</mapper>

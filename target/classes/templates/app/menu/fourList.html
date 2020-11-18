@@ -1,0 +1,141 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <title th:text="${name}"></title>
+        <base th:href="${#request.getContextPath()}+'/'">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <link rel="stylesheet" th:href="@{wui/css/weui.css}"/>
+        <link rel="stylesheet" th:href="@{wui/css/weuix.css}"/>
+        <script th:src="@{js/jquery.min.js}"></script>
+        <script th:src="@{wui/js/zepto.min.js}"></script>
+        <script th:src="@{wui/js/zepto.weui.js}"></script>
+        <script th:src="@{js/base.js}"></script>
+        <script>
+            $(function () {
+
+            });
+        </script>
+        <style>
+            .icon {
+                font-size: 24px;
+                line-height: 40px;
+                margin: 0 10px 5px 0;
+                color: #10AEFF;
+                -webkit-transition: font-size 0.5s ease-out 0s;
+                -moz-transition: font-size 0.5s ease-out 0s;
+                transition: font-size 0.5s ease-out 0s;
+            }
+
+            .weui-cells {
+                margin: 0px;
+            }
+        </style>
+    </head>
+
+    <body ontouchstart>
+        <div class="page-bd">
+            <div class="weui-cells" id="menu-list">
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" th:inline="javascript">
+        var id = [[${id}]];
+        // console.log(id);
+        $(function () {
+            var oneArr;
+            var twoArr = new Array();
+
+            //获取总数据集合
+            $.ajax({
+                url: basePath() + "/app/menu/findChildsMenu",
+                type: "get",
+                data: {"id": id},
+                dataType: "json",
+                success: function (result) {
+                    oneArr = result.data;
+                    console.log(oneArr)
+                    //获取二级菜单集合
+                    var index = 0;
+                    for (var i = 0; i < oneArr.length; i++) {
+                        if (oneArr[i].parentId == id) {
+                            twoArr[index] = oneArr[i];
+                            index++;
+                        }
+                    }
+                    //对二级菜单数据排序
+                    sortArr(twoArr);
+                    var str = '';
+                    for (var i = 0; i < twoArr.length; i++) {
+                        //判断菜单是否显示
+                        if (typeof(runEnviron) != "undefined" && runEnviron == 'wx') {
+                            //微信控制
+                            if (twoArr[i].wxShow != 1) {
+                                continue;
+                            }
+                        } else {
+                            //APP控制
+                            if (twoArr[i].mobileShow != 1) {
+                                continue;
+                            }
+                        }
+                        //对name中的特殊字符&和"进行转义
+                        var name = twoArr[i].name;
+                        name = name.replace(/\&/g, '%26');
+                        name = name.replace(/\"/g, '%5C"');
+
+                        //链接地址
+                        var url;
+                        url = twoArr[i].href;
+                        str += '<a class="weui-cell weui-cell_access" href="javascript:;" onclick="countFn(\'' + twoArr[i].modelid + '\',\'' + twoArr[i].id + '\',\'' + twoArr[i].parentIds + '\',\'' + twoArr[i].href + '\',\'' + twoArr[i].name + '\',\'' + twoArr[i].disclaimer + '\',\'' + url + '\')">\n' +
+                            '                    <div class="weui-cell__hd">\n' +
+                            '                       <span class="icon icon-97"></span>' +
+                            '                    </div>\n' +
+                            '                    <div class="weui-cell__bd">\n' +
+                            '                        <p>' + twoArr[i].name + '</p>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="weui-cell__ft"></div>\n' +
+                            '                </a>';
+                    }
+                    $("#menu-list").append(str);
+                }
+            });
+        });
+
+        //足迹和点击量统计
+        function countFn(modelId, mId, mParentIds, mUrl, mName, disclaimer, url) {
+            console.log("点击事件响应")
+            var phoneCode = '';
+            var operator = '';
+            var area = '';
+            var types = '';
+            var brand = '';
+            var versions = '';
+
+            //足迹和点击量统计
+            if (typeof(phoneCode) == 'string' && phoneCode != '') {
+                $.getJSON(basePath() + "/browse/sdbstBrowse/save?modelId=" + modelId + "&types=" + types + "&brand=" + brand + "&versions=" + versions + "&phoneCode=" + phoneCode + "&operator=" + operator + "&area=" + area + "&mId=" + mId + "&mParentIds=" + mParentIds + "&mUrl=" + mUrl + "&mName=" + mName, function () {
+                });
+            }
+            //微信免责声明
+            if (typeof(disclaimer) == 'string' && disclaimer != '' && disclaimer != '0' && typeof(runEnviron) == "string" && runEnviron == 'wx') {
+                $("#disclaimer .d-btn .d-btn-r a").attr('href', url);
+                $.getJSON(basePath() + "/app/menu/getDisclaimer?type=disclaimer&value=" + disclaimer,
+                    function (dict) {
+                        $("#disclaimer .d-content span").text(dict.remarks);
+                    }
+                );
+                $("#disclaimer").show();
+            } else {
+                $.showLoading("加载中");
+                window.location.href = url;
+            }
+        }
+
+        //重新加载时隐藏loading动态效果
+        $(document).ready(function () {
+            console.log("事件触发");
+            $.hideLoading();
+        });
+
+    </script>
+</html>

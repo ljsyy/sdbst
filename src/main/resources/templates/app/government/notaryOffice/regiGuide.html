@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>办证指南</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        body{background: #F3F3F3;}
+        a{text-decoration:none;color: #000;}
+        .main{width: 100%;}
+
+        #list{}
+        .line{
+            background: #fff;
+            border-bottom: solid 1px #ccc;
+            padding: 10px;
+        }
+        .left{height: 25px;}
+        .middle{    font-size: 18px;
+            vertical-align: bottom;
+            padding: 0 10px;}
+        .right{    height: 25px;    float: right;}
+    </style>
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            query();
+        });
+
+        function query(){
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/getJson?url=http://19.200.90.219/api/Bzzn",
+                type:"get",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    load_ani.remove();
+                    console.log(result);
+                    var data = result.data;
+                    if(result == ""){
+                        webToast("查询失败","middle",500);
+                        return;
+                    }else if(result.ret == "true"){
+                        for(var i in data){
+                            $("#list").append(
+                                '<div class="line" id="'+data[i].ID+'">'+
+                                '<img class="left" src="'+basePath()+'/img/menu/note.png" />'+
+                                '<span class="middle">'+data[i].Title+'</span>'+
+                                '<img class="right" src="'+basePath()+'/img/interface/right.png" />'+
+                                '</div>'
+                            );
+                        }
+                        $(".line").click(function(){
+                            var ID = $(this).attr("id");
+                            console.log(ID);
+                            window.location.href =basePath()+"/government/notaryOffice/detail?id="+ID;
+                        });
+                    }else{
+                        webToast("查询失败","middle",500);
+                        return;
+                    }
+
+                }
+            });
+        }
+
+
+
+    </script>
+</head>
+<body>
+<div class="main">
+    <!-- 列表 -->
+    <div id="list">
+
+    </div>
+
+</div>
+</body>
+</html>

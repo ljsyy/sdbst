@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>申报材料</title>
+    <link rel="stylesheet" href="mui/css/mui.min.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link rel="stylesheet" href="css/app/fingertips/common.css">
+    <style type="text/css">
+        .black_shade{
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.3);
+        }
+        .email_div{
+            display: none;
+            padding-top: 10px;
+            position: fixed;
+            z-index: 10001;
+            top: 50%;
+            left: 50%;
+            margin-left: -150px;
+            transform: translateY(-50%);
+            width: 300px;
+            /*height: 400px;*/
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        #email_input{
+            padding: 0 10px !important;
+        }
+        .email_addr{
+            padding: 10px 10px 0 10px;
+        }
+        .email_addr>p{
+            color: #333;
+        }
+        .email_btn>p{
+            display: inline-block;
+            width: 49%;
+            margin: 0;
+            text-align: center;
+            font-size: 16px;
+            height: 36px;
+            line-height: 36px;
+            color: #333;
+        }
+        .mui-checkbox.mui-left label{
+            /*padding: 0 !important;*/
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h3>以下材料可通过发送邮箱获取</h3>
+    <div class="email_get_list">
+<!--        <ul class="mui-table-view email_get">-->
+<!--            <input type="text" readonly="readonly" value="无">-->
+<!--        </ul>-->
+    </div>
+    <h3>以下材料需要自行筹备</h3>
+    <div class="self_prepare_list">
+<!--        <ul class="mui-table-view self_prepare">-->
+<!--            <li class="mui-table-view-cell mui-collapse">-->
+<!--                <a class="mui-navigate-right" href="#">1、本人身份证及户口本</a>-->
+<!--                <div class="mui-collapse-content info close">-->
+<!--                    <ul class="phone many">-->
+<!--                        <li>-->
+<!--                            <span class="left">重要等级</span>-->
+<!--                            <span class="rightSide">必要</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">材料来源</span>-->
+<!--                            <span class="rightSide">申请人自备</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">纸质原件</span>-->
+<!--                            <span class="rightSide">0份</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">纸质复印件</span>-->
+<!--                            <span class="rightSide">0份</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">材料说明</span>-->
+<!--                            <span class="rightSide">请拍照上传，身份证需双面，户口本需户主页及个人页</span>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--            <li class="mui-table-view-cell mui-collapse">-->
+<!--                <a class="mui-navigate-right" href="#">2、申请表单填写</a>-->
+<!--                <div class="mui-collapse-content info close">-->
+<!--                    <ul class="phone many">-->
+<!--                        <li>-->
+<!--                            <span class="left">重要等级</span>-->
+<!--                            <span class="rightSide">必要</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">材料来源</span>-->
+<!--                            <span class="rightSide">其他</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">纸质原件</span>-->
+<!--                            <span class="rightSide">0份</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">纸质复印件</span>-->
+<!--                            <span class="rightSide">0份</span>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <span class="left">材料说明</span>-->
+<!--                            <span class="rightSide">请直接在本平台填写</span>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
+    </div>
+    <div class="footer_btn">
+        <button type="button" class="mui-btn email_get_btn">发送电子材料到邮箱</button>
+    </div>
+
+    <div class="black_shade"></div>
+    <div class="email_div">
+        <div id="email_material"></div>
+        <div class="email_addr">
+            <p>邮箱地址：</p>
+            <input type="text" class="mui-input-clear" id="email_input" placeholder="请输入邮箱地址">
+        </div>
+        <div class="email_btn">
+            <p onclick="hideEmailDiv()">取消</p>
+            <p onclick="sendEmail()">发送</p>
+        </div>
+    </div>
+
+    <span style="display: none" id="materialTitle" th:text="${materialTitle}"></span>
+
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            var matterId = [[${matterId}]]
+            console.log(matterId);
+            getMatericalInfo(matterId)
+        })
+        function getMatericalInfo(matterId){
+            mui.showLoading("正在获取信息","div");
+            $.ajax({
+                url:basePath()+"/app/fingertips/matter/material",
+                // url:"http://218.104.177.2:8090/sdbst/app/fingertips/matter/material",
+                data:{
+                    matterId:matterId
+                },
+                type:"get",
+                dataType:"json",
+                success:function (res) {
+                    mui.hideLoading(function(){
+                        var data = res.data
+                        var email_get_html = '';
+                        var self_prepare_html = '';
+                        var email_get = [];
+                        var self_prepare = [];
+                        var email_material = [];
+                        for(var i=0;i<data.data.length;i++){
+                            if(data.data[i].emptyFileUrls || data.data[i].sampleFileUrls){
+                                email_get.push(data.data[i])
+                                if (data.data[i].emptyFileUrls) {
+                                    for(var j=0;j<data.data[i].emptyFileUrls.length;j++){
+                                        email_material.push(data.data[i].emptyFileUrls[j])
+                                        // if(data.data[i].sampleFileUrls && data.data[i].sampleFileUrls[j]){
+                                        //     email_material.push(data.data[i].sampleFileUrls[j])
+                                        // }
+                                    }
+                                }
+                                if(data.data[i].sampleFileUrls){
+                                    // email_get.push(data.data[i])
+                                    for(var j=0;j<data.data[i].sampleFileUrls.length;j++){
+                                        email_material.push(data.data[i].sampleFileUrls[j])
+                                        // if(data.data[i].sampleFileUrls && data.data[i].sampleFileUrls[j]){
+                                        //     email_material.push(data.data[i].sampleFileUrls[j])
+                                        // }
+                                    }
+                                }
+                            }else{
+                                self_prepare.push(data.data[i])
+                            }
+                        }
+                        console.log(email_get);
+                        if(email_get.length == 0){
+                            email_get_html = '<input type="text" readonly="readonly" class="noList" value="无">'
+                        }else {
+                            for (var i = 0; i < email_get.length; i++) {
+                                email_get_html += '<ul class="mui-table-view email_get">'
+                                email_get_html += '<li class="mui-table-view-cell mui-collapse">'
+                                email_get_html += '<a class="mui-navigate-right" href="#">' + (i + 1) + '、' + email_get[i].materialName + '</a>'
+                                email_get_html += '<div class="mui-collapse-content info close"><ul class="phone many">'
+                                email_get_html += '<li><span class="left">重要等级</span><span class="rightSide">' + importance(email_get[i].type) + '</span></li>'
+                                email_get_html += '<li><span class="left">材料来源</span><span class="rightSide">' + source(email_get[i].sources) + '</span></li>'
+                                email_get_html += '<li><span class="left">纸质原件</span><span class="rightSide">' + email_get[i].pageNum + '</span></li>'
+                                email_get_html += '<li><span class="left">纸质复印件</span><span class="rightSide">' + email_get[i].pageCopyNum + '</span></li>'
+                                email_get_html += '<li><span class="left">材料说明</span><span class="rightSide">' + (email_get[i].sourcesDescribe || "") + '</span></li>'
+                                email_get_html += '</ul></div></li></ul>'
+                            }
+                        }
+                        if(self_prepare.length == 0){
+                            self_prepare_html = '<input type="text" readonly="readonly" class="noList" value="无">'
+                        }else{
+                            for(var i=0;i<self_prepare.length;i++){
+                                self_prepare_html += '<ul class="mui-table-view email_get">'
+                                self_prepare_html += '<li class="mui-table-view-cell mui-collapse">'
+                                self_prepare_html += '<a class="mui-navigate-right" href="#">'+(i+1)+'、'+self_prepare[i].materialName+'</a>'
+                                self_prepare_html += '<div class="mui-collapse-content info close"><ul class="phone many">'
+                                self_prepare_html += '<li><span class="left">重要等级</span><span class="rightSide">'+importance(self_prepare[i].type)+'</span></li>'
+                                self_prepare_html += '<li><span class="left">材料来源</span><span class="rightSide">'+source(self_prepare[i].sources)+'</span></li>'
+                                self_prepare_html += '<li><span class="left">纸质原件</span><span class="rightSide">'+self_prepare[i].pageNum+'</span></li>'
+                                self_prepare_html += '<li><span class="left">纸质复印件</span><span class="rightSide">'+self_prepare[i].pageCopyNum+'</span></li>'
+                                self_prepare_html += '<li><span class="left">材料说明</span><span class="rightSide">'+(self_prepare[i].sourcesDescribe || "")+'</span></li>'
+                                self_prepare_html += '</ul></div></li></ul>'
+                            }
+                        }
+                        $(".email_get_list").html(email_get_html)
+                        $(".self_prepare_list").html(self_prepare_html)
+
+                        var html = ''
+                        for(var i=0;i<email_material.length;i++){
+                            html += '<div class="mui-input-row mui-checkbox mui-left">'
+                            html += '<label>'+email_material[i].fileName+'</label>'
+                            html += '<input name="email_material" value="'+email_material[i].storeUrl+'" type="checkbox">'
+                            html += '</div>'
+                        }
+                        $("#email_material").html(html)
+
+                        //电子邮件获取申报材料按钮
+                        if(email_get.length>0){
+                            $(".email_get_btn").css({
+                                "background":"#007aff",
+                                "border":"1px solid #007aff",
+                                "color":"#fff"
+                            }).click(function (e) {
+                                e.stopPropagation()
+                                showEmailDiv()
+                            })
+                        }else{
+                            $(".email_get_btn").css({
+                                "background":"#e1e1e1",
+                                "border":"1px solid #e1e1e1",
+                                "color":"#666"
+                            })
+                        }
+                    });
+                },
+                error:function (err) {
+                    mui.hideLoading(function() {
+                        mui.toast("获取列表数据失败")
+                        console.log(err);
+                    })
+                }
+            })
+        }
+        function importance(str){
+            if(str == "1"){
+                return "必要"
+            }else if(str == "2"){
+                return "普通"
+            }
+        }
+        function source(str){
+            if(str == "10"){
+                return "申请人自备"
+            }else if(str == "20"){
+                return "政府部门核发"
+            }else if(str == "99"){
+                return "其他"
+            }
+        }
+        function showEmailDiv(){
+            $(".email_div,.black_shade").show()
+        }
+        function hideEmailDiv(){
+            $(".email_div,.black_shade").hide()
+        }
+        function sendEmail(){
+            var $email_material = $("input[name=email_material]:checked")
+            if($email_material.length == 0){
+                hideEmailDiv()
+                mui.alert('请选择要发送的电子材料', '提示',"确定",showEmailDiv)
+                return;
+            }
+            var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            var emailNum = $("#email_input").val().trim()
+            if(!emailExp.test(emailNum)){
+                hideEmailDiv()
+                mui.alert('请输入正确的电子邮箱', '提示',"确定",showEmailDiv)
+                return;
+            }
+            var obj = {
+                title:$("#materialTitle").text()+"-电子材料下载",
+                fileInfo:[],
+                sendEmail:emailNum
+            }
+            $.each($email_material,function (i,info) {
+                var item = {
+                    url:$(info).val(),
+                    fileName:$(info).prev("label").text()
+                }
+                obj.fileInfo.push(item)
+            })
+            console.log(obj);
+            $(".email_div,.black_shade").hide();
+            mui.showLoading("正在发送邮件","div");
+            $.ajax({
+                type: "post",
+                url: basePath() + "/app/fingertips/SendMail",
+                // url: "http://218.104.177.2:8090/sdbst/app/fingertips/SendMail",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(obj),//
+                async: true,
+                success: function (result) {
+                    if (result.code == 200) {
+                        mui.hideLoading(function () {
+                            mui.toast("发送成功，请注意查收")
+                        })
+                    } else {
+                        mui.hideLoading(function () {
+                            mui.toast("发送邮件失败，" + result.msg)
+                        })
+                    }
+                },
+                error: function (err) {
+                    mui.hideLoading(function () {
+                        mui.toast("发送邮件失败")
+                    })
+                }
+            })
+        }
+    </script>
+</body>
+</html>

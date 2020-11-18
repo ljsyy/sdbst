@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>公立医院基本医疗服务项目和价格</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <style>
+        .main{}
+        .explain{
+            background: #fff;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        .explain .top{    display: flex;    align-items: center;}
+        .explain .top img{}
+        .explain .top p{font-size: 18px;font-weight: 600;}
+        .explain .middle{
+            display: -webkit-box; /** 将对象作为伸缩盒子模型显示 **/
+            -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+            -webkit-line-clamp: 3; /** 显示的行数 **/
+            overflow: hidden;  /** 隐藏超出的内容 **/
+        }
+        .explain .bottom{
+            color: #4281cd;
+            text-align: end;
+            font-size: 15px;
+        }
+        .data{background: #fff;margin-top: 10px;}
+        .data .line{
+            overflow: hidden;
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border-bottom: solid 1px #ECECEC;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .data .line .type{width: 90%;}
+        .data .line .image{width: 10%;text-align: center;}
+    </style>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        $(document).ready(function(){
+            explain()
+            start();
+        });
+
+        function start(){
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/interface/HealthCareThreeList",
+                data:"twoNum="+[[${twoNum}]],
+                type: "post",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    console.log(result)
+                    load_ani.remove();
+                    var data = result.data;
+                    for(var i in data){
+                        $(".data").append(
+                            '<a class="line" href="'+basePath()+'/life/medicalPriceThree?threeNum='+data[i].threeNum+'">'+
+                            '<p class="type">'+data[i].threeName+'</p>'+
+                            '<div class="image"><img src="img/interface/right.png" height="20" /></div>'+
+                            '</a>'
+                        );
+                    }
+
+                }
+            });
+        }
+
+        function explain(){
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/interface/HealthExplain",
+                data:"oneNum="+[[${oneNum}]],
+                type: "post",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    console.log(result)
+                    load_ani.remove();
+                    var data = result.data;
+                    for(var i in data){
+                        $(".explain").append(
+                            '<div class="top">'+
+                            '<img src="img/new/explain.png" height="25" />'+
+                            '<p>本类说明</p>'+
+                            '</div>'+
+                            '<p class="middle">'+data[0].oneExplain+'</p>'+
+                            '<p class="bottom">展开</p>'
+                        );
+                    }
+
+                    $(".explain .bottom").click(function(){
+                        var text = $(this).text();
+                        if(text == "展开"){
+                            $(".explain .middle").css("display","block");
+                            $(".explain .bottom").html("收缩");
+                        }else if(text == "收缩"){
+                            $(".explain .middle").css("display","-webkit-box");
+                            $(".explain .bottom").html("展开");
+                        }
+                    });
+                }
+            });
+        }
+
+
+
+    </script>
+</head>
+<body>
+
+<div class="main">
+    <!-- 说明 -->
+    <div class="explain">
+
+    </div>
+
+    <!-- 列表 -->
+    <div class="data">
+
+    </div>
+</div>
+
+</body>
+</html>

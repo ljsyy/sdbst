@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.second.server.ServerInfoMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.server.ServerInfo">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="TYPE" jdbcType="DECIMAL" property="type" />
+    <result column="TYPE2" jdbcType="DECIMAL" property="type2" />
+    <result column="TYPE3" jdbcType="DECIMAL" property="type3" />
+    <result column="DEL_FLAG" jdbcType="DECIMAL" property="delFlag" />
+    <result column="COUNT" jdbcType="DECIMAL" property="count" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+    <result column="IP_NUMBER" jdbcType="VARCHAR" property="ipNumber" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.server.ServerInfo">
+    insert into SERVER_INFO (ID, IP, "PASSWORD", 
+      "TYPE", TYPE2, TYPE3, 
+      DEL_FLAG, "COUNT", REMARKS, 
+      IP_NUMBER)
+    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{type,jdbcType=DECIMAL}, #{type2,jdbcType=DECIMAL}, #{type3,jdbcType=DECIMAL}, 
+      #{delFlag,jdbcType=DECIMAL}, #{count,jdbcType=DECIMAL}, #{remarks,jdbcType=VARCHAR}, 
+      #{ipNumber,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.unifs.sdbst.app.bean.server.ServerInfo">
+    insert into SERVER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="ip != null">
+        IP,
+      </if>
+      <if test="password != null">
+        "PASSWORD",
+      </if>
+      <if test="type != null">
+        "TYPE",
+      </if>
+      <if test="type2 != null">
+        TYPE2,
+      </if>
+      <if test="type3 != null">
+        TYPE3,
+      </if>
+      <if test="delFlag != null">
+        DEL_FLAG,
+      </if>
+      <if test="count != null">
+        "COUNT",
+      </if>
+      <if test="remarks != null">
+        REMARKS,
+      </if>
+      <if test="ipNumber != null">
+        IP_NUMBER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="type2 != null">
+        #{type2,jdbcType=DECIMAL},
+      </if>
+      <if test="type3 != null">
+        #{type3,jdbcType=DECIMAL},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="ipNumber != null">
+        #{ipNumber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+<!--    <select id="selectByType" resultType="com.unifs.sdbst.app.bean.server.ServerInfo">-->
+    <select id="selectByType" resultMap="BaseResultMap">
+      select ID, IP, "PASSWORD",
+      "TYPE", TYPE2, TYPE3,
+      DEL_FLAG, "COUNT", REMARKS,
+      IP_NUMBER from SERVER_INFO t
+      where t.DEL_FLAG=0
+      <if test="type != null and type != ''">
+        and type=#{type}
+      </if>
+      <if test="ip != null and ip != ''">
+        and ip=#{ip}
+      </if>
+    </select>
+</mapper>

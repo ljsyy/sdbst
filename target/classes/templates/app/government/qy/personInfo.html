@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <title>用户信息</title>
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background:#edeef0;}
+        body{background: #edeef0;}
+        a{text-decoration:none;color: #000;}
+
+        .main{padding: 10px;}
+        .main .font{font-size: 15px;margin-bottom: 10px;}
+        .main input{width: 100%;height: 40px;border: solid 1px #cccccc;border-radius: 5px;line-height: 40px; margin-bottom: 10px;padding-left: 5px;}
+        .main select{width: 100%;height: 40px;line-height: 40px;margin-bottom: 10px;border: solid 1px #cccccc;border-radius: 5px;}
+        .main .choose-input{width: 80%;background: #4b90f8;}
+        .main #choose{width: 18%;height: 40px;line-height: 40px;border: solid 1px #b9342d;border-radius: 5px;color: #fff;background: #4b90f8;vertical-align: top;  }
+        .main #submit{width: 100%;height: 40px;line-height: 40px;font-size: 16px;color: #fff;background: #4b90f8;border: solid 1px #b9342d;border-radius: 5px;margin-top: 15px;}
+
+        /*搜索界面*/
+        .search-html{display:none;position:fixed;height: 100%;width: 100%;background: #edeef0;}
+        #main_search{width: 90%;position: absolute;top: 10px;left: 0;right: 0;margin: auto;}
+        #main_search .search{padding: 5px;background: rgba(255,255,255,.8);-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.4);border-radius: 3px;    display: flex;}
+        #main_search .search input{border: none;background: transparent;flex: 1;margin-right: 5px;width: 100px;}
+        #main_search .search .start{font-size: 15px;border-left: solid 1px rgb(153, 150, 148);padding-left: 5px;}
+        #main_search .list{border: solid 1px #ddd;margin-top: 10px;display:block;background: rgba(255,255,255,.8);-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.4);border-radius: 3px;}
+        #main_search .list .format{max-height: 450px;overflow: auto;}
+        #main_search .list .format p{padding: 10px;font-size: 15px;border-bottom: solid 1px #ccc;padding: 10px;}
+        #main_search .list .format p:last-child{border-bottom:none;}
+        #main_search .list .tishi{background: #4b90f8;font-size: 14px;padding: 5px 10px;}
+        #main_search .list .num{color: #4b90f8;margin: 0 5px;}
+        .search-html .pic{position: abs redolute;top: 50%;left: 50%;transform: translate(-50%,-50%);    text-align: center;}
+        .search-html .exit{position: absolute;height: 20px;width: 20px;background: #fff;font-size: 20px;line-height: 20px;bottom: 5px;color: #d3d2d2;left: 5px;box-shadow: 0px 0px 2px rgba(0,0,0,.3);-webkit-box-shadow: 0px 0px 2px rgba(0,0,0,.3);border-radius: 3px;}
+        .search-html .exit:after{content: "";position: absolute;height: 35%;width: 35%;border-left: solid 2px;border-bottom: solid 2px;top: 50%;left: 58%;transform: translate(-50%,-50%) rotate(45deg);}
+    </style>
+    <script>
+        $(document).ready(function(){
+            SearchObj = SearchObj($("#etpName"));
+            getInfo();	//查询个人信息
+        });
+        /* 查询个人信息 */
+        var code;
+        var areaCode;
+        var HYCode;
+        function getInfo(){
+            mui.showLoading("","div");//开始动画
+            $.ajax({
+                url: basePath()+"/qy/train/getInfo",
+                type: "GET",
+                dataType: "json",
+                async: true,
+                success: function(result){
+                    console.log(result)
+                    if(result.errorCode == 0){
+                        var data = result.data;
+                        $("#realName").val(data.realName);
+                        $("#jobPosition").val(data.jobPosition);
+                        $("#etpName").val(data.etpName);
+                        if(data.etpDistrictCode != "" && data.etpDistrictCode != undefined && data.etpDistrictCode != null){
+                            code = data.etpDistrictCode;
+                            areaCode = data.etpDistrictCode;
+                            getCodeInfo();
+                            $("#area").text(info);
+                            //$("#area").val(getCode);
+                        }
+                        if(data.industryCode != "" && data.industryCode != undefined && data.industryCode != null){
+                            code = data.industryCode;
+                            HYCode = data.industryCode;
+                            console.log(code)
+                            getCodeInfo();
+                            $("#HYSecond").text(info);
+                            //$("#HYSecond").val(getCode);
+
+                            code = data.industryCode.substring(0,6);
+                            console.log(code)
+                            getCodeInfo();
+                            $("#HYFirst").text(info);
+                            //$("#HYFirst").val(getCode);
+                        }
+                        getAreaTree();	//查询区域
+                        getHYTree();	//查询行业
+
+                        mui.hideLoading(function () {});//结束动画
+                    }else if(result.errorCode == -101){
+                        mui.hideLoading(function () {
+                            popTipShow.alert('温馨提示', '未登录，请先登录后操作', ['知道了'],
+                                function (e) {
+                                    //callback 处理按钮事件
+                                    var button = $(e.target).attr('class');
+                                    if (button == 'ok') {
+                                        //按下确定按钮执行的操作
+                                        //todo ....
+                                        this.hide();
+                                        window.location.href = basePath() + "/qy/train/loginPage?type=info";
+                                    }
+                                }
+                            );
+                        });
+
+                    }else{
+                        mui.hideLoading(function () {
+                            mui.toast(result.errorMsg);
+                            return;
+                        });
+
+                    }
+                }
+            });
+        };
+        /* 根据code查询详情 */
+        var info;
+        var getCode;
+        function getCodeInfo(){
+            $.ajax({
+                url: basePath()+"/qy/train/codeInfo?code="+code,
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(result){
+                    console.log(result)
+                    if(result.errorCode == 0){
+                        info = result.data.name;
+                        getCode = result.data.code;
+                    }else{
+                        //alert(result.errorMsg);
+                        webToast(result.errorMsg,"middle",1000);
+                        return;
+                    }
+                }
+            });
+        }
+        /* 查询区域 */
+        function getAreaTree(){
+            $.ajax({
+                url: basePath()+"/qy/train/areaTree",
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(result){
+                    console.log(result)
+                    if(result.errorCode == 0){
+                        var data = result.data;
+                        for(var i in data){
+                            $("#etpDistrictCode").append(
+                                '<option value ="'+data[i].code+'">'+data[i].name+'</option>'
+                            );
+                        }
+                    }else{
+                        //alert(result.errorMsg);
+                        webToast(result.errorMsg,"middle",1000);
+                        return;
+                    }
+                }
+            });
+        };
+        var curdata = '';
+        function secondChange(){
+            var value = $("#industryCodeFirst").val();
+            var paramArray = value.split(",");
+            var index = paramArray[0];
+            var code = paramArray[1];
+            var child = curdata[index].children;
+            console.log(child);
+            $("#industryCodeSecond").html("");
+            for(var i in child){
+                $("#industryCodeSecond").append(
+                    '<option value ="'+child[i].code+'">'+child[i].name+'</option>'
+                )
+            }
+        }
+        /* 查询行业 */
+        function getHYTree(){
+            $.ajax({
+                url: basePath()+"/qy/train/HYTree",
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(result){
+                    console.log(result)
+                    //curdata = result.data;
+                    if(result.errorCode == 0){
+                        var data = result.data;
+                        curdata = data;
+                        for(var i in data){
+                            $("#industryCodeFirst").append(
+                                '<option value ="'+i+','+data[i].code+'">'+data[i].name+'</option>'
+                            )
+                        }
+                    }else{
+                        //alert(result.errorMsg);
+                        webToast(result.errorMsg,"middle",1000);
+                        return;
+                    }
+                }
+            });
+        };
+        /* 提交 */
+        function submit(){
+            var realName = $("#realName").val();
+            console.log(realName)
+            var jobPosition = $("#jobPosition").val();
+            console.log(jobPosition)
+            var etpName = $("#etpName").val();
+            console.log(etpName)
+            var etpDistrictCode = $("#etpDistrictCode").val();
+            console.log(etpDistrictCode)
+            if(etpDistrictCode == null){
+                etpDistrictCode = areaCode;
+            }
+            var industryCode = $("#industryCodeSecond").val();
+            console.log(industryCode)
+            if(industryCode == null){
+                industryCode = HYCode;
+            }
+
+            mui.showLoading("","div");//开始动画
+            $.ajax({
+                url: basePath()+"/qy/train/updateInfo?realName="+realName+"&jobPosition="+jobPosition+"&etpName="+etpName+"&etpDistrictCode="+etpDistrictCode+"&industryCode="+industryCode,
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(result){
+                    mui.hideLoading(function () {
+                        console.log(result)
+                        if (result.errorCode == 0) {
+                            mui.toast(result.errorMsg);
+                        } else {
+                            //alert(result.errorMsg);
+                            mui.toast(result.errorMsg);
+                            return;
+                        }
+                    });
+                }
+            });
+        }
+        /* 搜索html
+         * @method SearchObj();
+         * @param label 绑定数据标签-input
+         */
+        var SearchObj = function(lable){
+            var search_html = ".search-html",
+                main = search_html + " #main_search",
+                pic = search_html + " .pic",
+                input = main + " input",
+                start = main + " .start",
+                list = search_html + " #search_list",
+                tishinum = list + " .num",
+                format = list + " .format",
+                exit = search_html + " .exit";
+            function init(){
+                $(exit).bind("click",exit_click);
+                $(start).bind("click",search_click);
+            }
+            //初始化内容
+            function content_init(){
+                $(format).html("");
+                $(list).css("display","none");
+                $(input).val("");
+            }
+            //搜索
+            function search_click(){
+                //获取输入框内容
+                var getinput = $(input).val();
+                mui.showLoading("","div");//开始动画
+                $.ajax({
+                    url:basePath()+"/qy/train/getComListByType?keyword="+getinput+"&start=0&limit=20",
+                    type: "get",
+                    dataType:"json",
+                    async:true,
+                    success:function(result){
+                        mui.hideLoading(function () {
+                        var data = result.data,
+                            arr = new Array();
+                        for(var d in data){
+                            arr.push(data[d].etpName);
+                        }
+                        $(tishinum).text(data.length);
+                        if(data.length != 0){
+                            pic_hide();
+                        }else{
+                            pic_show();
+                        }
+                        made_list(arr);
+                        });
+                    }
+
+                });
+
+            }
+            /* 生成列表
+             * @param arr 列表数组
+             */
+            function made_list(arr){
+                var str = ""
+                for(var a in arr){
+                    str += ("<p>" + arr[a] + "</p>");
+                }
+                $(format).html(str);
+                $(list).css("display","block");
+                $(format).find("p").bind("click",function(){
+                    lable.val($(this).text());
+                    exit_click();
+                });
+            }
+            //隐藏搜索html
+            function exit_click(){
+                $(search_html).hide();
+            }
+            //显示搜索html
+            function html_show(){
+                $(search_html).show();
+                pic_show()
+                content_init();
+            }
+            //隐藏图片
+            function pic_hide(){
+                $(pic).hide();
+            }
+            //显示图片
+            function pic_show(){
+                $(pic).show();
+            }
+            //更改绑定标签
+            function change_label(name){
+                lable = name;
+            }
+            init();
+            return {
+                show:html_show,//显示搜索html
+                hide:exit_click,//隐藏搜索html
+                label:change_label//更换标签对象
+            }
+        };
+    </script>
+</head>
+<body>
+<div class="search-html">
+    <div class="exit"></div>
+    <div class="pic">
+        <span style="display: block;">请查找您的企业</span>
+    </div>
+    <div id="main_search">
+        <div class="search" id="search">
+            <input value="" />
+            <span class="start">搜索</span>
+        </div>
+        <div class="list" id="search_list">
+            <div class="tishi">搜索结果共<span class="num">0</span>条</div>
+            <div class="format"></div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="main">
+    <p class="font">真实姓名</p>
+    <input type="text" id="realName" value="" placeholder="请输入您的真实姓名" />
+
+    <p class="font">个人职位</p>
+    <input type="text" id="jobPosition" value="" placeholder="请输入您的职位" />
+
+    <p class="font">您所在企业名称</p>
+    <input class="choose-input" type="text" id="etpName" value="" placeholder="请选择企业" readonly="readonly" />
+    <button id="choose" onclick="SearchObj.show()">选择</button>
+
+    <p class="font">企业所属区域</p>
+    <select id="etpDistrictCode">
+        <option id="area" value="" disabled selected hidden>请选择</option>
+        <!-- <option value ="volvo">Volvo</option>
+        <option value ="saab">Saab</option>
+        <option value ="opel">Opel</option>
+        <option value ="audi">Audi</option> -->
+    </select>
+
+    <p class="font">企业所属行业类别</p>
+    <select id="industryCodeFirst" onchange="secondChange()">
+        <option id="HYFirst" value="" disabled selected hidden>请选择</option>
+        <!-- <option value ="volvo">Volvo</option>
+        <option value ="saab">Saab</option>
+        <option value ="opel">Opel</option>
+        <option value ="audi">Audi</option> -->
+    </select>
+    <select id="industryCodeSecond">
+        <option id="HYSecond" value="" disabled selected hidden>请选择</option>
+        <!-- <option value ="volvo">Volvo</option>
+        <option value ="saab">Saab</option>
+        <option value ="opel">Opel</option>
+        <option value ="audi">Audi</option> -->
+    </select>
+    <center><button id="submit" onclick="submit()">提交修改资料</button></center>
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/list.js"></script>
+    <script src="js/app/lib/md5.min.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <title>进度查询</title>
+
+    <style>
+
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+
+        html{height: 100%; width: 100%}
+        body{background: #F3F3F3;}
+        a{text-decoration:none;color: #000;}
+
+        .main{background: #fff;}
+        .list{background: #fff;}
+        .list p{font-size: 20px;padding: 15px 0;margin: 0 5%;}
+        .list button{
+            width: 90%;
+            border: 0;
+            color: #fff;
+            height: 40px;
+            line-height: 40px;
+            font-size: 17px;
+            border-radius: 5px;
+            margin: 15px 0 10px 0;
+            background:  #4281cd;
+        }
+        #progress,#matter{
+            width: 80%;
+            border: 0;
+            background: #f5f4f4;
+            height: 40px;
+            line-height: 40px;
+            font-size: 17px;
+            padding: 0 10px;
+            border-radius: 5px;
+            margin: 0 5%;
+        }
+
+    </style>
+
+    <script th:inline="javascript">
+        function progress(){
+            var code = $("#progress").val();
+            if(code == "" || code == null || code == undefined){
+                webToast("请输入受理编号","middle",800);
+                //alert("请输入受理编号");
+                return false;
+            }else{
+                window.location.href=basePath()+'/government/queryProgressResult?code='+code;
+            }
+        }
+
+        function matter(){
+            // webToast("此功能暂无法使用，敬请期待！","middle",800);
+            var keyword = $("#matter").val();
+            if(keyword == "" || keyword == null || keyword == undefined){
+                //alert("请输入事项名称");
+                webToast("请输入事项名称","middle",800);
+                return false;
+            }else{
+                window.location.href=basePath()+'/government/searchList?keyword='+keyword;
+            }
+        }
+    </script>
+
+
+
+</head>
+<body>
+
+<div class="main">
+    <div class="list">
+        <p>进度查询</p>
+        <input type="text" id="progress" placeholder="输入受理编号" />
+        <center>
+            <button onclick="progress()">查询</button>
+        </center>
+    </div>
+
+    <div style="background: #f5f4f4;height: 15px;"></div>
+
+    <div class="list">
+        <p>事项查询</p>
+        <input type="text" id="matter" placeholder="输入事项名称" />
+        <center>
+            <button onclick="matter()">查询</button>
+        </center>
+    </div>
+</div>
+
+</body>
+</html>

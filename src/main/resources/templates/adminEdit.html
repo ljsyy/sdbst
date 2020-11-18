@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+    <style>
+        body{
+            font-size: 12px;
+        }
+        div>div>span{
+            display: inline-block;
+            vertical-align: top;
+            min-width: 120px;
+            text-align: right;
+        }
+        select{
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 12px;
+            width: 200px;
+            height: 30px;
+            padding: 4px;
+        }
+        .multiText{
+            display: inline-block;
+            vertical-align: top;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 85%;
+            height: 330px;
+        }
+        textarea{
+            display: inline-block;
+            vertical-align: top;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 85%;
+            height: 330px;
+            resize: none;
+        }
+        input{
+            vertical-align: top;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 85%;
+            height: 30px;
+            padding: 4px;
+        }
+        #updateBtn{
+            outline: none;
+            width: 80px;
+            height: 30px;
+            border-radius: 3px;
+            background: #1ba3e4;
+            border: 1px solid #1ba3e4;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<!--    <div id="div1">-->
+<!--    </div>-->
+
+<div>
+    <div style="margin-bottom: 4px;">
+        <span>请选择部门名称：</span>
+        <select name="" id="departmentName">
+            <option value="" selected id="noChoose">请选择</option>
+        </select>
+    </div>
+    <div>
+        <span>请编辑部门简介：</span>
+        <!--            <textarea name="" id="departmentIntroduction"></textarea>-->
+<!--        <div id="departmentIntroduction" class="multiText"></div>-->
+        <textarea id="departmentIntroduction" ></textarea>
+    </div>
+    <div>
+        <span>请编辑部门职能：</span>
+        <textarea id="departmentMechanism" ></textarea>
+<!--        <div id="departmentMechanism" class="multiText"></div>-->
+    </div>
+    <div>
+        <span>请编辑部门科室：</span>
+        <div id="departmentOffice" class="multiText"></div>
+    </div>
+    <div>
+        <span>请编辑部门领导分工：</span>
+        <div id="departmentLaborDivision" class="multiText"></div>
+    </div>
+    <div>
+        <span>请编辑部门联系电话：</span>
+        <input name="" id="contact" />
+<!--        <div id="contact" class="multiText"></div>-->
+    </div>
+    <div>
+        <span>请编辑部门联系地址：</span>
+        <input name="" id="address"/>
+    </div>
+    <div style="text-align: center">
+        <input type="button" id="updateBtn" value="修改" />
+    </div>
+</div>
+
+
+<script type="application/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script type="application/javascript" src="../static/js/wangEditor.min.js" th:src="@{/js/wangEditor.min.js}"></script>
+<script type="application/javascript" src="../static/js/admin.js" th:src="@{/js/admin.js}"></script>
+<script type="application/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var basePath = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/
+        $(function () {
+            var E = window.wangEditor;
+            // window.departmentIntroductionEditor = new E('#departmentIntroduction');
+            // window.departmentIntroductionEditor.customConfig.menus = [
+            //     'head',
+            //     'bold',
+            //     'italic',
+            //     'underline'
+            // ]
+            // window.departmentIntroductionEditor.create();
+            // window.departmentIntroductionEditor.txt.html("");
+
+            // window.departmentMechanismEditor = new E('#departmentMechanism')
+            // window.departmentMechanismEditor.create();
+            // window.departmentMechanismEditor.txt.html("")
+
+            window.departmentOfficeEditor = new E('#departmentOffice')
+            window.departmentOfficeEditor.create();
+            window.departmentOfficeEditor.txt.html("")
+
+            window.departmentLaborDivisionEditor = new E('#departmentLaborDivision')
+            window.departmentLaborDivisionEditor.create();
+            window.departmentLaborDivisionEditor.txt.html("")
+
+            // window.contactEditor = new E('#contact')
+            // window.contactEditor.create();
+            // window.contactEditor.txt.html("")
+
+            $("#updateBtn").click(function (e) {
+                updateDepartmentInfoById();
+            });
+
+            getAllDepartmentName();
+        })
+
+    function getAllDepartmentName(){
+        $.ajax({
+            url:basePath+"/admin/getAllDepartmentName",
+            dataType:"json",
+            success:function(data){
+                if(data.code == 200){
+                    var data=data.data;
+                    var html = "";
+                    for(var i = 0;i<data.length;i++){
+                        html += '<option value="'+data[i].ID+'">'+data[i].DEPARTMENTNAME+'</option>';
+                    }
+                    $("#noChoose").siblings().remove();
+                    $("#departmentName").append(html);
+                    bindChangeEvent();
+                }
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        })
+    }
+
+    function bindChangeEvent() {
+        $("#departmentName").change(function () {
+            getDepartmentInfoByDepName($(this).find("option:selected").text());
+        })
+    }
+
+    var contact = '';
+
+    function getDepartmentInfoByDepName(dep_name){
+        $.ajax({
+            url:basePath+"/department/getDepartmentInfoByDepName",
+            dataType:"json",
+            type:"POST",
+            data:{
+                dep_name:dep_name
+            },
+            success:function(data){
+               var data=data.data;
+               $("#departmentIntroduction").val(data.departmentIntroduction || "");
+               // window.departmentIntroductionEditor.txt.html(data.departmentIntroduction || "");
+               // window.departmentMechanismEditor.txt.html(data.departmentMechanism || "");
+                $("#departmentMechanism").val(data.departmentMechanism || "");
+               window.departmentOfficeEditor.txt.html(data.departmentOffice || "");
+               window.departmentLaborDivisionEditor.txt.html(data.departmentLaborDivision || "");
+               // window.contactEditor.txt.html(data.contact || "");
+               // $("#contact").val(data.contact || "");
+                contact = data.contact || "";
+               $("#address").val(data.address || "");
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        })
+    }
+    
+    function updateDepartmentInfoById() {
+        var id = $("#departmentName").val();
+        var departmentNameVal = $("#departmentName").find("option:selected").text();
+        // var departmentIntroductionVal = window.departmentIntroductionEditor.txt.html().trim()== "<p><br></p>"?"":window.departmentIntroductionEditor.txt.html().trim();
+        var departmentIntroductionVal = $("#departmentIntroduction").val().trim();
+        // var departmentMechanismVal = window.departmentMechanismEditor.txt.html().trim()== "<p><br></p>"?"":window.departmentMechanismEditor.txt.html().trim();
+        var departmentMechanismVal = $("#departmentMechanism").val().trim();
+        var departmentOfficeVal = window.departmentOfficeEditor.txt.html().trim()== "<p><br></p>"?"":window.departmentOfficeEditor.txt.html().trim();
+        var departmentLaborDivisionVal = window.departmentLaborDivisionEditor.txt.html().trim()== "<p><br></p>"?"":window.departmentLaborDivisionEditor.txt.html().trim();
+        // var contactVal = window.contactEditor.txt.html().trim()== "<p><br></p>"?"":window.contactEditor.txt.html().trim();
+        var contactVal = $("#contact").val().trim();
+        console.log(departmentMechanismVal);
+        // $.ajax({
+        //     url:basePath+"/admin/updateDepartmentInfoById",
+        //     dataType:"json",
+        //     type:"POST",
+        //     data:{
+        //         id:id,
+        //         departmentName:departmentNameVal,
+        //         departmentIntroduction:departmentIntroductionVal,
+        //         departmentMechanism: departmentMechanismVal,
+        //         departmentOffice:departmentOfficeVal,
+        //         departmentLaborDivision:departmentLaborDivisionVal,
+        //         contact:contact,
+        //         address:$("#address").val().trim()
+        //     },
+        //     success:function(data){
+        //         getAllDepartmentName();
+        //     },
+        //     error:function (err) {
+        //         console.log(err);
+        //     }
+        // })
+    }
+
+    /*]]>*/
+
+</script>
+</body>
+</html>

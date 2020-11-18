@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.department.DepartmentMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.menus.Menu">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="PARENT_ID" jdbcType="VARCHAR" property="parent.id" />
+        <result column="PARENT_IDS" jdbcType="VARCHAR" property="parentIds" />
+        <result column="NAME" jdbcType="OTHER" property="name" />
+        <result column="SORT" jdbcType="DECIMAL" property="sort" />
+        <result column="HREF" jdbcType="VARCHAR" property="href" />
+        <result column="TARGET" jdbcType="VARCHAR" property="target" />
+        <result column="ICON" jdbcType="VARCHAR" property="icon" />
+        <result column="IS_SHOW" jdbcType="CHAR" property="isShow" />
+        <result column="PERMISSION" jdbcType="VARCHAR" property="permission" />
+        <!--<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />-->
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+        <!--<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />-->
+        <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+        <result column="REMARKS" jdbcType="OTHER" property="remarks" />
+        <!--<result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />-->
+        <result column="MOBILE_SHOW" jdbcType="CHAR" property="mobileShow" />
+        <!--<result column="SHOW_MENU" jdbcType="VARCHAR" property="showMenu" />-->
+        <result column="TYPE" jdbcType="VARCHAR" property="type" />
+        <result column="MOBILE_ICON" jdbcType="VARCHAR" property="mobileIcon" />
+        <result column="WX_SHOW" jdbcType="CHAR" property="wxShow" />
+        <result column="MODEL_ID" jdbcType="VARCHAR" property="modelid" />
+        <result column="DISCLAIMER" jdbcType="VARCHAR" property="disclaimer" />
+        <result column="TAG" jdbcType="OTHER" property="tag" />
+        <result column="MONITOR" jdbcType="OTHER" property="monitor" />
+        <result column="OPENWAY" jdbcType="VARCHAR" property="openWay" />
+    </resultMap>
+    <sql id="menuJoins">
+		LEFT JOIN sys_menu p ON p.id = a.parent_id
+		LEFT JOIN sys_menu q ON q.id = a.show_menu
+    </sql>
+
+    <select id="getDepartmentInfoByDepName" parameterType="String" resultType="com.unifs.sdbst.app.bean.department.DepartmentInfo">
+        select a.id AS "id",
+        a.dep_name AS "departmentName",
+        a.dep_introduce AS "departmentIntroduction",
+        a.dep_mechanism AS "departmentMechanism",
+        a.dep_office AS "departmentOffice",
+        a.dep_labor_division AS "departmentLaborDivision",
+        a.contact AS "contact",
+        a.dep_address AS "address",
+        a.othercontact AS "otherContact",
+        a.department_type AS "departmentType"
+        from sys_department_style a
+        <where>
+            a.dep_name=#{dep_name} and a.del_flag='0'
+        </where>
+    </select>
+
+    <select id="findChildsMenu" parameterType="String" resultMap="BaseResultMap">
+        SELECT * FROM sys_menu a
+            <include refid="menuJoins"/>
+        WHERE a.parent_ids LIKE
+        '%,'||#{id}||',%'
+        AND a.parent_id = #{id}
+        AND a.del_flag = '0' and a.mobile_show = '1'
+    </select>
+
+    <select id="getDepartmentType" resultType="String">
+        select department_type from sys_department_style group by department_type order by department_type desc
+    </select>
+
+    <select id="getDepartmentByType" parameterType="String" resultType="String">
+        select dep_name from sys_department_style where department_type=#{department_type}
+    </select>
+
+    <select id="getDepartmentContactByDepName" parameterType="String" resultType="map">
+        select to_char(contact) AS "contact",to_char(otherContact) AS "otherContact" from sys_department_style where dep_name=#{dep_name}
+    </select>
+</mapper>

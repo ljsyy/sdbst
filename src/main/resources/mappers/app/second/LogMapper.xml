@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.second.LogMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.base.LogEntity">
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="ARGS" jdbcType="VARCHAR" property="args" />
+    <result column="INTERFACE_PATH" jdbcType="VARCHAR" property="interfacePath" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="DETAIL" jdbcType="VARCHAR" property="detail" />
+    <result column="TIME" jdbcType="TIMESTAMP" property="time" />
+    <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.base.LogEntity">
+    insert into SYS_LOG (USERNAME, IP, ARGS, 
+      INTERFACE_PATH, STATUS, TYPE, 
+      DETAIL, TIME, CONTENT,START_TIME,SUB_TABLE,SUB_LIBRARY
+      )
+    values (#{username,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{args,jdbcType=VARCHAR}, 
+      #{interfacePath,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{detail,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR},
+      #{startTime,jdbcType=TIMESTAMP},#{subTable},#{subLibrary}
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select USERNAME, IP, ARGS, INTERFACE_PATH, STATUS, TYPE, DETAIL, TIME,START_TIME, CONTENT
+    from SYS_LOG
+  </select>
+</mapper>

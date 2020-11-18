@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.medical.InfoRecordMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.medical.InfoRecord">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="OTHER" property="name" />
+    <result column="SITE_CODE" jdbcType="VARCHAR" property="siteCode" />
+    <result column="CAR_NUMBER" jdbcType="VARCHAR" property="carNumber" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="CARD" jdbcType="VARCHAR" property="card" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="TEMPERATURE" jdbcType="VARCHAR" property="temperature" />
+    <result column="NAME2" jdbcType="VARCHAR" property="name2" />
+    <result column="PHONE2" jdbcType="VARCHAR" property="phone2" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="WORK" jdbcType="VARCHAR" property="work" />
+    <result column="WORK_CHARGE" jdbcType="VARCHAR" property="workCharge" />
+    <result column="WORK_PHONE" jdbcType="VARCHAR" property="workPhone" />
+    <result column="INSERT_DATE" jdbcType="TIMESTAMP" property="insertDate" />
+    <result column="RETURN_DATE" jdbcType="TIMESTAMP" property="returnDate" />
+    <result column="TO_SD" jdbcType="VARCHAR" property="toSd" />
+    <result column="CLOSE_PERSON" jdbcType="VARCHAR" property="closePerson" />
+    <result column="RESPLON_TIME" jdbcType="TIMESTAMP" property="resplonTime" />
+    <result column="POLICE_OPERNO" jdbcType="VARCHAR" property="policeOperno" />
+    <result column="HOSPITAL" jdbcType="VARCHAR" property="hospital" />
+    <result column="RECEIVE_PERSON" jdbcType="VARCHAR" property="receivePerson" />
+    <result column="RECEIVE_PHONE" jdbcType="VARCHAR" property="receivePhone" />
+    <result column="TOWN_ID" jdbcType="VARCHAR" property="townId" />
+    <result column="TOWN_NAME" jdbcType="VARCHAR" property="townName" />
+    <result column="TOWN" jdbcType="VARCHAR" property="town" />
+    <result column="FROM_PLACE" jdbcType="VARCHAR" property="fromPlace" />
+    <result column="RETRUN_PLACE" jdbcType="VARCHAR" property="retrunPlace" />
+    <result column="PLACE" jdbcType="VARCHAR" property="place" />
+    <result column="PERSON" jdbcType="VARCHAR" property="person" />
+    <result column="OPERNO" jdbcType="VARCHAR" property="operno" />
+    <result column="TELL" jdbcType="VARCHAR" property="tell" />
+    <result column="CAR_NUM" jdbcType="VARCHAR" property="carNum" />
+    <result column="COL1" jdbcType="VARCHAR" property="col1" />
+    <result column="COL2" jdbcType="VARCHAR" property="col2" />
+    <result column="COL3" jdbcType="VARCHAR" property="col3" />
+    <result column="COL4" jdbcType="VARCHAR" property="col4" />
+    <result column="COL5" jdbcType="VARCHAR" property="col5" />
+    <result column="COL6" jdbcType="VARCHAR" property="col6" />
+    <result column="COL7" jdbcType="VARCHAR" property="col7" />
+    <result column="COL8" jdbcType="VARCHAR" property="col8" />
+    <result column="COL9" jdbcType="VARCHAR" property="col9" />
+    <result column="POLICE_DATE" jdbcType="TIMESTAMP" property="policeDate" />
+    <result column="CUN_DATE" jdbcType="TIMESTAMP" property="cunDate" />
+    <result column="BEN_OWN" jdbcType="VARCHAR" property="benOwn" />
+    <result column="TOWN_NEW" jdbcType="VARCHAR" property="townNew" />
+    <result column="TOWN_NUM" jdbcType="VARCHAR" property="townNum" />
+    <result column="TOWN_DATE" jdbcType="TIMESTAMP" property="townDate" />
+    <result column="ZHEJIANG" jdbcType="VARCHAR" property="zhejiang" />
+    <result column="ZJ_DATE" jdbcType="TIMESTAMP" property="zjDate" />
+    <result column="COL10" jdbcType="VARCHAR" property="col10" />
+    <result column="COL11" jdbcType="VARCHAR" property="col11" />
+    <result column="COL12" jdbcType="VARCHAR" property="col12" />
+    <result column="TIME1" jdbcType="TIMESTAMP" property="time1" />
+    <result column="TIME2" jdbcType="TIMESTAMP" property="time2" />
+    <result column="TIME3" jdbcType="TIMESTAMP" property="time3" />
+    <result column="DEPARTMENT" jdbcType="VARCHAR" property="department" />
+    <result column="DEPART_DATE" jdbcType="TIMESTAMP" property="departDate" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.medical.InfoRecord">
+    insert into APP_HUBEI_RECORD (ID, NAME, SITE_CODE,
+      CAR_NUMBER, PHONE, CARD,
+      SEX, AGE, ADDRESS,
+      TEMPERATURE, NAME2, PHONE2,
+      CONTENT, WORK, WORK_CHARGE,
+      WORK_PHONE, INSERT_DATE, RETURN_DATE,
+      TO_SD, CLOSE_PERSON, COL1,ZHEJIANG, ZJ_DATE, COL12,
+      COL4, COL5
+    <!--,
+    RESPLON_TIME,COL2, COL3,
+    POLICE_OPERNO, HOSPITAL, RECEIVE_PERSON,
+    RECEIVE_PHONE, TOWN_ID, TOWN_NAME,
+    TOWN, FROM_PLACE, RETRUN_PLACE,
+    PLACE, PERSON, OPERNO,
+    TELL, CAR_NUM,
+    COL6, COL7, COL8, COL9,
+    POLICE_DATE, CUN_DATE, BEN_OWN,
+    TOWN_NEW, TOWN_NUM, TOWN_DATE,
+     COL10,
+    COL11, TIME1,
+    TIME2, TIME3, DEPARTMENT,DEPART_DATE-->)
+  values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=OTHER}, #{siteCode,jdbcType=VARCHAR},
+    #{carNumber,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR},
+    #{sex,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+    #{temperature,jdbcType=VARCHAR}, #{name2,jdbcType=VARCHAR}, #{phone2,jdbcType=VARCHAR},
+    #{content,jdbcType=VARCHAR}, #{work,jdbcType=VARCHAR}, #{workCharge,jdbcType=VARCHAR},
+    #{workPhone,jdbcType=VARCHAR}, #{insertDate,jdbcType=TIMESTAMP}, #{returnDate,jdbcType=TIMESTAMP},
+    #{toSd,jdbcType=VARCHAR}, #{closePerson,jdbcType=VARCHAR}, #{col1,jdbcType=VARCHAR},#{zhejiang,jdbcType=VARCHAR}, #{zjDate,jdbcType=TIMESTAMP}, #{col12,jdbcType=VARCHAR},
+    #{col4,jdbcType=VARCHAR}, #{col5,jdbcType=VARCHAR}
+    <!--,
+    #{resplonTime,jdbcType=TIMESTAMP},#{col2,jdbcType=VARCHAR}, #{col3,jdbcType=VARCHAR},
+    #{policeOperno,jdbcType=VARCHAR}, #{hospital,jdbcType=VARCHAR}, #{receivePerson,jdbcType=VARCHAR},
+    #{receivePhone,jdbcType=VARCHAR}, #{townId,jdbcType=VARCHAR}, #{townName,jdbcType=VARCHAR},
+    #{town,jdbcType=VARCHAR}, #{fromPlace,jdbcType=VARCHAR}, #{retrunPlace,jdbcType=VARCHAR},
+    #{place,jdbcType=VARCHAR}, #{person,jdbcType=VARCHAR}, #{operno,jdbcType=VARCHAR},
+    #{tell,jdbcType=VARCHAR}, #{carNum,jdbcType=VARCHAR},
+    #{col6,jdbcType=VARCHAR}, #{col7,jdbcType=VARCHAR}, #{col8,jdbcType=VARCHAR}, #{col9,jdbcType=VARCHAR},
+    #{policeDate,jdbcType=TIMESTAMP}, #{cunDate,jdbcType=TIMESTAMP}, #{benOwn,jdbcType=VARCHAR},
+    #{townNew,jdbcType=VARCHAR}, #{townNum,jdbcType=VARCHAR}, #{townDate,jdbcType=TIMESTAMP},
+     #{col10,jdbcType=VARCHAR},
+    #{col11,jdbcType=VARCHAR},#{time1,jdbcType=TIMESTAMP},
+    #{time2,jdbcType=TIMESTAMP}, #{time3,jdbcType=TIMESTAMP}, #{department,jdbcType=VARCHAR},
+    #{departDate,jdbcType=TIMESTAMP}*/-->)
+</insert>
+<select id="selectAll" resultMap="BaseResultMap">
+  select ID, NAME, SITE_CODE, CAR_NUMBER, PHONE, CARD, SEX, AGE, ADDRESS, TEMPERATURE,
+  NAME2, PHONE2, CONTENT, WORK, WORK_CHARGE, WORK_PHONE, INSERT_DATE, RETURN_DATE,
+  TO_SD, CLOSE_PERSON, RESPLON_TIME, POLICE_OPERNO, HOSPITAL, RECEIVE_PERSON, RECEIVE_PHONE,
+  TOWN_ID, TOWN_NAME, TOWN, FROM_PLACE, RETRUN_PLACE, PLACE, PERSON, OPERNO, TELL,
+  CAR_NUM, COL1, COL2, COL3, COL4, COL5, COL6, COL7, COL8, COL9, POLICE_DATE, CUN_DATE,
+  BEN_OWN, TOWN_NEW, TOWN_NUM, TOWN_DATE, ZHEJIANG, ZJ_DATE, COL10, COL11, COL12, TIME1,
+  TIME2, TIME3, DEPARTMENT, DEPART_DATE
+  from APP_HUBEI_RECORD
+</select>
+
+<select id="getInfoRecordById" resultMap="BaseResultMap" >
+  select ID, NAME, SITE_CODE, CAR_NUMBER, PHONE, CARD, SEX, AGE, ADDRESS, TEMPERATURE,
+  NAME2, PHONE2, CONTENT, WORK, WORK_CHARGE, WORK_PHONE, INSERT_DATE, RETURN_DATE,
+  TO_SD, CLOSE_PERSON, RESPLON_TIME, POLICE_OPERNO, HOSPITAL, RECEIVE_PERSON, RECEIVE_PHONE,
+  TOWN_ID, TOWN_NAME, TOWN, FROM_PLACE, RETRUN_PLACE, PLACE, PERSON, OPERNO, TELL,
+  CAR_NUM, COL1, COL2, COL3, COL4, COL5, COL6, COL7, COL8, COL9, POLICE_DATE, CUN_DATE,
+  BEN_OWN, TOWN_NEW, TOWN_NUM, TOWN_DATE, ZHEJIANG, ZJ_DATE, COL10, COL11, COL12, TIME1,
+  TIME2, TIME3, DEPARTMENT, DEPART_DATE
+  from APP_HUBEI_RECORD
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+<select id="getInfoRecordBySite" resultMap="BaseResultMap">
+  select ID, NAME, SITE_CODE, CAR_NUMBER, PHONE,INSERT_DATE
+  from APP_HUBEI_RECORD
+  where SITE_CODE = #{siteCode}
+  and trunc(INSERT_DATE) >= trunc(sysdate)
+  and RESPLON_TIME is null
+  <if test="name != null and name != ''">
+    and name=#{name}
+  </if>
+  <if test="phone != null and phone != ''">
+    and PHONE=#{phone}
+  </if>
+  order by INSERT_DATE desc
+</select>
+
+<select id="getInfoRecordBySite2" resultMap="BaseResultMap">
+  select ID, NAME, SITE_CODE, CAR_NUMBER, PHONE,INSERT_DATE
+  from APP_HUBEI_RECORD
+  where SITE_CODE = #{siteCode}
+  and RESPLON_TIME is not null
+  and POLICE_DATE is null
+  and col2 !=  '社区居家隔离'
+  <if test="name != null and name != ''">
+    and name=#{name}
+  </if>
+  <if test="phone != null and phone != ''">
+    and PHONE=#{phone}
+  </if>
+  order by INSERT_DATE desc
+</select>
+
+<select id="getInfoRecordBySite3" resultMap="BaseResultMap">
+  select ID, NAME, SITE_CODE, CAR_NUMBER, PHONE,INSERT_DATE
+  from APP_HUBEI_RECORD
+  where town is not null
+  and town = #{siteCode}
+  and CUN_DATE is null
+  <if test="name != null and name != ''">
+    and name=#{name}
+  </if>
+  <if test="phone != null and phone != ''">
+    and PHONE=#{phone}
+  </if>
+  union
+  select ID, NAME, SITE_CODE, CAR_NUMBER, PHONE,INSERT_DATE
+  from APP_HUBEI_RECORD
+  where town_New is not null
+  and town_New = #{siteCode}
+  and TOWN_DATE is null
+  <if test="name != null and name != ''">
+    and name=#{name}
+  </if>
+  <if test="phone != null and phone != ''">
+    and PHONE=#{phone}
+  </if>
+  order by INSERT_DATE desc
+</select>
+
+<update id="updateInfoRecordById">
+  update APP_HUBEI_RECORD
+  <trim prefix="set" suffixOverrides=",">
+    <if test="policeOperno != null">POLICE_OPERNO=#{policeOperno,jdbcType=VARCHAR},</if>
+    <if test="hospital != null">HOSPITAL=#{hospital,jdbcType=VARCHAR},</if>
+    <if test="receivePerson != null">RECEIVE_PERSON=#{receivePerson,jdbcType=VARCHAR},</if>
+    <if test="receivePhone != null">RECEIVE_PHONE=#{receivePhone,jdbcType=VARCHAR},</if>
+    <if test="townName != null">TOWN_NAME=#{townName,jdbcType=VARCHAR},</if>
+    <if test="town != null">TOWN=#{town,jdbcType=VARCHAR},</if>
+    <if test="retrunPlace != null">RETRUN_PLACE=#{retrunPlace,jdbcType=VARCHAR},</if>
+    <if test="col2 != null">COL2=#{col2,jdbcType=VARCHAR},</if>
+    <if test="resplonTime != null">RESPLON_TIME=#{resplonTime,jdbcType=TIMESTAMP},</if>
+    <if test="col9 != null">COL9=#{col9,jdbcType=VARCHAR},</if>
+    <if test="fromPlace != null">FROM_PLACE=#{fromPlace,jdbcType=VARCHAR},</if>
+    <if test="townId != null">TOWN_ID=#{townId,jdbcType=VARCHAR},</if>
+
+    <!--<if test="col3 != null">COL3=#{col3,jdbcType=VARCHAR},</if>
+    <if test="place != null">PLACE=#{place,jdbcType=VARCHAR},</if>
+    <if test="person != null">PERSON=#{person,jdbcType=VARCHAR},</if>
+    <if test="operno != null">OPERNO=#{operno,jdbcType=VARCHAR},</if>
+    <if test="tell != null">TELL=#{tell,jdbcType=VARCHAR},</if>
+    <if test="carNum != null">CAR_NUM=#{carNum},</if>
+
+    <if test="col7 != null">COL7=#{col7,jdbcType=VARCHAR},</if>
+    <if test="col8 != null">COL8=#{col8,jdbcType=VARCHAR},</if>
+
+    <if test="col6 != null">COL6=#{col6,jdbcType=VARCHAR},</if>
+    <if test="fromPlace != null">FROM_PLACE=#{fromPlace,jdbcType=VARCHAR},</if>
+    <if test="townId != null">TOWN_ID=#{townId,jdbcType=VARCHAR},</if>-->
+
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateInfoRecordById2">
+    update APP_HUBEI_RECORD
+    <trim prefix="set" suffixOverrides=",">
+      <if test="receivePerson != null">RECEIVE_PERSON=#{receivePerson,jdbcType=VARCHAR},</if>
+      <if test="receivePhone != null">RECEIVE_PHONE=#{receivePhone,jdbcType=VARCHAR},</if>
+      <if test="place != null">PLACE=#{place,jdbcType=VARCHAR},</if>
+      <if test="person != null">PERSON=#{person,jdbcType=VARCHAR},</if>
+      <if test="operno != null">OPERNO=#{operno,jdbcType=VARCHAR},</if>
+      <if test="tell != null">TELL=#{tell,jdbcType=VARCHAR},</if>
+      <if test="carNum != null">CAR_NUM=#{carNum},</if>
+      <if test="col6 != null">COL6=#{col6,jdbcType=VARCHAR},</if>
+      <if test="policeDate != null">POLICE_DATE=#{policeDate},</if>
+
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateInfoRecordById3">
+    update APP_HUBEI_RECORD
+    <trim prefix="set" suffixOverrides=",">
+
+      <if test="col8 != null">COL8=#{col8,jdbcType=VARCHAR},</if>
+      <if test="cunDate != null">CUN_DATE=#{cunDate,jdbcType=TIMESTAMP},</if>
+      <if test="townNew != null">TOWN_NEW=#{townNew,jdbcType=VARCHAR},</if>
+      <if test="townNum != null">TOWN_NUM=#{townNum,jdbcType=VARCHAR},</if>
+      <if test="col10 != null">col10=#{col10,jdbcType=VARCHAR},</if>
+      <if test="col11 != null">col11=#{col11,jdbcType=VARCHAR},</if>
+      <if test="col12 != null">col12=#{col12,jdbcType=VARCHAR},</if>
+      <if test="benOwn != null">BEN_OWN=#{benOwn,jdbcType=VARCHAR},</if>
+      <if test="townDate != null">TOWN_DATE=#{townDate,jdbcType=TIMESTAMP},</if>
+
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateInfoRecordBySysId">
+    update APP_HUBEI_RECORD
+    <trim prefix="set" suffixOverrides=",">
+
+      <if test="carNumber != null">CAR_NUMBER=#{carNumber,jdbcType=VARCHAR},</if>
+      <if test="returnDate != null">RETURN_DATE=#{returnDate,jdbcType=TIMESTAMP},</if>
+      <if test="name != null">NAME=#{name,jdbcType=VARCHAR},</if>
+      <if test="phone != null">PHONE=#{phone,jdbcType=VARCHAR},</if>
+      <if test="card != null">CARD=#{card,jdbcType=VARCHAR},</if>
+      <if test="sex != null">SEX=#{sex,jdbcType=VARCHAR},</if>
+      <if test="age != null">AGE=#{age,jdbcType=VARCHAR},</if>
+      <if test="address != null">ADDRESS=#{address,jdbcType=VARCHAR},</if>
+
+      <if test="temperature != null">TEMPERATURE=#{temperature,jdbcType=VARCHAR},</if>
+      <if test="name2 != null">NAME2=#{name2,jdbcType=VARCHAR},</if>
+      <if test="phone2 != null">PHONE2=#{phone2,jdbcType=VARCHAR},</if>
+      <if test="content != null">CONTENT=#{content,jdbcType=VARCHAR},</if>
+      <if test="work != null">WORK=#{work,jdbcType=VARCHAR},</if>
+      <if test="workCharge != null">WORK_CHARGE=#{workCharge,jdbcType=VARCHAR},</if>
+      <if test="workPhone != null">WORK_PHONE=#{workPhone,jdbcType=VARCHAR},</if>
+
+      <if test="toSd != null">TO_SD=#{toSd,jdbcType=VARCHAR},</if>
+      <if test="closePerson != null">CLOSE_PERSON=#{closePerson,jdbcType=VARCHAR},</if>
+      <if test="col4 != null">COL4=#{col4,jdbcType=VARCHAR},</if>
+      <if test="col5 != null">COL5=#{col5,jdbcType=VARCHAR},</if>
+      <if test="zhejiang != null">ZHEJIANG=#{zhejiang,jdbcType=VARCHAR},</if>
+      <if test="zjDate != null">ZJ_DATE=#{zjDate,jdbcType=TIMESTAMP},</if>
+      <if test="time1 != null">TIME1=#{time1,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectInfoRecord" resultMap="BaseResultMap">
+    select ID, NAME, SITE_CODE,
+      CAR_NUMBER, PHONE, CARD,
+      SEX, AGE, ADDRESS,
+      TEMPERATURE, NAME2, PHONE2,
+      CONTENT, WORK, WORK_CHARGE,
+      WORK_PHONE, INSERT_DATE, RETURN_DATE,
+      TO_SD, CLOSE_PERSON, COL1,ZHEJIANG, ZJ_DATE, COL12,
+      COL4, COL5
+      from APP_HUBEI_RECORD order by insert_date desc
+  </select>
+</mapper>

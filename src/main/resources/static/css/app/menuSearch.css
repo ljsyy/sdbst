@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+body{ margin:0; padding:0; font-size:14px; color:#333; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+#head{ height:43px; line-height:43px; background-color:#eb413d; display:flex; 
+	   align-items:center; text-align:center; font-size:16px; }
+#head .head-l{ width:12%; float:left; flex:1; }
+#head .head-l img{ width:13px; height:24px; }
+#head .head-c{ width:76%; float:left;}
+
+#head .head-r{ width:12%; float:left; color:#FFF; font-weight:600; }
+
+.container { padding:10px; margin:0px; max-width:750px; overflow:scroll; }
+.container .title{ line-height:40px; clear:both; }
+.container #hot-search .hot{ height:30px; line-height:30px; background-color:#EEE; border-radius:5px; 
+					 		 padding:0px 10px; margin:5px 5px 5px 0px; display:block; width: auto; float:left;}
+
+.container #history .his{ border-bottom:1px solid #999; line-height:40px; height:40px; text-align:center; 
+					 	  display:flex; align-items:center;}
+.container #history .his .his-l{ width:10%; float:left; flex:1; }
+.container #history .his .his-l img{ width:18px; height:18px; }
+.container #history .his .his-c{ width:80%; float:left; text-align:left; }
+.container #history .his .his-r{ width:10%; float:left; }
+.container #history .his .his-r img{ width:20px; height:20px; }
+.container #history .clear{ text-align:center; line-height:30px; margin-top:50px; }
+
+.container #result .list{ border-bottom:1px solid #999; line-height:40px; height:40px; text-align:center; }
+.container #result .list a{ display:flex; align-items:center; text-decoration:none; color:#333; }
+.container #result .list .list-l{ width:10%; float:left; flex:1; }
+.container #result .list .list-l img{ width:18px; height:18px; }
+.container #result .list .list-c{ width:90%; float:left; text-align:left; }
+
+

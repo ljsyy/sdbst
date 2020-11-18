@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.OlMapper">
+	<select id="queryByType" resultType="com.unifs.sdbst.app.bean.life.OlEntity">
+   		select * from ONLINE_SIGNON
+   	</select>
+   	
+   	<insert id="insert">
+		INSERT INTO ONLINE_SIGNON(
+		IDENTIFICATION,
+		SEX,
+		NAME,
+		PHONE,
+		QQ,
+		EMAIL
+		) VALUES (
+		#{identification},
+		#{sex},
+		#{name},
+		#{phone},
+		#{qq},
+		#{email}
+		)
+	</insert>
+</mapper>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>周边服务</title>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/list.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <script src="js/app/lib/md5.min.js"></script>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+    <script src="js/app/prompt.js"></script>
+
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{}
+        body{background: #F3F3F3;height: 100%;}
+        a{text-decoration:none;color: #000;}
+        #allmap {height:100%;width: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+        #r-result{
+            position: absolute;
+            height: 100%;
+            top: 0;
+            width: 55%;
+            left: 0;
+            overflow-y: auto;
+            right: 0;
+            margin: auto;
+            z-index: 1;
+            display: none;
+        }
+        #r-result table{width:100%;}
+        #r-result .navtrans-view a{display: none;}
+        .path{
+            z-index: 1;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            width: 34px;
+            background: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 2px;
+            color: #000;
+            display: none;
+        }
+        .location{
+            position: absolute;
+            z-index: 1;
+            background: #ECECEC;
+            bottom: 27px;
+            left: 10px;
+            height: 35px;
+            width: 35px;
+            border-radius: 5px;
+            filter: Alpha(Opacity=50);
+            -moz-opacity: 0.5;
+            opacity: 0.8;
+        }
+        .location img{    height: 35px;}
+        .select{
+            background: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            overflow-x: auto;
+            font-size: 0;
+            height: 143px;
+        }
+        .icon-top{}
+        .icon-bottom{}
+        .icon-click{
+            display: inline-block;
+            text-align: center;
+            padding: 10px 0px;
+            border-bottom: solid 1px #ccc;
+            border-right: solid 1px #ccc;
+            font-size: 16px;
+            width: 25%;
+        }
+        .icon-click img{    height: 25px;}
+        .icon-click p{
+            font-size: 14px;
+            padding-top: 6px;
+        }
+
+        .footer{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 74px;
+            background: #fff;
+        }
+        .footer .place{    padding: 16px 10px 10px 10px;}
+        .footer .address{    padding: 0px 10px 6px 10px;color: #ccc;}
+        .red-round{
+            background: #eb3f29;
+            position: absolute;
+            height: 70px;
+            width: 70px;
+            text-align: center;
+            line-height: 70px;
+            color: #fff;
+            border-radius: 50%;
+            right: 15px;
+            bottom: 45px;
+            font-size: 12px;
+            z-index: 1;
+            display: none;
+        }
+        .red-round img{    position: relative;
+            /* right: 12px; */
+            /* bottom: 22px; */
+            height: 35px;
+            margin-top: 5px;}
+        .red-round p{position: relative;	    position: relative;
+            margin-top: -25px;    background: transparent;}
+
+        #prompt p{background: none;}
+    </style>
+
+
+
+</head>
+<body>
+<!-- 选择 -->
+<div class="select">
+    <!-- 第一行 -->
+    <div class="icon-top">
+        <li class="icon-click" style="color:#eb3f29">
+            <img src="img/service/gy.png" />
+            <p>公园</p>
+        </li>
+        <li class="icon-click">
+            <img src="img/service/jyjg.png" />
+            <p>教育局</p>
+        </li>
+        <li class="icon-click">
+            <img src="img/service/jd.png" />
+            <p>旅馆</p>
+        </li>
+        <li class="icon-click">
+            <img src="img/service/lscs.png" />
+            <p>避难场所</p>
+        </li>
+    </div>
+    <!-- 第二行 -->
+    <div class="icon-bottom">
+        <li class="icon-click">
+            <img src="img/service/xx.png" />
+            <p>学校</p>
+        </li>
+        <li class="icon-click">
+            <img src="img/service/yy.png" />
+            <p>定点医院</p>
+        </li>
+        <li class="icon-click">
+            <img src="img/service/yd.png" />
+            <p>定点药店</p>
+        </li>
+        <li class="icon-click">
+            <img src="img/service/cy.png" />
+            <p>餐饮服务</p>
+        </li>
+    </div>
+</div>
+
+<!-- 地图 -->
+<div style="height: calc(100% - 217px);width: 100%;position: relative;">
+    <div class="path" onclick="path()">文字路线</div>
+    <div class="location" onclick="choose()"><img src="img/map/localicon.png" /></div>
+    <div id="allmap"></div>
+    <div id="r-result"></div>
+</div>
+
+
+<!-- 底部 -->
+<div class="footer">
+     <div class="red-round" onclick="goHere()">
+        <img src="img/map/go.png" />
+        <p>去这里</p>
+    </div>
+    <img class="red-round" src="img/service/dh.png" onclick="goHere()" />
+    <p class="place"></p>
+    <p class="address"></p>
+</div>
+
+</body>
+</html>
+
+
+
+<!-- IOS定位专用 -->
+<script>
+    var callLocationOfLatAndLong = function()
+    {
+        var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+        aaa.getCall(callInfo);
+    }
+
+    var CallbackLocationOfLatAndLong = function(str)
+    {
+        str1 = str;
+        return str1;
+    }
+    var alerCallback = function()
+    {
+        alert('成功');
+    }
+
+</script>
+
+<script>
+    var NearIndex = 0;
+    var lng;	//初始化经度(例：113.11111)
+    var lat;	//初始化纬度(例：23.11111)
+    var mlng;
+    var mlat;
+    var Plng;	//初始化终点经度
+    var Plat;	//初始化终点纬度
+    var str1;	//初始化IOS定位返回值
+    var choosetype;
+    var mypoint;//我的位置
+    var map;
+
+    var text = "公园";
+    function getNearPoint(text){
+        if(text == "餐饮服务"){choosetype = "cyfw";}
+        else if(text == "教育局"){choosetype = "jyj";}
+        else if(text == "学校"){choosetype = "xx";}
+        else if(text == "定点药店"){choosetype = "ddyd";}
+        else if(text == "定点医院"){choosetype = "ddyy";}
+        else if(text == "旅馆"){choosetype = "lg";}
+        else if(text == "避难场所"){choosetype = "bncs";}
+        else if(text == "公园"){choosetype = "gy";}
+        function getAttra(json){
+            //console.log(json)
+            $(".red-round").css("display","block");
+            $(".place").empty();
+            $(".place").text(json.companyName);
+            $(".address").empty();
+            $(".address").text("地址：" + json.companyAdress);
+            Plng = json.longitude;
+            Plat = json.latitude;
+        }
+        $.ajax({
+            url:basePath()+"/data/SjSurService/getAll",
+            data:"type="+choosetype+"&lng="+lng+"&lat="+lat,
+            type: "POST",
+            dataType:"json",
+            async:false,
+            success:function(result){
+                // console.log(result);
+                var json = result;
+                var getz = parseInt(map.getZoom());
+                var openshow = 10;
+                if(getz >= 17){
+                    openshow = 20;
+                }
+                if(getz == 16){
+                    openshow = 30;
+                }
+                if(getz == 15){
+                    openshow = 50;
+                }
+                if(getz == 14){
+                    openshow = 80;
+                }
+                if(json.length < openshow){
+                    openshow = json.length;
+                }
+                for(var i = 0;i<openshow;i++){
+                    // console.log(json[i].longitude+json[i].latitude)
+                    var near = new BMap.Point(json[i].longitude, json[i].latitude);
+                    addMarker(near,i);
+                }
+                // 编写自定义函数,创建标注
+                function addMarker(point,index){
+                    var marker = new BMap.Marker(near);
+                    map.addOverlay(marker);
+                    marker.onclick=function(){
+                        getAttra(json[index]);
+                    }
+                }
+            }
+        });
+    }
+    $(document).ready(function(){
+        $(".icon-click").click(function(){
+            NearIndex = $(this).index();
+            $(".icon-click").find("p").css("color","#000");
+            $(this).find("p").css("color","#eb3f29");
+            $(".red-round").css("display","none");
+            text = $(this).find("p").text();
+            //alert(text);
+            choose();
+            map.clearOverlays();
+            getNearPoint(text)
+        });
+        choose();
+        prompt.load();
+        prompt.config({//不可填
+            contant: "#fff",//内容框颜色
+            close: "#000",//交叉字体颜色
+            title: "#000",//标题字体颜色
+            font: "#000",//内容字体颜色
+            button: "#6BB39D",//按钮默认颜色
+        });
+        $(".red-round").print({
+            title:"温馨提示",
+            text: "请选择规划方式",
+            cancel:false,
+            button: [
+                {
+                    name : "步行",
+                    callback: function(){
+                        $("#prompt").attr("class","prompt");
+                        walking();
+                    }
+                },
+                {
+                    name : "驾车",
+                    callback: function(){
+                        $("#prompt").attr("class","prompt");
+                        driving();
+                    }
+                }
+            ]
+        });
+    });
+
+    function choose(){	//判断系统
+        //初始化百度地图
+        map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(113.303526, 22.80993), 15);
+        // 添加缩放地图控件
+        var navigationControl = new BMap.NavigationControl({
+            // 靠左上角位置
+            anchor: BMAP_ANCHOR_TOP_LEFT,
+            // LARGE类型
+            type: BMAP_NAVIGATION_CONTROL_LARGE,
+            // 启用显示定位
+            enableGeolocation: false
+        });
+        map.addControl(navigationControl);
+        map.setMinZoom(14);
+        //map.setMaxZoom(17);
+        load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+
+
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        // listen();
+        window.setTimeout(function(){
+            listen()
+        },500);
+        if (isAndroid) {
+            // console.log("Android");
+            window.setTimeout(function(){
+                android()
+            },500);
+        }else if (isIOS) {
+            // console.log("iOS");
+            // window.setTimeout("ios()",500);
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r){
+                if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                    ios(r.point.lat,r.point.lng);
+                }else {
+                    alert('failed'+this.getStatus());
+                }
+            });
+        }else {
+            console.log("wx");
+            wx();
+        }
+    }
+
+    function wx(){	//微信定位
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                //map.addOverlay(mk);
+                map.panTo(r.point);
+                var pt = new BMap.Point(r.point.lng, r.point.lat);
+                var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+                mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+                map.addOverlay(mypoint);              // 将标注添加到地图中
+                load_ani.remove();
+                //alert('您的位置：'+r.point.lng+','+r.point.lat);
+                lng = r.point.lng;
+                lat = r.point.lat;
+                getAddress();
+            }
+            else {
+                alert('failed'+this.getStatus());
+            }
+        });
+    }
+
+    function ios(lat1,lng1){	//ios定位
+        // aaa.callLocationOfLatAndLong();	//调用IOS调用返回值
+        // //alert(str1);
+        // var paramArray = str1.split(",");
+        // lat = paramArray[0];
+        // lng = paramArray[1];
+        lat = lat1;
+        lng = lng1;
+        if(lat == "" || lng == ""){
+            //alert("定位失败");
+            lng = "113.303526";
+            lat = "22.80993";
+        }
+
+        var ggPoint = new BMap.Point(lng,lat);
+        //坐标转换完之后的回调函数
+        translateCallback = function (data){
+            if(data.status === 0) {
+                var marker = new BMap.Marker(data.points[0]);
+                if(lat == "" || lng == ""){
+                    //alert("定位失败");
+                    lng = "113.303526";
+                    lat = "22.80993";
+                }else{
+                    map.setCenter(data.points[0]);
+                    lng = data.points[0].lng;
+                    lat = data.points[0].lat;
+                    //alert("转换完成");
+                }
+                var pt = new BMap.Point(lng, lat);
+                var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+                mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+                map.addOverlay(mypoint);              // 将标注添加到地图中
+                load_ani.remove();
+                //alert("标注完成");
+                getAddress();
+            }
+        }
+
+        // setTimeout(function(){
+        //     var convertor = new BMap.Convertor();
+        //     var pointArr = [];
+        //     pointArr.push(ggPoint);
+        //     convertor.translate(pointArr, 1, 5, translateCallback)
+        // }, 1000);
+        translateCallback({points:[ggPoint],status:0});
+
+    }
+
+    function android(){	//安卓定位
+        // var paramArray = myobj.show().split(",");
+        // lng = paramArray[0];
+        // lat = paramArray[1];
+        if (typeof myobj == "object") {
+            if(myobj.show() == null){
+                lng =  22.80613;//22.927904;
+                lat = 113.289986;//113.15105;
+            }else{
+                var paramArray = myobj.show().split(",");
+                lng = paramArray[0];
+                lat = paramArray[1];
+            }
+        }else {
+            lng =  22.80613;//22.927904;
+            lat = 113.289986;//113.15105;
+        }
+        if(lat == "" || lng == ""){
+            // alert("请确保网络通畅并打开手机定位与权限");
+            webToast("请确保网络通畅并打开手机定位与权限","middle",3000);
+        }
+        var ggPoint = new BMap.Point(lat,lng);
+        //坐标转换完之后的回调函数
+        translateCallback = function (data){
+            if(data.status === 0) {
+                var marker = new BMap.Marker(data.points[0]);
+                if(lat == "" || lng == ""){
+                    alert("定位失败");
+                    lng = "113.303526";
+                    lat = "22.80993";
+                }else{
+                    map.setCenter(data.points[0]);
+                    lng = data.points[0].lng;
+                    lat = data.points[0].lat;
+                }
+                var pt = new BMap.Point(lng, lat);
+                var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+                mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+                map.addOverlay(mypoint);              // 将标注添加到地图中
+                load_ani.remove();
+                getAddress();
+            }
+        }
+
+        setTimeout(function(){
+            var convertor = new BMap.Convertor();
+            var pointArr = [];
+            pointArr.push(ggPoint);
+            convertor.translate(pointArr, 1, 5, translateCallback)
+        }, 1000);
+    }
+
+    function goHere(){
+        /* prompt.init();	//初始化弹框
+        prompt.print("请选择规划方式",false,[
+            {
+                name : "步行",
+                color : null,
+                callback: function(){
+                    $("#prompt").attr("class","prompt");
+                    walking();
+                }
+            },
+            {
+                name : "驾车",
+                color : null,
+                callback: function(){
+                    $("#prompt").attr("class","prompt");
+                    driving();
+                }
+            }
+        ]); */
+    }
+
+
+
+    function driving(){
+        var p1 = new BMap.Point(lng,lat);
+        var p2 = new BMap.Point(Plng,Plat);
+
+        var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        driving.search(p1, p2);
+        $(".path").css("display","block");
+    }
+
+    function walking(){
+        var p1 = new BMap.Point(lng,lat);
+        var p2 = new BMap.Point(Plng,Plat);
+
+        var walking = new BMap.WalkingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        walking.search(p1, p2);
+        $(".path").css("display","block");
+    }
+
+    function path(){	//文字路线 显示/隐藏
+        $("#r-result").toggle();
+    }
+
+    function getAddress(){
+        var geoc = new BMap.Geocoder();
+        var pt1 = new BMap.Point(lng,lat);
+        //console.log(lng+","+lat);
+        geoc.getLocation(pt1, function(rs){
+            var addComp = rs.addressComponents;
+            //alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+            $(".place").empty();
+            $(".address").empty();
+            $(".place").text("当前位置:"+ addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + "附近");
+            getNearPoint(text);
+        });
+    }
+
+    var mlng;
+    var mlat;
+    //移动地图监听
+    function dragzoom(drag){
+        map.clearOverlays();
+        var center = map.getCenter();
+        //alert("地图中心点变更为：" + center.lng + ", " + center.lat);
+        mlng = center.lng;
+        mlat = center.lat;
+        if(drag){
+            var pt = new BMap.Point(mlng,mlat);
+            var geoc = new BMap.Geocoder();
+            geoc.getLocation(pt, function(rs){
+                var addComp = rs.addressComponents;
+                if(addComp.district == "顺德区")
+                    showListen();
+                else
+                    webToast("显示该区域未开通，敬请期待","middle",800);
+            });
+        }else{
+            showListen();
+        }
+    }
+    function listen(){
+        map.addEventListener("dragend", function(){
+            dragzoom(true);
+        });
+        map.addEventListener("zoomend", function(){
+            dragzoom(false);
+        });
+    }
+
+
+    //移动地图标记
+    function showListen(){
+        load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+        var text = "";
+        //alert(text);
+        //alert(text);
+        //claer();
+        if(choosetype == "cyfw"){text = "餐饮服务";}
+        else if(choosetype == "jyj"){text = "教育局";}
+        else if(choosetype == "xx"){text = "学校";}
+        else if(choosetype == "ddyd"){text = "定点药店";}
+        else if(choosetype == "ddyy"){text = "定点医院";}
+        else if(choosetype == "lg"){text = "旅馆";}
+        else if(choosetype == "bncs"){text = "避难场所";}
+        else if(choosetype == "gy"){text = "公园";}
+        //alert(choosetype)
+        function getAttra(json){
+            //console.log(json)
+            $(".red-round").css("display","block");
+            $(".place").empty();
+            $(".place").text(json.companyName);
+            $(".address").empty();
+            $(".address").text("地址：" + json.companyAdress);
+            Plng = json.longitude;
+            Plat = json.latitude;
+        }
+        $.ajax({
+            url:basePath()+"/data/SjSurService/getAll",
+            data:"type="+choosetype+"&lng="+mlng+"&lat="+mlat,
+            type: "POST",
+            dataType:"json",
+            async:true,
+            success:function(result){
+                load_ani.remove();
+                //console.log(result);
+                var json = result;
+                var bounds = map.getBounds();
+                var sw = bounds.getSouthWest();
+                var ne = bounds.getNorthEast();
+                var toast = "显示该区域未开通，敬请期待";
+                var getz = parseInt(map.getZoom());
+                var openshow = 10;
+                if(getz >= 17){
+                    openshow = 20;
+                }
+                if(getz == 16){
+                    openshow = 30;
+                }
+                if(getz == 15){
+                    openshow = 50;
+                }
+                if(getz == 14){
+                    openshow = 80;
+                }
+                if(json.length < openshow){
+                    openshow = json.length;
+                }
+                //alert(getz + " " + openshow + " " + json.length + " " + text)
+                for(var i = 0;i<openshow;i++){
+                    // 编写自定义函数,创建标注
+                    function addMarker(point,index){
+                        var marker = new BMap.Marker(near);
+                        map.addOverlay(marker);
+                        marker.onclick=function(){
+                            getAttra(json[index]);
+                        }
+                    }
+                    // console.log(json[i].longitude+json[i].latitude)
+                    var near = new BMap.Point(json[i].longitude, json[i].latitude);
+                    addMarker(near,i);
+                    area(json[i]);
+                }
+                function area(o){
+                    var ln = o.longitude;
+                    var la = o.latitude;
+                    if(sw.lng < ln && ne.lng > ln && sw.lat < la && ne.lat > la ){
+                        toast = text + "加载成功";
+                    }
+                }
+                webToast(toast,"middle",800);
+                if(mypoint != undefined)
+                    map.addOverlay(mypoint);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.sdcount.TwoyearnotnuitMapper">
+    
+	<sql id="twoyearnotnuitColumns">
+		a."id" AS "id",
+		a."year_date" AS "yearDate",
+		a."name" AS "name",
+		a."first_num" AS "firstNum",
+		a."last_num" AS "lastNum",
+		a."type" AS "type",
+		a."parent_type" AS "parentType",
+		a."big_type" AS "bigType",
+		to_char(a."zzl",'fm9999990.00') AS "zzl"
+	</sql>
+	
+	<sql id="twoyearnotnuitJoins">
+	</sql>
+    
+	<select id="get" resultType="com.unifs.sdbst.app.bean.sdcount.Twoyearnotnuit">
+		SELECT 
+			<include refid="twoyearnotnuitColumns"/>
+		FROM twoyearnotnuit a
+		<include refid="twoyearnotnuitJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.sdcount.Twoyearnotnuit">
+		SELECT 
+			<include refid="twoyearnotnuitColumns"/>
+		FROM twoyearnotnuit a
+		<include refid="twoyearnotnuitJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.unifs.sdbst.app.bean.sdcount.Twoyearnotnuit">
+		SELECT 
+			<include refid="twoyearnotnuitColumns"/>
+		FROM twoyearnotnuit a
+		<include refid="twoyearnotnuitJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO twoyearnotnuit(
+			"id",
+			"year_date",
+			"name",
+			"first_num",
+			"last_num",
+			"type",
+			"parent_type",
+			"big_type",
+			"zzl"
+		) VALUES (
+			#{id},
+			#{yearDate},
+			#{name},
+			#{firstNum},
+			#{lastNum},
+			#{type},
+			#{parentType},
+			#{bigType},
+			#{zzl}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE twoyearnotnuit SET 	
+			year_date = #{yearDate},
+			"name" = #{name},
+			first_num = #{firstNum},
+			last_num = #{lastNum},
+			type = #{type},
+			parent_type = #{parentType},
+			big_type = #{bigType},
+			zzl = #{zzl}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM twoyearnotnuit
+		WHERE id = #{id}
+	</update>
+	<select id="year" resultType="com.unifs.sdbst.app.bean.sdcount.Twoyearnotnuit">
+		SELECT 
+			<include refid="twoyearnotnuitColumns"/>
+		FROM twoyearnotnuit a
+		WHERE 
+			a."year_date" = #{year}
+		AND	a."type" = #{type}
+		AND	a."name" = #{name}
+	</select>
+	<select id="yearList" resultType="com.unifs.sdbst.app.bean.sdcount.Twoyearnotnuit">
+		SELECT 
+			<include refid="twoyearnotnuitColumns"/>
+		FROM twoyearnotnuit a
+		WHERE 
+			a."year_date" = #{year}
+		AND	a."type" = #{type}
+	</select>
+	<select id="yearzl" resultType="com.unifs.sdbst.app.bean.sdcount.Twoyearnotnuit">
+		SELECT 
+			<include refid="twoyearnotnuitColumns"/>
+		FROM twoyearnotnuit a
+		WHERE 
+			a."year_date" = #{year}
+		AND	a."type" = #{type}
+		  AND a."name" != '合计'
+		  AND a."name" != '完成投资总计'
+		<choose>
+			<when test="type =='全社会用电量'">
+			AND a."parent_type" is null
+			</when>
+			<otherwise>
+			AND (a."parent_type" like CONCAT (#{parentType,jdbcType=VARCHAR},'%') or a."parent_type"=#{name,jdbcType=VARCHAR})
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

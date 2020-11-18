@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线报名</title>
+    <style type="text/css">
+        body{margin:0;font-family:"Roboto",sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}.form{position:relative;z-index:1;background:#FFFFFF;padding:15px;}.form input{font-family:"Roboto",sans-serif;outline:0;background:#f2f2f2;width:100%;border:0;margin:0 0 15px;padding:15px;box-sizing:border-box;font-size:14px;}.form button{font-family:"Microsoft YaHei","Roboto",sans-serif;text-transform:uppercase;outline:0;background:#4281cd;width:100%;border:0;padding:15px;color:#FFFFFF;font-size:14px;-webkit-transition:all 0.3 ease;transition:all 0.3 ease;cursor:pointer;}
+        select{font-family: "Roboto",sans-serif;outline: 0;background: #f2f2f2;color:#a9a9a9;width: 100%;border: 0;margin: 0 0 15px;padding: 15px;box-sizing: border-box;font-size: 14px;}
+    </style>
+</head>
+<body>
+<div id="wrapper" class="login-page">
+    <div id="login_form" class="form">
+        <form class="login-form">
+            <!-- <input type="text" placeholder="用户名" id="user_name" />
+            <input type="password" placeholder="密码" id="password" /> -->
+            <input type="text" placeholder="姓名" id="name" />
+            <select id="sex" >
+                <option value ="">请选择性别</option>
+                <option value ="boy">男</option>
+                <option value="girl">女</option>
+            </select>
+            <input type="text" placeholder="身份证号" id="sfz" />
+            <input type="text" placeholder="手机号码" id="phone" />
+            <input type="text" placeholder="QQ" id="qq" />
+            <input type="text" placeholder="邮箱" id="email" />
+            <button id="login">报 名</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript">
+    /**
+     * 版本 1.0
+     */
+    !(function () {
+        var RegExp_CN = {}
+        window.RegExp_CN = RegExp_CN;
+        /**
+         * 姓名验证
+         * @param {string} str 字符串
+         * @return true false
+         */
+        RegExp_CN.fullname = function (str) {
+            var regName = /^[\u4e00-\u9fa5]{2,4}$/;
+            if (!regName.test(str)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+         * 身份证号验证
+         * @param {string} str 字符串
+         * @return true false
+         */
+        RegExp_CN.identification = function (str) {
+            var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if (!regIdNo.test(str)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+         * 手机验证
+         * @param {string} str 字符串
+         * @return true false
+         */
+        RegExp_CN.phone = function (str) {
+            var mobileRegex = /^(((1[3456789][0-9]{1})|(15[0-9]{1}))+\d{8})$/;
+            if (!mobileRegex.test(str)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+         * 邮箱验证
+         * @param {string} str 字符串
+         * @return true false
+         */
+        RegExp_CN.email = function (str) {
+            var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/
+            if (!re.test(str)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+         * qq验证
+         * @param {string} str 字符串
+         * @return true false
+         */
+        RegExp_CN.qq = function (str) {
+            var regex = /^[1-9][0-9]{4,10}$/;
+            if (!regex.test(str)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+         * 车牌验证
+         * @param {string} str 字符串
+         * @return true false
+         */
+        RegExp_CN.car = function (str) {
+            var cPattern = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+            if (!cPattern.test(str)) {
+                return false;
+            }
+            return true;
+        }
+    })();
+    $(function () {
+        $("#login").click(function () {
+            var name = $("#name").val(),
+                sex = $("#sex").val(),
+                phone = $("#phone").val(),
+                sfz = $("#sfz").val(),
+                qq = $("#qq").val(),
+                email = $("#email").val();
+            if(!RegExp_CN.fullname($("#name").val())){
+                alert("请输入正确姓名");
+                return false;
+            }
+            if($("#sex").val() == ""){
+                alert("性别不可以为空");
+                return false;
+            }
+            if(!RegExp_CN.identification($("#sfz").val())){
+                alert("请输入正确省份证");
+                return false;
+            }
+            if(!RegExp_CN.phone($("#phone").val())){
+                alert("请输入正确手机号码");
+                return false;
+            }
+            if(!RegExp_CN.qq($("#qq").val())){
+                alert("请输入正确qq号码");
+                return false;
+            }
+            if(!RegExp_CN.email($("#email").val())){
+                alert("请输入正确邮箱地址");
+                return false;
+            }
+            $.ajax({
+                url: basePath()+"/ol/add",
+                type: "post",
+                data: {
+                    "identification":sfz,
+                    "sex":sex,
+                    "name":name,
+                    "phone":phone,
+                    "qq":qq,
+                    "email":email
+                },
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if(result.result == "success"){
+                        alert("报名成功");
+                        window.location.reload();
+                    }
+                },
+                error:function(){
+                    alert("报名失败");
+                }
+            });
+            return false;
+        })
+    })
+</script>
+</body>
+</html>

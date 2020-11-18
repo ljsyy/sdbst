@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.user.SatisfactionMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.user.Satisfaction">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="SORT" jdbcType="DECIMAL" property="sort" />
+    <result column="OPTION_A" jdbcType="VARCHAR" property="optionA" />
+    <result column="OPTION_B" jdbcType="VARCHAR" property="optionB" />
+    <result column="OPTION_C" jdbcType="VARCHAR" property="optionC" />
+    <result column="OPTION_D" jdbcType="VARCHAR" property="optionD" />
+    <result column="COUNT_A" jdbcType="DECIMAL" property="countA" />
+    <result column="COUNT_B" jdbcType="DECIMAL" property="countB" />
+    <result column="COUNT_C" jdbcType="DECIMAL" property="countC" />
+    <result column="COUNT_D" jdbcType="DECIMAL" property="countD" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from APP_SATISFACTION
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.user.Satisfaction">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+      select SEQ_{1}.nextval from dual
+    </selectKey>
+    insert into APP_SATISFACTION (ID, TITLE, SORT, 
+      OPTION_A, OPTION_B, OPTION_C, 
+      OPTION_D, COUNT_A, COUNT_B, 
+      COUNT_C, COUNT_D, CREATE_DATE, 
+      DEL_FLAG)
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{sort,jdbcType=DECIMAL}, 
+      #{optionA,jdbcType=VARCHAR}, #{optionB,jdbcType=VARCHAR}, #{optionC,jdbcType=VARCHAR}, 
+      #{optionD,jdbcType=VARCHAR}, #{countA,jdbcType=DECIMAL}, #{countB,jdbcType=DECIMAL}, 
+      #{countC,jdbcType=DECIMAL}, #{countD,jdbcType=DECIMAL}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.user.Satisfaction">
+    update APP_SATISFACTION
+    set TITLE = #{title,jdbcType=VARCHAR},
+      SORT = #{sort,jdbcType=DECIMAL},
+      OPTION_A = #{optionA,jdbcType=VARCHAR},
+      OPTION_B = #{optionB,jdbcType=VARCHAR},
+      OPTION_C = #{optionC,jdbcType=VARCHAR},
+      OPTION_D = #{optionD,jdbcType=VARCHAR},
+      COUNT_A = #{countA,jdbcType=DECIMAL},
+      COUNT_B = #{countB,jdbcType=DECIMAL},
+      COUNT_C = #{countC,jdbcType=DECIMAL},
+      COUNT_D = #{countD,jdbcType=DECIMAL},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      DEL_FLAG = #{delFlag,jdbcType=CHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ID, TITLE, SORT, OPTION_A, OPTION_B, OPTION_C, OPTION_D, COUNT_A, COUNT_B, 
+    COUNT_C, COUNT_D, CREATE_DATE, DEL_FLAG
+    from APP_SATISFACTION
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, TITLE, SORT, OPTION_A, OPTION_B, OPTION_C, OPTION_D, COUNT_A, COUNT_B, 
+    COUNT_C, COUNT_D, CREATE_DATE, DEL_FLAG
+    from APP_SATISFACTION
+  </select>
+</mapper>

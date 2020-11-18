@@ -1,0 +1,145 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: #fafafa;
+    padding: 10px;
+}
+h3{
+    font-size: 15px;
+    line-height: 32px;
+}
+ul{
+    list-style: none;
+}
+
+.mui-input-clear{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.mui-table-view-cell>a:not(.mui-btn){
+    margin: -11px -30px !important;
+    white-space: normal;
+    padding-right: 30px;
+}
+.mui-table-view-cell.mui-collapse .mui-collapse-content{
+    padding: 0 !important;
+}
+.phone>li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 30px;
+}
+.left{
+    font-size: 16px;
+    color: #aaa;
+}
+.rightSide{
+    font-size: 16px;
+    color: #333;
+    max-width: 270px;
+}
+.mui-btn{
+    width: 100% !important;
+    /*background: #e1e1e1 !important;*/
+    /*color: #fff !important;*/
+    border: 1px solid #e1e1e1;
+    height: 40px;
+}
+.footer_btn{
+    text-align: center;
+    margin-top: 50px;
+}
+.footer_btns{
+    text-align: center;
+    margin-top: 20px;
+}
+.footer_btns>button{
+    width: 90%;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    height: 30px;
+}
+.save_btn{
+    background: #2583e7;
+    margin-bottom: 8px;
+}  
+.del_btn{
+    background: #fa0100;
+}
+
+.address_list>li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+.address_list>li>div{
+    padding: 6px 0;
+}
+.user_name{
+    line-height: 30px;
+    display: inline-block;
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+    max-width: 160px;
+}
+.set_default{
+    display: inline-block;
+    font-size: 12px;
+    border: 1px solid #999;
+    color: #999;
+    padding: 0 6px;
+    border-radius: 12px;
+    margin: 0 6px;
+}
+.user_phone{
+    font-size: 13px;
+    color: #999;
+}
+.user_address{
+    max-width: 320px;
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+.address_list>li>img{
+    width: 20px;
+    height: 20px;
+}
+.fix_footer_btns{
+    position: fixed;
+    width: 100%;
+    bottom: 10px;
+    text-align: center;
+}
+.fix_footer_btns>button{
+    width: 90%;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    height: 30px;
+    background: #2583e7;
+}
+.ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.noList{
+    border: none !important;
+    padding: 0 !important;
+    background: #fff;
+}
+
+
+#step{
+    height: 60px;
+}

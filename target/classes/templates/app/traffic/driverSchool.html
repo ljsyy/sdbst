@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+
+	<meta charset="utf-8">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>顺德驾校</title>
+<link rel="stylesheet" href="css/app/bounced.css" />
+<script src="js/app/bounced.js"></script>
+<script src="js/jquery.min.js"></script>
+	<script th:src="@{/js/base.js}"></script>
+
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+<style>
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+.container {padding: 0;max-width: 750px;overflow: auto;height: 100%;}
+body{background: #fff;}
+header{height: 50px;background: #eb413d;text-align: center;color: #fff;line-height: 50px;overflow: hidden;}
+header input{background: rgba(0,0,0,0.1);border-radius: 5px;border: none;width: 55%;line-height: 30px;color: #eee;padding: 0 10px;}
+.headl{float: left;margin-left: 15px;width: 50px;height: 50px;}
+@media only screen and (min-width: 100px) and (max-width: 340px) {header input{background: rgba(0,0,0,0.1);width: 50%;}}
+.headr{float: right;margin-right: 15px;width: 50px;height: 50px;}
+#ggzxc .ggzxc-title{position: relative;display: flex;height: 40px;background:#f6f6f6;align-items: center;justify-content: center;}
+#ggzxc .ggzxc-title .findpage{padding: 5px 5px 5px 10px;outline: 0;width:85%;border:0;}
+#ggzxc .ggzxc-title img{margin-left: 10px;border-radius: 50%;}
+#ggzxc .ggzxc-map{position: relative;height: 35px;background: #fff;padding: 5px;}
+#ggzxc .ggzxc-map .xuanzepos{background: #f6f6f6;height: 100%;border: solid 1.5px #C5C4C4;border-radius: 5px;    position: relative;}
+#ggzxc .ggzxc-map .xuanzepos img{    position: absolute;right: 10px;top: 5px;}
+#ggzxc .ggzxc-map .xuanzepos .pos-font{position:absolute;left:10px;line-height: 35px;}
+#ggzxc .ggzxclist{display:flex;align-items: center;border-bottom: solid 1.5px #C5C4C4;    padding: 5px 0;}
+#ggzxc .ggzxclist .listleft{flex: 1;padding:0 10px;}
+#ggzxc .ggzxclist .listleft p{overflow: hidden;color:#888;font-size: 15px;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 1;}
+#ggzxc .ggzxclist .listleft b{font-size: 16px;font-weight: normal;color: #333;} 
+#ggzxc .ggzxc-content .ggzxclist .listleft p span{    margin-right: 10px;color: #F90;}
+#ggzxc .ggzxc-content .ggzxclist .listright{padding: 10px;}
+
+body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+#allmap{width:100%;height:100%;}
+p{margin-left:5px; font-size:14px;}
+
+</style>
+
+
+</head>
+<body>
+
+	<!-- 列表 -->
+	<div id="ggzxc" class="container">
+		<div class="ggzxc-map">
+			<div class="xuanzepos" onClick=window.location.href=basePath()+"/traffic/driverSchoolMap"><div class="pos-font">我的位置</div><img src="img/map/weizhi.png" height="25"/></div>
+		</div>
+		<div id="ggzxc-content" class="ggzxc-content" style="overflow: scroll;"></div>
+    </div>
+    
+</body>
+</html>
+
+
+<script type="text/javascript">
+var page = 1;
+$(document).ready(function(){
+
+	loadJsonFn(true);
+	
+	/* $(".container").bind("scroll",function(){
+		var bottom=$(this).scrollTop()+$(this).height();
+		  if(bottom==$(this)[0].scrollHeight){
+			  page = page + 1;
+			  loadJsonFn();
+		  }	
+	}); */
+});
+
+</script>
+
+<script>
+
+	
+	function loadJsonFn(clear){	//true：清除原有数据
+		if(clear){
+			$("#ggzxc-content").empty();	
+		}
+		var lng = getQueryString("lng");
+		var lat  = getQueryString("lat");
+		if(lat == "" || lng == ""){
+			lng = "113.303526";
+			lat = "22.80993";
+		}
+		// console.log(lng+"___"+lat);
+		var url=basePath()+"/api/map/getNearbyTarget?lng="+lng+"&lat="+lat+"&type=driverSchool";
+		//url=url.replace(/&/g,'*');
+	    $.getJSON(url,function(result){ 	
+			//var json=JSON.parse(result.obj);
+			var json=result.list;
+			console.log(json)
+			var str=""
+			for(var x in json){
+				var dis=parseFloat(json[x].longx).toFixed(1);
+				var href ='/traffic/map?PARK_X='+json[x].oldLng+'&PARK_Y='+json[x].oldLat;
+				// console.log(href)
+				str=str+'<div class="ggzxclist"><div class="listleft"><p><b>'+json[x].servicepoint+'</b></p><p style="-webkit-box-orient: vertical;">地址：'+json[x].address+'</p></div><div class="listright"><span style="vertical-align: middle;margin-right: 7px;">'+dis+'K</span>' +
+						'<img onclick="tiaozhuan(\''+json[x].oldLng+'\',\''+json[x].oldLat+'\')"  style="vertical-align: middle;margin-right: 10px;" src="img/map/maplogn.jpg" height="25"/></div></div>'
+				//alert(href);
+			}
+			$("#ggzxc-content").append(str);
+		});	
+		
+	}
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    function tiaozhuan(x,y) {
+		window.location.href=basePath()+"/traffic/map?PARK_X="+x+"&PARK_Y="+y;
+	}
+</script>
+
+

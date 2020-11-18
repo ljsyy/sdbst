@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.user.UserMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.user.User">
+        <result column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="HEAD_URL" property="headUrl" jdbcType="VARCHAR"/>
+        <result column="LOGIN_IP" property="loginIp" jdbcType="VARCHAR"/>
+        <result column="LOGIN_DATE" property="loginDate" jdbcType="TIMESTAMP"/>
+        <result column="LOGIN_FLAG" property="loginFlag" jdbcType="VARCHAR"/>
+        <result column="CREATE_BY" property="createBy" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_BY" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+        <result column="LOGIN_COUNT" property="loginCount" jdbcType="INTEGER"/>
+        <result column="DEL_FLAG" property="delFlag" jdbcType="CHAR"/>
+        <result column="IDENTITY_NUMBER" property="identityNumber" jdbcType="VARCHAR"/>
+        <result column="IDENTITY_TYPE" property="identityType" jdbcType="VARCHAR"/>
+        <result column="ACCOUNT" jdbcType="VARCHAR" property="account"/>
+        <result column="ACCOUNT_TYPE" jdbcType="VARCHAR" property="accountType"/>
+        <result column="CTYPE" jdbcType="VARCHAR" property="ctype"/>
+        <result column="CLEVEL" jdbcType="VARCHAR" property="clevel"/>
+        <result column="LOGIN_TYPE" jdbcType="VARCHAR" property="loginType"/>
+        <result column="ORIGIN" jdbcType="VARCHAR" property="origin"/>
+        <result column="U_ID" jdbcType="VARCHAR" property="uid"/>
+        <result column="UVERSION" jdbcType="VARCHAR" property="uversion"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.user.User">
+    insert into APP_USER (ID,
+      LOGIN_NAME, PASSWORD, PHONE, HEAD_URL,
+      LOGIN_IP, LOGIN_DATE, LOGIN_FLAG, 
+      CREATE_BY, CREATE_DATE, UPDATE_BY, 
+      UPDATE_DATE, REMARKS, DEL_FLAG,LOGIN_COUNT,IDENTITY_NUMBER,IDENTITY_TYPE,
+      ACCOUNT, ACCOUNT_TYPE,CTYPE, CLEVEL,LOGIN_TYPE, ORIGIN,U_ID, UVERSION,LINK_PERSON_CTYPE,
+      LINK_PERSON_CID,LINK_PERSON_NAME
+      )
+    values (#{id,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{headUrl,jdbcType=VARCHAR},
+      #{loginIp,jdbcType=VARCHAR}, #{loginDate,jdbcType=TIMESTAMP}, #{loginFlag,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR},
+      #{loginCount,jdbcType=INTEGER},#{identityNumber,jdbcType=VARCHAR},#{identityType,jdbcType=VARCHAR},
+       #{account,jdbcType=VARCHAR}, #{accountType,jdbcType=VARCHAR},#{ctype,jdbcType=VARCHAR},
+       #{clevel,jdbcType=VARCHAR},#{loginType,jdbcType=VARCHAR},#{origin,jdbcType=VARCHAR},
+       #{uid,jdbcType=VARCHAR}, #{uversion,jdbcType=VARCHAR},#{linkPersonCtype,jdbcType=VARCHAR},#{linkPersonCid,jdbcType=VARCHAR},
+       #{linkPersonName,jdbcType=VARCHAR}
+      )
+  </insert>
+    <select id="getByLoginName" parameterType="String" resultMap="BaseResultMap">
+    select * from(
+    select * from APP_USER
+    where LOGIN_NAME=#{_parameter,jdbcType=VARCHAR} and DEL_FLAG='0'
+    )where rownum=1
+  </select>
+
+    <update id="update" parameterType="com.unifs.sdbst.app.bean.user.User">
+        update APP_USER
+        <trim prefix="set" suffixOverrides=",">
+            <if test="password!=null and password!=''">
+                password=#{password},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="loginName!=null and loginName!=''">
+                login_name=#{loginName},
+            </if>
+            <if test="headUrl!=null and headUrl!=''">
+                head_url=#{headUrl},
+            </if>
+            <if test="loginIp!=null and loginIp!=''">
+                login_ip=#{loginIp},
+            </if>
+            <if test="loginDate!=null">
+                login_date=#{loginDate},
+            </if>
+            <if test="loginFlag!=null and loginFlag!=''">
+                login_flag=#{loginFlag},
+            </if>
+            <if test="createBy!=null and createBy!=''">
+                create_by=#{createBy},
+            </if>
+            <if test="createDate!=null">
+                create_date=#{createDate},
+            </if>
+            <if test="updateBy!=null and updateBy!=''">
+                update_by=#{updateBy},
+            </if>
+            <if test="updateDate!=null">
+                update_date=#{updateDate},
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                remarks=#{remarks},
+            </if>
+            <if test="loginCount!=null">
+                login_count=#{loginCount},
+            </if>
+            <if test="identityNumber!=null and identityNumber!=''">
+                identity_number=#{identityNumber},
+            </if>
+            <if test="identityType!=null and identityType!=''">
+                identity_Type=#{identityType},
+            </if>
+            <if test="account!=null and account!=''">
+                account=#{account},
+            </if>
+            <if test="accountType!=null and accountType!=''">
+                account_type=#{accountType},
+            </if>
+            <if test="ctype!=null and ctype!=''">
+                ctype=#{ctype},
+            </if>
+            <if test="clevel!=null and clevel!=''">
+                clevel=#{clevel},
+            </if>
+            <if test="loginType!=null and loginType!=''">
+                login_type=#{loginType},
+            </if>
+            <if test="origin!=null and origin!=''">
+                origin=#{origin},
+            </if>
+            <if test="uid!=null and uid!=''">
+                u_id=#{uid},
+            </if>
+            <if test="uversion!=null and uversion!=''">
+                uversion=#{uversion},
+            </if>
+            <if test="linkPersonCid!=null and linkPersonCid!=''">
+                link_person_cid=#{linkPersonCid},
+            </if>
+            <if test="linkPersonCtype!=null and linkPersonCtype!=''">
+                link_person_ctype=#{linkPersonCtype},
+            </if>
+            <if test="linkPersonName!=null and linkPersonName!=''">
+                link_person_name=#{linkPersonName},
+            </if>
+        </trim>
+        where ID=#{id}
+    </update>
+
+    <update id="updateByIdentity" parameterType="com.unifs.sdbst.app.bean.user.User">
+        update APP_USER
+        <trim prefix="set" suffixOverrides=",">
+            <if test="loginName!=null and loginName!=''">
+                login_name=#{loginName},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="headUrl!=null and headUrl!=''">
+                head_url=#{headUrl},
+            </if>
+            <if test="loginIp!=null and loginIp!=''">
+                login_ip=#{loginIp},
+            </if>
+            <if test="loginDate!=null">
+                login_date=#{loginDate},
+            </if>
+            <if test="loginFlag!=null and loginFlag!=''">
+                login_flag=#{loginFlag},
+            </if>
+            <if test="createBy!=null and createBy!=''">
+                create_by=#{createBy},
+            </if>
+            <if test="createDate!=null">
+                create_date=#{createDate},
+            </if>
+            <if test="updateBy!=null and updateBy!=''">
+                update_by=#{updateBy},
+            </if>
+            <if test="updateDate!=null">
+                update_date=#{updateDate},
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                remarks=#{remarks},
+            </if>
+            <if test="loginCount!=null">
+                login_count=#{loginCount},
+            </if>
+            <if test="identityNumber!=null and identityNumber!=''">
+                identity_number=#{identityNumber},
+            </if>
+            <if test="identityType!=null and identityType!=''">
+                identity_Type=#{identityType},
+            </if>
+            <if test="account!=null and account!=''">
+                account=#{account},
+            </if>
+            <if test="accountType!=null and accountType!=''">
+                account_type=#{accountType},
+            </if>
+            <if test="ctype!=null and ctype!=''">
+                ctype=#{ctype},
+            </if>
+            <if test="clevel!=null and clevel!=''">
+                clevel=#{clevel},
+            </if>
+            <if test="loginType!=null and loginType!=''">
+                login_type=#{loginType},
+            </if>
+            <if test="origin!=null and origin!=''">
+                origin=#{origin},
+            </if>
+            <if test="uid!=null and uid!=''">
+                u_id=#{uid},
+            </if>
+            <if test="uversion!=null and uversion!=''">
+                uversion=#{uversion},
+            </if>
+        </trim>
+        where identity_number=#{identityNumber}
+    </update>
+
+    <update id="updatePhone" parameterType="com.unifs.sdbst.app.bean.user.User">
+    update app_user set LOGIN_NAME=#{loginName},phone=#{phone} where id=#{id}
+  </update>
+
+    <select id="selectById" parameterType="String" resultMap="BaseResultMap">
+    select * from app_user where id=#{_parameter,jdbcType=VARCHAR} and DEL_FLAG='0'
+  </select>
+
+    <!--防止重复数据无法校验报错的情况，取查询结果的第一行-->
+    <select id="selectByPhone" resultMap="BaseResultMap">
+    select * from(
+      select * from app_user where phone=#{_parameter,jdbcType=VARCHAR} and DEL_FLAG='0'
+    )
+    where rownum=1
+  </select>
+    <!--关联查询，并根据身份证字段去重-->
+    <select id="selectUserByPhone" parameterType="String" resultMap="BaseResultMap">
+        select id, login_name, identity_number, identity_type
+        from app_user
+        where phone = #{_parameter,jdbcType=VARCHAR}
+        and DEL_FLAG = '0'
+        --and identity_number is not null
+    </select>
+
+    <select id="selectByIdentity" parameterType="String" resultMap="BaseResultMap">
+    select id, login_name, identity_number, identity_type from APP_USER
+    where IDENTITY_NUMBER=#{_parameter,jdbcType=VARCHAR} and DEL_FLAG='0'
+  </select>
+
+    <!--多条身份证记录取第一条-->
+    <select id="identityIsExist" parameterType="String" resultMap="BaseResultMap">
+      select * from(
+        select * from APP_USER where IDENTITY_NUMBER=#{_parameter,jdbcType=VARCHAR} and DEL_FLAG='0'
+        )
+      where rownum=1
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from app_user
+    </select>
+
+    <select id="selectByFactor" resultMap="BaseResultMap">
+        select * from app_user
+        <where>
+            IDENTITY_NUMBER=#{identity,jdbcType=VARCHAR}
+            <if test="phone!=null and phone!=''">
+                and phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="loginName!=null and loginName!=''">
+                and login_name=#{loginName,jdbcType=VARCHAR}
+            </if>
+            and DEL_FLAG='0'
+        </where>
+    </select>
+
+    <update id="dropInfo" parameterType="String">
+        update app_user set del_flag='1' where id=#{_parameter,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByLimit" resultMap="BaseResultMap">
+        select *
+        from (select t1.*, rownum rowno
+        from (select phone, count(0)
+        from app_user
+        where phone is not null
+        group by phone
+        order by count(0) desc) t1
+        where rownum &lt;= #{endRow}) t2
+        where t2.rowno &gt; #{startRow}
+    </select>
+
+    <select id="selectAllByLimit" resultMap="BaseResultMap">
+        select *
+        from (select t1.*, rownum rowno
+        from (select * from app_user
+        where phone is not null
+        ) t1
+        where rownum &lt;= #{endRow}) t2
+        where t2.rowno &gt; #{startRow}
+    </select>
+
+    <select id="selectIdentityByLimit" resultMap="BaseResultMap">
+        select *
+        from (select t1.*, rownum rowno
+        from (select IDENTITY_NUMBER, count(0)
+        from app_user
+        where IDENTITY_NUMBER is not null
+        group by IDENTITY_NUMBER
+        order by count(0) desc) t1
+        where rownum &lt;= #{endRow}) t2
+        where t2.rowno &gt; #{startRow}
+    </select>
+</mapper>

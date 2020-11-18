@@ -1,0 +1,336 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="decorator" content="blank"/>
+<title th:text="${title}"></title>
+<base th:href="@{/}">
+<link href="./css/base.css" rel="stylesheet"/>
+	<script src="./js/jquery.js"></script>
+	<script src="./js/index.js"></script>
+	<script src="./js/base.js"></script>
+
+<style>
+	#wrapper{height:100%;-webkit-overflow-scrolling:touch;overflow:auto;}
+	header{position: relative;}
+	header .headr img{width:45px;}
+	.headl{height: 100%; width: 50px;}
+	header .headl .icon{height: 100%; margin-top:0;}
+	header{font-size: 16px;width:100%;position:position;top:0px;left:0px;}
+	.headr{height: 100%; width: 50px;}
+	html,body{height:100%;}
+	#icontent{width: 100%;border:none;}
+	.shareDiv{width: 100%;height: 100%;background-color: rgba(0, 0, 0, 0.1);position: absolute;top: 0px;
+	left: 0px;display:none;z-index:1000000;}
+	.jiathis_style_32x32{position: absolute;bottom: 0px;background: #fff;width: 100%;padding: 15px 0;height: 70px;}
+	/* .jiathis_style_32x32.bottom{} */
+	.jiathis_style_32x32>div{width: 30%;display: inline-block;text-align: center;}
+	.jiathis_style_32x32>div>a{display:inline-block;}
+	.jiathis_style_32x32  .jiathis_separator{font-size: 14px !important;}
+	.jiathis_style_32x32 .sharetitle{width: 100%;font-size: 13px;color: #333; margin-bottom: 15px;}
+	.detailDiv{ -webkit-overflow-scrolling:touch; overflow-y:scroll; }
+	.newshare{ background:#fff; padding: 5px 10px; font-size: 14px; color: #666; }
+	.newshare img{height:16px;margin-bottom: -3px;margin-right: 5px;}
+	.newshare span{margin-right:10px;}
+	#jiathis_weixin_modal{margin: -200px 0 0 -150px !important;width: 300px !important;height: 300px !important;}
+	.inner-frame{ border:0; width:100%; height:100%; overflow:hidden; }
+	#disclaimer{ width:80%; background-color:#EEE; border-radius:10px;position:fixed; top:10%; left:10%; text-align:center; display:none; }
+	#disclaimer .d-title{ height:50px; line-height:50px; font-weight:600; font-size:16px;}
+	#disclaimer .d-content{ height:250px; text-align:left; border-top:1px solid #03F; border-bottom:1px solid #03F; padding:10px; line-height:30px;    font-size: 16px;}
+	#disclaimer .d-btn{font-size: 16px;height:50px; line-height:50px;}
+	#disclaimer .d-btn .d-btn-l{ width:49%; float:left; border-right:1px solid #03F;}
+	#disclaimer .d-btn .d-btn-r{ width:50%; float:right;}
+	table{width: 100% !important;}
+	/*开始加载页面样式1：*/
+	#load-now{opacity:1;width:100%;height:100%;display:block;position: fixed;z-index:100000;background: rgba(0,0,0,0.2);	-webkit-transition: opacity 300ms linear;-moz-transition: opacity 300ms linear;-ms-transition: opacity 300ms linear;-o-transition: opacity 300ms linear;transition: opacity 300ms linear;}
+	/*加载样式1：*/
+	.spinner {position: absolute;margin: 0 auto;right: 0;top: 50%;left: 0;margin-top: -17px;width: 150px;text-align: center;} 
+	.spinner > div {width: 30px;height: 30px;background-color: #fff;border-radius: 100%;display: inline-block;-webkit-animation: bouncedelay 1.4s infinite ease-in-out;animation: bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode: both;animation-fill-mode: both;}
+	.spinner .bounce1 {-webkit-animation-delay: -0.32s;animation-delay: -0.32s;}
+	.spinner .bounce2 {-webkit-animation-delay: -0.16s;animation-delay: -0.16s;}
+	@-webkit-keyframes bouncedelay {0%, 80%, 100% { -webkit-transform: scale(0.0) }40% { -webkit-transform: scale(1.0) }}
+	@keyframes bouncedelay { 0%, 80%, 100% {transform: scale(0.0);-webkit-transform: scale(0.0);} 40% {transform: scale(1.0);-webkit-transform: scale(1.0);}}
+</style>
+	<script th:inline="javascript">
+		var url = [[${url}]];
+		var adapt = [[${adapt}]];
+	</script>
+<script type="text/javascript">
+   var meta='<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes">';
+   window.onload = function(){
+	   mzsmStyle();
+   }
+	$(function(){
+		/* load_ani.open();
+		$("#LoadAni>div").prepend("<p style='background: none;color: #fff;font-size: 8vw;margin-bottom: 0.5rem;'>加载时间可能有点长</p>");
+		$("#LoadAni .spinner-dotGo>div").css({
+		    width: '7vw',
+	    	height: '7vw'
+		}); */
+		//免责声明
+		//运行环境
+		var runEnviron='${runEnviron}';
+		//用session保存数据
+		$.getJSON(getRootPath()+"/app/menu/saveData?name=");
+		
+		//免责声明
+		/* if('${disclaimer}' && '${disclaimer}' != '0' && typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+			$("#disclaimer").show();
+		} 
+		$("#disclaimer .d-btn .d-btn-r").click(function(){
+			$("#disclaimer").hide();
+		})
+		$("#disclaimer .d-btn .d-btn-l").click(function(){
+			window.history.back();
+		}) */
+		
+		loadWx(url);
+		
+		//返回按钮	
+		$(".retrun-icon").click(function() {
+			if(typeof(url) != "undefined" && url.indexOf("mp.weixin.qq.com")>0 ){
+				history.go(-3);
+			}else{
+				window.history.back();
+			}
+		});
+		//设置页面高度
+		windowSizeFn();
+		
+		$("#share").click(function(){
+			$(".shareDiv").show();
+		});   	   
+		$(".shareDiv").click(function(){
+			$(this).hide();
+		});
+		$(".jiathis_style_32x32").click(function(){
+			event.stopPropagation();
+		});
+		
+		$("#xin").hide();
+		
+		//点赞
+		var goods=1;
+		$("#like").unbind().bind("click",function(){
+			var parent = $(this)
+			var id= '${param.articleId}';
+			if(goods==1){
+				$.ajax({ 
+					url:getRooPath()+"/app/menu/updateGoods",
+					type:"post",
+					data:{"id":id, "goods":goods},
+					dataType:"json",
+					success:function(result){
+						console.log(result)
+						if(goods==1){
+							goods=-1;
+							parent.find("span").text("已点赞");
+							parent.find("img").attr("src","./img/index/like2.png");
+							$("#xin").show(500);
+						}else{
+							goods=1;
+							parent.find("span").text("点赞");
+							parent.find("img").attr("src","./img/index/like1.png");
+							$("#xin").hide(500);
+						}
+					}
+				});
+			}
+		});
+	});
+	
+	function windowSizeFn(){
+		var domheight=$(document).height();
+		var headrH=$("header").height();
+		$(".detailDiv").height(domheight-headrH);
+		var articleId = '${param.articleId}';
+		if( typeof(articleId) == 'undefined' || articleId ==null || articleId =='' ){
+			$("#icontent").height(domheight-headrH);
+		}else{
+			$("#icontent").height(domheight-headrH-31);
+		}
+	}
+	//iframe的链接	
+	function loadUrl(url){
+		if( typeof(url) != "undefined" && url.indexOf("http")==0 ){
+			//跳转到外部href
+			url=url;
+		}else{
+			//跳转到内部href
+			url=basePath()+url;
+		} 
+		if(adapt=='1'){
+			windowSizeFn();
+			meta="";
+		}else if(adapt=='1'){
+			var screen=window.screen.width;
+			var w=(document.body.clientWidth/screen).toFixed(2);
+			//头部
+			var headerH=$("header").height();
+			var headerLine=parseInt($("header").css("line-height").replace(/[^0-9]/ig,""));
+			var headerSize=parseInt($("header").css("font-size").replace(/[^0-9]/ig,""));
+			var headl=parseInt($(".headl").css("width").replace(/[^0-9]/ig,""));
+			var headerShare=parseInt($(".headr").css("margin-right").replace(/[^0-9]/ig,""));
+			$("header").height(headerH*w);
+			$("header").css("line-height",headerLine*w+"px");
+			$("header").css("font-size",headerSize*w+"px");
+			$("#title").css("font-size",headerSize*w+"px");
+			$("#title").css("font-size",headerSize*w+"px");
+			$("svg.icon").css("font-size",headerSize*w+"px");
+			$(".headl").css("width",headl*w+"px");
+			$(".headr").css("margin-right",headerShare*w+"px");
+			//share
+			var jiathisH=parseInt($(".jiathis_style_32x32").height());
+			var jiathisPadding=parseInt($(".jiathis_style_32x32").css("padding").substring(0,4).replace(/[^0-9]/ig,""));
+			var sharetitle=parseInt($(".sharetitle").css("font-size").replace(/[^0-9]/ig,""));
+			var sharetitlebottom=parseInt($(".sharetitle").css("margin-bottom").replace(/[^0-9]/ig,""));
+			$(".jiathis_style_32x32").css("height",w*jiathisH+"px");
+			$(".jiathis_style_32x32").css("padding",w*jiathisPadding+"px 0");
+			$(".sharetitle").css("font-size",w*sharetitle+"px");
+			$(".sharetitle").css("margin-bottom",w*sharetitlebottom+24+"px");
+			$(".jiathis_button_qzone").css("transform","scale("+w+")");
+			$(".jiathis_button_tsina").css("transform","scale("+w+")");
+			$(".jiathis_button_weixin").css("transform","scale("+w+")");
+			windowSizeFn();
+			meta="";
+		}
+		
+		if(meta!=""){
+			$("head").prepend(meta);
+		}
+		console.log("url:"+url);
+	 	$("#icontent").attr("src",url);
+	}
+	
+	
+	function loadWx(url) {
+		//if(typeof(url) != "undefined" && url.indexOf("http://mp.weixin.qq.com")==0 ){${article.title}
+		console.log(" loadWx url:"+url);
+
+		if (typeof (url) != "undefined" && url.indexOf("mp.weixin.qq.com") > 0) {
+			if (!$("#title").text()) {
+				$("#title").text(url.substring(url.indexOf("title=") + 6));
+			}
+			$.ajaxPrefilter(function(options) {
+				if (options.crossDomain && jQuery.support.cors) {
+					var http = (window.location.protocol == 'http:' ? 'http:' : 'https:');
+					options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+					//options.url = "http://cors.corsproxy.io/url=" + options.url;
+				}
+			});
+
+			if (url.indexOf("&title") > 0) {
+				url = url.substring(0, url.indexOf("&title"));
+			}
+			loadUrl(url);
+			window.location.href = url;
+			/* 
+			$.post(url, function(response) {
+				//console.log("> ", response); 
+				html = response.replace(/data-src/g, "src");
+				var html_src = 'data:text/html;charset=utf-8,' + html;
+				$("iframe").attr("src", html_src);
+			}); */
+		} else if (typeof (url) != "undefined" && url.indexOf("http") == 0) {
+			if (url.indexOf("title=") == -1) {
+				loadUrl(url);
+			} else {
+				$("#title").text(url.substring(url.indexOf("title=") + 6));
+				loadUrl(url.substring(0, url.indexOf("&title")));
+			}
+		} else {
+			loadUrl(url);
+		}
+	}
+
+	//免责声明
+	function mzsmStyle() {
+		var disclaimer = $("#disclaimer");
+		var dtitle = disclaimer.find(".d-title");
+		var dcontent = disclaimer.find(".d-content");
+		var dbtn = disclaimer.find(".d-btn");
+		//格式更改
+		var screen =  window.screen.width;
+		var w = (document.body.clientWidth / screen).toFixed(2);
+		dtitle.css({
+			"height" : dtitle.height() * w,
+			"line-height" : dtitle.css("line-height").replace(/[^0-9]/ig, "") * w + "px",
+			"font-size" : dtitle.css("font-size").replace(/[^0-9]/ig, "") * w + "px"
+		});
+		dcontent.css({
+			"height" : dcontent.height() * w,
+			"line-height" : dcontent.css("line-height").replace(/[^0-9]/ig, "") * w + "px",
+			"font-size" : dcontent.css("font-size").replace(/[^0-9]/ig, "") * w + "px",
+			"padding" : dcontent.css("padding").replace(/[^0-9]/ig, "") * w + "px"
+		});
+		dbtn.css({
+			"height" : dbtn.height() * w,
+			"line-height" : dbtn.css("line-height").replace(/[^0-9]/ig, "") * w + "px",
+			"font-size" : dbtn.css("font-size").replace(/[^0-9]/ig, "") * w + "px"
+		});
+	}
+	function loadFn(){
+		//load_ani.remove();
+	}
+</script>
+</head>
+<body>
+
+	<header id="ihead" class="detailhead" th:if="noHead == false">
+		<div class="headl retrun-icon">
+			<svg class="icon" aria-hidden="true">
+				<use xlink:href="#icon-toLeft-copy"></use>
+			</svg>
+		</div>
+		<span id="title" th:text="${title}"></span>
+		<div class="headr">&nbsp;</div>
+	</header>
+	<!--<c:choose>-->
+   		<!--<c:when test="${param.noHead}"></c:when>-->
+   		<!--<c:otherwise>-->
+			<!--<header id="ihead" class="detailhead">-->
+		        <!--<div class="headl retrun-icon"> -->
+		   		    <!--<svg class="icon" aria-hidden="true">-->
+		              <!--<use xlink:href="#icon-toLeft-copy"></use>-->
+		            <!--</svg>-->
+		        <!--</div>-->
+		        <!--<span id="title">${title}</span>-->
+		        <!--<div class="headr">&nbsp;</div>-->
+		    <!--</header>-->
+   		<!--</c:otherwise>-->
+   	<!--</c:choose>-->
+    <!-- JiaThis Button BEGIN -->
+	<div class="shareDiv">
+		<div class="jiathis_style_32x32">
+		    <div class="sharetitle">分享到：</div>
+			<div><a class="jiathis_button_qzone">qq空间</a></div>
+			<div><a class="jiathis_button_tsina">微博</a></div>
+			<div><a class="jiathis_button_weixin">微信</a></div>
+		</div>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+	
+	<div class="detailDiv">
+		<div id="wrapper">
+			<iframe id="icontent" onload="loadFn()"  frameborder="0" allowtransparency="true"></iframe>
+		</div>
+		 <c:if test="${not empty param.articleId}">
+	     	<div class="newshare">
+		     	<span id="like"><img src="./img/index/like1.png"><span>点赞</span></span>
+		     	<c:if test="${not empty param.share}"><span id="share"><img src="./img/index/share1.png" style="height:14px">分享</span></c:if>
+		     	<div id="xin"><c:if test="${ not empty wxInfo.nickname }"><img src="./img/index/xin.png" width="20" height="18">${wxInfo.nickname}</c:if></div>
+	     	</div>
+		 </c:if>
+	</div>
+	
+	<!-- 免责声明 -->
+	<div id="disclaimer" style="background-image:url('./img/disclaimer/bg.jpg')">
+		<div class="d-title"><img src="./img/disclaimer/wxts.jpg" /></div>
+	    <div class="d-content"><strong style="color: #f0861b;">免责声明：</strong><span></span></div>
+	    <div class="d-btn"><div class="d-btn-l"><span>取消</span></div> <div class="d-btn-r"><a href=""><span>同意</span></a></div></div>
+	</div>
+</body>
+</html>

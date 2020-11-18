@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+
+    <style type="text/css">
+        body, dd, dl, html, ol, ul, p {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+            background: #dfdfdf;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 750px;
+        }
+
+        html, .container {
+            height: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .result {
+        }
+
+        .result p {
+            background: #fff;
+        }
+
+        .block {
+            background: #fff;
+            margin: 10px;
+            padding: 0 10px;
+            border: solid 1px #ccc;
+            border-radius: 5px;
+        }
+
+        .line {
+            display: -webkit-inline-box;
+            width: 100%;
+            padding: 10px 5px;
+            box-sizing: border-box;
+            border-bottom: solid 1px #ccc;
+        }
+
+        .left {
+            width: 50%;
+        }
+
+        .right {
+            width: 50%;
+            text-align: -webkit-right;
+            color: #ccc;
+        }
+
+        button {
+            background: #4281cd;
+            color: #fff;
+            border: 0;
+            width: 90%;
+            border-radius: 5px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 17px;
+            letter-spacing: 10px;
+            text-indent: 10px;
+            margin-top: 35%;
+        }
+
+        .error {
+            text-align: -webkit-center;
+            padding-top: 30%;
+        }
+
+        .error .font {
+            margin-top: 5%;
+        }
+
+        .error p {
+            background: #dfdfdf;
+            padding: 10px;
+            font-size: 17px;
+        }
+
+        .error img {
+            width: 58%;
+            height: auto;
+        }
+    </style>
+
+    <title>水费查询</title>
+</head>
+
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        query();
+    });
+
+    function query() {
+        mui.showLoading("正在加载..", "div");
+        var businessNo = [[${businessNo}]];
+        var account = [[${account}]];
+        var startTime = [[${startTime}]];
+        var endTime = [[${endTime}]];
+        $.ajax({
+            url: basePath() + "/app/menu/interface/queryWater",
+            data: {
+                "businessNo": businessNo,
+                "account": account,
+                "startTime": startTime,
+                "endTime": endTime,
+                "pageNum": "1",
+                "pageSize": "300"
+            },
+            type: "POST",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                mui.hideLoading(function () {
+                    console.log(result);
+                    var data = result.data;
+                    //console.log(data.length)
+                    if (data.length <= 0) {
+                        $(".result").append(
+                            '<div class="error">' +
+                            '<img src="' + basePath() + '/img/menu/error.png">' +
+                            '<div class="font">' +
+                            '<p>查询无数据！</p>' +
+                            '<p>请核实用户编号和用户名后查询！</p>' +
+                            '</div>' +
+                            '</div>'
+                        )
+                    } else {
+                        for (var i in data) {
+                            var BASICCOST;//基本水费
+                            if (data[i].BASICCOST == "" || data[i].BASICCOST == null || data[i].BASICCOST == undefined) {
+                                BASICCOST = "暂无记录";
+                            } else {
+                                BASICCOST = data[i].BASICCOST + "元";
+                            }
+                            var TRASHCOST;//垃圾费
+                            if (data[i].TRASHCOST == "" || data[i].TRASHCOST == null || data[i].TRASHCOST == undefined) {
+                                TRASHCOST = "暂无记录";
+                            } else {
+                                TRASHCOST = data[i].TRASHCOST + "元";
+                            }
+                            var SEWAGECOST;//污水处理费
+                            if (data[i].SEWAGECOST == "" || data[i].SEWAGECOST == null || data[i].SEWAGECOST == undefined) {
+                                SEWAGECOST = "暂无记录";
+                            } else {
+                                SEWAGECOST = data[i].SEWAGECOST + "元";
+                            }
+                            var BUSINESSNO;//用户编号
+                            if (data[i].BUSINESSNO == "" || data[i].BUSINESSNO == null || data[i].BUSINESSNO == undefined) {
+                                BUSINESSNO = "暂无记录";
+                            } else {
+                                BUSINESSNO = data[i].BUSINESSNO;
+                            }
+                            $(".result").append(
+                                '<div class="block">' +
+                                '<div class="line">' +
+                                '<p class="left">财务月份</p>' +
+                                '<p class="right">' + data[i].MONTH + '</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">基本水费</p>' +
+                                '<p class="right">' + BASICCOST + '</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">垃圾费</p>' +
+                                '<p class="right">' + TRASHCOST + '</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">污水处理费</p>' +
+                                '<p class="right">' + SEWAGECOST + '</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">应收金额</p>' +
+                                '<p class="right">' + data[i].TOTALCOST + '元</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">应收水量</p>' +
+                                '<p class="right">' + data[i].WATERUSED + 'm³</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">用水性质</p>' +
+                                '<p class="right">' + data[i].KIND + '</p>' +
+                                '</div>' +
+                                '<div class="line">' +
+                                '<p class="left">用户名</p>' +
+                                '<p class="right">' + data[i].ACCOUNT + '</p>' +
+                                '</div>' +
+                                '<div class="line" style="border-bottom: 0px;">' +
+                                '<p class="left">用户编号</p>' +
+                                '<p class="right">' + BUSINESSNO + '</p>' +
+                                '</div>' +
+                                '</div>'
+                            )
+                        }
+                    }
+
+                    $(".result").append(
+                        '<center><button onclick="window.history.back(-1);">返回</button></center>'
+                    )
+                });
+            }
+
+        });
+    }
+</script>
+
+<body>
+
+<!-- 结果页 -->
+<div class="result">
+
+</div>
+
+</body>
+
+</html>

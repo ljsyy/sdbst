@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.PayOrderMapper">
+
+	<resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.livingPay.PayOrder" >
+		<result column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="JYLX" property="jylx" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="VARCHAR" />
+		<result column="TIME" property="time" jdbcType="VARCHAR" />
+		<result column="DDBH" property="ddbh" jdbcType="DECIMAL" />
+		<result column="SIGN" property="sign" jdbcType="VARCHAR" />
+		<result column="SOURCE_TYPE" property="sourceType" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="DATE" />
+
+		<result column="FEE" property="fee" jdbcType="VARCHAR" />
+		<result column="PLATFORM" property="platform" jdbcType="VARCHAR" />
+
+		<result column="CLIENT" property="client" jdbcType="VARCHAR" />
+
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+
+		<result column="PRE_JYLX" property="preJylx" jdbcType="VARCHAR" />
+
+
+
+	</resultMap>
+
+	<insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.livingPay.PayOrder">
+		insert into PAY_ORDER (ID, JYLX, STATUS,
+      		TIME, DDBH, SIGN,SOURCE_TYPE,CREATE_DATE,FEE,PLATFORM,CLIENT,USER_ID,PRE_JYLX
+      	)
+    	values (#{id,jdbcType=VARCHAR}, #{jylx,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      	#{time,jdbcType=VARCHAR}, #{ddbh,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR},
+      	#{sourceType,jdbcType=VARCHAR},#{createDate,jdbcType=DATE},#{fee,jdbcType=VARCHAR},
+      #{platform,jdbcType=VARCHAR}, #{client,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{preJylx,jdbcType=VARCHAR}
+      	)
+	</insert>
+
+	<select id="getOrderList" resultMap="BaseResultMap" parameterType="com.unifs.sdbst.app.bean.life.livingPay.PayOrder" >
+		select * from PAY_ORDER
+		<where>
+			<if test="ddbh != null and ddbh != ''">
+				AND DDBH = #{ddbh}
+			</if>
+			<if test="sourceType != null and sourceType != ''">
+				AND SOURCE_TYPE = #{sourceType}
+			</if>
+			<if test="userId != null and userId != ''">
+			AND USER_ID = #{userId}
+			</if>
+			<if test="status != null and status != ''">
+				AND STATUS = #{status}
+			</if>
+		</where>
+		ORDER BY  CREATE_DATE DESC
+	</select>
+
+	<select id="getOrderMess" resultMap="BaseResultMap" parameterType="com.unifs.sdbst.app.bean.life.livingPay.PayOrder" >
+		select * from PAY_ORDER
+		<where>
+			<if test="ddbh != null and ddbh != ''">
+				AND DDBH = #{ddbh}
+			</if>
+			<if test="sourceType != null and sourceType != ''">
+				AND SOURCE_TYPE = #{sourceType}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND USER_ID = #{userId}
+			</if>
+			<if test="id != null and id != ''">
+				AND ID = #{id}
+			</if>
+			<if test="status != null and status != ''">
+				AND STATUS = #{status}
+			</if>
+		</where>
+	</select>
+
+
+	<update id="update">
+		UPDATE PAY_ORDER SET
+			JYLX =  #{jylx,jdbcType=VARCHAR},
+			STATUS =#{status,jdbcType=VARCHAR},
+			TIME = #{time,jdbcType=VARCHAR},
+			DDBH =  #{ddbh,jdbcType=VARCHAR},
+		SIGN = #{sign,jdbcType=VARCHAR},
+		SOURCE_TYPE = #{sourceType,jdbcType=VARCHAR},
+		CREATE_DATE = #{createDate,jdbcType=DATE},
+
+		FEE =  #{fee,jdbcType=VARCHAR},
+		PLATFORM = #{platform,jdbcType=VARCHAR},
+
+		CLIENT = #{client,jdbcType=VARCHAR},
+
+		USER_ID = #{userId,jdbcType=VARCHAR},
+
+		PRE_JYLX = #{preJylx,jdbcType=VARCHAR}
+		WHERE ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateStatusByDdbh">
+		UPDATE PAY_ORDER SET
+			STATUS =#{status,jdbcType=VARCHAR}
+		WHERE DDBH = #{ddbh,jdbcType=VARCHAR}
+	</update>
+</mapper>

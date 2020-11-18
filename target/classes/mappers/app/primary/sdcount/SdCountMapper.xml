@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.sdcount.SdCountMapper">
+    
+	<sql id="sdCountColumns">
+		a."id" AS "id",
+		a."c_date" AS "cDate",
+		a."name" AS "name",
+		a."total" AS "total",
+		a."nuit" AS "nuit",
+		a."growth_rate" AS "growthRate",
+		a."hb_rate" AS "hbRate",
+		a."month_total" AS  "monthTotal",
+		a."tb_rate" AS "tbRate"
+	</sql>
+	
+	<sql id="sdCountJoins">
+	</sql>
+    
+	<select id="get" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+		SELECT 
+			<include refid="sdCountColumns"/>
+		FROM sd_count a
+		<include refid="sdCountJoins"/>
+		WHERE a."id" = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+		SELECT 
+			<include refid="sdCountColumns"/>
+		FROM sd_count a
+		<include refid="sdCountJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+		SELECT 
+			<include refid="sdCountColumns"/>
+		FROM sd_count a
+		<include refid="sdCountJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sd_count(
+			"id",
+			"c_date",
+			"name",
+			"total",
+			"nuit",
+			"growth_rate",
+			"hb_rate",
+			"month_total",
+			"tb_rate"
+		) VALUES (
+			#{id},
+			#{cDate},
+			#{name},
+			#{total},
+			#{nuit},
+			#{growthRate},
+			#{hbRate},
+			#{monthTotal},
+			#{tbRate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sd_count SET 	
+			"c_date" = #{cDate},
+			"name" = #{name},
+			"total" = #{total},
+			"nuit" = #{nuit},
+			"growth_rate" = #{growthRate},
+			"hb_rate" = #{hbRate},
+			"month_total" = #{monthTotal},
+			"tb_rate" = #{tbRate}
+		WHERE "id" = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sd_count
+		WHERE id = #{id}
+	</update>
+	<!-- 年度环比 -->
+	<select id="findCountAll" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+		SELECT 
+			<include refid="sdCountColumns"/>
+		FROM sd_count a
+		 LEFT JOIN SD_INDEX  x ON a."name"= x."name"
+		 WHERE x."name" IS NOT NULL
+		 AND x."type"='0'
+		 AND a."c_date"like concat (#{cDate},'%')
+		 AND a."name"=#{name}
+		 ORDER BY "c_date" 
+	</select>
+	<!-- 同比 -->
+	<select id="tb" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+		SELECT 
+			<include refid="sdCountColumns"/>
+		FROM sd_count a
+		 WHERE  a."c_date"like concat (#{cDate},'%')
+		 AND a."name"=#{name}
+		 ORDER BY "c_date" DESC
+	</select>
+	<!--指标月度统计  -->
+	<select id="findCountMonth" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+		SELECT 
+			<include refid="sdCountColumns"/>
+		FROM sd_count a
+		 LEFT JOIN SD_INDEX  x ON a."name"= x."name"
+		 WHERE x."name" IS NOT NULL
+		 AND x."type"='0'
+		 AND a."c_date"like concat (#{cDate},'%')
+		 ORDER BY "total" DESC 
+	</select>
+	<select id="findcDate" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+			SELECT DISTINCT("c_date") from  SD_COUNT 
+			where "c_date"like concat ('2017','%')
+			ORDER BY "c_date" 
+	</select>
+	<select id="findSun" resultType="com.unifs.sdbst.app.bean.sdcount.SdCount">
+			SELECT 
+				<include refid="sdCountColumns"/>
+			FROM SD_COUNT a LEFT JOIN SD_INDEX x ON 
+			x."name"=a."name"
+			WHERE x."parent_id"=#{id}
+			AND "c_date"=#{cDate} 
+	</select>
+	
+</mapper>

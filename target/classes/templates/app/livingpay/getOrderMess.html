@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src * ;img-src *">-->
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline';img-src 'self' http://support.shunde.gov.cn:9203">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>缴费详情</title>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/life/livingpay/ipay.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/life/livingpay/orderMess.css?v=1.0.1" rel="stylesheet" type="text/css">
+
+<body>
+
+<div th:each="orderMess:${orderList}" style="width: 100%;height: 100%" >
+    <div class="mui-top" style="margin:0 auto;width: 100%;height: 30%">
+        <div class="mui-img" style="text-align: center;"  th:switch="${orderMess.sourceType}">
+            <img th:case="'iElePay'" src="img/life/dianfee.png" style="height: 50px;width: 50px;">
+            <img th:case="'iPayWaterFee'" src="img/life/shuifee.png" style="height: 50px;width: 50px;">
+            <img th:case="'iPayForNontaxFee'" src="img/life/feishuifee.png" style="height: 50px;width: 50px;">
+            <img th:case="'iPayForEducationFee'" src="img/life/xuezafee.png" style="height: 50px;width: 50px;">
+            <img th:case="'*'" src="img/life/qitafee.png" style="height: 50px;width: 50px;">
+        </div>
+        <div class="mui-fee">
+            <label  class="mui-label-fee" th:text="'￥'+  ${orderMess.fee}"  style="text-align:center;vertical-align:middle;font-size: 30px;"></label>
+        </div>
+    </div>
+    <div class="mui-bottom" style="margin:0 auto;width: 100%;height: 70%" >
+        <div  class="mui-tr">
+            <label class="mui-label-title">缴费状态</label>
+            <label class="mui-label-mess" th:switch="${orderMess.status}" >
+                <label class="" th:case="'0'">未缴费</label>
+                <label class="" th:case="'1'">缴费成功</label>
+            </label>
+        </div>
+        <div   class="mui-tr">
+            <label class="mui-label-title">缴费单号</label>
+            <label  class="mui-label-mess" th:text="${orderMess.ddbh}"></label>
+        </div>
+        <div  class="mui-tr">
+            <label class="mui-label-title">缴费类型</label>
+            <label class="" th:switch="${orderMess.sourceType}" >
+                <label class="mui-label-mess" th:case="'iPayForEducationFee'">教育费</label>
+                <label class="mui-label-mess" th:case="'iPayWaterFee'">水费</label>
+                <label class="mui-label-mess" th:case="'iPayForNontaxFee'">非税</label>
+                <label class="mui-label-mess" th:case="'iElePay'">电费</label>
+                <label class="mui-label-mess" th:case="'iPayRepairFundQry'">维修资金</label>
+                <label class="mui-label-mess" th:case="'*'">其他</label>
+            </label>
+        </div>
+        <div   class="mui-tr">
+            <label class="mui-label-title">缴费时间</label>
+            <label  class="mui-label-mess" th:text="${#dates.format(orderMess.createDate,'yyyy-MM-dd HH:mm:ss')}"></label>
+        </div>
+        <div class="mui-btn-div" th:if="${payStatus} eq '1'">
+            <div id="login_click" class="">
+                <a id="btlogin" href="javascript:CloseBrowser();" >关 &nbsp; 闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="application/javascript" src="mui/js/mui.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+<!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+<script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+<script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+<script>
+    function CloseBrowser() {
+        //调用app方法
+        //判断系统
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(isAndroid){
+            try{
+                //调用安卓方法
+            }catch(e){
+                mui.alert("网络异常","提示");
+            }
+        }else if(isiOS){
+            window.location.href="&funT=closeWebView";
+        }
+    }
+</script>
+</body>
+</html>

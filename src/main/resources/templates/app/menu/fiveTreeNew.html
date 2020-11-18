@@ -1,0 +1,132 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <title th:text="${name}"></title>
+        <base th:href="${#request.getContextPath()}+'/'">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <link rel="stylesheet" th:href="@{wui/css/weui.css}"/>
+        <link rel="stylesheet" th:href="@{wui/css/weuix.css}"/>
+        <script th:src="@{js/jquery.min.js}"></script>
+        <script th:src="@{wui/js/zepto.min.js}"></script>
+        <script th:src="@{wui/js/zepto.weui.js}"></script>
+        <script th:src="@{js/base.js}"></script>
+        <style>
+            .icon {
+                margin: 0 10px 5px 0;
+                color: #10AEFF;
+                -webkit-transition: font-size 0.5s ease-out 0s;
+                -moz-transition: font-size 0.5s ease-out 0s;
+                transition: font-size 0.5s ease-out 0s;
+            }
+
+            .weui-cells {
+                margin: 0px;
+            }
+        </style>
+    </head>
+
+    <body ontouchstart>
+        <div class="contianer page-bg">
+            <div class="page-bd">
+                <ul class="collapse">
+                </ul>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" th:inline="javascript">
+        var id = [[${id}]];
+        $(function () {
+            //获取总数据集合
+            $.ajax({
+                url: basePath() + "/app/menu/findChildsMenu",
+                type: "post",
+                data: {"id": id},
+                dataType: "json",
+                success: function (result) {
+                    var str = '';
+                    var oneArr = result.data;
+                    var twoArr = new Array();
+                    //获取二级菜单集合
+                    var index = 0;
+                    for (var i = 0; i < oneArr.length; i++) {
+                        console.log("33:" + oneArr.length)
+                        if (oneArr[i].parentId == id) {
+                            twoArr[index] = oneArr[i];
+                            index++;
+                        }
+                    }
+                    //对二级菜单数据排序
+                    sortArr(twoArr);
+                    for (var i = 0; i < twoArr.length; i++) {
+                        str += "<li>";
+                        str += '<div class="weui-flex js-category">\n' +
+                            '                    <div class="weui-cell__hd">\n' +
+                            '                       <span class="icon icon-97"></span>' +
+                            '                    </div>\n' +
+                            '                            <div class="weui-flex__item">' + twoArr[i].name + '</div>\n' +
+                            '                            <i class="icon icon-74"></i>\n' +
+                            '                        </div>' +
+                            '<div class="page-category js-categoryInner">\n' +
+                            '                            <div class="weui-cells page-category-content">\n';
+                        //获取三级菜单数据
+                        var threeArr = new Array();
+                        index = 0;
+                        for (var j = 0; j < oneArr.length; j++) {
+                            if (oneArr[j].parentId == twoArr[i].id) {
+                                threeArr[index] = oneArr[j];
+                                index++;
+                            }
+                        }
+                        //对三级菜单数据排序
+                        sortArr(threeArr);
+                        for (var j = 0; j < threeArr.length; j++) {
+                            //链接地址
+                            var url = "";
+                            //对name中的特殊字符&和"进行转义
+                            var name = threeArr[j].name;
+                            name = name.replace(/\&/g, '%26');
+                            name = name.replace(/\"/g, '%5C"');
+                            if (typeof(threeArr[j].href) == "string" && threeArr[j].href.indexOf("http") == 0) {
+                                url = threeArr[j].href;
+                            } else if (typeof(threeArr[j].href) == "string" && threeArr[j].href.indexOf("/app/menu/interface/getData") >= 0 && typeof(threeArr[j].disclaimer) == 'string' && threeArr[j].disclaimer != '' && threeArr[j].disclaimer != '0') {
+                                url = ct + threeArr[j].href + "&disclaimer=" + threeArr[j].disclaimer;
+                            } else {
+                                url = ct + threeArr[j].href;
+                            }
+                            str += '<a onclick="countFn(\'' + threeArr[j].modelid + '\',\'' + threeArr[j].id + '\',\'' + threeArr[j].parentIds + '\',\'' + threeArr[j].href + '\',\'' + threeArr[j].name + '\',\'' + threeArr[j].disclaimer + '\',\'' + url + '\')" class="weui-cell weui-cell_access">\n' +
+                                '                                    <div class="weui-cell__bd">\n' +
+                                '                                        <p>' + threeArr[j].name + '</p>\n' +
+                                '                                    </div>\n' +
+                                '                                    <div class="weui-cell__ft"></div>\n' +
+                                '                                </a>';
+                        }
+                        str += ' </div>\n' +
+                            '                        </div>\n' +
+                            '                    </li>';
+                    }
+                    //添加元素
+                    $(".collapse").append(str);
+
+                    //显示/隐藏
+                    $('.collapse .js-category').click(function () {
+                        console.log("开始执行");
+                        $parent = $(this).parent('li');
+                        if ($parent.hasClass('js-show')) {
+                            $parent.removeClass('js-show');
+                            $(this).children('i').removeClass('icon-35').addClass('icon-74');
+                        } else {
+                            $parent.siblings().removeClass('js-show');
+                            $parent.addClass('js-show');
+                            $(this).children('i').removeClass('icon-74').addClass('icon-35');
+                            $parent.siblings().find('i').removeClass('icon-35').addClass('icon-74');
+                        }
+                    });
+                }
+
+            });
+        });
+
+
+    </script>
+
+</html>

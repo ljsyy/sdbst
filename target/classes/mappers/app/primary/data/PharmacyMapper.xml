@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.data.PharmacyMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.data.Pharmacy" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ZJNAME" property="zjname" jdbcType="VARCHAR" />
+    <result column="PNAME" property="pname" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATER" property="creater" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="DECIMAL" />
+    <result column="JD" property="jd" jdbcType="VARCHAR" />
+    <result column="WD" property="wd" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_PHARMACY
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.data.Pharmacy" >
+    insert into T_PHARMACY (ID, ZJNAME, PNAME, 
+      ADDRESS, MOBILE, REMARK, 
+      CREATER, CREATE_TIME, MODIFIER, 
+      MODIFY_TIME, RECORD_STATUS, JD, 
+      WD)
+    values (#{id,jdbcType=VARCHAR}, #{zjname,jdbcType=VARCHAR}, #{pname,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=DECIMAL}, #{jd,jdbcType=VARCHAR}, 
+      #{wd,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.data.Pharmacy" >
+    update T_PHARMACY
+    set ZJNAME = #{zjname,jdbcType=VARCHAR},
+      PNAME = #{pname,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATER = #{creater,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      MODIFIER = #{modifier,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      RECORD_STATUS = #{recordStatus,jdbcType=DECIMAL},
+      JD = #{jd,jdbcType=VARCHAR},
+      WD = #{wd,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select ID, ZJNAME, PNAME, ADDRESS, MOBILE, REMARK, CREATER, CREATE_TIME, MODIFIER, 
+    MODIFY_TIME, RECORD_STATUS, JD, WD
+    from T_PHARMACY
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, ZJNAME, PNAME, ADDRESS, MOBILE, REMARK, CREATER, CREATE_TIME, MODIFIER, 
+    MODIFY_TIME, RECORD_STATUS, JD, WD
+    from T_PHARMACY
+  </select>
+
+  <select id="getNewsList2" resultType="com.unifs.sdbst.app.bean.data.Pharmacy">
+    select * from (select e.*,rownum as row_num from t_pharmacy e
+    <where>
+      RECORD_STATUS = 1
+      <if test="objzjname!=null and objzjname!=''">
+        and (e.zjname  like #{objzjname}||'%')
+      </if>
+      <if test="objpname!=null and objpname!=''">
+        and (e.pname like #{objpname}||'%')
+      </if>
+    </where>
+    ) where row_num between #{start} and #{end}
+  </select>
+</mapper>

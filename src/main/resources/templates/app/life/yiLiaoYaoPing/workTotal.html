@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="layui/back/view.css"/>
+    <link rel="stylesheet" href="layui/admin.css"/>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-nav-item .layui-nav-child dd.layui-this a {
+            background-color: #177ce3;
+            background-repeat: repeat-y;
+            background-image: -moz-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -webkit-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -o-linear-gradient(left, #29adeb, #177ce3);
+            background-image: linear-gradient(left, #29adeb, #177ce3);
+        }
+    </style>
+
+</head>
+<body class="layui-view-body">
+<div class="layui-content">
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-body chart-card">
+                    <div class="chart-header">
+                        <div class="metawrap">
+                            <div class="meta">
+                                <span>登记用户数</span>
+                            </div>
+                            <div class="total" id="total">126,560</div>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <!--<div class="contentwrap">-->
+                            <!--fsdfdsf-->
+                        <!--</div>-->
+                    </div>
+                    <div class="chart-footer">
+                        <div class="field">
+                            <span>今日新增</span>
+                            <span id="total1">321</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-body chart-card">
+                    <div class="chart-header">
+                        <div class="metawrap">
+                            <div class="meta">
+                                <span>湖北用户数</span>
+                            </div>
+                            <div class="total" id="hubei">126,560</div>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <!--<div class="contentwrap">-->
+                            <!--fsdfdsf-->
+                        <!--</div>-->
+                    </div>
+                    <div class="chart-footer">
+                        <div class="field">
+                            <span>今日新增</span>
+                            <span id="hubei1">321</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-body chart-card">
+                    <div class="chart-header">
+                        <div class="metawrap">
+                            <div class="meta">
+                                <span>温州用户数</span>
+                            </div>
+                            <div class="total" id="wenzhou">126,560</div>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <!--<div class="contentwrap">-->
+                            <!--fsdfdsf-->
+                        <!--</div>-->
+                    </div>
+                    <div class="chart-footer">
+                        <div class="field">
+                            <span>今日新增</span>
+                            <span id="wenzhou1">321</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-body chart-card">
+                    <div class="chart-header">
+                        <div class="metawrap">
+                            <div class="meta">
+                                <span>温度超37.3°</span>
+                            </div>
+                            <div class="total" id="temperature">126,560</div>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <!--<div class="contentwrap">-->
+                            <!--fsdfdsf-->
+                        <!--</div>-->
+                    </div>
+                    <div class="chart-footer">
+                        <div class="field">
+                            <span>今日新增</span>
+                            <span id="temperature1">321</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="layui-col-sm12 layui-col-md12">-->
+            <!--<div class="layui-card">-->
+                <!--<div class="layui-tab layui-tab-brief">-->
+                    <!--<ul class="layui-tab-title">-->
+                        <!--<li class="layui-this">新增数</li>-->
+                        <!--<li>活跃度</li>-->
+                    <!--</ul>-->
+                    <!--<div class="layui-tab-content">-->
+                        <!--<div class="layui-tab-item layui-show">-->
+                            <!--dddd-->
+                        <!--</div>-->
+                        <!--<div class="layui-tab-item">-->
+                            <!--ddd-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+
+    getDataNum();
+    
+    function  getDataNum() {
+        $.ajax({
+            url: basePath() + "/data/sjMedicalDrugs/totalNum",
+            type: "post",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (i, val) {
+                    console.log(val.TYPE);
+                    if (val.TYPE == 1) {
+                        $("#total").html(val.TOTAL);
+                        $("#hubei").html(val.STATE1);
+                        $("#wenzhou").html(val.STATE2);
+                        $("#temperature").html(val.TEMPATURE);
+                    }else {
+                        $("#total1").html(val.TOTAL);
+                        $("#hubei1").html(val.STATE1);
+                        $("#wenzhou1").html(val.STATE2);
+                        $("#temperature1").html(val.TEMPATURE);
+
+                    }
+                })
+            },
+            error: function () {
+                $.hideLoading();
+                $.toast("没有加载到数据", "text");
+            }
+        });
+    }
+</script>
+</body>
+</html>

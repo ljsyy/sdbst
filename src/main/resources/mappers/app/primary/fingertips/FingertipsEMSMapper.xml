@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.fingertips.FingertipsEMSMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.fingertips.FingertipsEMS" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="AGENT_PHONE" property="agentPhone" jdbcType="VARCHAR" />
+    <result column="AGENT_NAME" property="agentName" jdbcType="VARCHAR" />
+    <result column="AGENT_CERTIFICATENUM" property="agentCertificatenum" jdbcType="VARCHAR" />
+    <result column="CASE_ID" property="caseId" jdbcType="VARCHAR" />
+    <result column="MATTER_ID" property="matterId" jdbcType="VARCHAR" />
+    <result column="COLLECTS" property="collects" jdbcType="VARCHAR" />
+    <result column="SENDER" property="sender" jdbcType="VARCHAR" />
+    <result column="RECEIVER" property="receiver" jdbcType="VARCHAR" />
+    <result column="INSERT_DATE" property="insertDate" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="DESCS" property="descs" jdbcType="VARCHAR" />
+    <result column="MAIL_NUM" property="mailNum" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="RETURN_CODE" property="returnCode" jdbcType="VARCHAR" />
+    <result column="COL1" property="col1" jdbcType="VARCHAR" />
+    <result column="COL2" property="col2" jdbcType="VARCHAR" />
+    <result column="COL3" property="col3" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.fingertips.FingertipsEMS" >
+    insert into APP_FINGERTIPS_EMS (ID, PHONE, AGENT_PHONE, 
+      AGENT_NAME, AGENT_CERTIFICATENUM, CASE_ID, 
+      MATTER_ID, COLLECTS, SENDER, 
+      RECEIVER, INSERT_DATE, REMARK, 
+      STATUS, DESCS, MAIL_NUM, 
+      UPDATE_DATE, RETURN_CODE, COL1, 
+      COL2, COL3)
+    values (#{id,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{agentPhone,jdbcType=VARCHAR}, 
+      #{agentName,jdbcType=VARCHAR}, #{agentCertificatenum,jdbcType=VARCHAR}, #{caseId,jdbcType=VARCHAR}, 
+      #{matterId,jdbcType=VARCHAR}, #{collects,jdbcType=VARCHAR}, #{sender,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=VARCHAR}, #{insertDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{descs,jdbcType=VARCHAR}, #{mailNum,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{returnCode,jdbcType=VARCHAR}, #{col1,jdbcType=VARCHAR}, 
+      #{col2,jdbcType=VARCHAR}, #{col3,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, PHONE, AGENT_PHONE, AGENT_NAME, AGENT_CERTIFICATENUM, CASE_ID, MATTER_ID, 
+    COLLECTS, SENDER, RECEIVER, INSERT_DATE, REMARK, STATUS, DESCS, MAIL_NUM, UPDATE_DATE, 
+    RETURN_CODE, COL1, COL2, COL3
+    from APP_FINGERTIPS_EMS
+  </select>
+
+  <select id="findByTxLogisticID" resultType="int">
+  select count(0)
+  from APP_FINGERTIPS_EMS where id= #{id,jdbcType=VARCHAR}
+</select>
+
+  <update id="updateEMSById">
+    update APP_FINGERTIPS_EMS
+    <trim prefix="set" suffixOverrides=",">
+      <if test="status != null and status!=''">STATUS=#{status,jdbcType=VARCHAR},</if>
+      <if test="descs != null and descs!=''">DESCS=#{descs,jdbcType=VARCHAR},</if>
+      <if test="mailNum != null and mailNum!=''">MAIL_NUM=#{mailNum,jdbcType=VARCHAR},</if>
+      <if test="updateDate != null ">UPDATE_DATE=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateEMS" parameterType="com.unifs.sdbst.app.bean.fingertips.FingertipsEMS">
+    update APP_FINGERTIPS_EMS
+    <trim prefix="set" suffixOverrides=",">
+      <if test="collects != null and collects!=''">COLLECTS=#{collects,jdbcType=VARCHAR},</if>
+      <if test="sender != null and sender!=''">SENDER=#{sender,jdbcType=VARCHAR},</if>
+      <if test="receiver != null and receiver!=''">RECEIVER=#{receiver,jdbcType=VARCHAR},</if>
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="getFingertipsEMSByNotEms" resultMap="BaseResultMap" >
+    select ID, PHONE, AGENT_PHONE, AGENT_NAME, AGENT_CERTIFICATENUM, CASE_ID, MATTER_ID,
+    COLLECTS, SENDER, RECEIVER, INSERT_DATE, REMARK, STATUS, DESCS, MAIL_NUM, UPDATE_DATE,
+    RETURN_CODE, COL1, COL2, COL3
+    from APP_FINGERTIPS_EMS where RETURN_CODE is null
+  </select>
+
+  <update id="updateEMSCodeById">
+    update APP_FINGERTIPS_EMS
+    <trim prefix="set" suffixOverrides=",">
+      <if test="returnCode != null and returnCode!=''">RETURN_CODE=#{returnCode,jdbcType=VARCHAR},</if>
+    </trim>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateStatusById">
+    update APP_FINGERTIPS_EMS t set
+        col1=#{col1},
+        col2=#{col2}
+        WHERE id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getFingertipsEMSByCaseId" resultMap="BaseResultMap">
+    select ID, PHONE, AGENT_PHONE, AGENT_NAME, AGENT_CERTIFICATENUM, CASE_ID, MATTER_ID,
+    COLLECTS, SENDER, RECEIVER, INSERT_DATE, REMARK, STATUS, DESCS, MAIL_NUM, UPDATE_DATE,
+    RETURN_CODE, COL1, COL2, COL3
+    from APP_FINGERTIPS_EMS where CASE_ID = #{caseId,jdbcType=VARCHAR}
+  </select>
+
+  </mapper>

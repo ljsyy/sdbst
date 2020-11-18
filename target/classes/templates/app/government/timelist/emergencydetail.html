@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${headName}"></title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <script src="js/base.js"></script>
+</head>
+<body>
+
+<div id="show" style="padding:10px;"></div>
+
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        mui.showLoading("正在加载数据", "div");
+        var url = basePath() + "/data/newsDetail?id=" + [[${id}]] + "_" + [[${fid}]] + "&jsonpcallback=jQuery2130817426473066914_1499848806348&_=1499848806349";
+        var callName = "jQuery2130817426473066914_1499848806348";
+        loadJsonp(url, callName);	//初次加载数据
+    });
+
+    function getLabel(data) {
+        $(data).each(function (index) {
+            //alert(data[index].bt);
+            $("#show").append(
+                "<h3 style='text-align:center;font-size:16px;'>" + data.bt + "</h1>" +
+                "<p style='border-bottom:1px gray solid;text-align:center;'>发布时间:" + data.cjrq + " " + data.cjsj + "</p>"
+                + data.content
+            );
+        });
+    }
+</script>
+</body>
+</html>

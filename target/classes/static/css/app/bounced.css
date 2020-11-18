@@ -1,0 +1,19 @@
+/* 提示页面  */
+.prompt.ani{visibility: visible; opacity: 1;}
+.prompt{visibility: hidden; opacity: 0;height:100%;width:100%;background:rgba(0,0,0,0.3);position:fixed;z-index: 99999999;-webkit-transition: all 0.3s;-moz-transition: all 0.3s;transition: all 0.3s;}
+.prompt .prompt-contant{ background: #fff;width: 300px;border-radius: 5px;left: 0;right: 0;margin: 0 auto;position: absolute;top:50%;-webkit-transform: translate(0,-50%);-ms-transform: translate(0,-50%);transform:translate(0,-50%);}
+.prompt .prompt-font{    background: none;color:#3e4b5d;padding: 12px 35px 10px 20px;line-height: 25px;letter-spacing: 1px;    word-break: break-all;    text-align: center;}
+.prompt .tip{    
+	background: none;
+	color:#3e4b5d;
+	padding: 22px 35px 10px 20px;
+	line-height: 25px;
+	letter-spacing: 1px;    
+	word-break: break-all;    
+	text-align: center;    
+	font-size: 20px;
+    font-weight: 600;
+}
+.prompt .prompt-button{padding: 0 30px 20px;text-align: center;}
+.prompt .prompt-button a:hover{background-color: #3e4b5d;}
+.prompt .prompt-button a{margin: 5px;display: inline-block;cursor:pointer;background-color: #77bda8;;color: #fff;border:none;padding: 5px 25px;border-radius: 5px;}

@@ -1,0 +1,226 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>顺德区复工复产口罩预约登记平台</title>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"></link>
+    <link rel="stylesheet" href="wui/css/weui.css"></link>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="application/javascript" src="js/base.js"></script>
+    <style>
+        body {
+            position: relative;
+            background: linear-gradient(#eee, #fff);
+        }
+
+        /*#bg_div{*/
+        /*    position: absolute;*/
+        /*    z-index: 0;*/
+        /*    width: 100%;*/
+        /*    height: 100%;*/
+        /*    background: #1ba3e4;*/
+        /*}*/
+        #title {
+            /*position: absolute;*/
+            width: 100%;
+            /*top: -80px;*/
+            /*left: 0;*/
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 21px;
+            color: #333;
+        }
+
+        #container {
+            /*position: absolute;*/
+            /*z-index: 100;*/
+            /*width: 100%;*/
+            /*top: 50%;*/
+            /*transform: translateY(-50%);*/
+        }
+
+        #wrap {
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .weui-btn_primary {
+            background-color: #1ba3e4 !important;
+        }
+
+        .weui-input {
+            height: 46px;
+            border-radius: 6px;
+            padding: 0 10px;
+            background: #fff;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .weui-dialog__btn {
+            color: #1ba3e4;
+        }
+
+        .footer {
+            padding: 10px 10px 60px;
+        }
+
+        .bottom_saying {
+            color: #777;
+        }
+
+        ul > li {
+            list-style: none;
+            text-indent: 2em;
+        }
+    </style>
+</head>
+<body ontouchstart>
+
+<div id="container">
+    <div id="title">顺德区企业复工复产口罩预约登记平台</div>
+    <div id="wrap">
+        <div class="weui-cells weui-cells_form" style="margin-top: 0;background: none;">
+            <h3>企业信用代码</h3>
+            <div class="weui-cell_active" style="height: 48px;">
+                <div class="weui-cell__bd">
+                    <input id="code" class="weui-input" placeholder="填写企业信用代码">
+                </div>
+            </div>
+            <h3 style="margin-top: 20px;">企业法人身份证最后六位</h3>
+            <div class="weui-cell_active" style="height: 48px;">
+                <div class="weui-cell__bd">
+                    <input id="id_code" class="weui-input" placeholder="填写企业法人身份证最后六位">
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-form__opr-area" style="margin-top: 40px;text-align: center;">
+            <a style="width: 80%;" class="weui-btn weui-btn_primary" href="javascript:;" id="showTooltips">登录</a>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p style="text-indent: 2em;">
+        为坚持疫情防控与经济发展两手抓、两手硬，全力支持企业安全有序复工复产，我区将通过多渠道解决企业复工复产的口罩紧缺问题。请复工复产过程中切实存在口罩需求的各企业，按照实际需求进行网上预约申购，每家企业再次申购需间隔7天以上。如有疑问，请与属地镇（街道）经科部门联系。企业承诺所填资料真实有效，如因企业错报、漏报、瞒报所产生的不良后果及法律责任，均由企业自行承担。
+    </p>
+    <p style="text-indent: 2em;">
+        特别提示：预约成功并经各镇（街道）经科部门审核后，将以短信通知企业。企业可凭企业营业执照复印件加盖单位公章后，到指定的场所购买口罩（口罩按成本价每个2元收费）。
+    </p>
+    <br/>
+    <ul style="padding-left: 10px">
+        <li>1.大良街道: 29938269</li>
+        <li>2.容桂街道: 28386883</li>
+        <li>3.伦教街道: 27720001</li>
+        <li>4.勒流街道: 25533391</li>
+        <li>5.陈村镇: 23833342</li>
+        <li>6.北滘镇: 26335948</li>
+        <li>7.乐从镇: 28338823</li>
+        <li>8.龙江镇: 23638077</li>
+        <li>9.杏坛镇: 27388231</li>
+        <li>10.均安镇: 25518319</li>
+    </ul>
+
+    <p style="margin-top: 20px;" class="bottom_saying">主办单位：佛山市顺德区发展和改革局</p>
+    <p class="bottom_saying">技术支持单位：佛山市顺德区政务服务数据管理局</p>
+</div>
+
+<!--BEGIN toast-->
+<div id="toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-cancel weui-icon_toast"></i>
+        <p class="weui-toast__content">登录成功</p>
+    </div>
+</div>
+<!--end toast-->
+
+
+<script th:inline="javascript">
+    $(function () {
+        // 初始化内容
+        var flag = [[${flag}]];
+        if (flag == "false") {
+            //提示企业信用代码不存在，重新登录
+            $.alert("该企业信用代码不存在，请重新登录！", "提示", function () {
+            });
+        }
+    });
+
+    //JavaScript代码区域
+    function showToast(msg, isSuccess) {
+        var $toast = $('#toast');
+        if ($toast.css('display') != 'none') return;
+        $("#toast .weui-toast__content").text(msg);
+        if (isSuccess) {
+            $("#toast i").removeClass("weui-icon-cancel").addClass("weui-icon-success-no-circle");
+        } else {
+            $("#toast i").removeClass("weui-icon-success-no-circle").addClass("weui-icon-cancel");
+        }
+        $toast.fadeIn(100);
+        setTimeout(function () {
+            $toast.fadeOut(100);
+        }, 2000);
+    }
+
+    $("#showTooltips").click(function (e) {
+        var code = $("#code").val().trim();
+        var id_code = $("#id_code").val().trim();
+        if (code == "") {
+            $.alert("请填写企业信用代码", "提示", function () {
+            });
+            return
+        } else if (id_code == "" || id_code.length != 6) {
+            $.alert("请填写企业法人身份证后6位", "提示", function () {
+            });
+            return;
+        }
+        var obj = {
+            creditCode: code.toUpperCase(),
+            identityNumber: id_code
+        }
+        $.ajax({
+            url: basePath() + "/enterprise/qyLogin",
+            data: obj,
+            type: "post",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                if (data.code == 200) {
+                    var creditCode = data.data.creditCode;
+                    var identityNumber = data.data.identityNumber;
+                    var name = data.data.name;
+                    var type = data.data.type;
+                    var address = data.data.address;
+                    var insuredNumber = data.data.insuredNumber;
+                    if (identityNumber == "" || identityNumber == null) {
+                        //跳转
+                        window.location.href = basePath() + "/enterprise/enter?creditCode=" + creditCode + "&identityNumber=" + identityNumber + "&name=" + name + "&type=" + type + "&address=" + address + "&insuredNumber=" + insuredNumber;
+                    } else {
+                        //已录入，跳转修改
+                        window.location.href = basePath() + "/enterprise/toModify?insuredNumber=" + insuredNumber;
+                        /*$.alert("你已经预约了"+identityNumber+"个口罩，请三天后再预约","提示",function(){
+                        });*/
+                    }
+                } else {
+                    $.alert(data.msg, "提示", function () {
+                    });
+                }
+            },
+            error: function (err) {
+                $.alert("登录失败", "提示", function () {
+                });
+            }
+        })
+    })
+</script>
+</body>
+</html>

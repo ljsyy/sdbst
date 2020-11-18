@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>满意度调查</title>
+    <link rel="stylesheet" href="css/app/survey.css"/>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/plug/alertPopShow.js"></script>
+
+
+    <style>
+        .sub #btn {
+            width: 90% !important;
+            font-weight: 500 !important;
+            border-radius: 5px;
+        }
+
+        #advice {
+            border-radius: 5px !important;
+            padding: 5px !important;
+            box-sizing: border-box;
+        }
+    </style>
+
+    <script type="text/javascript">
+        //圆圈img
+        var src_red_circle = basePath() + "/img/person/s_red_circle.png";
+        var src_gray_circle = basePath() + "/img/person/s_gray_circle.png";
+
+
+        $(function () {
+            //返回按钮
+            $("#head .head-l").click(function () {
+                window.history.back();
+            });
+
+            //单选按钮点击事件
+            $(".single").click(function () {
+                $(this).parent().find("img").attr("src", src_gray_circle);
+                $(this).find("img").attr("src", src_red_circle);
+                //赋值操作
+                $(this).parent().attr("option", $(this).attr("value"));
+            });
+
+
+            //提交
+            $(".container .sub #btn").click(function () {
+                var stop = false;	//终止提交
+                //获取答案 205ee4b6c1f34db9a6178e37eaf32b51-A,205ee4b6c1f34db9a6178e37eaf32b51-C
+                var answer = '';
+                $(".util").each(function (index) {
+                    var id = $(this).attr("id");			//获取id
+                    // var option = $(this).attr("option");	//获取答案option
+                    console.log($(this).find("div").first());
+                    var option = $(this).find("div").first().attr("option");	//获取子节点
+                    console.log(option);
+                    if (typeof(option) == 'string' && option == '') {
+                        webToast("第" + $(this).attr("value") + "题没有选择...", "middle", 1000);
+                        //终止
+                        stop = true;
+                        return false;
+                    } else if (typeof(option) == 'string' && option != 'text') {
+                        answer += id + '-' + option + ',';
+                    }
+                });
+                if (stop) {
+                    return;
+                }
+
+                //获取建议
+                var advice = $("#show .util #advice").val();
+                //获取联系方式
+                var phone = $(".container .phone #phone").val();
+                phone = phone.replace(/(^\s*)|(\s*$)/g, "");
+                var regPhone = /^1[3|4|5|7|8|9][0-9]\d{8}$/;
+                if (phone != '' && !regPhone.test(phone)) {
+                    webToast("请输入正确的手机号码！", "middle", 1000);
+                    $(".container .phone #phone").val('');
+                    return;
+                }
+
+                var type="PC";
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if(isAndroid){
+                    type="android";
+                }
+                if(isiOS){
+                    type="ios"
+                }
+
+                //提交
+                $.ajax({
+                    url: basePath() + "/app/survey/submit",
+                    type: "post",
+                    data: {
+                        "answer": answer,
+                        "advice": advice,
+                        "phone": phone,
+                        "type":type
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        webToast("提交成功，感谢您的问卷调查和建议，我们会努力做得更好！", "middle", 1000);
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- IOS专用 -->
+    <script type="text/javascript">
+        var call = function () {
+            var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+            tianbai.getCall(callInfo);
+        }
+        var Callback = function (str) {
+            str1 = str;
+            return str1;
+        }
+        var alerCallback = function () {
+            alert('成功');
+        }
+    </script>
+
+</head>
+<body id="body">
+<img alt="★ 丢失了★" width="100%" src="img/person/s_head.jpg">
+<div id="show">
+    <div th:each="theme,state:  ${list}" class="util" th:id="${theme.id}" th:value="${state.index+1}">
+        <div th:if="${state.index<state.size-1}" option="">
+            <div class="title" th:inline="text">[[${state.index+1}]]、[[${theme.title}]]</div>
+            <div class="single" value="A">
+                <img width="20px" alt="●"
+                     src="img/person/s_gray_circle.png">
+                <span>A、非常满意</span>
+            </div>
+            <div class="single" value="B">
+                <img width="20px" alt="●"
+                     src="img/person/s_gray_circle.png">
+                <span>B、满意</span>
+            </div>
+            <div class="single" value="C">
+                <img width="20px" alt="●"
+                     src="img/person/s_gray_circle.png">
+                <span>C、可以接受</span>
+            </div>
+            <div class="single" value="D">
+                <img width="20px" alt="●"
+                     src="img/person/s_gray_circle.png">
+                <span>D、非常不满意</span>
+            </div>
+        </div>
+        <div th:if="${state.index>=state.size-1}" class="util" th:id="${theme.id}" option="text">
+            <div class="title" th:inline="text">[[${state.index+1}]]、[[${theme.title}]]</div>
+            <textarea rows="6" cols="35" placeholder="请输入您的建议" id="advice" maxlength="150"></textarea>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="phone">
+        联系方式（可选）：<input type="text" id="phone" placeholder="请输入联系方式" maxlength="11" size="20"/>
+    </div>
+    <div class="sub">
+        <button id="btn">提交</button>
+    </div>
+</div>
+</body>
+</html>

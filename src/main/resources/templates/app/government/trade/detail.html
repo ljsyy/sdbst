@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${headName}"></title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <style type="text/css">
+        #show {
+            overflow: scroll;
+        }
+
+        table {
+            WIDTH: 100% !important;
+        }
+
+        img {
+            WIDTH: 100%;
+            height: auto;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<style>
+    .spinner > div {
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+        animation: bouncedelay 1.4s infinite ease-in-out;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+
+    .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+    @-webkit-keyframes bouncedelay {
+        0%, 80%, 100% {
+            -webkit-transform: scale(0.0)
+        }
+        40% {
+            -webkit-transform: scale(1.0)
+        }
+    }
+
+    @keyframes bouncedelay {
+        0%, 80%, 100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+        }
+        40% {
+            transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+        }
+    }
+</style>
+<script>
+    document.onreadystatechange = function () {
+        if (document.readyState == "complete") {
+            setTimeout("$('#load-now').css('opacity','0');", 1000);
+            setTimeout("$('#load-now').remove();$('#main_container').css('overflow-y','');", 1310);
+        }
+    }
+</script>
+<div id="show" class="detailpad"></div>
+
+
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        //数据加载动态图
+        mui.showLoading("正在加载数据","div");
+        var url = basePath() + "/api/getjson?post=true&url=";
+        var param = "http://sdbst2.shunde.gov.cn:8090/sdbst/data/newsDetail?id=" + [[${id}]] + "_" + [[${fid}]] + "*jsonpcallback=jQuery2130817426473066914_1499848806348*_=1499848806349";
+        var id = [[${id}]] + "_" + [[${fid}]];
+        loadJsonp3(id, [[${titleName}]], basePath(), "true");	//初次加载数据
+
+    });
+
+    function getLabel(data) {
+        $(data).each(function (index) {
+            //alert(data[index].bt);
+            //alert(data.fold_id);
+            $("#show").append(
+                "<h3 style='text-align:center;'>" + data.bt + "</h1>" +
+                "<p class='time' style='border-bottom:1px gray solid;text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:" + data.cjrq + " " + data.cjsj + "</p><hr/>" +
+                "<div id='main'>" + data.content + "</div>"
+            );
+            if (data.fold_id == "10917" || data.fold_id == "10918" || data.fold_id == "10921" || data.fold_id == "10919" || data.fold_id == "10920" || data.fold_id == "10926" || data.fold_id == "10927" || data.fold_id == "10928" || data.fold_id == "10929" || data.fold_id == "10939" || data.fold_id == "10940") {
+                $("#main p").css("font-size", "18px");
+                $("#main p").css("line-height", "30px");
+                $("#main>div").css("display", "none");
+                $("#divDetail").css("display", "block");
+                $("#divDetail").css("font-size", "18px");
+                $("#divDetail").css("line-height", "30px");
+                $("strong").css("font-size", "18px");
+                $("span").css("font-size", "18px");
+                $("h3").css("font-size", "18px");
+                $("h3").css("background", "rgb(255, 255, 255)");
+                $("h3").css("padding", "10px 0 0 0");
+                $(".time").css("background", "rgb(255, 255, 255)");
+                $(".time").css("border-bottom", "none");
+                $(".time").css("font-size", "15px");
+                $(".time").css("padding", "10px 0");
+                $("#show").css("padding", "0");
+                $("#main").css("padding", "10px");
+            }
+            if (data.fold_id == "7570039" || data.fold_id == "7570040") {
+                $("h3").css("font-size", "20px");
+                $(".time").css("font-size", "17px");
+                $("#main").css("font-size", "20px");
+                $("#main").css("font-family", "宋体");
+                $("#main").css("line-height", "30px");
+                $("#main p").css("font-size", "20px");
+                $("#main p").css("font-family", "宋体");
+                $("#main span").css("font-size", "20px");
+                $("#main span").css("font-family", "宋体");
+                $("#main strong").css("font-size", "20px");
+                $("#main strong").css("font-family", "宋体");
+            }
+        });
+    }
+</script>
+</body>
+</html>

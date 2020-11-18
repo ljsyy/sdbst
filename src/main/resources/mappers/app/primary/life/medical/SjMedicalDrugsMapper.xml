@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.medical.SjMedicalDrugsMapper">
+    
+	<sql id="sjMedicalDrugsColumns">
+		a.id AS "id",
+		a.chinese_name AS "chineseName",
+		a.fen_class AS "fenClass",
+		a.formulation AS "formulation",
+		a.remarks AS "remarks",
+		a.numbering AS "numbering",
+		a.big_class AS "bigClass",
+		a.in_class AS "inClass",
+		a.small_class AS "smallClass",
+		a.fine_class AS "fineClass",
+		a.english_name AS "englishName",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sjMedicalDrugsJoins">
+	</sql>
+    
+	<select id="get" resultType="com.unifs.sdbst.app.bean.life.medical.SjMedicalDrugs">
+		SELECT 
+			<include refid="sjMedicalDrugsColumns"/>
+		FROM sj_medical_drugs a
+		<include refid="sjMedicalDrugsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.life.medical.SjMedicalDrugs">
+		SELECT 
+			<include refid="sjMedicalDrugsColumns"/>
+		FROM sj_medical_drugs a
+		<include refid="sjMedicalDrugsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="chineseName != null and chineseName != ''">
+				AND a.chinese_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{chineseName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{chineseName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{chineseName},'%')</if>
+			</if>
+			<if test="bigClass != null and bigClass != ''">
+				AND a.big_class LIKE 
+					<if test="dbName == 'oracle'">'%'||#{bigClass}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{bigClass}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{bigClass},'%')</if>
+			</if>
+			<if test="inClass != null and inClass != ''">
+				AND a.in_class LIKE 
+					<if test="dbName == 'oracle'">'%'||#{inClass}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{inClass}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{inClass},'%')</if>
+			</if>
+			<if test="englishName != null and englishName != ''">
+				AND a.english_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{englishName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{englishName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{englishName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.unifs.sdbst.app.bean.life.medical.SjMedicalDrugs">
+		SELECT 
+			<include refid="sjMedicalDrugsColumns"/>
+		FROM sj_medical_drugs a
+		<include refid="sjMedicalDrugsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findMedId" resultType="com.unifs.sdbst.app.bean.life.medical.SjMedicalDrugs">
+		select
+			a.id AS "id",
+			a.chinese_name AS "chineseName",
+			a.fen_class AS "fenClass",
+			a.formulation AS "formulation",
+			a.remarks AS "remarks",
+			a.numbering AS "numbering",
+			a.big_class AS "bigClass",
+			a.in_class AS "inClass",
+			a.small_class AS "smallClass",
+			a.fine_class AS "fineClass",
+			a.english_name AS "englishName"
+		from
+			sj_medical_drugs a
+		where
+			a.id = #{id}
+	</select>
+	
+	<select id="findMedicalDrugs" resultType="com.unifs.sdbst.app.bean.life.medical.SjMedicalDrugs">
+		select
+			A.id AS "id",
+			A.big_class AS "bigClass",
+			A.english_name AS "englishName",
+			A.in_class AS "inClass",
+			A.chinese_name AS "chineseName"
+		from
+			sj_medical_drugs A
+		<where>
+			<if test="bigClass != null and bigClass != ''">
+				A .BIG_CLASS LIKE '%'||#{bigClass}||'%'
+			</if>
+			<if test="englishName != null and englishName != ''">
+				AND A .ENGLISH_NAME LIKE '%'||#{englishName}||'%'
+			</if>
+			<if test="inClass != null and inClass != ''">
+				AND A .in_class LIKE '%'||#{inClass}||'%'
+			</if>
+			<if test="chineseName != null and chineseName != ''">
+				AND A .chinese_name LIKE '%'||#{chineseName}||'%'
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sj_medical_drugs(
+			id,
+			chinese_name,
+			fen_class,
+			formulation,
+			remarks,
+			numbering,
+			big_class,
+			in_class,
+			small_class,
+			fine_class,
+			english_name
+		) VALUES (
+			#{id},
+			#{chineseName},
+			#{fenClass},
+			#{formulation},
+			#{remarks},
+			#{numbering},
+			#{bigClass},
+			#{inClass},
+			#{smallClass},
+			#{fineClass},
+			#{englishName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sj_medical_drugs SET 	
+			chinese_name = #{chineseName},
+			fen_class = #{fenClass},
+			formulation = #{formulation},
+			remarks = #{remarks},
+			numbering = #{numbering},
+			big_class = #{bigClass},
+			in_class = #{inClass},
+			small_class = #{smallClass},
+			fine_class = #{fineClass},
+			english_name = #{englishName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sj_medical_drugs SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

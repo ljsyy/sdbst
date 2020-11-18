@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src * ;img-src *">-->
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline';img-src 'self' http://support.shunde.gov.cn:9203">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>缴交教育费</title>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/life/livingpay/ipay.css?v=1.0.1" rel="stylesheet" type="text/css">
+
+<body>
+
+<div class="mui-input-group">
+    <div id="base-div" style="margin-top: 5px">
+        <div class="mui-input-row" style="overflow: visible;">
+            <label class="label">学校名称</label>
+            <div class="payTypeDiv" style="margin-top: 4px;">
+                <input type="text" id="payType" value="学校名称" code="" readonly="readonly" />
+                <ul id="payTypeUl">
+
+                </ul>
+            </div>
+        </div>
+        <div class="mui-input-row">
+            <label class="label">学校编号</label>
+            <input type="text" placeholder="请输入学校编号" class="mui-input-clear top" id="SchoolNo">
+        </div>
+        <div class="mui-input-row">
+            <label class="label">学生缴费编号</label>
+            <input type="text" placeholder="请输入学生缴费编号" class="mui-input-clear top" id="StudentPayeeNo">
+        </div>
+
+
+        <div id="detailDiv" style="display: none;">
+            <div class="mui-input-row"  >
+                <label class="label" >学生姓名</label>
+                <input type="text" class="mui-input-clear top"  id="StudentName">
+            </div>
+            <div class="mui-input-row"  >
+                <label class="label" >缴费金额</label>
+                <input type="text" class="mui-input-clear top"  id="PayeeAmount">
+            </div>
+
+            <div class="mui-input-row" >
+                <label class="label" >付款卡号/账号</label>
+                <input type="text" class="mui-input-clear top"   placeholder="请输入付款卡号/账号" id="AcctNo">
+            </div>
+        </div>
+
+    </div>
+    <div class="mui-button-row" style="margin-top: 20px;">
+        <button type="button" class="mui-btn mui-btn-primary" id="searchBtn" onclick="search()">查询</button>
+        <button type="button" class="mui-btn mui-btn-primary" id="doNextBtn" style="display: none;" onclick="confirmPay()">下一步</button>
+    </div>
+</div>
+
+<form id="form1" name="MainForm" method="post" action="">
+    <INPUT type="hidden" name="transName" id="transName" value='iMPay' />
+    <INPUT type="hidden" name="Plain" id="Plain" value='' />
+    <INPUT type="hidden" name="Signature" id="Signature" value="" />
+</form>
+
+<input type="hidden" id="resultData" name="resultData" value="" />
+<input type="hidden" id="userId" name="userId" th:value="${userId}" />
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
+    提示:。
+</div>
+<script type="application/javascript" src="mui/js/mui.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+<!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+<script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+<script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+<script>
+
+    $(function(){
+
+        //初始化学校列表
+        $.post(basePath() + "/livingPay/payQuery",{"SchoolNo":"","queryType":"iSchoolQry"},function(result){
+            var resultData = result.data;
+           // console.log(resultData);
+            if(result.code == 200){
+                var mesg = eval('(' + resultData + ')');
+                var dataList = mesg.List;
+                if(dataList.length > 0){
+                    var htmlStr = "";
+                    for(var i = 0; i < dataList.length; i++){
+                        htmlStr += '<li code="' + dataList[i].SchoolNo + '">' + dataList[i].SchoolName + '</li>'
+                    }
+                    $("#payTypeUl").html(htmlStr);
+                }
+                //证件类型点击
+                $(".payTypeDiv").click(function (e) {
+                    e.stopPropagation()
+                    if ($("#payTypeUl").is(":hidden")) {
+                        $("#payTypeUl").show()
+                    } else {
+                        $("#payTypeUl").hide()
+                    }
+                });
+                $("#payTypeUl>li").click(function (e) {
+                    e.stopPropagation();
+                    $("#payType").val($(this).text()).attr("code", $(this).attr("code"));
+                    $("#SchoolNo").val($(this).attr("code"));
+                    $("#payTypeUl").hide()
+                });
+            }else{
+                mui.alert(resultData,"提示");
+                return;
+            }
+        });
+
+    })
+
+    function confirmPay(){
+        $("button").attr("disabled", true);
+        //校验付款卡号
+        var AcctNo = $("#AcctNo").val();
+        AcctNo = AcctNo.trim().replace(/\s/g,"");
+        if(AcctNo == ""){
+            mui.alert("请输入卡号","提示");
+            $("button").attr("disabled", false);
+            return ;
+        }
+        //请求后台，获取plain，及签名
+        var message = {
+            "data":$("#resultData").val(),
+            "payType":"iPayForEducationFee",
+            "AcctNo":$("#AcctNo").val()
+        };
+        $.ajax({
+            url: basePath() + "/livingPay/getPayParam?userId="+$("#userId").val(), /*接口域名地址*/
+            type: 'post',
+            data: JSON.stringify(message),
+            contentType: "application/json",
+            dataType:"json",
+            async:true,
+            success: function (res) {
+                if(res.code == 200){
+                    var result =  res.data;
+                    $("#Plain").val(result.Plain);
+                    //console.log(result.Plain);
+                    $("#Signature").val(result.Signature);
+                    //console.log(result.Signature);
+                    $("#form1").submit();
+                }else{
+                    mui.alert(res.data,"提示");
+
+                    return;
+                }
+                $("button").attr("disabled", false);
+            },
+            error:function(err){
+
+            }
+        })
+        //$("button").attr("disabled", false);
+    }
+
+
+    function isNumber(value) {
+        return !Number.isNaN(Number(value))
+    }
+
+    function search(){
+        $("button").attr("disabled", true);
+        var payType = $("#payType").attr("code");
+        payType = payType.trim().replace(/\s/g,"");
+        if(payType == ""){
+            mui.alert("请选择学校","提示");
+            $("button").attr("disabled", false);
+            return;
+        }
+        var SchoolNo = $("#SchoolNo").val();
+        SchoolNo = SchoolNo.trim().replace(/\s/g,"");
+        if(SchoolNo == ""){
+            mui.alert("请输入学校编号","提示");
+            $("button").attr("disabled", false);
+            return;
+        }
+
+        var StudentPayeeNo = $("#StudentPayeeNo").val();
+        StudentPayeeNo = StudentPayeeNo.trim().replace(/\s/g,"");
+        if(StudentPayeeNo == ""){
+            mui.alert("请输入学生缴费编号","提示");
+            $("button").attr("disabled", false);
+            return;
+        }
+        //查询接口
+        $.post(basePath() + "/livingPay/payQuery",{"SchoolNo":SchoolNo,"StudentPayeeNo":StudentPayeeNo,"queryType":"iPayForEducationFeeQry"},function(result){
+            // console.log(result);
+            //console.log(result);
+            var resultData = result.data;
+            console.log(resultData);
+            if(result.code == 200){
+                $("#detailDiv").show();
+                $("#resultData").val(resultData);//设置提交的值
+                var mesg = eval('(' + resultData + ')');
+                $("#form1").attr("action",mesg.payAddr);//设置提交地址
+
+                $("#StudentName").val(mesg.StudentName);
+                $("#PayeeAmount").val(mesg.PayeeAmount+"元");
+
+                $("#doNextBtn").show();
+                $("button").attr("disabled", false);
+            }else{
+                mui.alert(resultData,"提示");
+                $("button").attr("disabled", false);
+                return;
+            }
+
+        });
+
+    }
+</script>
+</body>
+</html>

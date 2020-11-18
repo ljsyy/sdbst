@@ -1,0 +1,16 @@
+package com.unifs.sdbst.app.dao.primary.enterprise;
+
+import com.unifs.sdbst.app.bean.enterprise.EnterpriseReserve;
+import java.util.List;
+
+public interface EnterpriseReserveMapper {
+    int deleteByPrimaryKey(String id);
+
+    int insert(EnterpriseReserve record);
+
+    EnterpriseReserve selectByPrimaryKey(String id);
+
+    List<EnterpriseReserve> selectAll();
+
+    int updateByPrimaryKey(EnterpriseReserve record);
+}

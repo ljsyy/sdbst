@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <script src="mui/js/mui.min.js"></script>
+    <script src="js/app/base64.js"></script>
+
+    <title>政策匹配</title>
+
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background: #edeef0;}
+        body{background: #edeef0;}
+        a{text-decoration:none;color: #000;}
+
+        .main{}
+        .header{background: #4281cd;color: #fff;text-align: center;}
+        .header .top{padding-top: 10px;}
+        .header .top img{height: 45px;}
+        .header .middle{}
+        .header .middle .font{font-size: 16px;padding: 10px 0;}
+        .header .middle .num{ font-size: 18px;padding-bottom: 10px;}
+        .header .middle #num{font-weight: 600;}
+        .header .bottom{display: -webkit-inline-box;width: 100%;border-top: solid 1px #fff;}
+        .header .bottom .button{width: 49%;padding: 10px 0;font-size: 17px;}
+        #toMatch{border-right: solid 1px #fff;}
+        #content{}
+        .error{text-align: center;}
+        .error img{width: 50%;padding-top: 20%;}
+        .error p{padding: 15px;font-size: 16px;}
+
+        .line{padding: 10px;display: block;background: #fff;margin-bottom: 5px;font-size: 14px;}
+        .line .title{}
+        .line .match{text-align: right;color: #888888;}
+    </style>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        $(document).ready(function(){
+            /* 重新匹配 */
+            $("#toMatch").click(function(){
+                zcpp();
+            });
+
+            /* 完善信息 */
+            $("#perfect").click(function(){
+                window.location.href = basePath()+"/qy/train/personInfo"
+            });
+
+        });
+
+        var base = new Base64();	//base64加密解密
+
+        /* 政策匹配 */
+        function zcpp(){
+            load_ani.open("pointloading");//开始动画
+            $.ajax({
+                url:basePath()+"/qy/train/zcpp",
+                type: "GET",
+                dataType: "json",
+                async: true,
+                success: function(result){
+                    load_ani.remove();//结束动画
+                    console.log(result)
+                    if(result.errorCode == -1 && result.errorMsg == "未登录！"){
+                        //alert("未登录，请先登录后操作");
+                        popTipShow.alert('温馨提示','未登录，请先登录企业直通车系统', ['知道了'],
+                            function(e){
+                                //callback 处理按钮事件
+                                var button = $(e.target).attr('class');
+                                if(button == 'ok'){
+                                    //按下确定按钮执行的操作
+                                    //todo ....
+                                    this.hide();
+                                    window.location.href = basePath()+"/qy/train/loginPage?type=zcpp";
+                                }
+                            }
+                        );
+
+                    }else if(result.errorCode == 0){
+                        var data = result.data;
+                        //console.log(data.length)
+                        $("#num").text(data.length);
+                        $("#content").html("");
+                        for(var i in data){
+                            var matchPrecent;
+                            matchPrecent = data[i].matchPrecent;
+                            matchPrecent = (matchPrecent * 100).toFixed(2) + "%";
+                            $("#content").append(
+                                '<a class="line" href="'+basePath()+'/qy/train/newDetail?id='+data[i].id+'">'+
+                                '<p class="title">'+data[i].title+'</p>'+
+                                '<p class="match">匹配度：'+matchPrecent+'</p>'+
+                                '</a>'
+                            )
+                        }
+                    }else if(result.errorCode == -101){
+                        $("#content").html("");
+                        $("#content").append(
+                            '<div class="error">'+
+                            '<img alt="" src="img/QyTrain/error.png" />'+
+                            '<p>暂时没有匹配到任何政策，原因是未选择您所属于的企业，请尽快完善信息</p>'+
+                            '</div>'
+                        )
+                    }else{
+                        //alert(result.errorMsg);
+                        webToast(result.errorMsg,"middle",1000);
+                        return;
+                    }
+                }
+            });
+        }
+    </script>
+
+
+</head>
+<body>
+
+<div class="main">
+
+    <div class="header">
+        <div class="top">
+            <img alt="" src="img/QyTrain/icon1.png" />
+        </div>
+        <div class="middle">
+            <p class="font">已匹配到相似度较高的政策</p>
+            <p class="num"><span id="num">0</span> 条</p>
+        </div>
+        <div class="bottom">
+            <div class="button" id="toMatch">重新匹配</div>
+            <div class="button" id="perfect">完善信息</div>
+        </div>
+    </div>
+
+    <div id="content">
+
+    </div>
+
+</div>
+
+</body>
+</html>

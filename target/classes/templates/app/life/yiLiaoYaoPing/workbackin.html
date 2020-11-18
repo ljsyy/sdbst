@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="layui/back/style.css"/>
+    <link rel="stylesheet" href="layui/back/bootstrap.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+        <script type="text/javascript" src="wui/js/fastclick.js"></script>
+
+    <style type="text/css">
+        span {
+            display: block;
+            font-size: 1.0em;
+            color: #333;
+            font-weight: 400;
+        }
+    </style>
+
+</head>
+<body ontouchstart>
+
+<div class="container" align="center">
+    <div class="col-md-6" style="margin-top: 20%;">
+        <div class="inset">
+            <!--<form name="login" id="login" method="post" action="ecmsadmin.php" onSubmit="return CheckLogin(document.login);">-->
+                <input type="hidden" name="enews" value="login">
+                <div>
+                    <h2>疫情防控管理系统</h2>
+                    <span style="text-align: left;text-indent: 0.4em;"><label>用户名</label></span>
+                    <span><input type="text" name="username" class="textbox" id="name"></span>
+                </div>
+                <div>
+                    <span style="text-align: left;text-indent: 0.4em;"><label>密码</label></span>
+                    <span><input  name="password" type="password" class="password" id="phone"></span>
+                </div>
+                <div class="sign">
+                    <input type="submit" value="登录" class="submit" />
+                </div>
+            <!--</form>-->
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+    $(function () {
+        FastClick.attach(document.body);
+        // getVerify($("#imgVerify"))
+    });
+
+    //获取验证码
+    function getVerify(obj) {
+        obj.src = basePath() + "/data/sjMedicalDrugs/createImg?" + Math.random();
+    }
+
+</script>
+
+<script>
+
+    $("#showTooltips").click(function () {
+        var tel = $('#phone').val();
+        var code = $('#code').val();
+        var name = $('#name').val();
+
+        if (!tel) {
+            $.toptip('请输入密码');
+        } /*else if (!code) {
+            $.toptip('请输入验证码');
+        } */else if (name == "") {
+            $.toptip('请输入账号');
+        } else {
+            getDAta(tel, code, name);
+        }
+        // $.toptip('提交成功', 'success');
+    });
+
+    function getDAta(tel, code, name) {
+        $.ajax({
+            url: basePath() + "/data/hospital/clinic/mainSub",
+            type: "post",
+            data: {
+                "phone": tel,
+                "Code": code,
+                "name": name
+            },
+            beforeSend: function (xhr) {
+                $.showLoading();
+            },
+            success: function (data) {
+                $.hideLoading();
+                if (data.code == 200) {
+                    $.toast("操作成功！", "text");
+                    window.location.href = basePath() + data.data;
+                } else {
+                    $("#imgVerify").attr("src",basePath() + "/data/sjMedicalDrugs/createImg?" + Math.random());
+                    $.toast("登录失败："+data.msg, "text");
+                }
+            },
+            error: function () {
+                $.hideLoading();
+                $.toast("没有加载到数据", "text");
+            }
+        });
+    }
+</script>
+</body>
+</html>

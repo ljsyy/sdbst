@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 14px;">
+
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>办事详情</title>
+    <link href="wui/dist/style/weui.css" rel="stylesheet">
+    <!--<link href="css/app/fingertips/detail.css" rel="stylesheet">-->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <!--<link rel="stylesheet" href="swiper/dist/css/swiper.min.css">-->
+    <!--<script src="swiper/dist/js/swiper.min.js"></script>-->
+
+</head>
+<style>
+    .weui-tabbar__label{
+        font-size: 12px;
+        line-height: 2;
+        color: rgba(0, 0, 0, 0.9);
+    }
+</style>
+<style>
+    /**{padding:0;margin:0;font-size: .28rem;color:#333;}*/
+    /*html{background:#fff;}*/
+    /*a{text-decoration:none;}*/
+    /*!*body{max-width:640px;margin:0 auto;position:relative;background:#ccc;overflow:hidden;}*!*/
+    /*img{width:100%;border:0;}*/
+    /*li{list-style:none;}*/
+
+    /*.head-top{height:36px;position:fixed;top:0;left:0;text-align:center;width:100%;line-height:36px;}*/
+    /*.swiper-containee{max-width:640px;}*/
+    /*#nav{border-bottom:1px solid #999;}*/
+    /*#nav li{text-align:center;}*/
+    /*.active-nav{*/
+        /*background-color: #ECECEC;*/
+    /*}*/
+    /*.active-nav a{text-decoration:none;*/
+        /*!*color:#fff;*!*/
+        /*!*background:#ddd !important;*!*/
+    /*}*/
+    .swiper-slide__item{
+        /*position: relative;*/
+        /*display: block;*/
+        /*-webkit-box-flex: 1;*/
+        /*-webkit-flex: 1;*/
+        /*flex: 1;*/
+        padding: 10px 0;
+        /*padding-top: calc(16px + constant(safe-area-inset-top));*/
+        /*padding-top: calc(16px + env(safe-area-inset-top));*/
+        text-align: center;
+        font-size: 17px;
+        line-height: 1.41176471;
+        /*-webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+
+    }
+    /*#page .swiper-slide{height:6rem;}*/
+    .test{
+        line-height: 30px;
+        padding-left: 14px;
+        background-color: #FFFFFF;
+        padding-top: 10px;
+    }
+    .weui-cell1 {
+        /*padding: 10px;*/
+        position: relative;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+    }
+    .weui-cell__bd1 {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+    }
+    .weui-label{
+        font-weight: bold;
+        font-size: 17px;
+    }
+    .tafter{
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .weui-navbar__item{
+        font-size: 14px;
+        line-height: 10px;
+    }
+</style>
+
+<body >
+<div id="container"class="container"> <!---->
+    <div class="page">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <ul class="weui-navbar">
+                    <li class="weui-navbar__item weui-bar__item_on">
+                        全部
+                    </li>
+                    <li class="weui-navbar__item">
+                        草稿
+                    </li>
+                    <li class="weui-navbar__item">
+                        待审批
+                    </li>
+                    <li class="weui-navbar__item">
+                        待补件
+                    </li>
+                    <li class="weui-navbar__item">
+                        办结
+                    </li>
+                    <li class="weui-navbar__item">
+                        我的
+                    </li>
+                </ul>
+                <div class="weui-tab__panel" id="pagecontent">
+                    <div id="myType" style="display: none">
+                        <div class="weui-cell weui-cell_select weui-cell_select-after" style="background-color: #ededed;">
+                            <div class="weui-cell__hd">
+                                <label for="" class="weui-label">人物类型</label>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <select class="weui-select" name="searcherType" id="searcherType">
+                                    <option value="1">代理人</option>
+                                    <option value="2">申请人</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="weui-cell" id="js_cell" style="background-color: #ededed;">
+                            <div class="weui-cell__hd"><label class="weui-label">证件号码</label></div>
+                            <div class="weui-cell__bd">
+                                <input id="certificateNum" name="certificateNum" class="weui-input" autofocus type="text"  maxlength="16" value="330102199003075981"  readonly  unselectable="on"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-loadmore" id="loadmore">
+                        <i class="weui-loading"></i>
+                        <span class="weui-loadmore__tips">正在加载</span>
+                    </div>
+                    <div id="dataResult" class="test">
+
+                    </div>
+                    <div id="dialogs"></div>
+                    <!--BEGIN toast-->
+                    <div id="toast" style="display: none;">
+                        <div class="weui-mask_transparent"></div>
+                        <div class="weui-toast">
+                            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+                            <p class="weui-toast__content">删除完成</p>
+                        </div>
+                    </div>
+                    <!--end toast-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    var pagesize=10;//每页数据条数
+    var dePhone = [[${dePhone}]]
+    var userPhone = [[${userPhone}]]
+    $("#certificateNum").val()
+    $(document).ready(function(){
+        var height = window.innerHeight;
+        console.log(height);
+        $(".page").height(height);
+        getData(1,pagesize,"");
+    })
+    $(function(){
+
+        $('.weui-navbar__item').on('click', function () {
+            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+            var item = $(this).index();  //获取索引下标 也从0开始
+            $("#myType").css("display","none");
+            $("#dataResult").html("");
+            if (item == 5){
+                $('#loadmore').hide();
+                $("#myType").css("display","block");
+            } else {
+                var page = 2;
+                var maxpage;
+                $('#getmore').on('click', function() {
+                    maxpage = sessionStorage['maxpage'];
+                    if(page<=maxpage) {
+                        getData(page,pagesize,navItem(item));
+                        page++;
+                    }
+                });
+                getData(1,pagesize,navItem(item));
+            }
+        });
+    });
+    function getMoreData(pageNo,statusString) {
+        $('#loading').show();
+        maxpage = sessionStorage['maxpage'];
+        console.log("maxpage:"+maxpage)
+        if(pageNo<=maxpage) {
+            getData(++pageNo,pagesize,statusString);
+        }
+    }
+    function getData(pageNo,pageSize,statusString) {
+        var searcherType = $("#searcherType").val();
+        var certificateNum = $("#certificateNum").val();
+        $.ajax({
+            url:getRootPath()+"/app/fingertips/case/page",
+            // url:"http://218.104.177.2:8090/sdbst/app/fingertips/case/page",
+            data:{
+                "searcherType":searcherType,"certificateNum":certificateNum,"pageNo":pageNo,"pageSize":pageSize,"statusString":statusString,"orderBy":"create_time"
+            },
+            type:"post",
+            dataType:"json",
+            beforeSend:function(xhr){
+                $('#loadmore').show();
+            },
+            success:function (data) {
+                var html  = '';
+                if ("200"==data.code){
+                    $('#loadmore').hide();
+                    if (data.data.data.length == 0){
+                        html = '<div style="text-align: center">没有更多了</div>';
+                    } else {
+                        $(".weui-panel__ft").remove();
+                        for (var i = 0; i < data.data.data.length; i++) {
+                            html +='<div class="tafter" id="'+data.data.data[i].id+'">\n' +
+                                '    <div class="weui-cell1">\n' +
+                                '        <div class="weui-cell__hd">\n' +
+                                '            <label class="weui-label">'+ data.data.data[i].applicantName +'</label>\n' +
+                                '        </div>\n' +
+                                '    </div>\n' +
+                                '    <label class="weui-cell1" >\n' +
+                                '        <div class="weui-cell__bd1">\n' +
+                                '            <p>'+ data.data.data[i].matterName +'</p>\n' +
+                                '        </div>\n' +
+                                '    </label>\n' +
+                                '    <label class="weui-cell1" >\n' +
+                                '        <div class="weui-cell__bd">\n' +
+                                '           <p><span style="color: #007aff">['+statusType(data.data.data[i].status)+']</span>'  +
+                                '                        编辑于'+renderTime(data.data.data[i].createTime)+'</p>\n' +
+                                '        </div>\n' ;
+                                    if (data.data.data[i].status==17) {
+                                        html += '        <a href="javascript:;" onclick="delCase(\''+data.data.data[i].id+'\',\''+data.data.data[i].matterName+'\')"><div class="weui-cell__ft" style="margin-right: 5px;padding-right: 5px;">' +
+                                            '           <img src="img/fingertips/del.jpg" alt="" style="width: 10px;padding-right: 5px;">删除'+
+                                            '        </div></a>';
+                                    }
+                            html+='    </label>' +
+                                '</div>';
+
+                        }
+                        var more = '';
+                        var maxpage = Math.ceil(data.total / pagesize);
+                        sessionStorage['maxpage'] = maxpage;
+                        if(pageNo==maxpage){
+                            more = '<div class="weui-panel__ft">\n' +
+                                // '            <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">\n' +
+                                '                <div class="weui-cell__bd" id="getmore" style="text-align: center;font-size: 16px;padding: 16px;">没有更多数据了</div>\n' +
+                                // '            </a>\n' +
+                                '        </div>';
+                        }else {
+                            // more += '<div class="weui-cell__bd" id="getmore" onclick="getMoreData('+statusString+')">查看更多<i id="loading" class="weui-loading"></i></div>';
+                            more = '        <div class="weui-panel__ft">\n' +
+                                '            <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" style="text-align: center;">\n' +
+                                '                <div class="weui-cell__bd" id="getmore" onclick="getMoreData('+pageNo+','+statusString+')">查看更多<i id="loading" class="weui-loading" style="display: none;"></i></div>\n' +
+                                '            </a>\n' +
+                                '        </div>';
+                        }
+                        html += more;
+                    }
+                    $("#dataResult").append(html);
+                }else if ("5000"==data.code) {
+                    $("#dataResult").append("正在加载中ing");
+                }else {
+                    $("#dataResult").append(data.msg);
+                }
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        })
+    }
+</script>
+
+<script type="application/javascript">
+
+    function navItem(item) {
+        if (item == 0) {
+            return "";
+        }else if (item == 1){
+            return 17;
+        }else if (item == 2){
+            return 0;
+        }else if (item == 3){
+            return 8;
+        }else if (item == 4){
+            return 15;
+        }else {
+            return "";
+        }
+    }
+    function statusType(str){
+        if(str == "0"){
+            return "待审批"
+        }else if(str == "1"){
+            return "预接件补件"
+        }else if(str == "2"){
+            return "补件待重审"
+        }else if(str == "3"){
+            return "预接件退件"
+        }else if(str == "4"){
+            return "预受理"
+        }else if(str == "5"){
+            return "收件"
+        }else if(str == "6"){
+            return "补齐补正"
+        }else if(str == "7"){
+            return "待受理"
+        }else if(str == "8"){
+            return "受理"
+        }else if(str == "9"){
+            return "不予受理"
+        }else if(str == "10"){
+            return "受理后补齐补正"
+        }else if(str == "12"){
+            return "退件"
+        }else if(str == "13"){
+            return "在办"
+        }else if(str == "14"){
+            return "挂起"
+        }else if(str == "15"){
+            return "办结"
+        }else if(str == "16"){
+            return "作废"
+        }else if(str == "17"){
+            return "草稿"
+        }else if(str == "18"){
+            return "上报"
+        }else {
+            return "其他"
+        }
+    }
+    //时间格式化函数
+    function renderTime(date){
+        var dateee = new Date(date).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    }
+    function delCase(id,matterName) {
+        // $('#iosDialog1').fadeIn(200);
+        // $('#iosDialog1').show();
+        var html = '<div class="js_dialog" id="iosDialog1" >\n' +
+            '                    <div class="weui-mask"></div>\n' +
+            '                    <div class="weui-dialog">\n' +
+            '                        <div class="weui-dialog__hd"><strong class="weui-dialog__title">温馨提示</strong></div>\n' +
+            '                        <div class="weui-dialog__bd">是否确定删除'+matterName+'？</div>\n' +
+            '                        <div class="weui-dialog__ft">\n' +
+            '                            <a href="javascript:;" onclick="hideDialog()" class="weui-dialog__btn weui-dialog__btn_default">取消</a>\n' +
+            '                            <a href="javascript:;" onclick="deleteDialog('+id+')" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>';
+        $("#dialogs").html(html);
+    }
+
+    function hideDialog() {
+        $("#dialogs").html("");
+    }
+
+    function deleteDialog(id) {
+        $.ajax({
+            url:getRootPath()+"/app/fingertips/case/delete",
+            // url: "http://218.104.177.2:8090/sdbst/app/fingertips/case/delete",
+            data: {
+                "caseId": id
+            },
+            type: "post",
+            dataType: "json",
+            beforeSend:function(xhr){
+                var html = '<div class="weui-toast weui_loading_toast weui-toast--visible" style="opacity: 1;"><div class="weui_loading"><i class="weui-loading weui-icon_toast"></i></div><p class="weui-toast_content">数据删除中</p></div>';
+                $("#dialogs").html(html);
+            },
+            success:function (data) {
+                if ("200"==data.code){
+                    hideDialog();
+                    var $toast = $('#toast');
+                    if ($toast.css('display') != 'none') return;
+
+                    $toast.fadeIn(100);
+                    setTimeout(function () {
+                        $toast.fadeOut(100);
+                    }, 2000);
+                    $("#" + id ).remove();
+                }
+            },
+            error:function (data) {
+                var html = '<div class="js_dialog" id="iosDialog1" >\n' +
+                    '                    <div class="weui-mask"></div>\n' +
+                    '                    <div class="weui-dialog">\n' +
+                    '                        <div class="weui-dialog__hd"><strong class="weui-dialog__title">温馨提示</strong></div>\n' +
+                    '                        <div class="weui-dialog__bd">服务器走丢了，请稍后重新</div>' +
+                     '                       <div class="weui-dialog__ft">\n' +
+                    '                           <a href="javascript:;" onclick="hideDialog()" class="weui-dialog__btn weui-dialog__btn_primary">知道了</a>\n' +
+                    '                        </div>'+
+                    '                    </div>\n' +
+                    '                </div>';
+                $("#dialogs").html(html);
+            }
+        })
+    }
+</script>
+
+</html>

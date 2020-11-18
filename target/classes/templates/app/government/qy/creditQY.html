@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>守合同重信用企业资料</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <style>
+        body{height: 100%;width: 100%;position: absolute;}
+        .line{border-bottom: #f4f6f8 2px solid;line-height: 50px;padding-left: 15px;}
+
+        /*搜索*/
+        #search{border-bottom: 0;}
+        #search,#search-details{background: #fff;position: relative;padding: 10px 15px;box-sizing: border-box;}
+        #search-details p{color: #000;margin: 5px 0;}
+        #search-details div{color:#3A3A3A;}
+        #search-details div li{display: inline-block;border: solid 2px #999999;margin: 0 10px 10px 0; padding:2px 10px;border-radius: 5px;}
+        #search-details .details-botton{padding: 8px 0;margin: 0 20px 0 0;flex: 1;background: #4281cd;color: white;border-radius: 5px;}
+        #search-details .choose{background: #999;color: #fff;}
+
+        .line1{width: 100%;padding: 0 20px;box-sizing: border-box;}
+        .line1 p{}
+        .line1 input{border: 0;width: 100%;background: #f4f6f8;padding: 5px 0 5px 5px;border-radius: 5px;}
+
+        #showdata{}
+        .list1{margin-top: 10px;background: #fff;}
+        .list1 .title span{font-size: 18px;margin-left: 0px;flex: 1;padding-left: 10px;}
+        .list1 .title{border-bottom: 0;line-height: 40px;padding: 5px 10px;display: flex;align-items: center;}
+        .list1 .title .xiala{float: right;}
+        .list1 .title .xiala.up{
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+        }
+        .list1 .info.close{display:none;	}
+        .icon{vertical-align: top;}
+        .info{}
+        .info .line{display: flex;border-top: solid 1px #dcdcdc;background: #fff;padding-left: 0;line-height: normal;}
+        .info .line .type{background: #fcf5f5;    width: 40%;padding: 5px;}
+        .info .line .value{padding: 5px;width: 60%;word-break: break-all;}
+
+        .main{overflow: scroll;height: 100%;position: relative;}
+
+    </style>
+
+    <script type="text/javascript">
+        var pageNum = 1;
+        var pagesize = 20;
+        var first=true;
+        $(document).ready(function(){
+
+            $(".main").bind("scroll",function(){
+                var bottom=$(this).scrollTop() + $(this).height();
+                if(bottom==$(this)[0].scrollHeight){
+                    pageNum = pageNum + 1;
+                    first=false;
+                    get();
+                }
+            });
+
+            get();
+        });
+
+        var qymc = "";
+        var qyzch = "";
+        var gsnd = "";
+
+        //判断特殊符号
+        function check(val){
+            var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im,
+                regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+            if(regEn.test(val) || regCn.test(val)) {
+                webToast("名称不能包含特殊字符","middle",1000);
+                return true;
+            }
+            if(val.match(/\\/g)){
+                webToast("名称不能包含特殊字符","middle",1000);
+                return true;
+            }
+            return;
+        }
+
+        /* 显示搜索框 */
+        function show(){
+            $("#search-details").css("display","block");//显示div
+        }
+        /* 取消 */
+        function cancel(){
+            $("#search-details").css("display","none");//隐藏div
+        }
+
+        /* 查询 */
+        function search(){
+            qymc = $("#qymc").val();
+            qyzch = $("#qyzch").val();
+            gsnd = $("#gsnd").val();
+            if(gsnd == ""){
+                gsnd = gsnd;
+            }else{
+                gsnd = gsnd + "年";
+            }
+            if(check($("#qymc").val())){
+                $("#qymc").val("");
+                return false;
+            }
+            if(check($("#qyzch").val())){
+                $("#qyzch").val("");
+                return false;
+            }
+            if(check($("#gsnd").val())){
+                $("#gsnd").val("");
+                return false;
+            }
+            console.log(qymc+","+qyzch+","+gsnd);
+            pageNum = 1;
+            $('#showdata').html("");	//清空数据
+            $("#search-details").css("display","none");//隐藏div
+            get();
+        }
+
+        /* 获取 */
+        function get(){
+
+            $.ajax({
+                url: basePath()+"/app/menu/interface/credit",
+                data: "pageNum="+pageNum+"&pageSize="+pagesize+"&qymc="+qymc+"&qyzch="+qyzch+"&gsnd="+gsnd,
+                type:"post",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    console.log(result)
+                    var json = result.data;
+                    if(json.length == 0){
+                        if(first){
+                            popTipShow.alert('温馨提示','查询无数据', ['知道了'],
+                                function(e){
+                                    //callback 处理按钮事件
+                                    var button = $(e.target).attr('class');
+                                    if(button == 'ok'){
+                                        //按下确定按钮执行的操作
+                                        location.reload();
+                                        this.hide();
+                                    }
+                                }
+                            );
+                        }else{
+                            webToast("查询无数据","middle",1000);
+                            return;
+                        }
+                    }
+                    for(var i in json){
+                        var GSND;//公示年度
+                        if(json[i].GSND == "" || json[i].GSND == null || json[i].GSND == undefined){
+                            GSND = "暂无记录";
+                        }else{
+                            GSND = json[i].GSND;
+                        }
+
+                        $("#showdata").append(
+                            '<div class="list1">'+
+                            '<div class="title">'+
+                            '<img class="icon" src="img/new/file.png" height="30">'+
+                            '<span>企业名称：'+json[i].QYMC+'</span>'+
+                            '<img class="xiala" src="img/menu/shangla.png" height="10">'+
+                            '</div>'+
+                            '<div class="info close">'+
+                            '<div class="line">'+
+                            '<p class="type">法定代表人</p>'+
+                            '<p class="value">'+json[i].FDDBR+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">统一社会信用代码/注册号</p>'+
+                            '<p class="value">'+json[i].QYZCH+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">连续年度</p>'+
+                            '<p class="value">'+json[i].LXND+'年</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">公示年度</p>'+
+                            '<p class="value">'+GSND+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'
+                        );
+                    }
+
+                    $(".list1 .title").unbind().click(function(){
+                        if($(this).parent().find(".info").hasClass("open")){
+                            $(this).parent().find(".info").removeClass("open").addClass("close");
+                            $(this).find(".xiala").removeClass("up");
+                        }else{
+                            $(this).parent().find(".info").removeClass("close").addClass("open");
+                            $(this).find(".xiala").addClass("up");
+
+                        }
+
+                    });
+
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+
+<div class="main">
+    <!-- 搜索框 -->
+    <div id="search-choose">
+        <div id="search" onclick="show()" >
+            <div style="background: #F4F6F8;border-radius: 5px;">
+                <img src="img/map/sousuo.jpg" height="30" style="vertical-align: middle;margin: 0 5px;padding: 5px;"/>
+                <span style="color: #ABA9AB;background: transparent;font-size: 17px;vertical-align: middle;">请输入搜索信息</span>
+            </div>
+        </div>
+        <div id="search-details" style="padding:0;display:none;">
+            <div class="line1"><p>企业名称：</p><input id="qymc" placeholder="请输入企业名称"/></div>
+            <div class="line1"><p>统一社会信用代码/注册号：</p><input id="qyzch" placeholder="请输入统一社会信用代码/注册号"/></div>
+            <div class="line1"><p>公示年度：</p><input id="gsnd" placeholder="请输入公示年度"/></div>
+            <p id="button" style="padding-top: 8px;">
+                <span id="exit" onclick="cancel()">取消</span>
+                <span id="request_no" onclick="search()">查询</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 内容 -->
+    <div id="showdata">
+
+    </div>
+</div>
+
+</body>
+</html>

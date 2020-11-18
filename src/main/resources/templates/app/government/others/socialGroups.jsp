@@ -1,0 +1,216 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>社会团体</title>
+<meta name="decorator" content="blank"/>
+<link rel="stylesheet" href="${ctxStatic}/modules/app/css/detail.css"/>
+<script type="text/javascript" src="${ctxStatic}/jquery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/modules/app/js/detail.js"></script>
+<style>
+body{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+/*搜索*/
+#search{border-bottom: 0;}
+#search,#search-details{background: #fff;position: relative;padding: 10px 15px;    box-sizing: border-box;}
+#search-details p{margin-bottom: 10px;color:#3A3A3A;padding:0 15px;} 
+#search-details div{color:#3A3A3A;padding:0 15px;}
+#search-details div li{display: inline-block;border: solid 2px #999999;margin: 0 10px 10px 0; padding:2px 10px;    border-radius: 5px;}
+#search-details .details-botton{padding: 8px 0;margin: 0 20px 0 0;flex: 1;background: #EB413D;color: white;border-radius: 5px;}
+#search-details .choose{background: #999;color: #fff;}
+.line{
+	border-bottom: #f4f6f8 2px solid;
+    line-height: 50px;
+    padding-left: 15px;
+}
+#depart{
+	height: 30px;
+    line-height: 30px;
+    text-align: right;
+    float: right;
+    width: 65%;
+    margin-right: 28px;
+    margin-top: 11px;
+    border: none;
+}
+#showdata{margin: 10px;}
+.list1{margin-bottom: 10px;background: #fff;}
+.list1 .title span{
+	font-size: 18px;
+    margin-left: 0px;
+    flex: 1;
+    padding-left: 10px;
+}
+.list1 .title{
+    border-bottom: 0;
+    line-height: 40px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+}
+.list1 .title .xiala{
+    float: right;
+}
+.list1 .title .xiala.up{
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+}
+.list1 .info.close{
+	display:none;	
+}
+.icon{vertical-align: top;}
+.info{border-top: solid 1px #e5e5e5;padding: 5px 0px;}
+.info p{color: #eb413d;padding: 3px 0px;}
+.info div{
+    display: flex;
+    padding: 3px;
+    font-size: 15px;
+    padding-left: 10px;
+}
+.info div text-col{   display:block}
+.info div text-col.l{color: #eb413d;    white-space: nowrap;}
+.info div text-col.r{    padding-left: 8px;}
+.info span{color: #6e6e6e;padding-left: 10px;}
+
+.main{
+    overflow: scroll;
+    height: 100%;
+    position: relative;
+}
+
+</style>
+
+<script type="text/javascript">
+var page = 1;
+var pagesize = 20;
+
+$(document).ready(function(){
+	get();
+	
+	$(".main").bind("scroll",function(){
+		var bottom=$(this).scrollTop() + $(this).height();
+		  if(bottom==$(this)[0].scrollHeight){
+			  page = page + 1;
+			  //alert(page);
+			  get();
+		  }	
+	}); 
+	/* $(window).scroll(function(){
+	　　//判断是否滑动到页面底部
+	     if($(window).scrollTop() === $(document).height() - $(window).height()){
+	           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+	    	 page = page + 1;
+			 alert(page);
+			 get();
+	     }
+	}); */
+	
+	
+});
+
+/* 显示搜索框 */
+function show(){
+	$("#search-details").css("display","block");//显示div
+}
+/* 取消 */
+function cancel(){
+	$("#search-details").css("display","none");//隐藏div
+}
+
+/* 查询 */
+function search(){
+	page = 1;
+	pagesize = 300;
+	$('#showdata').html("");	//清空数据
+	get();
+}
+
+/* 获取 */
+function get(){
+	var departName = $("#depart").val();
+	$("#search-details").css("display","none");//隐藏div
+	$.ajax({ 
+		url: "${ct}/app/menu/interface/club",
+		data: "pageNum="+page+"&pageSize="+pagesize+"&mcdm="+departName,
+		type:"post",
+		dataType:"json",
+		async:false,
+		success:function(result){
+			console.log(result)
+			//$('#showdata').html("");
+			$("#search-details").css("display","none");//隐藏div
+			var json = result.data;
+			for(var i in json){
+				$("#showdata").append(
+					'<div class="list1">'+
+				    	'<div class="title">'+
+					    	'<img class="icon" src="${ctxStatic}/modules/app/img/inshunde/shtt.png" height="30">'+
+					    	'<span>'+json[i].DWMC+'</span>'+
+					    	'<img class="xiala" src="${ctxStatic}/modules/app/img/menu/shangla.png" height="10">'+
+				    	'</div>'+
+				    	'<div class="info close">'+
+				    		'<div>组织机构代码：'+json[i].ZZJGDM+'</div>'+
+				    		'<div>联系电话：'+json[i].LXDH+'</div>'+
+				    		'<div>登记日期：'+json[i].DJRQ+'</div>'+
+				    		'<div>地址：'+json[i].DZ+'</div>'+
+				    		'<div>业务主管部门：'+json[i].YWZGBM+'</div>'+
+				    	'</div>'+
+				   '</div>'
+				);
+			}
+			
+			$(".list1 .title").unbind().click(function(){
+				if($(this).parent().find(".info").hasClass("open")){
+					$(this).parent().find(".info").removeClass("open").addClass("close");
+					$(this).find(".xiala").removeClass("up");
+				}else{
+					$(this).parent().find(".info").removeClass("close").addClass("open");
+					$(this).find(".xiala").addClass("up");
+					
+				}
+
+			});
+			
+		}
+	});
+}
+
+
+</script>
+</head>
+<body>
+<div class="main">
+	<!-- 搜索框 -->
+	<div id="search-choose">
+		<div id="search" onclick="show()" >
+			<div style="background: #F4F6F8;border-radius: 5px;">
+				<img src="${ctxStatic}/modules/app/img/map/sousuo.jpg" height="30" style="vertical-align: middle;margin: 0 5px;padding: 5px;"/>
+				<span style="color: #ABA9AB;background: transparent;font-size: 17px;vertical-align: middle;">请输入搜索信息</span>
+			</div>
+		</div>
+		<div id="search-details" style="padding:0;display:none;">
+			<div class="line">单位名称<input id="depart" placeholder="请输入"/></div>
+			<p id="button" style="padding-top: 8px;">
+				<span id="exit" onclick="cancel()">取消</span>
+				<span id="request_no" onclick="search()">查询</span>
+			</p>
+		</div>
+	</div>
+	
+	<!-- 内容 -->
+	<div id="showdata">
+		
+	</div>
+
+</div>
+</body>
+</html>

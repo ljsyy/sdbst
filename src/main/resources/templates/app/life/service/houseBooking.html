@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>房屋预售信息</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <style>
+        body{
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
+        /*搜索*/
+
+        .query{background: #fff;font-size: 16px;}
+        .query .line{
+            padding: 10px;
+            height: 25px;
+            line-height: 25px;
+        }
+        .query .line span{}
+        .query .line input{
+            float: right;
+            border: 0;
+            font-size: 14px;
+            width: 65%;
+            background: #f4f6f8;
+            padding: 7px 8px;
+        }
+        .query button{
+            width: 90%;
+            margin: 10px;
+            border: 0;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 0;
+            font-size: 15px;
+            background: #4281cd;
+        }
+        .query img{
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: bottom;
+        }
+
+        #showdata{}
+        .list1{margin-top: 10px;background: #fff;}
+        .list1 .title span{
+            font-size: 18px;
+            margin-left: 0px;
+            flex: 1;
+            padding-left: 10px;
+        }
+        .list1 .title{
+            border-bottom: 0;
+            line-height: 40px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        .list1 .title .xiala{
+            float: right;
+        }
+        .list1 .title .xiala.up{
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+        }
+        .list1 .info.close{
+            display:none;
+        }
+        .icon{vertical-align: top;}
+        .info{}
+        .info .line{
+            display: flex;
+            border-top: solid 1px #dcdcdc;
+            background: #fff;
+        }
+        .info .line .type{
+            background: #fcf5f5;
+            width: 40%;
+            padding: 5px;
+        }
+        .info .line .value{padding: 5px;width: 60%;word-break: break-all;}
+
+        .main{
+            overflow: scroll;
+            height: 100%;
+            position: relative;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var page = 1;
+        var pagesize = 20;
+
+        $(document).ready(function(){
+
+            $(".main").bind("scroll",function(){
+                var bottom=$(this).scrollTop() + $(this).height();
+                if(bottom==$(this)[0].scrollHeight){
+                    page = page + 1;
+                    //alert(page);
+                    get();
+                }
+            });
+
+
+
+
+        });
+
+        /* 查询 */
+        function search(){
+            page = 1;
+            $('#showdata').html("");	//清空数据
+            get();
+        }
+
+        /* 获取 */
+        function get(){
+            var date = $("#date").val();
+            var paramArray = $("#date").val().split("-");
+            var year = paramArray[0];
+            var month = paramArray[1];
+            date = year+month;
+            //console.log("date="+date);
+            if(date == "" || date == null || date == "undefined"){
+                //alert("请选择预售日期");
+                webToast("请选择预售日期","middle",3000);
+                return;
+            }
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url: basePath()+"/app/menu/interface/fwys",
+                data: "pageNum="+page+"&pageSize="+pagesize+"&NY="+date,
+                type:"post",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    load_ani.remove();
+                    console.log(result)
+                    //$('#showdata').html("");
+                    var data = result.data;
+                    console.log(data.length)
+                    if(data.length == 0){
+                        //alert("暂无房屋预售信息");
+                        webToast("暂无房屋预售信息","middle",3000);
+                    }
+                    for(var i in data){
+                        $("#showdata").append(
+                            '<div class="list1">'+
+                            '<div class="title">'+
+                            '<img class="icon" src="img/new/file.png" height="25" />'+
+                            '<span>工程名称：'+data[i].GC_MC+'</span>'+
+                            '<img class="xiala" src="img/menu/shangla.png" height="10" />'+
+                            '</div>'+
+                            '<div class="info close">'+
+                            '<div class="line">'+
+                            '<p class="type">工程地址</p>'+
+                            '<p class="value">'+data[i].GC_DZ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">批准预售日期</p>'+
+                            '<p class="value">'+data[i].YS_PZRQ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">预售有效期</p>'+
+                            '<p class="value">'+data[i].YS_YXQ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">开发单位名称</p>'+
+                            '<p class="value">'+data[i].KFDW_MC+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">单位营业执照号</p>'+
+                            '<p class="value">'+data[i].KFDW_YYZZH+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">楼盘编码</p>'+
+                            '<p class="value">'+data[i].LP_BM+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">建筑层数</p>'+
+                            '<p class="value">'+data[i].FW_CS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">楼栋数</p>'+
+                            '<p class="value">'+data[i].FW_LDS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">土地用途</p>'+
+                            '<p class="value">'+data[i].TD_YT+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">车位面积</p>'+
+                            '<p class="value">'+data[i].CW_MJ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">车位套数</p>'+
+                            '<p class="value">'+data[i].CW_TS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">铺位面积</p>'+
+                            '<p class="value">'+data[i].PW_MJ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">铺位套数</p>'+
+                            '<p class="value">'+data[i].PW_TS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">其他面积</p>'+
+                            '<p class="value">'+data[i].QI_MJ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">其他套数</p>'+
+                            '<p class="value">'+data[i].QI_TS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">预售款专用账户开户银行</p>'+
+                            '<p class="value">'+data[i].YSK_KHYH+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">预售款专用账户</p>'+
+                            '<p class="value">'+data[i].YSK_ZH+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">预售总面积</p>'+
+                            '<p class="value">'+data[i].YS_ZMJ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">预售总套数</p>'+
+                            '<p class="value">'+data[i].YS_ZTS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">住宅面积</p>'+
+                            '<p class="value">'+data[i].ZZ_MJ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">住宅套数</p>'+
+                            '<p class="value">'+data[i].ZZ_TS+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">发证日期</p>'+
+                            '<p class="value">'+data[i].FZRQ+'</p>'+
+                            '</div>'+
+
+                            '</div>'+
+                            '</div>'
+                        );
+                    }
+
+                    $(".list1 .title").unbind().click(function(){
+                        if($(this).parent().find(".info").hasClass("open")){
+                            $(this).parent().find(".info").removeClass("open").addClass("close");
+                            $(this).find(".xiala").removeClass("up");
+                        }else{
+                            $(this).parent().find(".info").removeClass("close").addClass("open");
+                            $(this).find(".xiala").addClass("up");
+
+                        }
+
+                    });
+
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+<div class="main">
+    <!-- 搜索框 -->
+    <div class="query">
+        <div class="line">
+            预售日期
+            <input type="month" id="date" />
+        </div>
+
+        <center>
+            <button align="center" onclick="search()"><img src="img/new/sousuo.png" />查询</button>
+        </center>
+
+    </div>
+
+
+    <!-- 内容 -->
+    <div id="showdata">
+
+    </div>
+
+</div>
+</body>
+</html>

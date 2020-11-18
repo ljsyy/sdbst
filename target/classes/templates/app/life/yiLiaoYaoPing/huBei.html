@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="wui/css/weui.css"/>
+    <link rel="stylesheet" href="wui/css/weuix.css"/>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="wui/js/city-picker.min.js"></script>
+    <style type="text/css">
+
+        .weui-label {
+            font-weight: normal;
+        }
+
+        .weui-btn_primary:not(.weui-btn_disabled):active {
+            color: rgba(255, 255, 255, 0.6);
+            background-color: #10aeff;
+        }
+
+        .weui-form-li {
+            margin: 0 20px;
+        }
+
+        .weui-form-checkbox[type="radio"]:checked + label .weui-icon-radio {
+            background-color: #10aeff;
+            border: 1px solid #10aeff;
+        }
+
+        .selecth {
+            height: 30px;
+            width: 100%;
+            background: #fff;
+            border: 0;
+        }
+
+        label.xrequired:after {
+            content: '* ';
+            color: red;
+        }
+
+        .xreq:after {
+            content: '* ';
+            color: red;
+        }
+    </style>
+
+</head>
+<body ontouchstart>
+
+<div id="liuyan" style="">
+    <div class="weui-panel weui-panel_access" style="margin: 0 auto;">
+        <div class="weui-panel__bd">
+
+            <div class="weui-cells__title">联合检疫点所属镇街</div>
+
+            <div class="weui-form">
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath3" value="3" type="radio" checked>
+                    <label for="breath3">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>大良</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath9" value="9" type="radio">
+                    <label for="breath9">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>容桂</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath8" value="8" type="radio">
+                    <label for="breath8">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>伦教</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath6" value="6" type="radio">
+                    <label for="breath6">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>勒流</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath2" value="2" type="radio">
+                    <label for="breath2">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>陈村</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath1" value="1" type="radio">
+                    <label for="breath1">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>北滘</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath5" value="5" type="radio">
+                    <label for="breath5">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>乐从</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath7" value="7" type="radio">
+                    <label for="breath7">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>龙江</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath10" value="10" type="radio">
+                    <label for="breath10">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>杏坛</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="breath" id="breath4" value="4" type="radio">
+                    <label for="breath4">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>均安</p></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="weui-cell" id="select1">
+                <div class="weui-cell__hd"><label class="weui-label">检疫点名称</label></div>
+                <div class="weui-cell__bd">
+                    <select name="site" id="site" class="selecth">
+                        <option value="C1">广珠西顺德出入口</option>
+                        <option value="C2">东新高速五沙</option>
+                        <option value="C3">客运顺德汽车客运站</option>
+                        <option value="C5">城际轨道学院站</option>
+                        <option value="C6">S123番龙线K31+900</option>
+                        <option value="C7">X501大灵线沙坑牌坊</option>
+                    </select>
+                    <!---->
+                    <!--<select name="site" id="site" class="selecth">-->
+                    <!--<option value='A1'>广珠西碧江出入口</option>-->
+                    <!--<option value='A2'>广明佛山高速北滘南北西行出口</option>-->
+                    <!--<option value='A3'>广明佛山高速林上路北行出口</option>-->
+                    <!--<option value='A4'>广明佛山高速林上路南行出口</option>-->
+                    <!--<option value='A5'>广明佛山高速华阳路西行出口</option>-->
+                    <!--<option value='A6'>城际轨道北滘站</option>-->
+                    <!--</select>-->
+                </div>
+            </div>
+            <!--<div class="weui-cell" id="select2" style="display:none;">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='B1'>广明佛山高速仙涌出口</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select3" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='C1'>广珠西顺德出入口</option>-->
+            <!--<option value='C2'>东新高速五沙</option>-->
+            <!--<option value='C3'>客运顺德汽车客运站</option>-->
+            <!--<option value='C4'>城际轨道顺德站</option>-->
+            <!--<option value='C5'>城际轨道学院站</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select4" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='D1'>佛江高速安成北行出口</option>-->
+            <!--<option value='D2'>佛江高速安成南行出口</option>-->
+            <!--<option value='D3'>广中江高速均安</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select5" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='E1'>广明佛山高速华阳路东行出口</option>-->
+            <!--<option value='E2'>广明佛山高速新桂路西行出口</option>-->
+            <!--<option value='E3'>广明佛山高速环镇西路东行出口</option>-->
+            <!--<option value='E4'>广明佛山高速环镇西路西行出口</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select6" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='F1'>西二环南段及南二环勒流出口（双向）（北行）</option>-->
+            <!--<option value='F2'>西二环南段及南二环勒流出口（双向）（南行）</option>-->
+            <!--<option value='F3'>佛江高速冲鹤服务区（北行）</option>-->
+            <!--<option value='F4'>佛江高速南水南行出口</option>-->
+            <!--<option value='F5'>佛江高速西华南行出口</option>-->
+            <!--<option value='F6'>佛江高速冲鹤南行出口</option>-->
+            <!--<option value='F7'>佛江高速冲鹤西侧南北行出口</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select7" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='G1'>西二环南段及南二环龙江乐龙路出口</option>-->
+            <!--<option value='G2'>佛开高速龙山出口</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select8" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='H1'>西二环南段及南二环伦教新基北路东行出口</option>-->
+            <!--<option value='H2'>西二环南段及南二环伦教新基北路西行出口</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select9" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='I1'>广珠西容桂出入口</option>-->
+            <!--<option value='I2'>城际轨道容桂站</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell" id="select10" style="display: none">-->
+            <!--<div class="weui-cell__hd"><label class="weui-label">具体站点</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<select name="site" id="site" class="selecth">-->
+            <!--<option value='J1'>西二环南段及南二环杏坛站出口</option>-->
+            <!--<option value='J2'>佛江高速高赞南行出口</option>-->
+            <!--<option value='J3'>佛江高速高赞北行出口</option>-->
+            <!--<option value='J4'>佛江高速新联南行出口</option>-->
+            <!--<option value='J5'>佛江高速新联北行出口</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label xrequired">车牌/班次</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入车牌号码/交通班次" type="text" id="car">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label xrequired">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入个人姓名" type="text" id="name">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label xrequired">手机号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入手机号" type="tel" id="phone">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd">
+                    <label class="weui-label xrequired">验证码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="验证码" type="number" id="code">
+                </div>
+                <div class="weui-cell__ft">
+                    <button class="weui-vcode-btn bg-blue" onclick="settime(this)" style="color: #10aeff">获取验证码</button>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label xrequired">身份证</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入身份证" type="tel" id="idCard" onblur="GetAge()">
+                </div>
+
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label xrequired">年龄</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入年龄" type="tel" id="age">
+                </div>
+
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label xrequired">性别</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <div class="weui-form-li iblock" style="margin: 0px;">
+                        <input class="weui-form-checkbox" name="f2" id="g1" value="男" type="radio">
+                        <label for="g1">
+                            <i class="weui-icon-radio"></i>
+                            <div class="weui-form-text"><p>男</p></div>
+                        </label>
+                    </div>
+
+                    <div class="weui-form-li iblock">
+                        <input class="weui-form-checkbox" name="f2" id="g2" value="女" type="radio">
+                        <label for="g2">
+                            <i class="weui-icon-radio"></i>
+                            <div class="weui-form-text"><p>女</p></div>
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="weui-cells__title xreq" style="border-top: 1px solid #e5e5e5;">是否从湖北回到顺德</div>
+            <div class="weui-form">
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="tosd" id="tosd1" value="是" type="radio">
+                    <label for="tosd1">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>是</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="tosd" id="tosd2" value="否" type="radio">
+                    <label for="tosd2">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>否</p></div>
+                    </label>
+                </div>
+            </div>
+            <div class="weui-cell" id="rtime" style="display: none;">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">回返时间</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请选择回返时间" type="text" id="startTime">
+                </div>
+            </div>
+            <div id="zjwz">
+                <div class="weui-cells__title xreq" style="border-top: 1px solid #e5e5e5;">是否来自浙江温州</div>
+                <div class="weui-form">
+                    <div class="weui-form-li iblock">
+                        <input class="weui-form-checkbox" name="zhejiang" id="zhejiang1" value="是" type="radio">
+                        <label for="zhejiang1">
+                            <i class="weui-icon-radio"></i>
+                            <div class="weui-form-text"><p>是</p></div>
+                        </label>
+                    </div>
+                    <div class="weui-form-li iblock">
+                        <input class="weui-form-checkbox" name="zhejiang" id="zhejiang2" value="否" type="radio">
+                        <label for="zhejiang2">
+                            <i class="weui-icon-radio"></i>
+                            <div class="weui-form-text"><p>否</p></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell" id="zhengtime" style="display: none;">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">返回时间</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请选择返回时间" type="text" id="startTime2">
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells__title" style="border-top: 1px solid #e5e5e5;margin-left: 15px;">
+                是否密切接触人员（共乘交通工具或居住）
+            </div>
+            <div class="weui-form">
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="close" id="close1" value="是" type="radio">
+                    <label for="close1">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>是</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="close" id="close2" value="否" type="radio" checked>
+                    <label for="close2">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>否</p></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label xrequired">现/暂住地</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="详细地址，登记到门牌号" type="text" id="address">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label xrequired">体温</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入测量的体温" type="number" step="0.1" id="temperature">
+                </div>
+                <div class="weui-cell__ft">
+                    <span class="weui-vcode-btn" style="height: auto;line-height: normal;color: #10aeff;">℃</span>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">同行人姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入个人姓名" type="text" id="name2">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">同行人手机</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入同行人手机号" type="tel" id="phone2">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">工作学习单位是否顺德辖区</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <div class="weui-form-li iblock" style="margin: 0px;">
+                        <input class="weui-form-checkbox" name="f21" id="g11" value="是" type="radio" checked>
+                        <label for="g11">
+                            <i class="weui-icon-radio"></i>
+                            <div class="weui-form-text"><p>是</p></div>
+                        </label>
+                    </div>
+
+                    <div class="weui-form-li iblock">
+                        <input class="weui-form-checkbox" name="f21" id="g21" value="否" type="radio">
+                        <label for="g21">
+                            <i class="weui-icon-radio"></i>
+                            <div class="weui-form-text"><p>否</p></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="worksd">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">工作单位类型</label></div>
+                    <div class="weui-cell__bd">
+                        <select name="worktype" id="worktype" class="selecth">
+                            <option value=''>请选择</option>
+                            <option value='企业或工厂员工'>企业或工厂员工</option>
+                            <option value='教师'>教师</option>
+                            <option value='学生'>学生</option>
+                            <option value='建筑工人'>建筑工人</option>
+                            <option value='其他'>其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">所属镇街</label></div>
+                    <div class="weui-cell__bd">
+                        <select name="town" id="town" class="selecth">
+                            <option value='1'>大良街道</option>
+                            <option value='2'>容桂街道</option>
+                            <option value='3'>伦教街道</option>
+                            <option value='4'>勒流街道</option>
+                            <option value='5'>陈村镇</option>
+                            <option value='6'>北滘镇</option>
+                            <option value='7'>乐从镇</option>
+                            <option value='8'>龙江镇</option>
+                            <option value='9'>杏坛镇</option>
+                            <option value='10'>均安镇</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">所属村居</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请填写工作单位所属村居" type="text" id="col5">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">单位/学校</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入工作单位/学校" type="text" id="department">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">负责/联系人</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入单位/学校负责人" type="text" id="namecharge">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">联系方式</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入负责人联系方式" type="tel" id="tell">
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cells__title xreq" style="border-top: 1px solid #e5e5e5;">请填写因何事进入顺德</div>
+
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <textarea class="weui-textarea" placeholder="因何事进入顺德" rows="5" id="question"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="weui-btn-area" style="">
+        <a class="weui-btn weui-btn_primary bg-blue" href="javascript:" id="showTooltips">提交</a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+    });
+    $('input[type=radio][name=breath]').change(function () {
+        $("#site").html("");
+        var html1 = "<option value='A2'>广明佛山高速北滘南北西行出口</option>\n" +
+            "                        <option value='A3'>广明佛山高速林上路北行出口</option>\n" +
+            "                        <option value='A4'>广明佛山高速林上路南行出口</option>\n" +
+            "                        <option value='A5'>广明佛山高速华阳路西行出口</option>\n" +
+            "                        <option value='A6'>城际轨道北滘站</option>" +
+            "                        <option value='A7'>G105京珠线钟林收费站</option>";
+        var html2 = "<option value='B1'>广明佛山高速仙涌出口</option>" +
+            "<option value='B2'>广珠西碧江出入口</option>";
+        var html3 = "<option value='C1'>广珠西顺德出入口</option>\n" +
+            "                        <option value='C2'>东新高速五沙</option>\n" +
+            "                        <option value='C3'>客运顺德汽车客运站</option>\n" +
+            "                        <option value='C5'>城际轨道学院站</option>" +
+            "                        <option value='C6'>S123番龙线K31+900</option>" +
+            "                        <option value='C7'>X501大灵线沙坑牌坊</option>";
+        var html4 = "<option value='D1'>佛江高速安成南北行出口</option>\n" +
+            "                        <option value='D3'>广中江高速均安</option>" +
+            "                        <option value='D4'>S268光金线中山古镇</option>" +
+            "                        <option value='D5'>S271乐崖线顺德区荷塘</option>" +
+            "                        <option value='D6'>X502黄荷线均榄路</option>";
+        var html5 = "<option value='E1'>广明佛山高速华阳路东行出口</option>\n" +
+            "                        <option value='E2'>广明佛山高速新桂路西行出口</option>\n" +
+            "                        <option value='E3'>广明佛山高速环镇西路东行出口</option>\n" +
+            "                        <option value='E4'>广明佛山高速环镇西路西行出口</option>";
+        var html6 = "<option value='F1'>西二环南段及南二环勒流出口（双向）（北行）</option>\n" +
+            "                        <option value='F2'>西二环南段及南二环勒流出口（双向）（南行）</option>\n" +
+            "                        <option value='F3'>佛江高速冲鹤服务区（北行）</option>\n" +
+            "                        <option value='F4'>佛江高速南水南行出口</option>\n" +
+            "                        <option value='F5'>佛江高速西华南行出口</option>\n" +
+            "                        <option value='F6'>佛江高速冲鹤南行出口</option>";
+        var html7 = "<option value='G1'>西二环南段及南二环龙江乐龙路出口</option>\n" +
+            "                        <option value='G2'>佛开高速龙山出口</option>";
+        var html8 = "<option value='H1'>西二环南段及南二环伦教新基北路东行出口</option>\n" +
+            "                        <option value='H4'>城际轨道顺德站</option>\n" +
+            "                        <option value='H2'>西二环南段及南二环伦教新基北路西行出口</option>" +
+            "                        <option value='H3'>G325广南线三善大桥</option>";
+        var html9 = "<option value='I1'>广珠西容桂出入口</option>\n" +
+            "                        <option value='I2'>城际轨道容桂站</option>" +
+            "                        <option value='I3'>细滘大桥桥台</option>" +
+            "                        <option value='I5'>X577容黄线K4+794</option>" +
+            "                        <option value='I6'>S530容三线顺德容桂华口</option>";
+        var html10 = "<option value='J1'>西二环南段及南二环杏坛站出口</option>\n" +
+            "                        <option value='J2'>佛江高速高赞南行出口</option>\n" +
+            "                        <option value='J3'>佛江高速高赞北行出口</option>\n" +
+            "                        <option value='J4'>佛江高速新联南行出口</option>\n" +
+            "                        <option value='J5'>佛江高速新联北行出口</option>" +
+            "                        <option value='J6'>G325广南线安富立交桥</option>";
+        var myhmtl = new Array()
+        myhmtl[0] = html1
+        myhmtl[1] = html2
+        myhmtl[2] = html3
+        myhmtl[3] = html4
+        myhmtl[4] = html5
+        myhmtl[5] = html6
+        myhmtl[6] = html7
+        myhmtl[7] = html8
+        myhmtl[8] = html9
+        myhmtl[9] = html10
+
+        $("#site").html(myhmtl[this.value - 1]);
+
+        // for (var i = 1; i <= 10; i++) {
+        //     if (this.value == i) {
+        //         if ($("#select" + i).css('display') === 'none') {
+        //             $("#select" + i).css('display', 'flex');
+        //         }
+        //     } else {
+        //         $("#select" + i).css('display', 'none');
+        //     }
+        // }
+    });
+    $('input[type=radio][name=tosd]').change(function () {
+        if (this.value == '是') {
+            $("#rtime").css('display', 'flex');
+            $("#zjwz").css("display", "none");
+            $("input[name=zhejiang]").attr("checked", false);
+        } else {
+            $("#rtime").css('display', 'none');
+            $("#zjwz").css("display", "block");
+        }
+    });
+    $('input[type=radio][name=zhejiang]').change(function () {
+        if (this.value == '是') {
+            $("#zhengtime").css('display', 'flex');
+        } else {
+            $("#zhengtime").css('display', 'none');
+        }
+    });
+</script>
+
+<script>
+
+    var startTime = "";
+    var startTime2 = "";
+
+    $("#startTime").calendar({
+        dateFormat: "yyyy-mm-dd",
+        defaultValue: [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()],
+        onChange: function (p, values, displayValues) {
+            startTime = values[0];
+        }
+    });
+    $("#startTime2").calendar({
+        dateFormat: "yyyy-mm-dd",
+        defaultValue: [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()],
+        onChange: function (p, values, displayValues) {
+            startTime = values[0];
+        }
+    });
+    var isWork = "是";
+    $('input[type=radio][name=f21]').change(function () {
+        if (this.value == '是') {
+            $("#worksd").css("display", "block");
+            isWork = "是";
+        } else {
+            $("#worksd").css("display", "none");
+            isWork = "否";
+        }
+    });
+
+    var countdown = 60;
+
+    function settime2(obj) {
+        var code = $(obj);
+        if (countdown == 0) {
+            code.removeAttr('disabled');
+            code.text("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            code.text("重新发送(" + countdown + ")");
+            code.attr('disabled', true);
+            countdown--;
+        }
+        setTimeout(function () {
+            settime2(obj)
+        }, 1000);
+    }
+
+    function settime(obj) {
+        var tel = $("#phone").val();
+        if (!tel || !/(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/.test(tel)) {
+            $.toptip('请输入手机号');
+        } else {
+            var url = basePath() + "/public/sendPhoneCode?phone=" + tel;
+            $.showLoading();
+            settime2(obj);
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.toast("验证码已发送！请注意查收！", "text");
+                    }  else if (data.code == 0) {
+                        $.toast(data.msg, "text");
+                        var code = $("#weui-vcode-btn");
+                        code.text("获取验证码");
+                        countdown = 0;
+                    } else {
+                        $.toast(data.msg, "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据", "text");
+                }
+            });
+        }
+
+    }
+
+    $("#showTooltips").click(function () {
+        var tel = $('#phone').val();
+        var name = $('#name').val();
+        var content = $('#question').val();
+        var address = $('#address').val();
+        var sitecode = $('#site option:selected').val()
+        var sitename = $('#site option:selected').text()
+        var car = $("#car").val();
+        var card = $("#idCard").val();
+        var len = (card + "").length;
+        var age = $("#age").val();
+        var sex = $('input:radio[name="f2"]:checked').val()
+        var tosd = $('input:radio[name="tosd"]:checked').val()
+        var zhejiang = $('input:radio[name="zhejiang"]:checked').val()
+        if(tosd == "是"){
+            zhejiang = "否"
+        }
+        var closeperson = $('input:radio[name="close"]:checked').val()
+        var temperature = $("#temperature").val();
+        var name2 = $("#name2").val();
+        var phone2 = $("#phone2").val();
+        var department = $("#department").val();
+        var namecharge = $("#namecharge").val();
+        var tell = $("#tell").val();
+        var worktype = $('#worktype option:selected').val()
+        var col5 = $('#town option:selected').text() + $("#col5").val();
+
+        var code = $('#code').val();
+
+        if (!tel || !/1[3|4|5|7|8]\d{9}/.test(tel)) {
+            $.toptip('请输入正确手机号');
+        } else if (!code || !/\d{6}/.test(code)) {
+            $.toptip('请输入六位手机验证码');
+        } else if (name == "") {
+            $.toptip('请输入您的名字');
+        } else if (address == "") {
+            $.toptip('请输入详细地址');
+        } else if (car == "") {
+            $.toptip('请输入车牌/交通班次');
+        } else if (card == "") {
+            $.toptip('请输入身份证');
+        } else if ((len != 15) && (len != 18)) {
+            $.toptip('请输入合法的身份证号码');
+        }  else if (age == "NaN") {
+            $.toptip('请输入年龄');
+        } else if (temperature == "") {
+            $.toptip('请输入测量的体温');
+        } else if (typeof (tosd) == "undefined") {
+            $.toptip('请选择是否从湖北回到顺德');
+        } else if (tosd == "否" && typeof (zhejiang) == "undefined") {
+            $.toptip('请选择是否来自浙江温州');
+        }
+        /* else if (name2 == "") {
+            $.toptip('请输入同行人姓名');
+        } else if (phone2 == "") {
+            $.toptip('请输入同行人手机号');
+        }*/ else if (department == "" && isWork == '是') {
+            $.toptip('请输入工作单位/学校');
+        } else if (namecharge == "" && isWork == '是') {
+            $.toptip('请输入工作单位/学校负责人');
+        } else if (tell == "" && isWork == '是') {
+            $.toptip('请输入工作单位/学校负责人联系方式');
+        } else if (worktype == "" && isWork == '是') {
+            $.toptip('请选择工作单位类型');
+        } else if (col5 == "" && isWork == '是') {
+            $.toptip('请填写所属镇街/村');
+        } else if (content == "") {
+            $.toptip('请填写因何事进入顺德');
+        } else {
+            $.ajax({
+                url: basePath() + "/data/sjMedicalDrugs/personRecordSubmit",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "name": name,
+                    "siteCode": sitecode,
+                    "col1": sitename,
+                    "carNumber": car,
+                    "phone": tel,
+                    "card": card,
+                    "sex": sex,
+                    "age": age,
+                    "address": address,
+                    "temperature": temperature,
+                    "name2": name2,
+                    "phone2": phone2,
+                    "content": content,
+                    "work": department,
+                    "workCharge": namecharge,
+                    "workPhone": tell,
+                    "startTime": startTime,
+                    "startTime2": startTime2,
+                    "toSd": tosd,
+                    "closePerson": closeperson,
+                    "col4": worktype,
+                    "col5": col5,
+                    "zhejiang": zhejiang,
+                    "code":code
+                },
+                beforeSend: function (xhr) {
+                    $.showLoading();
+                },
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.alert("点击确定返回填报页面", "成功提交", function () {
+                            $.toast("成功提交", "text");
+                        });
+                        // setTimeout(function () {
+                        //     window.location.reload();
+                        // }, 3000);
+                    } else if (data.code == 0) {
+                        $.toast(data.msg, "text");
+                        var code = $("#weui-vcode-btn");
+                        code.text("获取验证码");
+                        countdown = 0;
+                    }else {
+                        $.toast("没有加载到数据!", "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据", "text");
+                }
+            });
+        }
+        // $.toptip('提交成功', 'success');
+    });
+
+
+    function GetAge() {
+        var identityCard = $("#idCard").val();
+        var len = (identityCard + "").length;
+        if (len == 0) {
+            return 0;
+        } else {
+            if ((len != 15) && (len != 18))//身份证号码只能为15位或18位其它不合法
+            {
+                $.toptip('请输入合法的身份证号码');
+                return 0;
+            }
+        }
+        var sexAndAge = {};
+        var strBirthday = "";
+        if (len == 18)//处理18位的身份证号码从号码中得到生日和性别代码
+        {
+            strBirthday = identityCard.substr(6, 4) + "/" + identityCard.substr(10, 2) + "/" + identityCard.substr(12, 2);
+            //获取性别
+            if (parseInt(identityCard.substr(16, 1)) % 2 == 1) {
+                sexAndAge.sex = '男'
+            } else {
+                sexAndAge.sex = '女'
+            }
+        }
+        if (len == 15) {
+            strBirthday = "19" + identityCard.substr(6, 2) + "/" + identityCard.substr(8, 2) + "/" + identityCard.substr(10, 2);
+            //获取性别
+            if (parseInt(identityCard.substr(14)) % 2 == 1) {
+                sexAndAge.sex = '男'
+            } else {
+                sexAndAge.sex = '女'
+            }
+        }
+        $(":radio[name='f2'][value='" + sexAndAge.sex + "']").prop("checked", "checked");
+        // if (sexAndAge.sex == '男'){
+        //
+        // }
+        //时间字符串里，必须是“/”
+        var birthDate = new Date(strBirthday);
+        var nowDateTime = new Date();
+        var age = nowDateTime.getFullYear() - birthDate.getFullYear();
+        //再考虑月、天的因素;.getMonth()获取的是从0开始的，这里进行比较，不需要加1
+        if (nowDateTime.getMonth() < birthDate.getMonth() || (nowDateTime.getMonth() == birthDate.getMonth() && nowDateTime.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        $("#age").val(age);
+        //得到年龄
+        sexAndAge.age = age;
+        return sexAndAge;
+    }
+</script>
+</body>
+</html>

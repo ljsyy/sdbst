@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/list.js"></script>
+    <script src="js/app/lib/md5.min.js"></script>
+    <title>办件进度查询结果</title>
+
+    <style >
+
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{}
+        body{background: #f6f6f6;}
+        a{text-decoration:none;color: #000;}
+
+        .main{background: #f6f6f6;    padding: 15px;}
+        p{background: #f6f6f6;padding: 8px 0;}
+        .read{background: #fff;padding: 8px;border-radius: 5px;border: solid 1px #e1e1e1;}
+        .red{color: #4281cd;}
+        img{height: 135px;padding-top: 30%;}
+        .goback{background: #4281cd;color: #fff;border: 0;border-radius: 5px;width: 74%;padding: 8px;margin-top: 20px;}
+    </style>
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            query();
+
+        });
+
+        function query(){
+            var code=[[${code}]]
+            $.ajax({
+                url:basePath()+"/app/menu/getjson?url=http://202.104.25.196/RXWSSTWeb/xzsp.web?serchSpeedByCode*code="+code,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                    console.log(result)
+                    if(result.Head.msgCode == "100" && result.Head.message == "访问成功"){
+                        var Body = result.Body;
+                        for(var i in Body){
+                            $(".main").append(
+                                '<div>'+
+                                '<p>受理编号</p>'+
+                                '<div class="read">'+Body[0].code+'</div>'+
+                                '</div>'+
+                                '<div>'+
+                                '<p>事项名称</p>'+
+                                '<div class="read">'+Body[0].itemName+'</div>'+
+                                '</div>'+
+                                '<div>'+
+                                '<p>主办机关</p>'+
+                                '<div class="read">'+Body[0].unitName+'</div>'+
+                                '</div>'+
+                                '<div>'+
+                                '<p>受理时间</p>'+
+                                '<div class="read">'+Body[0].acceptDate+'</div>'+
+                                '</div>'+
+                                '<div>'+
+                                '<p>承诺办结日期</p>'+
+                                '<div class="read">'+Body[0].announceFinishTime+'</div>'+
+                                '</div>'+
+                                '<div>'+
+                                '<p>办理时限（工作日）</p>'+
+                                '<div class="read">'+Body[0].finishTimeLimit+'</div>'+
+                                '</div>'+
+                                '<div>'+
+                                '<p>办理状态</p>'+
+                                '<div class="read red">'+Body[0].state+'</div>'+
+                                '</div>'
+                            )
+                        }
+
+                    }else{
+                        $(".main").css("text-align","-webkit-center");
+                        $(".main").append(
+                            '<img src="'+basePath()+'/img/menu/error.png">'+
+                            '<p class="red" style="font-size: 25px;">'+result.Head.message+'</p>'+
+                            '<p>请核实流水号后查询！</p>'+
+                            '<button class="goback" onclick="javascript:history.go(-1);">返回</button>'
+                        )
+                    }
+                }
+            });
+        }
+    </script>
+
+
+
+</head>
+<body>
+
+<div class="main">
+</div>
+
+</body>
+</html>

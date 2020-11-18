@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <style type="text/css">
+        body, dd, dl, html, ol, ul, p {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;background: #dfdfdf;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        a{text-decoration:none;color: #000;}
+
+        .main{padding: 15px;}
+        .list{width: 100%;}
+        .list input[type="text"]{width: 100%;padding: 0 10px;box-sizing: border-box;margin: 10px 0;border: solid 1px #cccccc;background: #fff;border-radius: 5px;height: 50px;line-height: 50px;font-size: 14px;}
+        .list p{font-size: 14px;}
+        input[type="month"]{border: solid 1px #cccccc;padding: 0 8px;border-radius: 5px;margin: 10px 0;width: 100%;box-sizing: border-box;height: 50px;line-height: 50px;font-size: 14px;}
+        .oneLine{display: -webkit-inline-box;width: 100%;}
+        .half{width: 45%;}
+        .half p{font-size: 14px;}
+        button{background: #4281cd;color: #fff;border: 0;width: 100%;border-radius: 5px;margin-top: 15%;height: 50px;line-height: 50px;font-size: 17px;letter-spacing: 10px;text-indent: 10px;}
+        .tip{position: absolute;bottom: 0;padding: 5px;color: #4281cd;}
+    </style>
+
+    <title>水费查询</title>
+</head>
+
+<script type="text/javascript">
+    function query(){
+        var businessNo = $("#businessNo").val();
+        var account = $("#account").val();
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        var d2 = $("#startTime").val();
+        var d3 = $("#endTime").val();
+        if(businessNo == "" || businessNo == null || businessNo == undefined){
+            webToast("请输入用户编号","middle",1000);
+            return;
+        }
+        if(account == "" || account == null || account == undefined){
+            webToast("请输入用户名","middle",1000);
+            return;
+        }
+        if(d2 != "" && d2 != null && d2 != undefined){
+            console.log(d2)
+            if(d3 == "" || d3 == null || d3 == undefined){
+                webToast("请填写结束日期","middle",1000);
+                return;
+            }
+        }
+        if(d3 != "" && d3 != null && d3 != undefined){
+            if(d2 == "" || d2 == null || d2 == undefined){
+                webToast("请填写开始日期","middle",1000);
+                return;
+            }
+        }
+        window.location.href = basePath()+"/app/menu/interface/waterQueryResult?businessNo="+businessNo+"&account="+account+"&startTime="+startTime+"&endTime="+endTime;
+    }
+
+
+    $(document).ready(function(){
+        $("#endTime").change(function () {
+            var d2 = $("#startTime").val();
+            var d3 = $("#endTime").val();
+            if(d3 != "" && d3 != null && d3 != undefined){
+                console.log(d2)
+                if(d2 == "" || d2 == null || d2 == undefined){
+                    webToast("请填写开始日期","middle",1000);
+                    return;
+                }
+                d2 = new Date(d2);
+                d3 = new Date(d3);
+                if (d3 < d2) {
+                    webToast("填写的结束日期不能小于开始日期","middle",1000);
+                    $("#endTime").val("");
+                    return;
+                }
+            }
+
+        });
+    });
+
+
+</script>
+
+<body>
+<!-- 查询页 -->
+<div class="main">
+    <div class="list">
+        <p>用户编号</p>
+        <input type="text" id="businessNo" placeholder="请输入用户编号" />
+    </div>
+    <div class="list">
+        <p>用户名</p>
+        <input type="text" id="account" placeholder="请输入用户名" />
+    </div>
+    <div class="oneLine">
+        <div class="half">
+            <p>开始年月（选填）</p>
+            <input type="month" id="startTime" />
+        </div>
+        <div class="half" style="margin-left: 10%;">
+            <p>结束年月（选填）</p>
+            <input type="month" id="endTime" />
+        </div>
+    </div>
+    <center><button onclick="query()">查询</button></center>
+</div>
+
+<p class="tip">此查询结果只做参考，以营业厅咨询或致电968300为准。</p>
+
+</body>
+
+</html>

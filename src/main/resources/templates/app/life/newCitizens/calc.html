@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>积分入户计算</title>
+    <meta name="decorator" content="blank"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/app/calc.js"></script>
+
+</head>
+<body>
+
+<style>
+    .mui-control-content {background-color: #efeff4;min-height: 215px;}
+    .mui-control-content .mui-loading {margin-top: 50px;}
+    body,html,.mui-content,.mui-slider{height: 100%;}
+    .mui-slider-group{height: 94%;}
+    .block{background: #fff;margin: 8px 16px;border: solid 1px #c8c7cc;border-radius: 5px;padding: 10px;}
+    .block .list{display: -webkit-inline-box;width: 100%;margin: 3px 0;font-size: 13px;}
+    .block .list .left{width: 35%;text-align: center;padding-right: 10px;justify-content: center;align-items: center;display: flex;}
+    .block .list .right{width: 65%;background: #ddd;padding: 5px;border-radius: 5px;}
+    .block .list .right select{margin: 0;padding: 0;width: 100%;background: transparent;font-size: 13px;}
+    .block .hidden{margin: 0;}
+    .block .tip{margin: 0;display: none;}
+    .block .list .white-click{background: #fff;color: #4b90f8;padding: 0;}
+    .block .list .white-back{background: #fff;}
+    .block .list .white-back-year{background: #fff;padding-left: 0;}
+    .block .list .font{background: #fff;color: #4b90f8;padding: 0;font-size: 12px;}
+    input[type="checkbox"]{vertical-align: middle;}
+    .checkbox-font{width: 88%;display: -webkit-inline-box;vertical-align: middle;margin: 0;color: #000;font-size: 13px;}
+    input[type="number"]{padding: 5px 2px;margin: 0;border: 0;font-size: 13px;height: auto;line-height: normal;background: transparent;}
+    .score{background: #fff;margin: 16px;padding: 10px;border: solid 1px #c8c7cc;border-radius: 5px;text-align: center;color: #4b90f8;}
+    #sumScore{}
+    .shebao{background: #ddd;margin: 2px;display: -webkit-inline-box;border-radius: 5px;padding: 5px;}
+    .shebaoYear{width: 30px !important;text-align: center;}
+    .score-span{padding-right: 5px;}
+    .warm{ margin-bottom: 20px;text-align: center;color: #4b90f8;}
+    .line{}
+</style>
+
+<div class="mui-content">
+    <div id="slider" class="mui-slider">
+        <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <a class="mui-control-item" href="#item1mobile">基础指标</a>
+            <a class="mui-control-item" href="#item2mobile">加分指标</a>
+            <a class="mui-control-item" href="#item3mobile">其它指标</a>
+        </div>
+
+        <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+
+        <div class="mui-slider-group">
+            <!-- 基础指标 -->
+            <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+                <div id="scroll1" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <!-- 文化程度 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">个人素质</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right">文化程度</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">三级指标</div>
+                                <div class="right">
+                                    <select id="edu">
+                                        <option value="0">请选择学历</option>
+                                        <option value="40">初中</option>
+                                        <option value="50">高中或中技、中职</option>
+                                        <option value="60">大专</option>
+                                        <option value="80">本科</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="eduScore">0</span>分</div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：按最高学历计分，不累计计分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）教育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 职业资格或专业技术职称 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">个人素质</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right">职业资格或专业技术职称</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">三级指标</div>
+                                <div class="right">
+                                    <select id="tech">
+                                        <option value="0">请选择职称</option>
+                                        <option value="20">初级工、技术岗位五级</option>
+                                        <option value="40">中级工、技术岗位四级</option>
+                                        <option value="70">高级工、技术岗位三级、专业技术资格初级</option>
+                                        <option value="90">技师、技术岗位二级、专业技术资格中级</option>
+                                        <option value="100">高级技师、技术岗位一级、专业技术资格高级</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="techScore">0</span>分</div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：按最高职业资格或专业技术资格计分，不累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）人力资源社会保障局</div>
+                            </div>
+                        </div>
+
+                        <!-- 参保情况 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">参保情况</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">省内参保</div>
+                                <div class="right white-back-year">
+                                    <div class="shebao">养老保险<input class="shebaoYear" type="number" value="0" id="oOldS" />年</div>
+                                    <div class="shebao">医疗保险<input class="shebaoYear" type="number" value="0" id="oMedS" />年</div>
+                                    <div class="shebao">失业保险<input class="shebaoYear" type="number" value="0" id="oDoS" />年</div>
+                                    <div class="shebao">工伤保险<input class="shebaoYear" type="number" value="0" id="oHurtS" />年</div>
+                                    <div class="shebao">生育保险<input class="shebaoYear" type="number" value="0" id="oBirthS" />年</div>
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">是否有市内参保</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isInS" />
+                                        <p class="checkbox-font">有</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isInHide" style="display:none;">
+                                <div class="left">市内参保</div>
+                                <div class="right white-back-year">
+                                    <div class="shebao">养老保险<input class="shebaoYear" type="number" value="0" id="iOldS" />年</div>
+                                    <div class="shebao">医疗保险<input class="shebaoYear" type="number" value="0" id="iMedS" />年</div>
+                                    <div class="shebao">失业保险<input class="shebaoYear" type="number" value="0" id="iDoS" />年</div>
+                                    <div class="shebao">工伤保险<input class="shebaoYear" type="number" value="0" id="iHurtS" />年</div>
+                                    <div class="shebao">生育保险<input class="shebaoYear" type="number" value="0" id="iBirthS" />年</div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：在广东省内参加城镇基本养老保险、基本医疗保险、失业保险、工伤保险、生育保险。每个险种每满1年积1分，最高50分；在我市内参保的，每个险种每满1年再积1分，最高50分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="socre-span" id="securityScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">社保基金管理局镇（街道）办事处</div>
+                            </div>
+                        </div>
+
+                        <!-- 房产情况 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">居住情况</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right">房产情况</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">三级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="house" />
+                                        <p class="checkbox-font">本人、配偶或本人直系亲属（父母、子女）在佛山市拥有合法居住房产。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：积80分。不累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="houseScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）国土城建和水利局</div>
+                            </div>
+                        </div>
+
+                        <!-- 办理居住（暂住）证年限 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">居住情况</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">是否办理居住（暂住）证</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isLive" />
+                                        <p class="checkbox-font">已办理</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isLiveHide" style="display:none;">
+                                <div class="left">年数</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入符合要求的年数" id="liveYear" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：在本市累积办理居住（暂住）证年限，未按要求续期的断开时间不计算，其余有效时间可连续计算。每满1年积5分。可累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="liveScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）流管办</div>
+                            </div>
+                        </div>
+
+                        <div class="score">总分值：<span id="sumScore1">0</span>分</div>
+                        <div class="warm">此总分值仅供参考，以各部门实际计算分数为准！</div>
+
+                    </div></div></div>
+
+            <!-- 加分指标 -->
+            <div id="item2mobile" class="mui-slider-item mui-control-content">
+                <div id="scroll2" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <!-- 个人基本情况（年龄） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">指标</div>
+                                <div class="right">个人基本情况（年龄）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">年龄</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入您的岁数" id="olds" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：50周岁以上（含50周岁）积5分。50周岁以下，年龄每减少1岁，积分增加1分，最高15分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="oldsScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）派出所</div>
+                            </div>
+                        </div>
+
+                        <!-- 个人基本情况（婚姻状况） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">指标</div>
+                                <div class="right">个人基本情况（婚姻状况）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">婚姻状况</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="marry" />
+                                        <p class="checkbox-font">未婚者</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：未婚者，积10分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="marryScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）农业和社会工作局</div>
+                            </div>
+                        </div>
+
+                        <!-- 特定公共服务领域（在本市内） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">特定公共服务领域（在本市内）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isHard" />
+                                        <p class="checkbox-font">从事环卫、公共交通（公共汽车、地铁）工作的特殊艰苦岗位人员。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isPro" />
+                                        <p class="checkbox-font">从事医疗（医院、诊所、社区卫生服务中心）工作的专业技术人员。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：每满1年积4分，最高20分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list" id="isHardHide" style="display:none;">
+                                <div class="left">从事以上艰苦岗位年限</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入符合要求的年限" id="hardYear" />
+                                </div>
+                            </div>
+                            <div class="list" id="isProHide" style="display:none;">
+                                <div class="left">从事以上专业技术岗位年限</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入符合要求的年限" id="proYear" />
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="socre-span" id="specScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）环境运输和城市管理分局、镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 专利创新（近5年内获得） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">专利创新（近5年内获得）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isNation" />
+                                        <p class="checkbox-font">国家发明专利</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isPractical" />
+                                        <p class="checkbox-font">实用新型专利</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isAppearance" />
+                                        <p class="checkbox-font">外观设计专利</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isNationHide" style="display:none;">
+                                <div class="left">国家发明专利积分</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入积分" id="nation" />
+                                </div>
+                            </div>
+                            <div class="list" id="isPracticalHide" style="display:none;">
+                                <div class="left">实用新型专利积分</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入积分" id="practical" />
+                                </div>
+                            </div>
+                            <div class="list" id="isAppearanceHide" style="display:none;">
+                                <div class="left">外观设计专利积分</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入积分" id="appearance" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：国家发明专利，每获得1项积30分。实用新型专利，每获得1项积20分。外观设计专利，每获得1项积10分。多人共有专利的，专利权人、发明人所得分数按相应分值/（人数+1）计算，如为第一专利人（专利权人、发明人）的，加计一份平均分，即得分再“乘以2”。专利权人和发明人为同一人不重复计分，多项可累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="inventScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）经济和科技促进局</div>
+                            </div>
+                        </div>
+
+                        <!-- 表彰奖励（近5年在广东省内获得） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">表彰奖励（近5年在广东省内获得）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">县处级</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入次数" id="commendX" />
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">地厅级</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入次数" id="commendD" />
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">加分项</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isInGet" />
+                                        <p class="checkbox-font">在佛山市工作生活期间获得</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isInXHide" style="display:none;">
+                                <div class="left">市内县处级</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入次数" id="inCommendX" />
+                                </div>
+                            </div>
+                            <div class="list" id="isInDHide" style="display:none;">
+                                <div class="left">市内地厅级</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入次数" id="inCommendD" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：县处级，在我市镇（街道）党委（党工委）、政府（办事处）表彰奖励按县处级级别积分，每次30分，最高60分。地厅级，每次60分，最高120分。在佛山市工作生活期间获得县处级奖励的每次再积10分，最高20分；获得地厅级以上奖励的每次再积20分，最高40分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="commendScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）流管办</div>
+                            </div>
+                        </div>
+
+                        <!-- 竞赛获奖（近5年在广东省内获得） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">竞赛获奖（近5年在广东省内获得）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">奖项级别</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isQP" />
+                                        <p class="checkbox-font">区级</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isSP" />
+                                        <p class="checkbox-font">市级</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isSSP" />
+                                        <p class="checkbox-font">省级</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isGP" />
+                                        <p class="checkbox-font">国家级</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isQPHide" style="display:none;">
+                                <div class="left">区级</div>
+                                <div class="right white-back-year">
+                                    <div class="shebao">一等奖<input class="shebaoYear" type="number" value="0" id="QPOne" />次</div>
+                                    <div class="shebao">二等奖<input class="shebaoYear" type="number" value="0" id="QPTwo" />次</div>
+                                    <div class="shebao">三等奖<input class="shebaoYear" type="number" value="0" id="QPThree" />次</div>
+                                </div>
+                            </div>
+                            <div class="list" id="isSPHide" style="display:none;">
+                                <div class="left">市级</div>
+                                <div class="right white-back-year">
+                                    <div class="shebao">一等奖<input class="shebaoYear" type="number" value="0" id="SPOne" />次</div>
+                                    <div class="shebao">二等奖<input class="shebaoYear" type="number" value="0" id="SPTwo" />次</div>
+                                    <div class="shebao">三等奖<input class="shebaoYear" type="number" value="0" id="SPThree" />次</div>
+                                </div>
+                            </div>
+                            <div class="list" id="isSSPHide" style="display:none;">
+                                <div class="left">省级</div>
+                                <div class="right white-back-year">
+                                    <div class="shebao">一等奖<input class="shebaoYear" type="number" value="0" id="SSPOne" />次</div>
+                                    <div class="shebao">二等奖<input class="shebaoYear" type="number" value="0" id="SSPTwo" />次</div>
+                                    <div class="shebao">三等奖<input class="shebaoYear" type="number" value="0" id="SSPThree" />次</div>
+                                </div>
+                            </div>
+                            <div class="list" id="isGPHide" style="display:none;">
+                                <div class="left">国家级</div>
+                                <div class="right white-back-year">
+                                    <div class="shebao">一等奖<input class="shebaoYear" type="number" value="0" id="GPOne" />次</div>
+                                    <div class="shebao">二等奖<input class="shebaoYear" type="number" value="0" id="GPTwo" />次</div>
+                                    <div class="shebao">三等奖<input class="shebaoYear" type="number" value="0" id="GPThree" />次</div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：区级，三等奖60分，二等奖65分，一等奖75分。市级，三等奖80分，二等奖85分，一等奖95分。省级，三等奖100分，二等奖110分，一等奖120分。国家级，三等奖130分，二等奖140分，一等奖150分。可累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="prizeScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）流管办</div>
+                            </div>
+                        </div>
+
+                        <!-- 参加志愿者服务工作。 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">社会贡献（近5年在本市内 ）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right">参加志愿者服务工作</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">时间/小时</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入参加志愿者服务工作累积时间" id="volunHour" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：每满50小时积3分，最高30分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="socre-span" id="volunScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）团委</div>
+                            </div>
+                        </div>
+
+                        <!-- 无偿献血、 无偿献血者并成为中华骨髓库捐献志愿者。-->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">社会贡献（近5年在本市内 ）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isBlood" />
+                                        <p class="checkbox-font">无偿献血。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isVolun" />
+                                        <p class="checkbox-font">无偿献血者并成为中华骨髓库捐献志愿者。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isBone" />
+                                        <p class="checkbox-font">成功实现骨髓（造血干细胞）捐献。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isBloodHide" style="display:none;">
+                                <div class="left">献血量/毫升</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入献血量" id="bloodML" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：无偿献血，每满200毫升积3分，最高30分。无偿献血者并成为中华骨髓库捐献志愿者，积5分，成功实现骨髓（造血干细胞）捐献积50分。可累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="bloodScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 市内投资 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">投资（在本市内）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">投资</div>
+                                <div class="right">
+                                    <select id="invest">
+                                        <option value="0">请选择投资程度</option>
+                                        <option value="3">投资设立个体工商户</option>
+                                        <option value="6">投资设立个人独资企业、合伙企业、股份合作制企业</option>
+                                        <option value="10">投资设立有限公司</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：投资设立个体工商户的积3分，投资设立个人独资企业、合伙企业、股份合作制企业的积6分，投资设立有限公司的积10分。取最高分，不累计积分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="investScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）市场监督管理分局</div>
+                            </div>
+                        </div>
+
+                        <!-- 市内纳税 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">纳税（在本市内）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">个人纳税/元</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入已缴纳个人所得税款" id="taxP" />
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">经营纳税/元</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入已缴纳经营税款" id="taxC" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：近5年内（税款入库期），个人累计缴纳个人所得税款每满500元积1分，从事工商经营活动累计缴纳除个人所得税外的其他税款每满10,000元积1分。个人缴纳的其他税款以经营实体中个人的出资比例计算。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="taxScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）国、地税分局</div>
+                            </div>
+                        </div>
+
+                        <!-- 卫生防疫 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">卫生防疫</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isVaccine" />
+                                        <p class="checkbox-font">持《儿童预防接种证》，按照预防接种程序参加疫苗接种，并到现住地预防接种门诊办理转入、转出手续</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isBodyCheck" />
+                                        <p class="checkbox-font">婚前自愿参加婚检或自愿参加孕前优生健康检查</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isHealthBook" />
+                                        <p class="checkbox-font">按岗位要求办理从业健康合格证明</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：持《儿童预防接种证》，按照预防接种程序参加疫苗接种，并到现住地预防接种门诊办理转入、转出手续的，积3分。婚前自愿参加婚检或自愿参加孕前优生健康检查的，积1分。按岗位要求办理从业健康合格证明的，积1分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="socre-span" id="healthScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 住房公积金缴交（在本市内） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">住房公积金缴交（在本市内）</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isOpenFund" />
+                                        <p class="checkbox-font">开立住房公积金账户</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isPayFund" />
+                                        <p class="checkbox-font">按月缴交住房公积金</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isFundHide" style="display:none;">
+                                <div class="left">缴交住房公积金月数</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入缴交住房公积金月数" id="fundMonth" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：开立住房公积金账户的，积3分。按月缴交住房公积金的，每缴交1个月积0.2分，最高12分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="fundScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">住房公积金顺德管理部</div>
+                            </div>
+                        </div>
+
+                        <!-- 计划生育证明 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">计划生育</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isFamilyPlanBook" />
+                                        <p class="checkbox-font">办理了《流动人口婚育证明》（含电子婚育证明）或广东省统一的《计划生育服务证》（本省籍已婚），到达我市后按有关办法进行验证，并按管理年限及时换证</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：办理了《流动人口婚育证明》（含电子婚育证明）或广东省统一的《计划生育服务证》（本省籍已婚），到达我市后按有关办法进行验证，并按管理年限及时换证的，积5分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="socre-span" id="familyPlanBookScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 避孕节育、孕检 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">计划生育</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isSH" />
+                                        <p class="checkbox-font">申请人或其配偶自觉上环（含皮埋）。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isJZ" />
+                                        <p class="checkbox-font">申请人或其配偶自觉结扎。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isYJ" />
+                                        <p class="checkbox-font">申请人或其配偶每年按照要求参加居住地卫计部门组织的孕情检查不少于3次。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isYJHide" style="display:none;">
+                                <div class="left">连续参与孕检年数</div>
+                                <div class="right">
+                                    <select id="YJYear">
+                                        <option value="0">请选择</option>
+                                        <option value="5">连续满1年</option>
+                                        <option value="10">连续满2年</option>
+                                        <option value="15">连续满3年及以上</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：申请人或其配偶自觉落实长效避孕节育措施，上环（含皮埋）积8分，结扎积15分。申请人或其配偶每年按照要求参加居住地卫计部门组织的孕情检查不少于3次，连续满1年积5分。连续满2年积10分。连续满3年及以上积15分。两次孕情检查间隔不超过6个月视为连续，2016年1月1日后孕情检查不纳入积分计算。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="birthControlScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 承诺表 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">计划生育</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isCommit" />
+                                        <p class="checkbox-font">《佛山市新市民积分制服务管理卫生和计划生育积分承诺表》中能够加具申请人及其配偶户籍地（乡镇街道）卫生计生部门审核意见。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isCommitHide" style="display:none;">
+                                <div class="left">项数</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入项数" id="commitNum" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：《佛山市新市民积分制服务管理卫生和计划生育积分承诺表》中能够加具申请人及其配偶户籍地（乡镇街道）卫生计生部门审核意见的，每项额外奖励5分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="commitScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 基础教育（仅用于积分入学） -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">基础教育</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right">
+                                    <select id="basicEdu">
+                                        <option value="0">请选择</option>
+                                        <option value="5">适龄随迁子女入读我市教育部门登记的幼儿园</option>
+                                        <option value="5">适龄随迁子女入读我市义务教育阶段小学（含民办）</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="left">年数</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入年数" id="eduYear" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：每1年积5分。两项不同时计分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="socre-span" id="basicEduScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）教育局</div>
+                            </div>
+                        </div>
+
+                        <!-- 积分入户奖励 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">积分入户奖励</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isPolicy" />
+                                        <p class="checkbox-font">未婚未育、已婚未育或政策内生育子女。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isProcessed" />
+                                        <p class="checkbox-font">违反计划生育政策行为处理完毕。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：未婚未育、已婚未育或政策内生育子女的，积30分。违反计划生育政策行为处理完毕的，积10分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="rewardScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）卫生和计划生育局</div>
+                            </div>
+                        </div>
+
+                        <div class="score">总分值：<span id="sumScore2">0</span>分</div>
+                        <div class="warm">此总分值仅供参考，以各部门实际计算分数为准！</div>
+
+                    </div></div></div>
+
+            <!-- 其他指标 -->
+            <div id="item3mobile" class="mui-slider-item mui-control-content">
+                <div id="scroll2" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <!-- 积分入户减分指标 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">违法犯罪</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">二级指标</div>
+                                <div class="right white-back">
+                                    <div class="line">
+                                        <input type="checkbox" id="isDrug" />
+                                        <p class="checkbox-font">近5年内曾受过强制隔离戒毒措施。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isCrim" />
+                                        <p class="checkbox-font">近5年内因过失犯罪且情节较轻并受过刑事处罚。</p>
+                                    </div>
+                                    <div class="line">
+                                        <input type="checkbox" id="isDetention" />
+                                        <p class="checkbox-font">近3年内曾受过行政拘留处分。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" id="isDrugHide" style="display:none;">
+                                <div class="left">强制戒毒次数</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入次数" id="drug" />
+                                </div>
+                            </div>
+                            <div class="list" id="isDetentionHide" style="display:none;">
+                                <div class="left">行政拘留次数</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入次数" id="detention" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：近5年内曾受过强制隔离戒毒措施的，每次扣50分。近5年内因过失犯罪且情节较轻并受过刑事处罚的，扣100分。近3年内曾受过行政拘留处分的，每次扣15分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="crimeScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）派出所</div>
+                            </div>
+                        </div>
+
+                        <!-- 自定义 -->
+                        <div class="block">
+                            <div class="list">
+                                <div class="left">一级指标</div>
+                                <div class="right">各镇（街道）自行设定项目</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">预估分</div>
+                                <div class="right">
+                                    <input type="number" placeholder="请输入预估分" id="custom" />
+                                </div>
+                            </div>
+                            <div class="list tip">
+                                <div class="left"></div>
+                                <div class="right font">说明：合计总分数20分。</div>
+                            </div>
+                            <div class="list hidden">
+                                <div class="left"></div>
+                                <div class="right white-click">>>></div>
+                            </div>
+                            <div class="list">
+                                <div class="left">分数</div>
+                                <div class="right"><span class="score-span" id="customScore">0</span>分</div>
+                            </div>
+                            <div class="list">
+                                <div class="left">核定部门</div>
+                                <div class="right">镇（街道）</div>
+                            </div>
+                        </div>
+
+                        <div class="score">总分值：<span id="sumScore3">0</span>分</div>
+                        <div class="warm">此总分值仅供参考，以各部门实际计算分数为准！</div>
+
+                    </div></div></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    mui.init({
+        swipeBack: false
+    });
+    (function($) {
+        $('.mui-scroll-wrapper').scroll({
+            indicators: true //是否显示滚动条
+        });
+    })(mui);
+</script>
+
+
+</body>
+</html>

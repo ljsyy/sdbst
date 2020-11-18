@@ -1,0 +1,112 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>小作坊管理查询平台</title>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" th:href="@{wui/css/weui.css}"/>
+    <link rel="stylesheet" th:href="@{wui/css/weuix.css}"/>
+    <script th:src="@{js/jquery.min.js}"></script>
+    <script th:src="@{wui/js/zepto.min.js}"></script>
+    <script th:src="@{wui/js/zepto.weui.js}"></script>
+    <script th:src="@{js/base.js}"></script>
+    <script>
+        $(function () {
+
+
+        });
+
+    </script>
+    <style>
+        .img-null {
+            width: 50%;
+            position: absolute;
+            left: 25%;
+            top: 45%;
+            display: none;
+        }
+    </style>
+</head>
+
+<body ontouchstart>
+<div class="img-box">
+    <img th:src="@{img/life/sfw-head.jpg}" class="img-max">
+</div>
+
+
+<div class="weui-search-bar">
+    <input type="search" class="search-input" id='search' placeholder='请输入登记编号或名称'/>
+    <button class="weui-btn weui-btn_mini weui-btn_primary"><i class="icon icon-4"></i></button>
+</div>
+<div>
+    <table class="weui-table">
+        <thead>
+        <tr>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <img class="img-null" th:src="@{img/life/search-null.png}">
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<div class="weui-footer weui-footer_fixed-bottom">
+    <p class="weui-footer__text">顺德区市场安全监管局</p>
+    <p class="weui-footer__text">地址：佛山市顺德区大良兴顺路口</p>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        //搜索点击事件
+        $(".weui-btn_primary").click(function () {
+            console.log("点击事件开始");
+            //获取搜索框输入的值
+            var keyword = $("#search").val();
+            if (keyword == null || keyword == '') {
+                alert("请输入关键字");
+                return;
+            }
+            $.ajax({
+                url: basePath() + "/life/foodWorkshopSearch",
+                type: "get",
+                data: {"keyword": keyword},
+                dataType: "json",
+                async: true,
+                success: function (result) {
+                    console.log(result);
+                    //清空子元素
+                    $('tbody tr').empty();
+                    //判断查询相关信息是否成功
+                    if (result.code == '0') {
+                        console.log("未找到相关内容");
+                        //显示未找到效果图
+                        $('.img-null').show();
+                    } else {
+                        //隐藏未找到效果图
+                        $('.img-null').hide();
+
+                        var socialCode;
+                        if (result.data.socialCode == null) {
+                            socialCode = result.data.registerCode;
+                        } else {
+                            socialCode = result.data.socialCode;
+                        }
+                        //初始化列表信息
+                        var str = '<td title="统一社会信用代码">' + socialCode + '</td>' +
+                            '<td title="登记证编号">' + result.data.registerCode + '</td>' +
+                            '<td title="行政相对人名称">' + result.data.administrativeName + '</td>' +
+                            '<td title="许可内容">' + result.data.licensedContent + '</td>' +
+                            '<td title="法定代表人姓名">' + result.data.delegateName + '</td>' +
+                            '<td title="许可决定日期">' + result.data.decideDate + '</td>' +
+                            '<td title="许可截止日期">' + result.data.cutoffDate + '</td>';
+                        //将元素添加到表格中
+                        $('tbody tr').append(str);
+                    }
+                }
+            });
+        })
+    })
+</script>
+</html>

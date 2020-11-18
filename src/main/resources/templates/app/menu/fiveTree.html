@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<base th:href="${#request.getContextPath()}+'/'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<title th:text="${name}"></title>
+<!--<link rel="stylesheet" href="${ctxStatic}/modules/app/css/base.css" />-->
+<link rel="stylesheet" href="css/app/menu.css" />
+<link rel="stylesheet" href="css/disclaimer.css" />
+<!--<script src="${ctxStatic}/modules/app/js/lib/vue.js"></script>-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/base.js"></script>
+<style>
+	dd{
+		margin: 0px;
+	}
+	dl {
+		display: block;
+		margin: 0;
+	}
+	.fiveTree {
+		 border-bottom: #e0e0e0 0px solid;
+	}
+	body{
+		margin: 0px;
+	}
+</style>
+</head>
+<body>
+	<div class="container fiveTree">
+    	<div class="page no-select">
+             <div  id="change" class="content"></div>
+       </div>        
+    </div>
+    <!-- 免责声明 -->
+	<div id="disclaimer">
+		<div class="d-title">温馨提示</div>
+	    <div class="d-content"><strong>免责声明：</strong><span></span></div>
+	    <div class="d-btn"><div class="d-btn-l">取消</div> <div class="d-btn-r"><a href="">同意</a></div></div>
+	</div>
+</body>
+</html>
+
+<script type="text/javascript" th:inline="javascript">
+	//用于足迹和点击量统计的全局变量
+	var phoneCode='${appInfo.serialNumber}';
+	var operator='${appInfo.operator}';
+	var area='${appInfo.area}';
+	var types='${appInfo.type}';
+	var brand='${appInfo.brand}';
+	var versions='${appInfo.versions}';
+	var ct='${ct}';
+	//运行环境
+	var runEnviron='${runEnviron}';
+
+	var id = [[${id}]];
+	$(function(){
+		//获取id
+		// var id="${param.id}";
+
+		//获取总数据集合
+		$.ajax({ 
+			url:basePath()+"/app/menu/findChildsMenu",
+			type:"post",
+			data:{"id":id},
+			dataType:"json",
+			success:function(result){
+				// var result = JSON.stringify(result1);
+				// console.log("2:"+JSON.stringify(result));
+				// console.log("21:"+ JSON.stringify(result.data));
+				// console.log("2:"+result.data);
+				// console.log("2:"+result.length);
+				// oneArr=JSON.stringify(result.data);
+				// console.log("22:"+oneArr);
+				// console.log("23:"+oneArr.length);
+
+				var str=menuFiveTree(basePath(),JSON.stringify(result.data),id,'img/menu/note.png','img/menu/xiala.png');
+				// console.log("1:"+str);
+				$("#change").append(str);
+				//隐藏子菜单
+				childsMenuHide_new();
+				if(typeof(sessionStorage.getItem('fiveTree'))=='string' && sessionStorage.getItem('fiveTree') != ""){
+					var newname = sessionStorage.getItem('fiveTree').split(",");
+					if(newname.length != 0)
+						for(var x in newname){
+							if(newname[x] != ''){
+								$(".fiveTree:eq(" + (parseInt(newname[x])) + ")  dt").click();
+							}
+						}
+				} 
+			}
+		
+		});
+		
+		//免责声明取消
+		$("#disclaimer .d-btn .d-btn-l").click(function(){
+			$("#disclaimer").hide();
+			$("#disclaimer .d-content span").text('');
+		});
+		
+	});
+	function childsMenuHide_new(){
+		$(".fiveTree  dd").hide();
+		$(".fiveTree  dt").click(function(){
+			if($(this).next().is(":hidden")){
+				$(this).find(".xiala").attr("class","xiala");
+				$(this).parent().attr("trun","1");
+
+			}else{
+				$(this).find(".xiala").attr("class","xiala"+" down");
+				$(this).parent().attr("trun","0");
+			}
+			$(this).nextUntil("dt").toggle(200);
+			//alert($(this).parent().index())
+			if( $(".fiveTree") != 0){
+				var fiveTree = '';
+				var len = $(".fiveTree").length;
+				for(var x = 0; x < len; x++){
+					 var trun = $(".fiveTree:eq(" + x + ")").attr("trun");
+					 if(trun == "1"){
+						 fiveTree+=x+',';
+					 }
+				}
+				sessionStorage.setItem('fiveTree', fiveTree);
+			}
+		});
+	}
+</script>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.user.SurveyResultMapper">
+	
+    <sql id="appSurveyResultColumns">
+		a.id AS "id",
+		a.answer AS "answer",
+		a.advice AS "advice",
+		a.phone AS "phone",
+		a.versions AS "versions",
+		a.type AS "type",
+		a.create_date AS "createDate"
+	</sql>
+
+	<sql id="appSurveyResultJoins">
+	</sql>
+
+	<select id="get" resultType="com.unifs.sdbst.app.bean.user.SurveyResult">
+		SELECT
+			<include refid="appSurveyResultColumns" />
+		FROM APP_SURVEY_RESULT a
+			<include refid="appSurveyResultJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.user.SurveyResult">
+		SELECT
+			<include refid="appSurveyResultColumns" />
+		FROM APP_SURVEY_RESULT a
+			<include refid="appSurveyResultJoins" />
+		<where>
+			a.advice is not null
+		</where>
+		ORDER BY a.create_date DESC
+	</select>
+	
+	<select id="findResultList" resultType="com.unifs.sdbst.app.bean.user.SurveyResult">
+		SELECT
+			a.id AS "id",
+			a.answer AS "answer",
+			a.advice AS "advice"
+		FROM APP_SURVEY_RESULT a
+			<include refid="appSurveyResultJoins" />
+		ORDER BY a.create_date DESC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO APP_SURVEY_RESULT(
+			id,
+			answer,
+			advice,
+			phone,
+			versions,
+			type,
+			create_date
+		) VALUES (
+			#{id,jdbcType=VARCHAR},
+			#{answer,jdbcType=VARCHAR},
+			#{advice,jdbcType=VARCHAR},
+			#{phone,jdbcType=VARCHAR},
+			#{versions,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{createDate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE APP_SURVEY_RESULT SET
+			answer = #{answer},
+			advice = #{advice},
+			phone = #{phone},
+			versions = #{versions},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM APP_SURVEY_RESULT
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>

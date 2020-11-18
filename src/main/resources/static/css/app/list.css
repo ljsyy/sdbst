@@ -1,0 +1,77 @@
+﻿@charset "UTF-8";
+
+body, dd, dl, html, ol, p, ul { margin: 0;padding: 0;list-style-type: none;	font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti; }
+
+.container { padding:0; margin:0px; max-width:750px; overflow:scroll; }
+.container #head { height:50px; background:#eb413d; text-align:center; color:#fff; 
+				   line-height:50px;  font-size:16px; font-weight:500;
+				   position:fixed; left:0px; top:0px; right:0px; z-index: 10000;}
+.container #head .headl .icon{margin-top:8px;}
+#head .headr img { vertical-align:middle; width:41px; height:42px; margin: 2px;}
+
+
+.container #search { position:fixed; left:0px; top:50px; right:0px; background-color:#eee; 
+						   height:50px; line-height:50px; text-align:center; }
+.container #search span input { font-size: 15px; font-weight: 500; line-height: 32px; border: none; outline: 0px; 
+									  border-radius: 20px; margin: 8px 0px; text-indent: 1em; width: 80%; }						   
+.container #search .search-r { width: 15%;float: right;text-align: center;padding: 10px 0;color: #eb413d;}	
+
+
+.container #content { margin-top:100px;}
+.container #content dl dt {line-height:23px;}
+.container #content dl dt a { text-decoration:none; color:#333; border-bottom:1px solid #DDD; 
+							  width:100%; display:flex; align-items:center; padding: 10px 0; background: white;}
+.container #content dl dt .dl-l { width:80%; float:left; text-align:left; padding:0px 10px; 
+								  line-height:23px;
+								  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;
+								  font-size:15px; font-weight:500; }
+.container #content dl dt .dl-r { width:20px; float:right; flex:1; text-align:right; padding:0px 10px; }
+.container #content dl dt .dl-r img { width:12px; height:19px; }
+
+
+/* 失信者名单 */
+.container #court-search { position:fixed; left:0px; top:50px; right:0px; background-color:#eee; 
+						   height:50px; line-height:50px; text-align:center; }
+.container #court-search span input { font-size: 15px; font-weight: 500; line-height: 32px; border: none; outline: 0px; 
+									  border-radius: 20px; margin: 8px 0px; text-indent: 1em; width: 80%; }						   
+.container #court-search .search-r { width: 15%;float: right;text-align: center;padding: 10px 0;color: #eb413d;}	
+
+
+.container #court-content { margin-top:100px; }
+.container #court-content a { text-decoration:none; color:#000;}
+.container #court-content .list { height:120px; border-bottom: 1px solid #ddd; }
+.container #court-content .list .list-l { width:25%; float:left; height:120px; line-height:120px;
+										  text-align:center; }
+.container #court-content .list .list-l img { vertical-align:middle; width:72px; height:90px; }
+.container #court-content .list .list-r { width:75%; float:left; height:90px; line-height:30px;  
+										  text-align:left; margin:15px 0px;
+										  font-family:"宋体"; font-size:15px; font-weight:500; }
+
+
+/* 失信者信息 */
+.container #personInfo-content { margin-top:0px; padding:10px; }
+.container #personInfo-content #facePhoto { text-align:center; }
+.container #personInfo-content #facePhoto img { width:99px; height:120px; }
+.container #personInfo-content div { font-family:"仿宋"; font-size:18px; font-weight:500; line-height:30px; }
+
+
+/* 通用timeList列表 */
+/* .container #show { margin-top:50px; } */
+.time-list .list{ position: relative;padding: 5px 0;background: #fff;border-bottom: 1px solid #e5e5e5;}
+.time-list .list a { overflow: hidden;text-decoration:none; color:#000; display:flex;align-items: center;width:100%;}
+.time-list .list .list-l { width:90%;text-align:left;  }
+.time-list .list .list-l div { line-height: 25px;font-size: 16px;font-weight: 500;padding-left: 10px;}	
+.time-list .list .time{ color: #999;float: right; bottom: 5px;font-size: 14px !important;right: 11%;}									   
+.time-list .list .list-r { width:10%;flex: 1;text-align: center;}
+.time-list .list .list-r img { width:12px; height:19px; }
+
+
+/*弹框*/
+#simpleWD{ height:auto; width:80%; border:1px solid #666; border-radius:10px; background-color:#EEE;
+		   text-align:center; position:fixed; top:25%; left:0; right:0; margin:auto; display:none; }
+#simpleWD div{ line-height:50px; padding:0 10px; }
+#simpleWD .under-line{ border-bottom:1px solid #666; }
+#simpleWD .content{ text-align:left; }
+#simpleWD .sure{ color:#eb413d;}
+
+

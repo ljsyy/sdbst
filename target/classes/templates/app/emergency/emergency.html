@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <!-- 引入 WeUI -->
+    <link rel="stylesheet" href="weui/css/weui.css"/>
+    <link rel="stylesheet" href="weui/css/weuix.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="weui/js/zepto.min.js"></script>
+    <script src="weui/js/zepto.weui.min.js"></script>
+    <script src="weui/js/iscroll-lite.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+<title></title>
+</head>
+<body ontouchstart>
+
+<div class="container">
+    <!--头部导航，获取type不用了-->
+<!--    <div class="weui-tab" style="height:44px;"  id="t1">-->
+<!--        <div class="weui-tab-nav">-->
+<!--            <a value="1" class="weui-navbar__item weui-nav-green"> 预警信息 </a>-->
+<!--            <a value="2" class="weui-navbar__item weui-nav-green"> 发布信息 </a>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div id="liAll"> </div>
+</div>
+
+
+
+<script th:inline="javascript">
+
+    $(function () {
+        getListByType();
+        <!--头部导航，获取type不用了-->
+        // $('.weui-navbar__item').on('click', function () {
+        //     $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        //     var type = $(".weui-tab-nav > .weui-bar__item_on").attr("value");
+        //     getListByType(type);
+        //     console.log(type);
+        // });
+
+    });
+
+    function getListByType() {
+        var type = [[${type}]];
+        $.ajax({
+            url: getRootPath() + "/app/emergency/list",
+            // url:"http://19.202.137.139:8080/admin/emergency/isd/list",
+            data: {
+                "type": type
+            },
+            type: "post",
+            dataType: "json",
+            beforeSend: function (xhr) {
+                $.showLoading();
+            },
+            success:function (data){
+                var html = '';
+                if (data.code==0){
+                    var res = data.data;
+                    for (var i = 0; i < res.length; i++) {
+                        console.log(res[i].warnid+res[i].title);
+                        html += '<a class="weui-cell weui-cell_access" href="/sdbst/app/emergency/detail?warnid=' +  res[i].warnid + '">\n' +
+                            '    <div class="weui-cell__bd">\n' +
+                            '        <p>' + res[i].title + '</p>\n' +
+                            '    </div>\n' +'<div class="weui-cell__ft" style="font-size: smaller;">'+ res[i].issuedate + '</div>'+
+                            '</a>';
+                    }
+                    $.hideLoading();
+                    $("#liAll").html(html);
+                }else {
+                    html +="应急平台维护中，请稍后再试！";
+                    $.hideLoading();
+                    $("#liAll").html(html);
+
+                }
+
+                if (type==1){
+                    $("title").text("应急预警")
+                }else {
+                    $("title").text("应急事件通报")
+                }
+
+            }
+        })
+    }
+
+</script>
+
+<!--头部导航，不用了-->
+<!--<script>-->
+<!--    $(function(){-->
+<!--        $('#t1').tab({defaultIndex:0,activeClass:"bg-green"});-->
+<!--    })-->
+<!--</script>-->
+
+</body>
+</html>

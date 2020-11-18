@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<link rel="stylesheet" href="css/app/guideDetail.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+<title>统计年报</title>
+</head>
+<body>
+<div class="container">
+    <!--头部-->
+    <!--内容-->
+    <div id="yearlyRe-content">
+    </div>
+</div> 
+</body>
+<script>
+    //url地址和param参数，&换为*
+    // var url="http://202.104.25.196/RXWSSTWeb/news.web";
+    var url = basePath();
+    var param="/data/menuList?fid=7200040&orderByString=fold_name";
+
+    $(function(){
+        $.ajax({
+            url:basePath()+"/app/menu/getjson?url="+url+param,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+                var arr=result.obj;
+                //跳转地址
+                var uri="";
+                $(arr).each(function(i){
+                    uri="classify?fid="+arr[i].fold_id+"&foldName="+arr[i].fold_name;
+                    $(".container #yearlyRe-content").append("<div class='list'><a href='"+uri+"'><div class='list-l'><div>"+arr[i].fold_name+"</div></div><div class='list-r'>&nbsp;<img src='img/interface/right.png' /></div></a></div>");
+                });
+
+            }
+        });
+    });
+
+</script>
+</html>
+
+

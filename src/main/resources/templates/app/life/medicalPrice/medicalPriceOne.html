@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>公立医院基本医疗服务项目和价格</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <style>
+        body{
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
+        /*搜索*/
+
+        .query{background: #fff;font-size: 16px;}
+        .query .line{padding: 10px;}
+        .query .line p{display: inline-block;width: 30%;}
+        .query .line input{
+            border: 0;
+            font-size: 14px;
+            width: 60%;
+            padding: 7px 8px;
+        }
+        .query .line select{
+            border: 0;
+            font-size: 14px;
+            width: 65%;
+            padding: 7px 8px;
+        }
+        .query button{
+            width: 90%;
+            margin: 10px;
+            border: 0;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 0;
+            font-size: 15px;
+            background: #4281cd;
+        }
+        .query img{
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: bottom;
+        }
+        #showdata{}
+        .list1{margin-top: 10px;background: #fff;}
+        .list1 .title span{
+            font-size: 18px;
+            margin-left: 0px;
+            flex: 1;
+            padding-left: 10px;
+        }
+        .list1 .title{
+            border-bottom: 0;
+            line-height: 40px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        .list1 .title .xiala{float: right;}
+        .list1 .title .xiala.up{
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+        }
+        .list1 .info.close{display:none;}
+        .icon{vertical-align: top;}
+        .info{border-top: solid 1px #ECECEC;}
+        .info .line{
+            overflow: hidden;
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border-bottom: solid 1px #ECECEC;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .info .line .type{width: 90%;}
+        .info .line .image{width: 10%;text-align: center;}
+        .main{
+            overflow: scroll;
+            height: 100%;
+            position: relative;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        //判断特殊符号
+        function check(val){
+            var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im,
+                regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+            if(regEn.test(val) || regCn.test(val)) {
+                //alert("名称不能包含特殊字符.");
+                webToast("名称不能包含特殊字符","middle",600);
+                return true;
+            }
+            var a = document.getElementById("keyword").value;
+            if(a.match(/\\/g)){
+                //alert("名称不能包含特殊字符.");
+                webToast("名称不能包含特殊字符","middle",600);
+                return true;
+            }
+            return false;
+        }
+
+        $(document).ready(function(){
+
+            start();
+
+        });
+
+        function start(){
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/interface/HealthCareList",
+                type: "get",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    load_ani.remove();
+                    console.log(result)
+                    for(var i in result){
+                        //一类展示
+                        $("#showdata").append(
+                            '<div class="list1">'+
+                            '<div class="title">'+
+                            '<img class="icon" src="img/new/medical.png" height="25" />'+
+                            '<span>'+result[i].oneName+'</span>'+
+                            '<img class="xiala" src="img/menu/shangla.png" height="10" />'+
+                            '</div>'+
+                            '<div class="info close">'+
+
+                            '</div>'+
+                            '</div>'
+                        );
+                        //一类查询框
+                        $("#one").append(
+                            '<option value ="'+result[i].oneNum+'">'+result[i].oneName+'</option>'
+                        );
+                        var data = result[i].data;
+                        for(var j in data){
+                            $("#showdata .list1:eq(" + i + ") .info").append(
+                                '<a class="line" href="'+basePath()+'/life/medicalPriceTwo?oneNum='+result[i].oneNum+'&twoNum='+data[j].twoNum+'">'+
+                                '<p class="type">'+data[j].twoName+'</p>'+
+                                '<div class="image"><img src="img/interface/right.png" height="20" /></div>'+
+                                '</a>'
+                            );
+                        }
+                    }
+
+                    $(".list1 .title").unbind().click(function(){
+                        if($(this).parent().find(".info").hasClass("open")){
+                            $(this).parent().find(".info").removeClass("open").addClass("close");
+                            $(this).find(".xiala").removeClass("up");
+                        }else{
+                            $(this).parent().find(".info").removeClass("close").addClass("open");
+                            $(this).find(".xiala").addClass("up");
+
+                        }
+
+                    });
+                }
+            });
+            getTwo();
+            // getThree();
+        }
+
+        var oneOptions;
+        function getTwo(){
+            oneOptions = $("#one option:selected").val();
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/interface/HealthCareTwoList",
+                data:"oneNum="+oneOptions,
+                type: "post",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    load_ani.remove();
+                    $("#two").html("");
+                    $("#three").html("");
+                    console.log(result)
+                    var data = result.data;
+                    for(var i in data){
+                        $("#two").append(
+                            '<option value ="'+data[i].twoNum+'">'+data[i].twoName+'</option>'
+                        );
+                    }
+                    getThree();
+                }
+            });
+        }
+
+        var twoOptions;
+        var threeOptions;
+        function getThree(){
+            twoOptions = $("#two option:selected").val();
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/interface/HealthCareThreeList",
+                data:"twoNum="+twoOptions,
+                type: "post",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    load_ani.remove();
+                    $("#three").html("");
+                    console.log(result)
+                    var data = result.data;
+                    for(var i in data){
+                        $("#three").append(
+                            '<option value ="'+data[i].threeNum+'">'+data[i].threeName+'</option>'
+                        );
+                    }
+
+                }
+            });
+        }
+
+        function search(){
+            if(check($("#keyword").val())){
+                $("#keyword").val("");
+                return false;
+            }
+            oneOptions = $("#one option:selected").val();	//一层num
+            twoOptions = $("#two option:selected").val();	//二层num
+            threeOptions = $("#three option:selected").val();	//三层num
+            console.log(oneOptions+","+twoOptions+","+threeOptions);
+            var keyword = $("#keyword").val();
+            if((oneOptions == "" || oneOptions == undefined || twoOptions == "" || twoOptions == undefined || threeOptions == "" || threeOptions == undefined)&&keyword==""){
+                //alert("请输入项目名称");
+                webToast("请输入项目名称","middle",600);
+                return;
+            }
+            if(keyword != ""){
+                //alert("text");
+                window.location.href=basePath()+"/life/medicalPriceKeyword?keyword="+keyword;
+            }else{
+                //alert("select");
+                window.location.href=basePath()+"/life/medicalPriceThree?threeNum="+threeOptions;
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div class="main">
+    <!-- 搜索框 -->
+    <div class="query">
+        <div class="line">
+            <p>一类</p>
+            <select id="one" onchange="getTwo()">
+
+            </select>
+        </div>
+        <div class="line">
+            <p>二类</p>
+            <select id="two" onchange="getThree()">
+
+            </select>
+        </div>
+        <div class="line">
+            <p>三类</p>
+            <select id="three">
+
+            </select>
+        </div>
+        <div class="line">
+            <p>项目名称</p>
+            <input type="text" id="keyword" maxlength="30" />
+        </div>
+
+        <center>
+            <button align="center" onclick="search()"><img src="img/new/sousuo.png" />查询</button>
+        </center>
+
+    </div>
+
+
+    <!-- 内容 -->
+    <div id="showdata">
+
+    </div>
+
+</div>
+</body>
+</html>

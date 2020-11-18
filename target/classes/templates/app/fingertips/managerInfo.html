@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+<!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src * ;img-src *">-->
+<!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline';img-src 'self' http://support.shunde.gov.cn:9203">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>办事人信息</title>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+<!--    <link rel="stylesheet" href="mui/css/mui.picker.css">-->
+
+<body>
+<!--<div class="file">-->
+<!--    <div>-->
+<!--        <label style="display: inline-block;height: 48px;" onclick="">-->
+<!--            <img src="img/fingertips/add_pic.jpg" alt="">'-->
+<!--            <input type="file" value="请选择图片" accept="image/*">-->
+<!--        </label>-->
+<!--    </div>-->
+<!--</div>-->
+
+    <form class="mui-input-group">
+    <!--基础信息-->
+    <div id="base-div" style="">
+        <div class="mui-input-row mui-radio" style="width: 100%;">
+			<div class="let">
+				 <label class="check-left">申报类型</label>
+			</div>
+			<div class="mui-input-row mui-radio mui-left">
+                <label class="check-word">个人办事</label>
+                <input name="applicant_type" value="1" type="radio" checked="checked" id="bs-persion">
+			</div>
+			<div class="mui-input-row mui-radio mui-left">
+                <label class="check-word">企业办事</label>
+                <input name="applicant_type" value="2" type="radio" id="bs_company">
+			</div>
+        </div>
+        <div class="mui-input-row" style="overflow: visible;">
+            <label class="label">证件类型</label>
+<!--            <a class="mui-navigate-right">-->
+<!--                <select class="select top" id="agentCertificateType">-->
+<!--                    <option>身份证</option>-->
+<!--                    <option>身份证</option>-->
+<!--                    <option>身份证</option>-->
+<!--                </select>-->
+<!--            </a>-->
+            <div class="agentCertificateTypeDiv" style="margin-top: 4px;">
+                <input type="text" id="agentCertificateType" value="请选择证件类型" code="" readonly="readonly" />
+                <ul id="agentCertificateTypeUl">
+                </ul>
+            </div>
+        </div>
+        <div class="mui-input-row">
+            <label class="label">证件号码</label>
+            <input type="text" placeholder="请输入证件号码" class="mui-input-clear top" id="agentCertificateNum">
+        </div>
+        <div class="">
+            <!--<label class="label"></label>-->
+            <span style="margin-left: 15px;color: red;font-size: 14px;"> 该证件号用于关联查询办事事件，请正确填写！</span>
+        </div>
+        <div class="mui-input-row">
+            <label class="label">办事人姓名</label>
+            <input type="text" placeholder="请输入办事人姓名" class="mui-input-clear top" id="agentName">
+        </div>
+        <div class="mui-input-row">
+            <label class="label">办事人手机</label>
+            <input type="number" placeholder="请输入办事人手机" class="top" id="agentPhone" >
+        </div>
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" onclick="oneNext()">下一步</button>
+        </div>
+    </div>
+    <!--个人-->
+    <div id="persion-div" style="">
+        <div class="mui-input-row mui-radio" style="width: 100%;">
+        	<div class="let">
+        		 <label class="check-left">是否本人</label>
+        	</div>
+        	<div class="mui-input-row mui-radio mui-left">
+                <label class="check-word">是</label>
+                <input name="is_self" value="1" type="radio" checked="checked">
+        	</div>
+        	<div class="mui-input-row mui-radio mui-left">
+                <label class="check-word">否</label>
+                <input name="is_self" value="2" type="radio">
+        	</div>
+        </div>
+        <div class="mui-input-row" style="display: none;">
+            <label class="label">申请人姓名</label>
+            <input type="text" class="mui-input-clear top" placeholder="请输入申请人姓名" id="applicantName">
+        </div>
+        <div class="mui-input-row" >
+            <label class="label">申请人姓名</label>
+            <input type="text" class="mui-input-clear top" placeholder="请输入申请人姓名" id="applicantName_is_self">
+        </div>
+        <div class="mui-input-row" style="overflow: visible;display: none;" id="applicantType">
+            <label class="label">证件类型</label>
+            <div class="agentCertificateTypeDiv_applicant" style="margin-top: 4px;">
+                <input type="text" id="agentCertificateType_applicant" value="请选择证件类型" code="" readonly="readonly" />
+                <ul id="agentCertificateTypeUl_applicant">
+                </ul>
+            </div>
+        </div>
+        <div class="mui-input-row" id="applicantNum" style="display: none;">
+            <label class="label">证件号码</label>
+            <input type="text" placeholder="请输入证件号码" class="mui-input-clear top" id="agentCertificateNum_applicant">
+        </div>
+<!--        <div class="mui-input-row">-->
+<!--            <label class="label">申请人手机</label>-->
+<!--            <input type="number" placeholder="请输入申请人手机" class="mui-input-clear top" id="applicantPhone">-->
+<!--        </div>-->
+        <div class="mui-input-row" >
+            <label class="label" style="padding-right: 0 !important;">申请人联系地址</label>
+            <div style="color:#333;font-size: 14px;" id="user_address">
+                <p style="color: #333;line-height: 18px;" class="click_add_address1">点击添加联系地址</p>
+                <span id="user_contact_username" class="ellipsis" style="display:none;max-width: 30%;vertical-align: middle;"></span>
+                <span id="user_contact_phone" style="display:none;vertical-align:middle;"></span>
+                <span id="user_contact_address" class="ellipsis" style="display:none;color: #333;"></span>
+            </div>
+<!--            <input type="text" class="mui-input-clear top" placeholder="点击添加申请人联系地址" readonly="readonly" id="user_address">-->
+        </div>
+        <div class="mui-input-row">
+            <label class="label">备注</label>
+            <input type="text" class="mui-input-clear top" placeholder="点击输入备注" id="memo">
+        </div>
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" onclick="showLast('#persion-div','#base-div')">上一步</button>
+            <button type="button" class="mui-btn mui-btn-primary" onclick="secondNext()">下一步</button>
+        </div>
+    </div>
+    <!--企业-->
+    <div id="enterprise-div" >
+        <div class="mui-input-row">
+            <label class="label">名称(企业)</label>
+            <input type="text" class="mui-input-clear top" placeholder="请输入企业名称" id="enterpriseName">
+        </div>
+        <div class="mui-input-row">
+            <label class="label">法定代表人</label>
+            <input type="text" class="mui-input-clear top" placeholder="法定代表人姓名" id="legal_representative">
+        </div>
+        <div class="mui-input-row" style="overflow: visible;">
+            <label class="label">证件类型</label>
+            <div class="agentCertificateTypeDiv_enterprise">
+                <input type="text" id="agentCertificateType_enterprise" value="请选择证件类型" code="" style="margin-top: 4px;" readonly="readonly" />
+                <ul id="agentCertificateTypeUl_enterprise">
+<!--                    <li>身份证</li>-->
+                </ul>
+            </div>
+        </div>
+        <div class="mui-input-row">
+            <label class="label">证件号码</label>
+            <input type="text" class="mui-input-clear top" placeholder="输入证件号" id="applicantCertificateNum">
+        </div>
+<!--        <div class="mui-input-row">-->
+<!--            <label class="label">申请人手机</label>-->
+<!--            <input type="text" placeholder="请输入申请人手机" class="mui-input-clear top" id="applicantPhone_enterprise">-->
+<!--        </div>-->
+        <div class="mui-input-row">
+            <label class="label" style="padding-right: 0 !important;">申请人联系地址</label>
+            <div style="color:#333;font-size: 14px;" id="user_address_enterprise">
+                <p style="color: #333;line-height: 18px;" class="click_add_address2">点击添加联系地址</p>
+                <span id="user_contact_username_enterprise" class="ellipsis" style="display:none;max-width: 30%;vertical-align: middle;"></span>
+                <span id="user_contact_phone_enterprise" style="display:none;vertical-align:middle;"></span>
+                <span id="user_contact_address_enterprise" class="ellipsis" style="display:none;color: #333;"></span>
+            </div>
+        </div>
+        <div class="mui-input-row">
+            <label class="label">备注</label>
+            <input type="text" class="mui-input-clear top" id="memo_enterprise" placeholder="点击输入备注">
+        </div>
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" onclick="showLast('#enterprise-div','#base-div')">上一步</button>
+            <button type="button" class="mui-btn mui-btn-primary" onclick="secondNext()">下一步</button>
+        </div>
+    </div>
+    <!--材料上交-->
+    <div id="save-next-div" style="">
+        <div id="hall_div" style="display: none;">
+            <!--<div  class="mui-input-row" style="overflow: visible;">-->
+                <!--<label class="label">办事大厅：</label>-->
+                <!--<div class="hallDiv" style="margin-top: 4px;">-->
+                    <!--<input type="text" id="hall" value="请选择办事大厅" readonly="readonly" />-->
+                    <!--<ul id="hallUI">-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div  class="" style="overflow: visible;height: 48px !important;position: relative;clear: left;overflow: hidden;">
+                <label class="label blackBold" style="    line-height: 60px;">办事大厅</label>
+            </div>
+            <div>
+                <div class="hallDiv" style="margin-top: 4px;padding: 0 10px;width: 100%">
+                    <input type="text" id="hall" value="请选择办事大厅" readonly="readonly" style="max-width: 100%;"/>
+                    <ul id="hallUI"style="padding: 0 10px;width: 94%;margin: 10px;">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="scene_div" style="display: none;">
+            <div  class="" style="overflow: visible;height: 48px !important;position: relative;clear: left;overflow: hidden;">
+                <label class="label blackBold" style="    line-height: 60px;">场景类型</label>
+            </div>
+            <div>
+                <div class="sceneDiv" style="margin-top: 4px;padding: 0 10px;width: 100%">
+                    <input type="text" id="scene" value="请选择场景类型" readonly="readonly" style="max-width: 100%;"/>
+                    <ul id="sceneUI"style="padding: 0 10px;width: 94%;margin: 10px;">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--<div id="" style="">-->
+            <!--<div  class="mui-input-row" style="overflow: visible;width: 100%">-->
+                <!--&lt;!&ndash;<label class="label">办事大厅：</label>&ndash;&gt;-->
+                <!--<div class="hallDiv" style="margin-top: 4px;">-->
+                    <!--<input type="text" id="hall" value="请选择办事大厅" readonly="readonly" />-->
+                    <!--<ul id="hallUI">-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div style="width: 100%;clear: both;">
+            <label style="line-height: 56px;color: #333;font-weight: bold;padding: 0 15px;">材料递交列表</label>
+            <p style="color: #333;margin: 0;padding: 0 15px;">材料递交方式<span style="color:#FF0000;">（请选择）</span></p>
+            <div class="mui-input-row mui-radio" id="noEleFile" style="width: 100%;padding: 0 15px;display:none;">
+                <div class="mui-input-row mui-radio mui-left">
+                    <label class="check-word">邮政快递</label>
+                    <input name="hand_in_way" value="1" type="radio">
+                </div>
+                <div class="mui-input-row mui-radio mui-left">
+                    <label class="check-word">窗口递交</label>
+                    <input name="hand_in_way" value="2" type="radio" >
+                </div>
+            </div>
+            <div class="mui-input-row mui-radio" id="eleFile" style="width: 100%;padding: 0 15px;display: none;">
+                <div class="mui-input-row mui-radio mui-left">
+                    <label class="check-word">上传电子文件</label>
+                    <input name="hand_in_way" value="3" type="radio">
+                </div>
+            </div>
+        </div>
+        <div id="hand_in_div" style="display: none;">
+            <label class="label" style="padding-right: 0 !important;color:#333;">窗口递交材料地址：</label>
+            <div style="color:#333;font-size: 14px;padding: 0 15px;margin-top: 10px;">
+                <span id="hand_in_username" class="ellipsis" style="color:#333;max-width: 30%;vertical-align: middle;"></span>
+                <span id="hand_in_phone" style="vertical-align:middle;color:#333;"></span>
+                <p id="hand_in_address" class="" style="color:#333;margin: 10px 0;"></p>
+            </div>
+        </div>
+        <ul class="mui-table-view material_list">
+<!--            <li class="mui-table-view-cell mui-collapse">-->
+<!--                <a style="color: #929292;" class="mui-navigate-right" href="#">1、本人身份证及户口本</a>-->
+<!--                <div class="mui-collapse-content">-->
+<!--                    <span>电子文件上传</span>-->
+<!--                    <div class="file">-->
+<!--                        <div class="fileerrorTip1">请选择图片</div>-->
+<!--                        <input type="file" value="请选择图片" accept="image/*" >-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </li>-->
+        </ul>
+<!--        <div class="material_list_btn">-->
+<!--            <label class="label" style="color: #333;font-weight: bold;">所需材料列表</label>-->
+<!--            <button type="button" class="mui-btn mui-btn-primary" style="margin-right: 15px;" id="toDetail">详情</button>-->
+<!--        </div>-->
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" onclick="materialCreate()">保存下一步</button>
+        </div>
+    </div>
+    <!--寄件信息填写-->
+    <div id="post_message_div" style="display: none;">
+        <div class="coding_direct">
+            <label class="label blackBold" >寄件信息填写</label>
+            <span class="guide">办事指引</span>
+        </div>
+        <div class="mui-input-row">
+            <label class="label blackBold">寄件备注</label>
+            <input type="text" placeholder="请输入寄件备注" class="mui-input-clear top" id="post_desc">
+        </div>
+        <div class="" id="post_div">
+            <label class="label blackBold">寄件人地址</label>
+            <div style="font-size: 14px;padding: 0 15px;margin-top: 10px;" id="post_user_address">
+                <p style="color: #333;line-height: 18px;" class="click_add_address_post">点击添加联系地址</p>
+                <span id="post_message_username" class="" style="color:#929292;max-width: 30%;vertical-align: middle;"></span>
+                <span id="post_message_phone" style="vertical-align:middle;color:#929292;"></span>
+                <p id="post_message_addr" class=""></p>
+            </div>
+        </div>
+        <div class="">
+            <label class="label blackBold">收件地址</label>
+            <div style="font-size: 14px;padding: 0 15px;margin-top: 10px;" id="receive_user_address">
+                <span id="receive_message_username" class="" style="color:#929292;max-width: 30%;vertical-align: middle;"></span>
+                <span id="receive_message_phone" style="vertical-align:middle;color:#929292;"></span>
+                <p id="receive_message_addr" class=""></p>
+            </div>
+        </div>
+        <div class="" id="collect_div">
+            <label class="label blackBold">揽件地址</label>
+            <div style="font-size: 14px;padding: 0 15px;margin-top: 10px;" id="collect_user_address">
+                <p style="color: #333;line-height: 18px;" class="click_add_address_collect">点击添加联系地址</p>
+                <span id="collect_message_username" class="" style="color:#929292;max-width: 30%;vertical-align: middle;"></span>
+                <span id="collect_message_phone" style="vertical-align:middle;color:#929292;"></span>
+                <p id="collect_message_addr" class=""></p>
+            </div>
+        </div>
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" onclick="showLast('#post_message_div','#save-next-div')">上一步</button>
+            <button type="button" class="mui-btn mui-btn-primary" onclick="postCreate()">保存下一步</button>
+        </div>
+    </div>
+    <!--保存提交-->
+    <div id="save-commit-dive" style="">
+        <div class="coding_direct">
+            <label class="label"></label>
+            <span class="guide">办事指引</span>
+        </div>
+        <div class="mui-input-row mui-radio" style="width: 100%;">
+            <div class="let">
+                <label class="check-left">取件方式</label>
+            </div>
+            <div class="mui-input-row mui-radio mui-left">
+                <label class="check-word">快递送达</label>
+                <input name="get_way" value="2" type="radio" checked="checked" id="qj-way-1">
+            </div>
+            <div class="mui-input-row mui-radio mui-left">
+                <label class="check-word">窗口取件</label>
+                <input name="get_way" value="1" type="radio" id="qj-way-2">
+            </div>
+        </div>
+        <div id="send_div" style="margin-top: 15px;">
+            <label class="label" style="padding-right: 0 !important;">配送地址（配送免快递费）</label>
+            <div style="font-size: 14px;padding: 0 15px;margin-top: 10px;">
+                <p style="color: #333;line-height: 18px;" class="click_add_address3">点击添加联系地址</p>
+                <span id="send_username" class="ellipsis" style="display:none;color:#929292;max-width: 30%;vertical-align: middle;"></span>
+                <span id="send_phone" style="display:none;vertical-align:middle;color:#929292;"></span>
+                <p id="send_address" class="ellipsis" style="display:none;"></p>
+            </div>
+        </div>
+        <div id="send_get_div" style="display: none;">
+            <div class="mui-input-row">
+                <label class="label">取件人名称</label>
+                <input type="text" placeholder="请输入取件人名称" class="mui-input-clear top" id="send_get_username">
+            </div>
+            <div class="mui-input-row">
+                <label class="label">取件人手机</label>
+                <input type="number" placeholder="请输入取件人手机" class="mui-input-clear top" id="send_get_phone">
+            </div>
+        </div>
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" onclick="showLast('#save-commit-dive','#save-next-div')">上一步</button>
+            <button type="button" class="mui-btn mui-btn-primary" onclick="submitHandling()">保存提交</button>
+        </div>
+    </div>
+
+    <!--地址列表-->
+    <div id="address_list">
+        <ul class="address_list">
+            <li>
+                <div>
+                    <span class="user_name ellipsis"></span>
+                    <span class="set_default">设置默认</span>
+                    <span class="user_phone"></span>
+                    <br />
+                    <span class="user_location" province="13" city="105" district="1096"></span>
+                    <span class="user_address ellipsis"></span>
+                </div>
+                <img src="img/fingertips/address.png" alt="" class="address_edit">
+            </li>
+        </ul>
+        <div id="step"></div>
+        <div class="fix_footer_btns">
+            <button type="button" class="add_btn mui-btn mui-btn-primary">添加地址</button>
+        </div>
+    </div>
+    <!--新增地址-->
+<!--    <div id="address_add">-->
+<!--        <form class="mui-input-group">-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>联系人姓名</label>-->
+<!--                <input type="text" class="mui-input-clear" placeholder="请输入姓名">-->
+<!--            </div>-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>手机号码</label>-->
+<!--                <input type="text" class="mui-input-clear" placeholder="请输入手机号">-->
+<!--            </div>-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>所在地区</label>-->
+
+<!--            </div>-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>详细地址</label>-->
+<!--                <input type="text" class="mui-input-clear" placeholder="请输入街道地址">-->
+<!--            </div>-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>邮政编码</label>-->
+<!--                <input type="text" class="mui-input-clear" placeholder="请输入邮政编码">-->
+<!--            </div>-->
+<!--        </form>-->
+<!--        <div class="footer_btns">-->
+<!--            <button type="button" class="save_btn mui-btn mui-btn-primary">保存</button>-->
+<!--        </div>-->
+<!--    </div>-->
+    <!--操作地址-->
+    <div id="address_operate">
+        <form class="mui-input-group">
+            <div class="mui-input-row">
+                <label>联系人姓名</label>
+                <input type="text" class="mui-input-clear" placeholder="请输入姓名" id="username_operate">
+            </div>
+            <div class="mui-input-row">
+                <label>手机号码</label>
+                <input type="number" class="mui-input-clear" placeholder="请输入手机号" id="phone_operate">
+            </div>
+            <div class="mui-input-row">
+                <label>所在地区</label>
+                <input type="text" placeholder="请选择城市" readonly="readonly" id="location" name="location">
+            </div>
+            <div class="mui-input-row">
+                <label>详细地址</label>
+                <input type="text" class="mui-input-clear" placeholder="请输入街道地址" id="detail_operate">
+            </div>
+            <div class="mui-input-row">
+                <label>邮政编码</label>
+                <input type="text" class="mui-input-clear" placeholder="请输入邮政编码" id="postcode_operate" maxlength="6">
+            </div>
+        </form>
+        <div class="footer_btns">
+            <button type="button" class="update_btn mui-btn mui-btn-primary">确定</button>
+<!--            <button type="button" class="del_btn mui-btn mui-btn-primary">删除</button>-->
+        </div>
+    </div>
+
+    <div class="black_shade"></div>
+    <div id="work_guide">
+        <h4>办事指引</h4>
+        <div>
+            <img src="" alt="加载失败">
+        </div>
+        <p>我知道了</p>
+    </div>
+
+    <span style="display: none" id="matterId" th:text="${matterId}"></span>
+    <span style="display: none" id="matterCode" th:text="${matterCode}"></span>
+    <span style="display: none" id="dePhone" th:text="${dePhone}"></span>
+    <span style="display: none" id="dePhoneEnc" th:text="${dePhoneEnc}"></span>
+
+    <span style="display: none" id="personCid" th:text="${personCid}"></span>
+    <span style="display: none" id="personName" th:text="${personName}"></span>
+    <span style="display: none" id="link" th:text="${link}"></span>
+    <span style="display: none" id="caseId" th:text="${caseId}"></span>
+
+</form>
+
+
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+<!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+    <script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+    <script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+    <script type="text/javascript" src="js/app/fingertips/managerInfo.js?v=1.0.4"></script>
+
+</body>
+</html>

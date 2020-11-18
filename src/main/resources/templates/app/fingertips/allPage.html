@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title th:text="${orgName}"></title>
+    <!-- 引入 WeUI -->
+    <link rel="stylesheet" href="weui/css/weui.css"/>
+    <link rel="stylesheet" href="weui/css/weuix.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="weui/js/zepto.min.js"></script>
+    <script src="weui/js/zepto.weui.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+</head>
+<body ontouchstart>
+<!--<div class="page-hd">-->
+<div class="page-hd">
+    <h1 class="page-hd-title" th:text="${orgName}">
+    </h1>
+    <p class="page-hd-desc"></p>
+</div>
+
+<div id="matterAll">
+
+</div>
+<script th:inline="javascript">
+    $(function () {
+        var link = [[${link}]];
+        var orgId = [[${orgId}]];
+        var orgName = [[${orgName}]];
+        // $("#type_title").text(orgName);
+        // $.showLoading();
+        $.ajax({
+            url: getRootPath() + "/app/fingertips/matter/all",
+            // url:"http://19.202.141.200:8080/sdbst/app/fingertips/matter/all",
+            data: {
+                "orgId": orgId,
+                "starProperty": 4,
+                "pageNo": 1,
+                "pageSize": 200
+            },
+            type: "post",
+            dataType: "json",
+            // async: false,
+            beforeSend: function (xhr) {
+                $.showLoading();
+            },
+            success: function (data) {
+                var html = '';
+                var res = data.data
+                if ("200" == data.code) {
+                    if (res.total > 0) {
+                        for (var i = 0; i < res.total; i++) {
+                            if (res.data[i].children.length > 1) {
+                                html += '<a class="weui-cell weui-cell_access" href="javascript:;" onclick="openTwo(' + res.data[i].id + ')">\n' +
+                                    '    <div class="weui-cell__bd">\n' +
+                                    '        <p>' + res.data[i].name + '</p>\n' +
+                                    '    </div>\n' +
+                                    '    <div class="weui-cell__ft">\n' +
+                                    '    </div>\n' +
+                                    '</a>';
+                                html += '<div style="display: none" id="divName_' + res.data[i].id + '">';
+                                for (var j = 0; j < res.data[i].children.length; j++) {
+                                    html += '<a class="weui-cell weui-cell_access" style="padding-left: 50px;"href="app/fingertips/detail?id=' + res.data[i].children[j].id + '">\n' +
+                                        '        <div class="weui-cell__bd">\n' +
+                                        '            <p>' + res.data[i].children[j].matterName + '</p>\n' +
+                                        '        </div>\n' +
+                                        '        <div class="weui-cell__ft">\n' +
+                                        '        </div>\n' +
+                                        '    </a>';
+                                }
+                                html += '</div>';
+                            } else {
+                                html += '<a class="weui-cell weui-cell_access" href="app/fingertips/detail?id=' + res.data[i].children[0].id + '">\n' +
+                                    '    <div class="weui-cell__bd">\n' +
+                                    '        <p>' + res.data[i].name + '</p>\n' +
+                                    '    </div>\n' +
+                                    '    <div class="weui-cell__ft">\n' +
+                                    '    </div>\n' +
+                                    '</a>';
+                            }
+                        }
+                        $.hideLoading();
+                        $("#matterAll").html(html);
+                        $(".weui-cell.weui-cell_access").each(function (index, item) {
+                            var href = $(item).attr("href");
+                            $(item).attr("href", href + "&link=" + link);
+                        })
+                    }
+                } else {
+                    $.hideLoading();
+                    $.toast("暂无数据，请稍后重试!", 'text');
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                $.hideLoading();
+                $.toast("出错了，请稍后重试", 'text');
+            }
+        })
+    });
+
+    function openTwo(par) {
+        if ($("#divName_" + par).css("display") == "none") {
+            $("#divName_" + par).css("display", "block")
+        } else {
+            $("#divName_" + par).css("display", "none")
+        }
+    }
+
+</script>
+</body>
+</html>

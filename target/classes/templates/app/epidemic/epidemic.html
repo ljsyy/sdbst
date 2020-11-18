@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1,er-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>疫情集结号</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/base.js}"></script>
+    <script th:src="@{/js/app/echarts/echarts.js}"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            user-select: none;
+            -webkit-user-select: none;
+            height: 100%;
+        }
+
+        .header > img {
+            display: block;
+            width: 100%;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        .flexDiv {
+            display: flex;
+            align-items: center;
+        }
+
+        .titleBar {
+            height: 56px;
+            border-bottom: 1px solid #e9e9e9;
+            padding-left: 20px;
+            padding-right: 20px;
+            justify-content: space-between;
+        }
+
+        .titleBar > .leftBar {
+            margin-top: 4px;
+        }
+
+        .titleBar > .rightBar {
+            margin-top: 4px;
+            justify-content: end;
+        }
+
+        .titleBar .blue {
+            height: 12px;
+            width: 3px;
+            background: #4285F4;
+        }
+
+        .title {
+            color: #252525;
+            font-size: 14px;
+            margin-left: 6px;
+            font-weight: bold;
+        }
+
+        .showMore > span {
+            display: block;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .greyDiv {
+            margin-left: 6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 7px;
+            background: #f3f3f3;
+            text-align: center;
+        }
+
+        .articlelist {
+            margin-left: 25px;
+        }
+
+        .articlelist > li {
+            height: 44px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .articlelist > li:last-child {
+            border-bottom: none;
+        }
+
+        .articlelist > li > .focus {
+            font-size: 12px;
+            width: 34px;
+            min-width: 34px;
+            height: 21px;
+            line-height: 20px;
+            border: 1px solid #F3A953;
+            color: #F3A953;
+            border-radius: 4px;
+            text-align: center;
+            margin-right: 6px;
+        }
+
+        .articlelist > li > .con {
+            font-size: 14px;
+            color: #000;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            padding-right: 30px;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+            height: 44px;
+            width: 100%;
+            line-height: 44px;
+        }
+
+        .leftArrow {
+            position: absolute;
+            top: 200px;
+            left: 20px;
+        }
+
+        .leftArrow > img {
+            width: 26px;
+            height: 26px;
+        }
+
+        .rightArrow {
+            position: absolute;
+            top: 200px;
+            right: 20px;
+        }
+
+        .rightArrow > img {
+            width: 26px;
+            height: 26px;
+        }
+
+        .indicatorUl {
+            width: 100%;
+            text-align: center;
+        }
+
+        .indicatorUl > li {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            margin-left: 3px;
+            margin-right: 3px;
+            background: #C6C3CE;
+            border-radius: 50%;
+        }
+
+        .indicatorUl > li.active {
+            background: #595867;
+        }
+
+        .menulist {
+            margin-left: 25px;
+        }
+
+        .menulist > li {
+            height: 48px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .menulist > li:last-child {
+            border-bottom: none;
+        }
+
+        .menulist > li img {
+            width: 20px;
+            height: 20px;
+            margin-left: 16px;
+            margin-right: 20px;
+            vertical-align: middle;
+        }
+
+        .menulist > li span {
+            color: #252525;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div class="container" style="padding-bottom: 60px;">
+    <div class="header">
+        <img src="img/epidemic/yqbanner.png" alt="">
+    </div>
+    <div>
+        <div class="titleBar flexDiv">
+            <div class="leftBar flexDiv">
+                <div class="blue"></div>
+                <div class="title">
+                    顺德动态速览
+                </div>
+            </div>
+            <!--<div class="rightBar flexDiv">
+                <div class="showMore">
+                    <span><a th:href="@{/epidemic/list}">查看更多</a></span>
+                </div>
+                <a th:href="@{/epidemic/list}">
+                    <div class="greyDiv">
+                        <span>></span>
+                    </div>
+                </a>
+            </div>-->
+        </div>
+        <div>
+            <ul class="articlelist">
+                <li class="flexDiv">
+                    <span class="focus">快讯</span>
+                    <span class="con">连夜作战！全面狙击活禽和野生动物违法连夜作战！全面狙击活禽和野生动物违法</span>
+                </li>
+                <li class="flexDiv">
+                    <span class="con">区市场监管局和经促局深入北滘镇开展疫情防</span>
+                </li>
+                <li class="flexDiv">
+                    <span class="con">郭文海:复工开学前全面排查企业员工和师生</span>
+                </li>
+                <li class="flexDiv">
+                    <span class="focus">要闻</span>
+                    <span class="con">顺德确诊病例出现病症期间曾逗留过的小区…</span>
+                </li>
+                <li class="flexDiv">
+                    <span class="con">『我现在感觉很好！』佛山首位确诊新冠康复</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--<div style="height: 318px;position: relative;">-->
+        <!--<div class="titleBar flexDiv" style="border-top: 1px solid #e9e9e9">-->
+            <!--<div class="leftBar flexDiv">-->
+                <!--<div class="blue"></div>-->
+                <!--<div class="title">-->
+                    <!--疫情最新动态-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div style="width: 100%;position: relative;overflow: hidden;height: 260px;">-->
+            <!--<div id="charts"-->
+                 <!--style="position: absolute;display:flex;left: 0;top: 0;width: 300%;height: 260px;">-->
+                <!--<div id="echartContainer1" style="float: left;height:230px;padding-top: 30px;"></div>-->
+                <!--&lt;!&ndash;<div id="echartContainer2" style="float: left;height:230px;padding-top: 30px;"></div>-->
+                <!--<div id="echartContainer3" style="float: left;height:230px;padding-top: 30px;"></div>&ndash;&gt;-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+        <!--&lt;!&ndash;<div class="leftArrow">-->
+            <!--<img src="img/epidemic/back.png" alt="">-->
+        <!--</div>-->
+        <!--<div class="rightArrow">-->
+            <!--<img src="img/epidemic/front.png" alt="">-->
+        <!--</div>&ndash;&gt;-->
+    <!--</div>-->
+
+    <!--<div class="indicatorDiv">
+        <ul class="indicatorUl">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>-->
+
+    <div>
+        <div class="titleBar flexDiv">
+            <div class="leftBar flexDiv">
+                <div class="blue"></div>
+                <div class="title">
+                    疫情申报
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="menulist">
+                <li class="flexDiv">
+                    <a href="https://www.shunde.gov.cn/yqzx/">
+                        <img src="img/epidemic/clue.png" alt="">
+                        <span>疫情线索</span>
+                    </a>
+                </li>
+                <li class="flexDiv">
+                    <a href="ab42e3f2e94d6282ec8e0e3d123b79431a579878058f43e2b70b9f842b9b5fdd11b80039de3bd3dd268d8b03681fd07dafeb2ad8c1462fbdd60208337eb6b24f5http://218.104.177.21:8081/fygk/iShundeLogin">
+                        <img src="img/epidemic/report.png" alt="">
+                        <span>疫情上报</span>
+                    </a>
+                </li>
+                <li class="flexDiv">
+                    <a href="http://www.fshszh.gov.cn">
+                        <img src="img/epidemic/donate.png" alt="">
+<!--                    <a href="a7d1575238b94953abcc0dc4dfcf89eb7f44676eb67643f9a4dc651334d649ce281ab67841055804dbc95f0964794d10e2d5580ed9e22fb0e0140ba6020c554e3https://sdwg.shunde.gov.cn:80/eGovaPublic/third/oauth/login">捐赠申报</a>-->
+                        <span>捐赠申报</span>
+                    </a>
+                </li>
+<!--                <li class="flexDiv">-->
+<!--                    <img src="img/epidemic/travel.png" alt="">-->
+<!--                    <a href="">行程查询</a>-->
+<!--                </li>-->
+<!--                <li class="flexDiv">-->
+<!--                    <img src="img/epidemic/travel.png" alt="">-->
+<!--                    <a href="http://sdbst2.shunde.gov.cn:8090/sdbst/data/sjMedicalDrugs/personRecord">行程查询</a>-->
+<!--                </li>-->
+                <li class="flexDiv">
+                    <a href="http://m.mp.oeeee.com/h5/pages/v20/nCovcase/#/">
+                        <img src="img/epidemic/travel.png" alt="">
+                        <span>确诊查询</span>
+                    </a>
+                </li>
+                <!--<li class="flexDiv">
+                    <a href="ab17612fd7cdabb7f33090d5e84955cda4f86121389e60d98aefa7b5cb567456f7e31546ce63db0d122e70ee0e9f4b2f21b85b9f4fa3867b51c2b5bcdb6aa37b9http://sdbst2.shunde.gov.cn:8090/sdbst/data/sjMedicalDrugs/ywRecord">
+                        <img src="img/epidemic/expert.png" alt="">
+                        <span>工作人员区</span>
+                    </a>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <div class="titleBar flexDiv" style="border-top: 1px solid #E9E9E9;">
+            <div class="leftBar flexDiv">
+                <div class="blue"></div>
+                <div class="title">
+                    疫情知识
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="menulist">
+                <li class="flexDiv">
+                    <a href="http://news.hsw.cn/system/2020/0204/1152500.shtml">
+                        <img src="img/epidemic/expert.png" alt="">
+                        <span>专家解读</span>
+                    </a>
+                </li>
+                <li class="flexDiv">
+                    <a href="https://xw.qq.com/cmsid/20200125A0COBK00?f=newdc">
+                        <img src="img/epidemic/allegation.png" alt="">
+                        <span>辟谣信息</span>
+                    </a>
+                </li>
+                <li class="flexDiv">
+                    <a href="http://www.gd.gov.cn/gdywdt/zwzt/yqfk/ywjj/content/mpost_2878499.html">
+                        <img src="img/epidemic/defend.png" alt="">
+                        <span>防护措施</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--<div>
+        <div class="titleBar flexDiv" style="border-top: 1px solid #E9E9E9;">
+            <div class="leftBar flexDiv">
+                <div class="blue"></div>
+                <div class="title">
+                    爱心互动
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="menulist">
+                <li class="flexDiv">
+                    <img src="img/epidemic/psycho.png" alt="">
+                    <a href="">心理咨询</a>
+                </li>
+                <li class="flexDiv">
+                    <img src="img/epidemic/answer.png" alt="">
+                    <a href="">疫情咨询和问答</a>
+                </li>
+                <li class="flexDiv">
+                    <img src="img/epidemic/public.png" alt="">
+                    <a href="">捐赠信息公开</a>
+                </li>
+            </ul>
+        </div>
+    </div>-->
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        initWidth();
+        initArticle();
+        //initCharts();
+        initEvent();
+
+    });
+
+    var animationCount = 0;
+    var indicatorActiveIndex = 0;
+
+    function initWidth() {
+        var width = parseFloat($(document).width());
+        console.log(width);
+        $("#echartContainer1").css("width", width);
+        $("#echartContainer2").css("width", width);
+        $("#echartContainer3").css("width", width);
+    }
+
+    //初始化新闻列表
+    function initArticle() {
+        $.ajax({
+            url: basePath() + "/epidemic/articleList",
+            data: {categoryId: "2596146f7dfd4e06af57d3cbfb4c72b0"},
+            type: "get",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                console.log(result)
+                if (result.code == 200) {
+                    var str = "";
+                    for (var i = 0; i < 5; i++) {
+                        str += " <li class=\"flexDiv\">\n";
+                        if (i ==0) {
+                            str += "<span class=\"focus\">快讯</span>\n";
+                        } else if(i==2){
+                            str += "<span class=\"focus\">焦点</span>\n";
+                        }
+                        str += "<span class=\"con\" ><a href='" + result.data[i].link + "'>" + result.data[i].title + "</a></span>\n" +
+                            "</li>"
+                    }
+                    $(".articlelist").empty();
+                    $(".articlelist").append(str);
+                }
+            }
+        })
+    }
+
+    function initCharts() {
+        //异步请求获取数据
+        $.ajax({
+            url: basePath() + "/epidemic/echartsData",
+            data: {type: "1"},
+            type: "get",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                console.log(result);
+                var option1 = {
+                    title: {
+                        text: "全国疫情累计趋势图",
+                        subtext: result.data.newCount,
+                        x: "center",
+                        y: "top",
+                        textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+                            "fontWeight": "bolder",
+                            fontSize: 20,
+                            color: "#293653",
+                            fontStyle: 'normal'
+                        },
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: result.data.dates
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '确诊病例',
+                    },
+                    grid: {
+                        containLabel:true
+                    },
+                    series: [{
+                        data: result.data.amounts,
+                        type: 'line',
+                        smooth: true
+                    }]
+                };
+                var myChart1 = echarts.init(document.getElementById('echartContainer1'));
+                myChart1.setOption(option1)
+            }
+        })
+
+        //异步请求获取数据
+        $.ajax({
+            url: basePath() + "/epidemic/echartsData",
+            data: {type: "2"},
+            type: "get",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                console.log(result);
+                var option2 = {
+                    title: {
+                        text: "全省疫情累计趋势图",
+                        subtext: result.data.newCount,
+                        x: "center",
+                        y: "top",
+                        textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+                            "fontWeight": "bolder",
+                            fontSize: 20,
+                            color: "#293653",
+                            fontStyle: 'normal'
+                        },
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: result.data.dates
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '确诊病例'
+                    },
+                    series: [{
+                        data: result.data.amounts,
+                        type: 'line',
+                        smooth: true
+                    }]
+                };
+                var myChart2 = echarts.init(document.getElementById('echartContainer2'));
+                myChart2.setOption(option2)
+            }
+        })
+
+        //异步请求获取数据
+        $.ajax({
+            url: basePath() + "/epidemic/echartsData",
+            data: {type: "3"},
+            type: "get",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                console.log(result);
+                var option3 = {
+                    title: {
+                        text: "全市疫情累计趋势图",
+                        subtext: result.data.newCount,
+                        x: "center",
+                        y: "top",
+                        textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+                            "fontWeight": "bolder",
+                            fontSize: 20,
+                            color: "#293653",
+                            fontStyle: 'normal'
+                        },
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: result.data.dates
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '确诊病例',
+                    },
+                    series: [{
+                        data: result.data.amounts,
+                        type: 'line',
+                        smooth: true
+                    }]
+                };
+                var myChart3 = echarts.init(document.getElementById('echartContainer3'));
+                myChart3.setOption(option3)
+            }
+        })
+
+    }
+
+    function initEvent() {
+        $(".leftArrow").click(function (e) {
+            if (animationCount == 0) {
+                var left = parseFloat($("#charts").css("left"));
+                if (left < 0) {
+                    chartAnimation("#charts", left + $(document).width());
+                    animationCount++;
+                }
+            }
+        })
+
+        $(".rightArrow").click(function (e) {
+            if (animationCount == 0) {
+                var left = parseFloat($("#charts").css("left"));
+                if (left > -2 * $(document).width()) {
+                    chartAnimation("#charts", left - $(document).width());
+                    animationCount++;
+                }
+            }
+        })
+    }
+
+    function chartAnimation(id, to) {
+        $(id).animate({
+            left: to
+        }, 300, function () {
+            animationCount = 0;
+            var left = parseFloat($("#charts").css("left"));
+            var width = $(document).width();
+            if (left == 0) {
+                indicatorActiveIndex = 0
+            } else if (left == -width) {
+                indicatorActiveIndex = 1
+            } else if (left == -2 * width) {
+                indicatorActiveIndex = 2
+            }
+            indicatorAnimation(indicatorActiveIndex);
+        })
+    }
+
+    function indicatorAnimation(activeIndex) {
+        $(".indicatorUl>li").removeClass("active").eq(activeIndex).addClass("active");
+    }
+</script>
+</html>

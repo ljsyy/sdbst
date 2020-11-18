@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.SjSurServiceMapper">
+    
+	<sql id="sjSurServiceColumns">
+		a.id AS "id",
+		a.service_type AS "serviceType",
+		a.company_name AS "companyName",
+		a.company_adress AS "companyAdress",
+		a.detailed_adress AS "detailedAdress",
+		a.owned_town AS "ownedTown",
+		a.telephone AS "telephone",
+		a.longitude AS "longitude",
+		a.latitude AS "latitude",
+		a.food_grading AS "foodGrading",
+		a.food_type AS "foodType",
+		a.remarks AS "remarks",
+		a.school_section AS "schoolSection",
+		a.mian_ji as "mianJi",
+		a.people_number as "peopleNumber",
+		a.kf_time as "kfTime",
+		a.men_piao as "menPiao",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sjSurServiceJoins">
+	</sql>
+    
+    <select id="getTypeList" resultType="com.unifs.sdbst.app.bean.life.SjSurService">
+    	SELECT a.id  AS "lableId",a.label AS "label" ,a.value AS "serviceType" FROM(SELECT
+				A."ID",A .LABEL,A."VALUE",A."SORT"
+			FROM
+				SYS_DICT A
+			WHERE
+				A ."TYPE" = 'ZBFW' ORDER BY A."SORT")a
+		LEFT JOIN
+			(
+			SELECT DISTINCT
+				SERVICE_TYPE AS "type"
+			FROM
+				SJ_SUR_SERVICE)b ON a.label = b."type" ORDER BY a.SORT DESC
+  	 </select>
+    
+    <select id="getAll" resultType="com.unifs.sdbst.app.bean.life.SjSurService">
+    	SELECT
+			a.SERVICE_TYPE as "serviceType",
+			a.company_name AS "companyName",
+			a.COMPANY_ADRESS as "companyAdress",
+			a.LONGITUDE as "longitude",
+			a.LATITUDE as "latitude"
+		FROM
+			SJ_SUR_SERVICE a
+		<include refid="sjSurServiceJoins"/>
+		<where>
+			<if test="type != null and type != ''">
+				a.service_type = #{type}
+			</if>
+		</where>
+    </select>
+    
+	<select id="get" resultType="com.unifs.sdbst.app.bean.life.SjSurService">
+		SELECT 
+			<include refid="sjSurServiceColumns"/>
+		FROM sj_sur_service a
+		<include refid="sjSurServiceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.life.SjSurService">
+		SELECT 
+			<include refid="sjSurServiceColumns"/>
+		FROM sj_sur_service a
+		<include refid="sjSurServiceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="serviceType != null and serviceType != ''">
+				AND a.service_type = #{serviceType}
+			</if>
+			<if test="companyName != null and companyName != ''">
+				AND a.company_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{companyName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{companyName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{companyName},'%')</if>
+			</if>
+			<if test="companyAdress != null and companyAdress != ''">
+				AND a.company_adress LIKE 
+					<if test="dbName == 'oracle'">'%'||#{companyAdress}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{companyAdress}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{companyAdress},'%')</if>
+			</if>
+			<if test="detailedAdress != null and detailedAdress != ''">
+				AND a.detailed_adress LIKE 
+					<if test="dbName == 'oracle'">'%'||#{detailedAdress}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{detailedAdress}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{detailedAdress},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.unifs.sdbst.app.bean.life.SjSurService">
+		SELECT 
+			<include refid="sjSurServiceColumns"/>
+		FROM sj_sur_service a
+		<include refid="sjSurServiceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sj_sur_service(
+			id,
+			service_type,
+			company_name,
+			company_adress,
+			detailed_adress,
+			owned_town,
+			telephone,
+			longitude,
+			latitude,
+			food_grading,
+			food_type,
+			remarks,
+			school_section,
+			mian_ji,
+			people_number,
+			kf_time,
+			men_piao
+		) VALUES (
+			#{id},
+			#{serviceType},
+			#{companyName},
+			#{companyAdress},
+			#{detailedAdress},
+			#{ownedTown},
+			#{telephone},
+			#{longitude},
+			#{latitude},
+			#{foodGrading},
+			#{foodType},
+			#{remarks},
+			#{schoolSection},
+			#{mianJi},
+			#{peopleNumber},
+			#{kfTime},
+			#{menPiao}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sj_sur_service SET 	
+			service_type = #{serviceType},
+			company_name = #{companyName},
+			company_adress = #{companyAdress},
+			detailed_adress = #{detailedAdress},
+			owned_town = #{ownedTown},
+			telephone = #{telephone},
+			longitude = #{longitude},
+			latitude = #{latitude},
+			food_grading = #{foodGrading},
+			food_type = #{foodType},
+			remarks = #{remarks},
+			school_section = #{schoolSection},
+			mian_ji = #{mianJi},
+			people_number = #{peopleNumber},
+			kf_time = #{kfTime},
+			men_piao = #{menPiao}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sj_sur_service SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

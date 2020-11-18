@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="app/css/base.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/list.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <title>园丁风采</title>
+
+    <style>
+
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;background: #fff;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        a{text-decoration:none;color: #000;}
+
+        .main{width: 100%;}
+        .line{
+            border-bottom: solid 1px #dddddd;
+            padding: 5px 10px;
+            position: relative;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+        }
+        .image{
+            width: 100px;
+            height: 70px;
+            margin: 5px 5px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+        }
+        .image img{width: 100%;height: 90%;vertical-align: middle;}
+        .news{flex: 2;position: relative;}
+        .title{
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            letter-spacing: 1px;
+            overflow: hidden;
+            padding-left: 5px;
+        }
+        .time{
+            position: absolute;
+            bottom: 1px;
+            color: #aaaaaa;
+            font-size: 13px;
+            text-align: right;
+            right: 10px;
+            background: transparent;
+        }
+        .main{
+            overflow: scroll;
+            height: 100%;
+            position: relative;
+        }
+    </style>
+
+    <script type="text/javascript" th:inline="javascript">
+        var pageNum = 1;
+        $(document).ready(function(){
+
+            /* 下拉到底加载下一页 */
+            $(".main").bind("scroll",function(){
+                var bottom=$(this).scrollTop() + $(this).height();
+                if(bottom==$(this)[0].scrollHeight){
+                    pageNum = pageNum + 1;
+                    article();
+                }
+            });
+
+            article();
+        });
+
+        //获取文章
+        function article(){
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url: basePath()+"/cms/articleApi/articleMap",
+                data: "pageIndex="+pageNum+"&infoType="+[[${id}]],
+                type:"POST",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    load_ani.remove();
+                    console.log(result)
+                    var obj = result.obj;
+                    for(var i in obj){
+                        var href;
+                        if(obj[i].link.indexOf("http")==0){ 			// 跳转的是 外网网址
+                            href=obj[i].link;
+                        }else if(obj[i].link.indexOf("/app/artic")==0){	// 跳转的是 内部网址
+                            href=basePath()+"/app/artic/cityView?contentId="+obj[i].id;
+                        }
+                        $(".main").append(
+                            '<a class="line" href="'+href+'">'+
+                            '<div class="image"><img src="http://sdbst2.shunde.gov.cn/sdbstImages'+obj[i].image+'" /></div>'+
+                            '<div class="news">'+
+                            '<p class="title">'+obj[i].title+'</p>'+
+                            '<p class="time">'+obj[i].publishTime+'</p>'+
+                            '</div>'+
+                            '</a>'
+                        );
+                    }
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+
+<!-- 文章 -->
+<div class="main">
+
+</div>
+
+</body>
+</html>

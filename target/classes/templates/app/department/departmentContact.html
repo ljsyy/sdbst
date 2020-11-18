@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1,er-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>政府部门电话</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/base.js}"></script>
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background: #f7f7f7;}
+        body{}
+        a{text-decoration:none;color: #000;}
+
+        .container{}
+        .navi{
+            display: -webkit-inline-box;
+            background: #fff;
+            width: 100%;
+            border-bottom: solid 1px #d4d4d4;
+            color: #6f6666;
+        }
+        .navi .naviBlock{
+            width: 25%;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .dep{
+            width: 100%;
+            text-align: -webkit-auto;
+        }
+        .dep .depBlock{
+            display: -webkit-inline-box;
+            width: 42%;
+            background: #fff;
+            padding: 10px 5px;
+            text-align: -webkit-left;
+            margin: 10px 2% 0 2%;
+            vertical-align: -webkit-baseline-middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 四级滑块 -->
+        <div class="navi">
+            <!-- <div class="naviBlock">党政机关</div>
+            <div class="naviBlock">党政机关2</div>
+            <div class="naviBlock">党政机关3</div>
+            <div class="naviBlock">党政机关4</div> -->
+        </div>
+
+        <!-- 部门 -->
+        <div class="dep">
+            <!-- <a class="depBlock">企业服务促进科企业服务促进科</a>
+            <a class="depBlock">企业服务促进科</a>
+            <a class="depBlock">企业服务促进科</a>
+            <a class="depBlock">企业服务促进科</a>
+            <a class="depBlock">企业服务促进科</a> -->
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        getDepartmentType();
+        $(".naviBlock").eq(0).click();
+
+    });
+    var text = '';
+    function getDepartmentType(){
+        $.ajax({
+            url: basePath()+'/department/getDepartmentType',
+            type: 'GET',
+            dataType: 'json',
+            async:false,
+            success: function(data) {
+                var list = data.data;
+                var html = "";
+                for(var i in list){
+                    html += '<div class="naviBlock">'+list[i]+'</div>';
+                };
+                $(".navi").html(html);
+                /* 点击效果 */
+                $(".naviBlock").click(function(){
+                    $(".naviBlock").css("color","#6f6666");
+                    $(".naviBlock").css("border-bottom","0");
+                    $(this).css("color","#eb3f29");
+                    $(this).css("border-bottom","solid 2px #eb3f29");
+                    text = $(this).text();
+                    getDepartmentByType();
+                });
+            },
+            error: function(data) {
+                console.error(data);
+            }
+        })
+    }
+    function getDepartmentByType(){
+        $.ajax({
+            url: basePath()+'/department/getDepartmentByType',
+            type: 'GET',
+            data:{
+                department_type:text
+            },
+            dataType: 'json',
+            async:false,
+            success: function(data) {
+                var html = '';
+                var list = data.data;
+                for(var i in list){
+                    var href = basePath()+'/department/departmentDetailContact?dep_name='+list[i];
+                    html += '<a class="depBlock" href="'+href+'">'+list[i]+'</a>'
+                }
+                $('.dep').html(html);
+            },
+            error: function(data) {
+                console.error(data);
+            }
+        })
+    }
+</script>
+</html>

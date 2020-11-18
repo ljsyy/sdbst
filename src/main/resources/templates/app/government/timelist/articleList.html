@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="decorator" content="blank"/>
+<!--<link rel="stylesheet" href="${ctxStatic}/modules/app/css/list.css" />-->
+<!--<link rel="stylesheet" href="${ctxStatic}/modules/app/css/base.css" />-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+
+    <script src="js/app/list.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+<!-- <title>项目申报</title> -->
+<title th:text="${title}"></title>
+
+<style type="text/css">
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;background: #fff;}
+.container {padding: 0;max-width: 750px;}
+ html,.container{height: 100%;}
+a{text-decoration:none;color: #000;}
+.main{width: 100%;}
+.list{background: #fff;border-bottom: solid 1px #e5e5e5;padding: 10px;position: relative;width: 100%;box-sizing: border-box;display: inline-block;}
+.title{padding-bottom: 10px;font-size: 16px;}
+.time{text-align: end;color: #999;font-size: 14px;}
+.main{overflow: scroll;height: 100%;position: relative;}
+</style>
+
+</head>
+<body>
+
+<div class="main">
+	
+</div>
+
+</body>
+
+</html>
+<script th:inline="javascript">
+    var id = [[${id}]];
+    // console.log(id);
+</script>
+<script type="text/javascript">
+var pageNum = 1; 
+
+var first = true;
+$(document).ready(function(){
+	
+	/* 下拉到底加载下一页 */
+	/* $(".main").bind("scroll",function(){
+		alert()
+		var bottom=$(this).scrollTop() + $(this).height();
+		  if(bottom==$(this)[0].scrollHeight){
+			  pageNum = pageNum + 1;
+			  alert(1);
+		  }	
+	}); */
+	
+	$(window).scroll(function(){
+	　　//判断是否滑动到页面底部
+		if($(window).scrollTop() === $(document).height() - $(window).height()){
+	           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+	        if(first){
+	        	pageNum = pageNum + 1;
+				article();
+	        }else{
+	        	webToast("已加载到底部！","middle",1000);
+	        	return;
+	        }
+			
+		}
+	});
+	
+	article();
+});
+
+//获取列表
+function article(){
+	$.ajax({ 
+		url: basePath()+"/cms/articleApi/articleMap",
+		data: "pageIndex="+pageNum+"&pageSize=20&infoType="+id,
+		type:"POST",
+		dataType:"json",
+		async:false,
+		success:function(result){
+			console.log(result)
+			var obj = result.obj;
+			//console.log(obj.length)
+			if(obj.length < 20){
+				first = false;
+			}
+			for(var i in obj){
+				var href;
+				if(obj[i].link.indexOf("http")==0){ 			// 跳转的是 外网网址
+					href=obj[i].link;
+				}else if(obj[i].link.indexOf("/app/artic")==0){	// 跳转的是 内部网址
+					// href=basePath()+"/app/menu/interface/getData?url="+obj[i].link+"&title=新闻&share=%20&articleId="+obj[i].id;
+                    href=basePath()+"/app/artic/cityView?title=新闻&contentId="+obj[i].id;
+
+                }else{											// 跳转的是内部sid详情链接(用于认识顺德-旅游信息)
+					href=basePath()+obj[i].link+"&noHead=true";
+				}
+				$(".main").append(
+					'<a class="list" href="'+href+'">'+
+						'<p class="title">'+obj[i].title+'</p>'+
+						'<p class="time">'+obj[i].publishTime+'</p>'+
+					'</a>'
+				)
+			}
+			
+			
+		}
+	});
+}
+</script>

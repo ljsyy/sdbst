@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>行政许可</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <style>
+        /*搜索*/
+        #search{border-bottom: 0;}
+        #search,#search-details{background: #fff;position: relative;padding: 10px 15px;    box-sizing: border-box;}
+        #search-details p{margin-bottom: 10px;color:#3A3A3A;padding:0 15px;}
+        #search-details div{color:#3A3A3A;}
+        #search-details div li{display: inline-block;border: solid 2px #999999;margin: 0 10px 10px 0; padding:2px 10px;    border-radius: 5px;}
+        #search-details .details-botton{padding: 8px 0;margin: 0 20px 0 0;flex: 1;background: #EB413D;color: white;border-radius: 5px;}
+        #search-details .choose{background: #999;color: #fff;}
+        .line{
+            border-bottom: #f4f6f8 2px solid;
+            line-height: 50px;
+            padding-left: 15px;
+        }
+        #xdrmc,#xkwsh,#xkmc{
+            height: 30px;
+            line-height: 30px;
+            text-align: right;
+            float: right;
+            width: 55%;
+            margin-right: 28px;
+            margin-top: 11px;
+            border: none;
+        }
+        #showdata{}
+        .list1{margin-top: 10px;background: #fff;}
+        .list1 .title span{
+            font-size: 18px;
+            margin-left: 0px;
+            flex: 1;
+            padding-left: 10px;
+        }
+        .list1 .title{
+            border-bottom: 0;
+            line-height: 40px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        .list1 .title .xiala{
+            float: right;
+        }
+        .list1 .title .xiala.up{
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+        }
+        .list1 .info.close{
+            display:none;
+        }
+        .icon{vertical-align: top;}
+        .info{}
+        .info .line{
+            display: flex;
+            border-top: solid 1px #dcdcdc;
+            background: #fff;
+            padding-left: 0;
+            line-height: normal;
+        }
+        .info .line .type{
+            background: #fcf5f5;
+            width: 40%;
+            padding: 5px;
+        }
+        .info .line .value{padding: 5px;width: 60%;word-break: break-all;}
+
+    </style>
+
+    <script type="text/javascript">
+        var pagesize = 20;
+
+        $(document).ready(function(){
+
+            get();
+        });
+
+        /* 显示搜索框 */
+        function show(){
+            $("#search-details").css("display","block");//显示div
+        }
+        /* 取消 */
+        function cancel(){
+            $("#search-details").css("display","none");//隐藏div
+        }
+
+        /* 查询 */
+        function search(){
+            $('#showdata').html("");
+            pagesize = 300;
+            get();
+        }
+
+        /* 获取 */
+        function get(){
+
+            var xdrmc = $("#xdrmc").val();
+            var xkwsh = $("#xkwsh").val();
+            var xkmc = $("#xkmc").val();
+            $("#search-details").css("display","none");//隐藏div
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url: basePath()+"/app/menu/interface/xzxk",
+                data: "pageNum=1&pageSize="+pagesize+"&xdrmc="+xdrmc+"&xkwsh="+xkwsh+"&xkmc="+xkmc,
+                type:"post",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    load_ani.remove();
+                    console.log(result)
+                    //$('#showdata').html("");
+                    $("#search-details").css("display","none");//隐藏div
+                    var json = result.data;
+                    //alert(json.length);
+                    if(json.length == 0){
+                        //alert("查询无记录");
+                        webToast("查询无数据！","middle",3000);
+                    }
+                    for(var i in json){
+                        var BZ;	//备注
+                        if(json[i].BZ == null || json[i].BZ == ""){
+                            BZ = "暂无";
+                        }else{
+                            BZ = json[i].BZ;
+                        }
+                        var GSDJM;	//工商登记码
+                        if(json[i].XK_XDR_GSD == null || json[i].XK_XDR_GSD == ""){
+                            GSDJM = "暂无记录";
+                        }else{
+                            GSDJM = json[i].XK_XDR_GSD;
+                        }
+                        var idCard;	//身份证
+                        if(json[i].XK_XDR_SFZ == null || json[i].XK_XDR_SFZ == ""){
+                            idCard = "暂无记录";
+                        }else{
+                            idCard = json[i].XK_XDR_SFZ;
+                        }
+                        var SWDJH;	//税务登记号
+                        if(json[i].XK_XDR_SWD == null || json[i].XK_XDR_SWD == ""){
+                            SWDJH = "暂无记录";
+                        }else{
+                            SWDJH = json[i].XK_XDR_SWD;
+                        }
+                        var ZZJGDM;	//组织机构代码
+                        if(json[i].XK_XDR_ZDM == null || json[i].XK_XDR_ZDM == ""){
+                            ZZJGDM = "暂无记录";
+                        }else{
+                            ZZJGDM = json[i].XK_XDR_ZDM;
+                        }
+                        var XKNR;	//许可内容
+                        if(json[i].XK_NR == null || json[i].XK_NR == ""){
+                            XKNR = "暂无记录";
+                        }else{
+                            XKNR = json[i].XK_NR;
+                        }
+                        var SPLB;	//审批类别
+                        if(json[i].XK_SPLB == null || json[i].XK_SPLB == ""){
+                            SPLB = "暂无记录";
+                        }else{
+                            SPLB = json[i].XK_SPLB;
+                        }
+                        var FRXM;	//姓名
+                        if(json[i].XK_FR == null || json[i].XK_FR == ""){
+                            FRXM = "暂无记录";
+                        }else{
+                            FRXM = json[i].XK_FR;
+                        }
+                        $("#showdata").append(
+                            '<div class="list1">'+
+                            '<div class="title">'+
+                            '<img class="icon" src="img/new/file.png" height="30">'+
+                            '<span>项目名称：'+json[i].XK_XDR+'</span>'+
+                            '<img class="xiala" src="img/menu/shangla.png" height="10">'+
+                            '</div>'+
+                            '<div class="info close">'+
+                            '<div class="line">'+
+                            '<p class="type">法定代表人</p>'+
+                            '<p class="value">'+FRXM+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">行政许可决定书文号</p>'+
+                            '<p class="value">'+json[i].XK_WSH+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">许可内容</p>'+
+                            '<p class="value">'+XKNR+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">行政相对人名称</p>'+
+                            '<p class="value">'+json[i].XK_XDR+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">统一社会信用代码</p>'+
+                            '<p class="value">'+json[i].XK_XDR_SHX+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">组织机构代码</p>'+
+                            '<p class="value">'+ZZJGDM+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">工商登记码</p>'+
+                            '<p class="value">'+GSDJM+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">税务登记号</p>'+
+                            '<p class="value">'+SWDJH+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">居民身份证号</p>'+
+                            '<p class="value">'+idCard+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">许可决定日期</p>'+
+                            '<p class="value">'+json[i].XK_JDRQ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">许可截止期</p>'+
+                            '<p class="value">'+json[i].XK_JZQ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">许可机关</p>'+
+                            '<p class="value">'+json[i].XK_XZJG+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">当前状态</p>'+
+                            '<p class="value">'+json[i].XK_ZT+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">地方编码</p>'+
+                            '<p class="value">'+json[i].DFBM+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">审批类别</p>'+
+                            '<p class="value">'+SPLB+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">备注</p>'+
+                            '<p class="value">'+BZ+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">数据更新时间戳</p>'+
+                            '<p class="value">'+json[i].SJC+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'
+                        );
+                    }
+
+                    $(".list1 .title").unbind().click(function(){
+                        if($(this).parent().find(".info").hasClass("open")){
+                            $(this).parent().find(".info").removeClass("open").addClass("close");
+                            $(this).find(".xiala").removeClass("up");
+                        }else{
+                            $(this).parent().find(".info").removeClass("close").addClass("open");
+                            $(this).find(".xiala").addClass("up");
+
+                        }
+
+                    });
+
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+<!-- 搜索框 -->
+<div id="search-choose">
+    <div id="search" onclick="show()" >
+        <div style="background: #F4F6F8;border-radius: 5px;">
+            <img src="img/map/sousuo.jpg" height="30" style="vertical-align: middle;margin: 0 5px;padding: 5px;"/>
+            <span style="color: #ABA9AB;background: transparent;font-size: 17px;vertical-align: middle;">请输入搜索信息</span>
+        </div>
+    </div>
+    <div id="search-details" style="padding:0;display:none;">
+        <div class="line">企业名称<input id="xdrmc" placeholder="请输入"/></div>
+        <div class="line">许可文书号<input id="xkwsh" placeholder="请输入"/></div>
+        <div class="line">许可项目名称<input id="xkmc" placeholder="请输入"/></div>
+        <p id="button" style="padding-top: 8px;">
+            <span id="exit" onclick="cancel()">取消</span>
+            <span id="request_no" onclick="search()">查询</span>
+        </p>
+    </div>
+</div>
+
+<!-- 内容 -->
+<div id="showdata">
+
+</div>
+
+</body>
+</html>

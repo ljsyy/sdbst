@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.traffic.MapCoordinateMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.traffic.MapCoordinate" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATE_BY" property="createBy" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_BY" property="updateBy" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="LAT" property="lat" jdbcType="VARCHAR" />
+    <result column="LNG" property="lng" jdbcType="VARCHAR" />
+    <result column="OLD_ID" property="oldId" jdbcType="VARCHAR" />
+    <result column="OLD_LAT" property="oldLat" jdbcType="VARCHAR" />
+    <result column="OLD_LNG" property="oldLng" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="CONTACTS" property="contacts" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="VARCHAR" />
+    <result column="CREATER" property="creater" jdbcType="VARCHAR" />
+    <result column="DISTANCE" property="distance" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFYTIME" property="modifytime" jdbcType="VARCHAR" />
+    <result column="OPENINGHOURS" property="openinghours" jdbcType="VARCHAR" />
+    <result column="RECORDSTATUS" property="recordstatus" jdbcType="VARCHAR" />
+    <result column="SERVICEPOINT" property="servicepoint" jdbcType="VARCHAR" />
+    <result column="TERMINALNO" property="terminalno" jdbcType="VARCHAR" />
+    <result column="TERMINALTYPE" property="terminaltype" jdbcType="VARCHAR" />
+    <result column="TOWNID" property="townid" jdbcType="VARCHAR" />
+    <result column="TOWNNAME" property="townname" jdbcType="VARCHAR" />
+    <result column="TYPENAME" property="typename" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.traffic.MapCoordinate" >
+    insert into MAP_COORDINATE (ID, CREATE_BY, CREATE_DATE, 
+      UPDATE_BY, UPDATE_DATE, REMARKS, 
+      DEL_FLAG, TYPE, LAT, LNG, 
+      OLD_ID, OLD_LAT, OLD_LNG, 
+      ADDRESS, CONTACTS, CREATETIME, 
+      CREATER, DISTANCE, MOBILE, 
+      MODIFIER, MODIFYTIME, OPENINGHOURS, 
+      RECORDSTATUS, SERVICEPOINT, TERMINALNO, 
+      TERMINALTYPE, TOWNID, TOWNNAME, 
+      TYPENAME)
+    values (#{id,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=CHAR}, #{type,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{lng,jdbcType=VARCHAR}, 
+      #{oldId,jdbcType=VARCHAR}, #{oldLat,jdbcType=VARCHAR}, #{oldLng,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=VARCHAR}, #{distance,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifytime,jdbcType=VARCHAR}, #{openinghours,jdbcType=VARCHAR}, 
+      #{recordstatus,jdbcType=VARCHAR}, #{servicepoint,jdbcType=VARCHAR}, #{terminalno,jdbcType=VARCHAR}, 
+      #{terminaltype,jdbcType=VARCHAR}, #{townid,jdbcType=VARCHAR}, #{townname,jdbcType=VARCHAR}, 
+      #{typename,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, REMARKS, DEL_FLAG, TYPE, 
+    LAT, LNG, OLD_ID, OLD_LAT, OLD_LNG, ADDRESS, CONTACTS, CREATETIME, CREATER, DISTANCE, 
+    MOBILE, MODIFIER, MODIFYTIME, OPENINGHOURS, RECORDSTATUS, SERVICEPOINT, TERMINALNO, 
+    TERMINALTYPE, TOWNID, TOWNNAME, TYPENAME
+    from MAP_COORDINATE
+  </select>
+
+  <select id="getByOldId" resultMap="BaseResultMap">
+		select
+			*
+		from map_coordinate
+		where old_id = #{id}
+	</select>
+
+  <select id="getByType" resultMap="BaseResultMap">
+		select
+			*
+		from map_coordinate
+		where type = #{type}
+	</select>
+
+  <select id="getByWindow" resultMap="BaseResultMap">
+		select
+			*
+		from map_coordinate
+		where type = #{type}
+	</select>
+</mapper>

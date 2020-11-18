@@ -1,0 +1,297 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta charset="utf-8">
+	<base th:href="${#request.getContextPath()}+'/'">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title th:text="${name}"></title>
+<!--<script th:src="@{/js/jquery.min.js}"></script>-->
+<!--<script th:src="@{/js/base.js}"></script>-->
+<script th:src="@{/js/index.js}"></script>
+<!--<script th:src="@{/js/app/load-ani.js}"></script>-->
+<!--<link th:href="@{/mui/css/mui.min.css}" rel="stylesheet"/>-->
+<link th:href="@{/css/disclaimer.css}" rel="stylesheet"/>
+
+<!--<link rel="stylesheet" href="mui/css/mui.css">-->
+<!--<link rel="stylesheet" href="mui/css/mui.loading.css">-->
+<!--<script type="application/javascript" src="mui/js/mui.min.js"></script>-->
+<!--<script type="application/javascript" src="mui/js/mui.loading.js"></script>-->
+
+	<link rel="stylesheet" href="mui/css/mui.css">
+	<link rel="stylesheet" href="mui/css/mui.loading.css">
+	<script src="js/jquery.min.js"></script>
+	<script type="application/javascript" src="mui/js/mui.js"></script>
+	<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+	<script src="js/base.js"></script>
+<!--<link th:href="@{/wui/dist/style/weui.css}" rel="stylesheet"/>-->
+<script type="text/javascript" charset="utf-8">
+    mui.init();
+</script>
+
+<style>
+	/*点击变蓝色高亮*/
+	.mui-table-view-cell mui-media.mui-active{
+		background-color: #0062CC;
+	}
+	.mui-table-view .mui-media-object.mui-pull-left {
+		margin-right: 20px;
+		height: 37px;
+	}
+	.mui-table-view-cell{
+		padding: 24px 23px 19px 23px;
+	}
+	.mui-table-view-cell>a:not(.mui-btn) {
+		margin: 0;
+		padding: 0;
+	}
+	.mui-table-view-cell>a:not(.mui-btn) {
+		white-space: normal;
+	}
+	.twoline{
+		align-items:center;
+		display: flex;
+		display: -webkit-flex;
+		/*text-overflow: ellipsis;*/
+		/*display: -webkit-box;*/
+		/*-webkit-line-clamp: 2;*/
+		/*-webkit-box-orient: vertical;*/
+		/*width:80%;*/
+		height:37px;
+		/*font-size:16px;*/
+		/*font-family:PingFang-SC;*/
+		/*font-weight:600;*/
+		/*color:rgba(47,47,47,1);*/
+		/*line-height:22px;*/
+		/*top:50%;*/
+		/*display: flex;*/
+		/*justify-content: space-around;*/
+		/*flex-direction: column;*/
+	}
+	.twoline p{
+		word-break: break-all;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+		font-size: 16px;
+		font-family: PingFang-SC;
+		font-weight: 600;
+		color: rgba(42,42,42,1);
+		line-height: 17px;
+	}
+	.mui-table-view-cell:after{
+		left: 25px;
+	}
+	.mui-table-view:after {
+		left: 25px;
+	}
+	.weui-toast{min-height:auto !important}
+</style>
+</head>
+<body style="background:rgba(255,255,255,1);">
+	<div class="container">
+    	<div class="page no-select">
+            <!--列表-->
+       		<div  class="content">
+				<ul  id="change" class="mui-table-view">
+				</ul>
+			</div>
+        </div>
+    </div>
+    <!-- 免责声明 -->
+	<div id="disclaimer">
+		<div style="padding: 15px 10px;box-sizing: border-box;-webkit-box-sizing: border-box;">
+			<div class="d-title"><img src="./img/menu/wxts.jpg" /></div>
+		    <div class="d-content"><strong style="color: #f0861b;">免责声明：</strong><span></span></div>
+		    <div class="d-btn">
+		    	<div class="d-btn-l">
+		    		<span>取消</span>
+		    	</div> 
+		    	<div class="d-btn-r">
+		    		<a href=""><span>同意</span></a>
+		    	</div>
+		    	<div style="clear: both;"></div>
+		    </div>
+		</div>
+	</div>
+	<!-- loading toast -->
+	<div id="loadingToast" style="display:none;">
+		<div class="weui-mask_transparent"></div>
+		<div class="weui-toast">
+			<p class="weui-toast__content">数据加载中</p>
+		</div>
+	</div>
+</body>
+<script th:inline="javascript">
+    var id = [[${id}]];
+    // console.log(id);
+</script>
+<script type="text/javascript">
+    //运行环境
+    // var runEnviron='${runEnviron}';
+
+    $(".mui-media-body.twoline").css({
+        position: "absolute",
+        left: ($(window).width() - $(".mui-media-body.twoline").outerWidth())/2,
+        top: ($(window).height() - $(".mui-media-body.twoline").outerHeight())/2
+    });
+
+    $(function(){
+        //设置标题
+        /* $("#title").text("${param.name}");
+        $("title").text("${param.name}"); */
+
+        //获取id
+        // var id='${id}';
+        //测试id=857fb366827241908c2b88baf2915d5a
+        // console.log(id);
+        //总数据和二级菜单数据集合
+        var oneArr;
+        var twoArr=new Array();
+
+        // console.log(getRootPath());
+        //获取总数据集合
+        $.ajax({
+            url:getRootPath()+"/app/menu/findChildsMenu",
+            type:"get",
+            data:{"id":id},
+            dataType:"json",
+            success:function(result){
+                oneArr=result.data;
+                console.log(oneArr)
+                //获取二级菜单集合
+                var index=0;
+                for(var i=0; i<oneArr.length; i++){
+                    if(oneArr[i].parentId == id){
+                        twoArr[index]=oneArr[i];
+                        index++;
+                    }
+                }
+                //对二级菜单数据排序
+                sortArr(twoArr);
+                var str='';
+                for(var i=0; i<twoArr.length; i++){
+                    //判断菜单是否显示
+                    if(typeof(runEnviron) != "undefined" && runEnviron == 'wx' ){
+                        //微信控制
+                        if( twoArr[i].wxShow!=1 ){continue;}
+                    }else{
+                        //APP控制
+                        if( twoArr[i].mobileShow!=1 ){continue;}
+                    }
+
+                    //对name中的特殊字符&和"进行转义
+                    var name=twoArr[i].name;
+                    name=name.replace(/\&/g,'%26');
+                    name=name.replace(/\"/g,'%5C"');
+
+                    //链接地址
+                    var url;
+                    // if(twoArr[i].type=="fourList" || twoArr[i].type=="fourSlider" || twoArr[i].type=="five16" || twoArr[i].type=="fiveTree" || twoArr[i].type=="fiveSliderList" || twoArr[i].type=="sixTree"){
+                    //     //跳转到type
+                    //     url=getRootPath()+"/app/menu/"+twoArr[i].type+"?id="+twoArr[i].id+"&name="+name;
+					//
+                    // }else{
+                    //     if( typeof(twoArr[i].href) == "string" && twoArr[i].href.indexOf("http")==0 ){
+                            //跳转到外部href
+                            url=twoArr[i].href;
+
+                        // }else if( typeof(twoArr[i].href) == "string" && twoArr[i].href.indexOf("/app/menu/interface/getData") >= 0 && typeof(twoArr[i].disclaimer) == 'string' && twoArr[i].disclaimer != '' && twoArr[i].disclaimer != '0' ){
+                        //     url="${ct}"+twoArr[i].href+"&disclaimer="+twoArr[i].disclaimer;
+						//
+                        // }else{
+                        //     //跳转到内部href
+                        //     url="${ct}"+twoArr[i].href+"";
+						//
+                        // }
+
+                        // //遍历判断是否还有下一级菜单
+                        // for(var j=0; j<oneArr.length; j++){
+                        //     if( oneArr[j].parentId == twoArr[i].id ){
+                        //         url="nextList?id="+twoArr[i].id+"&name="+name;
+                        //         break;
+                        //     }
+                        // }
+                    // }
+                    // if (twoArr[i].name.length > 13){
+                    // 	var divbody = '<div class="mui-media-body twoline " style="line-height: 22px;">'+ twoArr[i].name+'</div>';
+                    // } else {
+                    // 	var divbody = '<div class="mui-media-body twoline " style="line-height: 44px;">'+ twoArr[i].name+'</div>';
+                    // }
+                    var divbody = '<div class="mui-media-body twoline " ><p >'+ twoArr[i].name+'</p></div>';
+
+                    // str=str+'<dl class="fourList"><dt><a onclick="countFn(\''+twoArr[i].modelid+'\',\''+twoArr[i].id+'\',\''+twoArr[i].parentIds+'\',\''+twoArr[i].href+'\',\''+twoArr[i].name+'\',\''+twoArr[i].disclaimer+'\',\''+url+'\')" class="dt-a"><div class="left">' +
+                    // 		'<img src="${ctxStatic}/modules/app/img/menu/note.png" height="30"/></div>' +
+                    // 		'<div class="center">'+ twoArr[i].name +'</div><div class="right"><img class="xiala right" src="${ctxStatic}/modules/app/img/menu/xiala.png" height="10"/>' +
+                    // 		'</div></a></dt></dl>';
+                    // str +=  '<a onclick="countFn(\''+twoArr[i].modelid+'\',\''+twoArr[i].id+'\',\''+twoArr[i].parentIds+'\',\''+twoArr[i].href+'\',\''+twoArr[i].name+'\',\''+twoArr[i].disclaimer+'\',\''+url+'\')"  >\n' +
+                    // 		'\t         <li class="mui-table-view-cell mui-media" >\n' +
+                    // 		// '\t        <a onclick="countFn(\''+twoArr[i].modelid+'\',\''+twoArr[i].id+'\',\''+twoArr[i].parentIds+'\',\''+twoArr[i].href+'\',\''+twoArr[i].name+'\',\''+twoArr[i].disclaimer+'\',\''+url+'\')" class="mui-navigate-right" >\n' +
+                    // 		'\t            <div class="mui-navigate-right"><img class="mui-media-object mui-pull-left" src="./img/menu/note2.png">\n' +
+                    // 						divbody+'</div>'+
+                    // 		'\t        </li>\n' +
+                    // 		'\t    </a>';
+                    str += '<li class="mui-table-view-cell mui-media" onclick="countFn(\''+twoArr[i].modelid+'\',\''+twoArr[i].id+'\',\''+twoArr[i].parentIds+'\',\''+twoArr[i].href+'\',\''+twoArr[i].name+'\',\''+twoArr[i].disclaimer+'\',\''+url+'\')">\n' +
+                        '\t            <div class="mui-navigate-right"><img class="mui-media-object mui-pull-left" src="img/menu/note.png">\n' +
+                        divbody+'</div>'+
+                        '\t        </li>\n' ;
+                }
+                // console.log(str);
+                $("#change").append(str);
+            }
+        });
+
+        //免责声明取消
+        $("#disclaimer .d-btn .d-btn-l").click(function(){
+            $("#disclaimer").hide();
+            $("#disclaimer .d-content span").text('');
+        });
+
+    });
+
+    //足迹和点击量统计
+    function countFn(modelId,mId,mParentIds,mUrl,mName,disclaimer,url){
+        // var phoneCode='${appInfo.serialNumber}';
+        // var operator='${appInfo.operator}';
+        // var area='${appInfo.area}';
+        // var types='${appInfo.type}';
+        // var brand='${appInfo.brand}';
+        // var versions='${appInfo.versions}';
+
+		var phoneCode='';
+		var operator='';
+		var area='';
+		var types='';
+		var brand='';
+		var versions='';
+
+        //足迹和点击量统计
+        if(typeof(phoneCode)=='string' && phoneCode != ''){
+            $.getJSON(getRootPath()+"/browse/sdbstBrowse/save?modelId="+modelId+"&types="+types+"&brand="+brand+"&versions="+versions+"&phoneCode="+phoneCode+"&operator="+operator+"&area="+area+"&mId="+mId+"&mParentIds="+mParentIds+"&mUrl="+mUrl+"&mName="+mName, function(){});
+        }
+        //微信免责声明
+        if(typeof(disclaimer) == 'string' && disclaimer != '' && disclaimer != '0' && typeof(runEnviron) == "string" && runEnviron == 'wx'){
+            $("#disclaimer .d-btn .d-btn-r a").attr('href', url);
+            $.getJSON(basePath()+"/app/menu/getDisclaimer?type=disclaimer&value="+disclaimer,
+                function(dict){
+                    $("#disclaimer .d-content span").text(dict.remarks);
+                }
+            );
+            $("#disclaimer").show();
+        }else{
+            // $('#loadingToast').fadeIn(100);
+            // setTimeout(function () {
+            //     $('#loadingToast').fadeOut(100);
+            // }, 3000);
+			mui.showLoading("加载中","div");
+			window.location.href=url;
+			mui.showLoading("加载中","div");
+
+		}
+
+    }
+
+</script>
+</html>
+

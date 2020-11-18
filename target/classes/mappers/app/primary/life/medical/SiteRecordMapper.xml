@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.medical.SiteRecordMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.medical.SiteRecord">
+        <result column="SITE_CODE" property="siteCode" jdbcType="VARCHAR"/>
+        <result column="SITE_NAME" property="siteName" jdbcType="VARCHAR"/>
+        <result column="APP_CODE" property="appCode" jdbcType="VARCHAR"/>
+        <result column="APP_NAME" property="appName" jdbcType="VARCHAR"/>
+        <result column="FLAG" property="flag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.medical.SiteRecord">
+    insert into POLICE_SITE_RECORD (SITE_CODE, SITE_NAME, APP_CODE, 
+      APP_NAME, FLAG)
+    values (#{siteCode,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, #{appCode,jdbcType=VARCHAR}, 
+      #{appName,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR})
+  </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select SITE_CODE, SITE_NAME, APP_CODE, APP_NAME, FLAG
+    from POLICE_SITE_RECORD
+  </select>
+
+    <select id="getSiteRecordById" resultMap="BaseResultMap">
+     select SITE_CODE, SITE_NAME, APP_CODE, APP_NAME, FLAG
+    from POLICE_SITE_RECORD where site_code = #{siteCode,jdbcType=VARCHAR} and flag = '1'
+  </select>
+
+
+    <select id="getTotalNumber" resultType="java.util.Map">
+select count(distinct col2) as total,sum(case when a.from_hubei = '是' then 1 else 0 end ) as state1,
+       sum(case when a.from_wenzhou = '是' then 1 else 0 end ) as state2,
+       sum(case when (case when trim(translate(temperature, '0123456789.', ' ')) is null then  temperature  else null end) >37.3 then 1 else 0 end) as tempature,'1' type
+     from app_police_check a
+     union
+select count(distinct col2) as total,sum(case when a.from_hubei = '是' then 1 else 0 end ) as state1,
+       sum(case when a.from_wenzhou = '是' then 1 else 0 end ) as state2,
+       sum(case when (case when trim(translate(temperature, '0123456789.', ' ')) is null then  temperature  else null end) >37.3 then 1 else 0 end) as tempature,'2' type
+     from app_police_check a where trunc(insert_date)=trunc(sysdate)
+
+  </select>
+
+    <select id="getMessageTotalbak" resultType="java.util.Map">
+select '核查总人数' type,count(distinct col2) num from app_police_check
+<where>
+    <if test="date1 != null">
+      date1 &gt;= #{date1}
+    </if>
+    <if test="date2 != null">
+        date2 &lt;= #{date1}
+    </if>
+</where>
+union
+select '敏感人数' type,sum(case when from_hubei = '是' or from_wenzhou = '是' then 1 else 0 end ) as num from app_police_check
+        <where>
+            <if test="date1 != null">
+                date1 &gt;= #{date1}
+            </if>
+            <if test="date2 != null">
+                date2 &lt;= #{date1}
+            </if>
+        </where>
+union
+select decode(opermeasure, '', '待核查', opermeasure) type,count(0) num from app_police_check where (from_hubei = '是'  or from_wenzhou = '是' )
+        <if test="date1 != null">
+            and date1 &gt;= #{date1}
+        </if>
+        <if test="date2 != null">
+            and date2 &lt;= #{date1}
+        </if>
+group by   opermeasure
+    </select>
+
+
+</mapper>

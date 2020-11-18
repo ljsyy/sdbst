@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.user.UserSwtMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.user.UserSwt">
+        <id column="MOBILE" jdbcType="VARCHAR" property="mobile"/>
+        <result column="ACCOUNT" jdbcType="VARCHAR" property="account"/>
+        <result column="ACCOUNT_TYPE" jdbcType="VARCHAR" property="accountType"/>
+        <result column="CID" jdbcType="VARCHAR" property="cid"/>
+        <result column="CTYPE" jdbcType="VARCHAR" property="ctype"/>
+        <result column="CLEVEL" jdbcType="VARCHAR" property="clevel"/>
+        <result column="LOGIN_TYPE" jdbcType="VARCHAR" property="loginType"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="ORIGIN" jdbcType="VARCHAR" property="origin"/>
+        <result column="U_ID" jdbcType="VARCHAR" property="uid"/>
+        <result column="UVERSION" jdbcType="VARCHAR" property="uversion"/>
+        <result column="USER_ID" jdbcType="VARCHAR" property="userId"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from APP_USER_SWT
+    where U_ID = #{uid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.user.UserSwt">
+    insert into APP_USER_SWT (MOBILE, ACCOUNT, ACCOUNT_TYPE, 
+      CID, CTYPE, CLEVEL, 
+      LOGIN_TYPE, NAME, ORIGIN, 
+      U_ID, UVERSION, USER_ID
+      )
+    values (#{mobile,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{accountType,jdbcType=VARCHAR}, 
+      #{cid,jdbcType=VARCHAR}, #{ctype,jdbcType=VARCHAR}, #{clevel,jdbcType=VARCHAR}, 
+      #{loginType,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{origin,jdbcType=VARCHAR}, 
+      #{uid,jdbcType=VARCHAR}, #{uversion,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.user.UserSwt">
+    update APP_USER_SWT
+    set ACCOUNT = #{account,jdbcType=VARCHAR},
+      ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR},
+      CID = #{cid,jdbcType=VARCHAR},
+      CTYPE = #{ctype,jdbcType=VARCHAR},
+      CLEVEL = #{clevel,jdbcType=VARCHAR},
+      LOGIN_TYPE = #{loginType,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      MOBILE=#{mobile,jdbcType=VARCHAR},
+      ORIGIN = #{origin,jdbcType=VARCHAR},
+      UVERSION = #{uversion,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=VARCHAR}
+    where U_ID = #{uid,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select MOBILE, ACCOUNT, ACCOUNT_TYPE, CID, CTYPE, CLEVEL, LOGIN_TYPE, NAME, ORIGIN, 
+    U_ID, UVERSION, USER_ID
+    from APP_USER_SWT
+    where ACCOUNT = #{account,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select MOBILE, ACCOUNT, ACCOUNT_TYPE, CID, CTYPE, CLEVEL, LOGIN_TYPE, NAME, ORIGIN, 
+    U_ID, UVERSION, USER_ID
+    from APP_USER_SWT
+  </select>
+
+    <select id="selectByUserId" parameterType="String" resultMap="BaseResultMap">
+        select * from (select * from APP_USER_SWT where USER_ID = #{_parameter,jdbcType=VARCHAR})
+        where rownum=1
+    </select>
+
+</mapper>

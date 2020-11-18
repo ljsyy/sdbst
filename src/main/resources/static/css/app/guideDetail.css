@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+* { margin:0px; padding:0px; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+.container { padding:0; margin:0px; max-width:750px; overflow:hidden; background: #fff; }
+.container #head { height:50px; background:#eb413d; text-align:center; color:#fff; 
+				   line-height:50px;  font-size:16px; font-weight:500;
+				   position:fixed; left:0px; top:0px; right:0px; }
+.container #head .headl .icon{margin-top:8px;}
+#head .headr img { vertical-align:middle; width:41px; height:42px; margin: 2px;}
+
+
+.container .empty { height:50px; line-height:50px; };
+
+.container #content dl {  font-size:18px; font-weight:500;  }
+.container #content dl dt { background-color:#FFF; margin:10px 5px 2px 5px; padding:10px; 
+							 font-size:15px; font-weight:600; color:#eb413d; }
+.container #content dl dd { background-color:#FFF; margin:0px 5px; padding:3px 10px; 
+							 font-size:14px; font-weight:500;color:#6e6e6e;
+							text-indent:30px; line-height:25px; }							
+.container #content dl dd a { text-decoration:none;color:#eb413d; }
+/* 政府信息公开指南 */
+.container #guide-content { padding:10px; background-color:#FFF; }
+.container #guide-content a { text-decoration:none; }
+.container #guide-content p { line-height:25px; }
+
+
+/* 通用列表 */
+.time-list .list{ position: relative;padding: 5px 0;background: #fff;}
+.time-list .list a { overflow: hidden;text-decoration:none; color:#000; display:block;  width:100%;border-bottom: 1px solid #e5e5e5; }
+.time-list .list .list-l { width:90%; float:left; text-align:left;  }
+.time-list .list .list-l div { line-height: 25px;
+    						   border: 0px;font-size: 16px;font-weight: 500;padding-left: 10px;}	
+.time-list .list .time{ color: #999;position: absolute; bottom: 10px;font-size: 14px !important;right: 11%;}									   
+.time-list .list .list-r { width:10%; float:left; text-align:center; 
+						   height: 55px;line-height: 50px; }
+.time-list .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+
+
+
+/* 政府信息公开目录 */
+.container #catalog-content { padding:10px; font-size:18px; }
+.container #catalog-content .unit { color:#00F; line-height:40px; text-indent:5px; font-weight: 600; }
+.container #catalog-content .list { line-height:40px; }
+.container #catalog-content .list a { text-decoration:none; color:#000; }
+.container #catalog-content .list div { background-color:#FFF; }
+.container #catalog-content .list .list-l { width:90%; float:left; text-indent:1em; text-align:left; line-height:40px; height:40px; }
+.container #catalog-content .list .list-r { width:10%; float:left; text-align:center; line-height:40px; height:40px; }
+.container #catalog-content .list .list-r img { width:10px; height:16px; vertical-align:middle; }
+.container #catalog-content .b-line div { border-bottom:1px solid #DDD; }
+
+
+/* 详情页 */
+.container #reportDetail-content { background-color:#FFF; padding:10px; line-height:30px; }
+.container #reportDetail-content h3 { text-align:center; }
+.container #reportDetail-content .time { text-align:center; }
+.container #reportDetail-content .content a { text-decoration:none; }
+.container #reportDetail-content .content img { width:100%; }
+
+
+/* 顺德政务 */
+.container #sdGovern-content .list{ position: relative; padding: 0px;}
+.container #sdGovern-content .list a { overflow: hidden; text-decoration:none; color:#000; display:block;  width:100%; border-bottom: 1px solid #e5e5e5; }
+.container #sdGovern-content .list .list-l { width:90%; float:left; text-align:left;  }
+.container #sdGovern-content .list .list-l div { line-height: 50px;border: 0px; font-family:"楷体"; font-size: 20px;font-weight: 500;padding-left: 10px;}	
+.container #sdGovern-content .list .list-r { width:10%; float:left; text-align:center; 
+										     height: 50px;line-height: 50px; }
+.container #sdGovern-content .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+
+
+/* 顺德政务文件详情列表 */
+.container #shundeDetail-content .list{ position: relative;padding: 5px 0;background: #fff;border-bottom: 1px solid #e5e5e5;}
+.container #shundeDetail-content .list a { overflow: hidden;text-decoration:none; color:#000; display:flex;align-items: center;width:100%;}
+.container #shundeDetail-content .list .list-l { width:90%;text-align:left;  }
+.container #shundeDetail-content .list .list-l div { line-height: 25px;font-size: 16px;font-weight: 500;padding-left: 10px;}	
+.container #shundeDetail-content .list .time{ color: #999;float: right; bottom: 5px;font-size: 14px !important;right: 11%;}									   
+.container #shundeDetail-content .list .list-r { width:10%;flex: 1;text-align: center;}
+.container #shundeDetail-content .list .list-r img { width:12px; height:19px; }
+
+
+/* 行政复议 */
+.container #adminReview-content .list { height:60px; }
+.container #adminReview-content .list a { text-decoration:none; color:#000; display:block;  width:100%; }
+.container #adminReview-content .list div { border-bottom:1px solid #BBB; }
+.container #adminReview-content .list .list-l { width:85%; float:left; text-align:left; height:60px; }
+.container #adminReview-content .list .list-l div { line-height:30px; padding:0px 10px; border:0px;
+											   		 font-family:"楷体"; font-size:18px; font-weight:500;}										   
+.container #adminReview-content .list .list-r { width:15%; float:left; text-align:center; 
+										   		 height:60px; line-height:60px; }
+.container #adminReview-content .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+
+
+/* 统计年报 */
+.container #yearlyRe-content .list{ position: relative; padding: 0px;}
+.container #yearlyRe-content .list a { overflow: hidden; text-decoration:none; color:#000; display:block;  width:100%; border-bottom: 1px solid #e5e5e5; }
+.container #yearlyRe-content .list .list-l { width:90%; float:left; text-align:left;  }
+.container #yearlyRe-content .list .list-l div { line-height: 50px;border: 0px;font-size: 18px;font-weight: 500;padding-left: 10px;}	
+.container #yearlyRe-content .list .list-r { width:10%; float:left; text-align:center; 
+										     height: 50px;line-height: 50px; }
+.container #yearlyRe-content .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+
+
+/* 统计年报分类 */
+.container #classify-content .list{ position: relative; padding: 0px;}
+.container #classify-content .list a { overflow: hidden; text-decoration:none; color:#000; display:block;  width:100%; border-bottom: 1px solid #e5e5e5; }
+.container #classify-content .list .list-l { width:90%; float:left; text-align:left;  }
+.container #classify-content .list .list-l div { line-height: 50px;border: 0px;font-size: 16px;font-weight: 500;padding-left: 10px;}	
+.container #classify-content .list .list-r { width:10%; float:left; text-align:center; 
+										     height: 50px;line-height: 50px; }
+.container #classify-content .list .list-r img { width:12px; height:19px; vertical-align:middle; }
+
+
+/* 政府规范性文件 */
+.container #governNorma-content .list{position: relative;padding: 5px 0;border-bottom: 1px solid #e5e5e5;}
+.container #governNorma-content .list a {overflow: hidden;text-decoration:none; color:#000; display:flex; align-items:center; width:100%; }
+.container #governNorma-content .list .list-l { width:90%; float:left; text-align:left;  }
+.container #governNorma-content .list .list-l div { line-height: 25px;border: 0px;font-size: 16px;font-weight: 500;padding-left: 10px;}	
+.container #governNorma-content .list .list-r { width:10%; float:left; text-align:center; 
+										   		height: 50px;line-height: 50px; flex:1; }
+.container #governNorma-content .list .list-r img { width:12px; height:19px; }

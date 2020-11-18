@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.menus.SysWorkMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.menus.SysWorkMenu" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="HREF" property="href" jdbcType="VARCHAR" />
+    <result column="MOBILE_ICON" property="mobileIcon" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="DECIMAL" />
+    <result column="MOBILE_SHOW" property="mobileShow" jdbcType="CHAR" />
+    <result column="WX_SHOW" property="wxShow" jdbcType="CHAR" />
+    <result column="MENU_IDS" property="menuIds" jdbcType="VARCHAR" />
+    <result column="COLOR" property="color" jdbcType="VARCHAR" />
+    <result column="TJL" property="tjl" jdbcType="DECIMAL" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from SYS_WORK_MENU
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.menus.SysWorkMenu" >
+    insert into SYS_WORK_MENU (ID, NAME, HREF, 
+      MOBILE_ICON, SORT, MOBILE_SHOW, 
+      WX_SHOW, MENU_IDS, COLOR, 
+      TJL, DEL_FLAG)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{href,jdbcType=VARCHAR}, 
+      #{mobileIcon,jdbcType=VARCHAR}, #{sort,jdbcType=DECIMAL}, #{mobileShow,jdbcType=CHAR}, 
+      #{wxShow,jdbcType=CHAR}, #{menuIds,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
+      #{tjl,jdbcType=DECIMAL}, #{delFlag,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.menus.SysWorkMenu" >
+    update SYS_WORK_MENU
+    set NAME = #{name,jdbcType=VARCHAR},
+      HREF = #{href,jdbcType=VARCHAR},
+      MOBILE_ICON = #{mobileIcon,jdbcType=VARCHAR},
+      SORT = #{sort,jdbcType=DECIMAL},
+      MOBILE_SHOW = #{mobileShow,jdbcType=CHAR},
+      WX_SHOW = #{wxShow,jdbcType=CHAR},
+      MENU_IDS = #{menuIds,jdbcType=VARCHAR},
+      COLOR = #{color,jdbcType=VARCHAR},
+      TJL = #{tjl,jdbcType=DECIMAL},
+      DEL_FLAG = #{delFlag,jdbcType=CHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select ID, NAME, HREF, MOBILE_ICON, SORT, MOBILE_SHOW, WX_SHOW, MENU_IDS, COLOR, 
+    TJL, DEL_FLAG
+    from SYS_WORK_MENU
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, NAME, HREF, MOBILE_ICON, SORT, MOBILE_SHOW, WX_SHOW, MENU_IDS, COLOR, 
+    TJL, DEL_FLAG
+    from SYS_WORK_MENU
+  </select>
+
+  <select id="getListName" resultMap="BaseResultMap" >
+		SELECT
+			*
+		FROM
+			SYS_WORK_MENU s
+		WHERE s.del_flag='0'
+		ORDER BY s.SORT ASC
+	</select>
+</mapper>

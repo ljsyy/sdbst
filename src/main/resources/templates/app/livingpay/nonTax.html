@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="css/app/life/livingpay/appthird.css">
+    <link rel="stylesheet" href="css/app/life/livingpay/colorOne.css">
+    <link rel="stylesheet" href="css/app/life/livingpay/common.css">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <title>非税缴费</title>
+
+    <style>
+        .inputSty{
+            outline-style: none ;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            height: 2.05rem;
+            width: 99%;
+            font-size: 14px;
+            font-family: "Microsoft soft";
+        }
+        input:focus{
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+        }
+
+
+
+        .divcss6{
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 15px;
+        }
+
+        .divcss7{
+            height: 2.05rem;
+            /*flex 布局*/
+            display: flex;
+            /*实现垂直居中*/
+            align-items: center;
+            /*实现水平居中*/
+            /*justify-content: center;*/
+            text-align: justify;
+        }
+
+        input{
+            -webkit-user-select:text !important;
+        }
+
+    </style>
+</head>
+<body style="height: 685.75px; overflow: hidden; margin-top: -0.5rem; padding-top: 0.5rem; box-sizing: border-box;">
+
+<div class="result resultCss">
+    <div class="" id="searchDiv">
+        <div class="HistoryInfo ptb thirdtypeold" style="">
+            <div class="clearfix pt5 lh" style="margin-top: 15px">
+                <input class="inputSty" id="tzsbh" name="tzsbh" placeholder="请输入通知书号"/>
+            </div>
+
+
+<!--            <input class="inputSty" id="zxdwbh" type="hidden" placeholder="请输入执行单位编码"/>-->
+            <div id="zxdwbhDiv" class="clearfix pt5 lh" style="margin-top: 15px;">
+                <input class="inputSty" id="zxdwbh" placeholder="请输入执行单位编码"/>
+            </div>
+
+            <div  class="clearfix pt5 lh divcss6 divcss7" style="justify-content: center">
+                &nbsp;
+                <input type="radio" name="jylx"  value="03021" />行政事业收费
+                &nbsp;
+                &nbsp;
+                <input type="radio"  name="jylx"  value="03023"  />行政事业处罚
+
+
+            </div>
+            <div class="divcss6">
+                <div  class="divcss7" style="position:relative;" onclick="selectPlatform('wx')">
+                    <img src="img/life/wxzf.jpg" style="height: 1.25rem; width: 1.25rem;" />
+                    <span style="margin-left: 2px"> 微信支付</span>
+                    <input type="radio" name="platform" id="wx"  value="0" checked  style="position:absolute; right:5px;"/>
+                </div>
+                <hr color="#ccc" size="1px"/>
+                <div  class="divcss7" style="position:relative" onclick="selectPlatform('zfb')">
+                    <img src="img/life/zfb.png" style=" height: 1.15rem; width: 1.15rem;margin-left: 2px" />
+                    <span style="margin-left: 2px">支付宝支付</span>
+                    <input type="radio"  name="platform" id="zfb"  value="1" style="position:absolute; right:5px;" />
+                </div>
+                <hr color="#ccc" size="1px"/>
+                <div  class="divcss7" style="position:relative" onclick="selectPlatform('yl')">
+                    <img src="img/life/unionpay.png" style=" height: 1.15rem; width: 1.15rem;margin-left: 2px" />
+                    <span style="margin-left: 2px">银联支付</span>
+                    <input type="radio"  name="platform" id="yl"  value="2" style="position:absolute; right:5px;" />
+                </div>
+            </div>
+            <div style="margin-top: 1px">
+                    <span style="color: red;font-size: 12px">
+                        提示:请正确选择通知书类型，否则将会导致缴费失败。行政事业收费(例如学费、身份证工本费等)， 行政事业处罚(例如交罚、行政处罚等)。
+                    </span>
+
+            </div>
+
+            <div  style="margin-top: 15px; display: none">
+                <a href="javascript:void(0)" class="explain">《声明》</a>
+            </div>
+            <div class="payB pt3" style="margin-top: 15px">
+                <button class="submit" id="PayOrder" onclick="doNext()">下一步</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="" id="detailDiv" style="display: none;">
+        <div class="HistoryInfo ptb thirdtypeold" style="">
+            <div class="clearfix pt5 lh" style="margin-top: 5px">
+                <div class="fl bd hwt30">通知书号</div>
+                <div class="fr colorH hwt70"  style="color: black;font-size: 15px">
+                    <span id="NoticeNo"></span>
+                </div>
+            </div>
+            <div class="clearfix pt5 lh" style="margin-top: 5px">
+                <div class="fl bd hwt30 ">执收单位</div>
+                <div class="fr colorH hwt70" ><span id="PayeeAcName"></span></div>
+            </div>
+            <div class="clearfix pt5 lh" style="margin-top: 5px">
+                <div class="fl bd hwt30 ">收费项目</div>
+                <div class="fr colorH hwt70" >
+                    <span id="Remark" class="Hinfo"></span>
+                    <span id="Amount" class="ml10"></span>
+                </div>
+            </div>
+            <div class="clearfix pt5 lh" style="margin-top: 5px">
+                <div class="fl bd hwt30 ">滞纳金</div>
+                <div class="fr colorH hwt70" ><span id="LateFee"></span></div>
+            </div>
+
+            <div class="clearfix pt5 lh" style="margin-top: 5px">
+                <div class="fl bd hwt30 ">总付金额</div>
+                <div class="fr colorH hwt70 orangeC fw" ><span id="TransAmount"></span></div>
+            </div>
+
+            <div class="clearfix pt5 lh" style="margin-top: 10px">
+                <input class="inputSty" id="AcctNo" name="AcctNo" placeholder="请输入卡号"/>
+            </div>
+
+            <div class="payB pt3" style="margin-top: 15px">
+                <button class="submit" id="confirmPay" onclick="confirmPay()">确认交款</button>
+            </div>
+
+            <form id="form1" name="MainForm" method="post" action="">
+                <INPUT type="hidden" name="transName" id="transName" value='iMPay' />
+                <INPUT type="hidden" name="Plain" id="Plain" value='' />
+                <INPUT type="hidden" name="Signature" id="Signature" value="" />
+            </form>
+
+            <input type="hidden" id="resultData" name="resultData" value="" />
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="userId" name="userId" th:value="${userId}" />
+
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
+    提示:。
+</div>
+<!--
+<div class="alert_bg alert" style="display: none;">
+    <div class="alert_content">
+        <p class="alert_info">
+            提示:
+        </p>
+        <button class="alert_btn Btop" style="height: 2rem">确定</button>
+    </div>
+</div>
+-->
+</body>
+<script>
+
+    /*
+    $(function(){
+        $(".alert_btn").click(function(){
+            $(".alert").hide();
+        });
+        $(".explain").click(function(){
+            $(".alert").show();
+        });
+    })
+*/
+
+    /**
+     * 确认缴费
+     */
+    function confirmPay(){
+        $("#confirmPay").attr("disabled", true);
+
+        var AcctNo = $("#AcctNo").val();
+        AcctNo = AcctNo.trim().replace(/\s/g,"");
+        if(AcctNo == ""){
+            mui.alert("请输入卡号","提示");
+            $("#confirmPay").attr("disabled", false);
+            return ;
+        }
+        var message = {
+            "data":$("#resultData").val(),
+            "payType":"iPayForNontaxFee",
+            "AcctNo":$("#AcctNo").val()
+        };
+        //后台组织付款参数
+        $.ajax({
+            url: basePath() + "/livingPay/getPayParam?userId="+$("#userId").val(), /*接口域名地址*/
+            type: 'post',
+            data: JSON.stringify(message),
+            contentType: "application/json",
+            dataType:"json",
+            async:true,
+            success: function (res) {
+                if(res.code == 200){
+                    var result =  res.data;
+                    $("#Plain").val(result.Plain);
+                    //console.log(result.Plain);
+                    $("#Signature").val(result.Signature);
+                    //console.log(result.Signature);
+                    $("#form1").submit();
+                }else{
+                    mui.alert(res.data,"提示");
+                    $("#confirmPay").attr("disabled", false);
+                    return;
+                }
+            },
+            error:function(err){
+                $("#confirmPay").attr("disabled", false);
+            }
+        })
+    }
+
+
+    function doNext(){
+        $("#PayOrder").attr("disabled", true);
+        var platform = $("input[name='platform']:checked").val();
+        if(platform == "2"){
+            rcBank();
+        }else{
+            ccBank();
+        }
+    }
+
+
+    /**
+     * 农商银行
+     */
+    function rcBank(){
+        $("#PayOrder").attr("disabled", true);
+        var tzsbh = $("#tzsbh").val();
+        tzsbh = tzsbh.trim().replace(/\s/g,"");
+
+        var jylx = $("input[name='jylx']:checked").val();
+        var platform = $("input[name='platform']:checked").val();
+
+        if(tzsbh == ""){
+            mui.alert("请输入通知书编号","提示");
+            $("#PayOrder").attr("disabled", false);
+            return ;
+        }
+        if(jylx == "" || jylx == undefined){
+            mui.alert("请选择交易类型","提示");
+            $("#PayOrder").attr("disabled", false);
+            return ;
+        }
+        var NoticeType = "03021"==jylx && jylx != ""&& jylx != undefined?"1":"2";//转为农商所需要参数值
+        //调用农商行查询接口
+        $.post(basePath() + "/livingPay/payQuery",{"NoticeNo":tzsbh,"NoticeType":NoticeType,"queryType":"iPayForNontaxFeeQry"},function(result){
+            try{
+               // console.log(result);
+                var resultData = result.data;
+                if(result.code == 200){
+                    $("#resultData").val(resultData);
+                    var mesg = eval('(' + resultData + ')');
+                    //根据支付方式：微信和支付宝选择建行，银联选择农商
+                    if(platform == "2"){
+                        $("#searchDiv").hide();
+                        $("#detailDiv").show();
+                        //
+                        $("#form1").attr("action",mesg.payAddr);
+                        //通知书号 NoticeNo
+                        $("#NoticeNo").text(mesg.NoticeNo);
+                        //执行单位 PayeeAcName（单位号：PayeeID）
+                        $("#PayeeAcName").text(mesg.PayeeAcName+"（单位号："+mesg.PayeeID+"）");
+                        // $("#PayeeID").text();
+                        //收费项目 Remark 金额 Amount
+                        $("#Remark").text(mesg.Remark);
+                        $("#Amount").text(mesg.Amount+"元");
+                        // 滞纳金 LateFee
+                        $("#LateFee").text(mesg.LateFee+"元");
+                        // 总付金额：TransAmount ( Amount + LateFee)
+                        $("#TransAmount").text(mesg.TransAmount+"元");
+                    }else{
+                        // var PayeeID = mesg.PayeeID;
+                        // $("#zxdwbh").val(PayeeID);
+                    }
+
+                }else{
+                    mui.alert(resultData,"提示");
+                    $("#PayOrder").attr("disabled", false);
+                    return;
+                }
+            }catch(e){
+                alert(e.message);
+            }
+        })
+    }
+
+    /**
+     * 建设银行
+     */
+    function ccBank() {
+        var tzsbh = $("#tzsbh").val();
+        tzsbh = tzsbh.trim().replace(/\s/g,"");
+        var zxdwbh = $("#zxdwbh").val();
+        zxdwbh = zxdwbh.trim().replace(/\s/g,"");
+        var jylx = $("input[name='jylx']:checked").val();
+        var platform = $("input[name='platform']:checked").val();
+        //调用app方法
+        //判断系统
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+        var message={
+            'tzsbh':tzsbh,
+            'zxdwbh':zxdwbh,
+            'jylx':jylx,
+            'xmbh':"440606",
+            'sqlybm':'400023',
+            'md5key':'66jhtyd0t3kyt6p',
+            'url':'https://gz.nontax.cn/NonTaxPayMent/thirdaccess/getinfo.do',
+            "isProduction":'true',
+            'platform':platform
+        };
+        var messJson = JSON.stringify(message);//转为json数据
+        if(isAndroid){
+            try{
+                //调用安卓方法
+                var result =  window.NonTaxSdk.nonTaxPay(messJson);
+                if(result && result.indexOf("err")<0){
+                    var phone = getQueryVariable(result,"currentPhone");
+                    var sourceType = getQueryVariable(result,"currentPayType");
+                    var idNum = getQueryVariable(result,"currentIdNum");
+                    var ddbh = getQueryVariable(result,"ddbh");
+                    var saveOrderUrl = getQueryVariable(result,"saveOrderUrl");
+                    // $.post(basePath() + "/livingPay/"+saveOrderUrl,{phone:phone,idNum:idNum,sourceType:sourceType,ddbh:ddbh,client:"android"},function(data){
+                    //
+                    // });
+                    toPayPage(result);
+                }else{
+                    $("#PayOrder").attr("disabled", false);
+                }
+            }catch(e){
+                console.log(e.message);
+                mui.alert("网络异常","提示");
+                $("#PayOrder").attr("disabled", false);
+            }
+        }else if(isiOS){
+            window.location.href="&nonTaxPay&data="+messJson;
+            //lert("isiOS");
+        }
+    }
+
+    function selectPlatform(typeId){
+        if(document.getElementById(typeId)){
+            $("#"+typeId).attr("checked",true);
+        }
+        if(typeId == "yl"){
+           $("#zxdwbhDiv").hide();
+        }else{
+            $("#zxdwbhDiv").show();
+        }
+    }
+
+    function toPayPage(url){
+        window.location = url;
+    }
+    function getQueryVariable(url,variable) {
+        try{
+            var vars = url.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+        }catch (e) {
+
+        }
+        return null;
+    }
+</script>
+</html>
+
+
+
+

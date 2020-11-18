@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <title>详情</title>
+
+    <style type="text/css">
+        body, dd, dl, html {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+            background: #e5e5e5;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 750px;
+        }
+
+        html, .container {
+            height: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .main {
+            margin: 10px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .title {
+            font-size: 14px;
+        }
+
+        .detail {
+            font-size: 13px;
+            line-height: 25px;
+            margin-top: 5px;
+        }
+
+        .file {
+            font-size: 13px;
+            border-top: solid 1px #bbb;
+            margin-top: 10px;
+            line-height: 25px;
+        }
+
+        #download, #sample {
+            display: -webkit-inline-box;
+        }
+
+        .left {
+        }
+
+        .right {
+            max-width: 75%;
+        }
+
+        .right a {
+            display: -webkit-box;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="main">
+    <b class="title"></b>
+
+    <div class="detail" >
+
+    </div>
+
+    <div class="file" >
+
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+
+    $(document).ready(function () {
+        getList();
+    });
+
+    function getList() {
+        $.ajax({
+            url: basePath() + "/government/chemicalGuide/getDetail?id=" + [[${id}]],
+            type: "get",
+            dataType: "json",
+            async: true,
+            success: function (result) {
+                var types = [[${type}]]
+                console.log(result)
+                var data = result.data;
+
+                for (var i in data) {
+                    var type;
+                    if (types == "apply") {
+                        type = "申请资料";
+                        console.log(data[0].guideApply);
+                        $(".detail").append(data[0].guideApply);
+                        $(".file").append(data[0].guideFile);
+                    } else if (types == "law") {
+                        type = "相关法律法规";
+                        $(".detail").append(data[0].guideLaw);
+                    } else {
+                        return;
+                    }
+                    $(".title").append(
+                        data[0].guideName + type
+                    );
+                    rz("detail");
+                    rz("file");
+
+                }
+
+            }
+        });
+    }
+    //解决富文本未识别问题
+    function rz(cz) {
+        var a = $("."+cz).text(); //news_abstract为p标签的class值
+        $("."+cz).html(a);
+    }
+</script>
+</html>
+

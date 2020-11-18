@@ -1,0 +1,674 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>顺德区复工复产口罩预约登记平台</title>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"></link>
+    <link rel="stylesheet" href="wui/css/weui.css"></link>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="application/javascript" src="js/base.js"></script>
+    <style>
+        body {
+            position: relative;
+            background: #fff;
+        }
+
+        .weui-btn_primary {
+            background-color: #1ba3e4 !important;
+            margin-bottom: 30px;
+        }
+
+        .weui-input {
+            height: 48px;
+            font-size: 19px;
+        }
+
+        .picker-calendar-month-picker a.icon-only, .picker-calendar-year-picker a.icon-only {
+            display: flex;
+            align-items: center;
+        }
+
+        .selected:before {
+            content: "\EA06";
+            background-color: #FFFFFF;
+            color: #1ba3e4;
+        }
+
+        .weui-toast {
+            margin-left: 0 !important;
+        }
+
+        .footer_tip {
+            padding: 0 10px 80px;
+        }
+
+        .footer_tip p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .weui-dialog__btn {
+            color: #1ba3e4;
+        }
+
+        .red_i {
+            color: red;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .footer {
+            padding: 10px 10px 60px;
+        }
+
+        .bottom_saying {
+            color: #777;
+        }
+        .gray_btn{
+            background: #ddd !important;
+            color: #fff;
+        }
+        ul>li{
+            list-style: none;
+            text-indent: 2em;
+        }
+        .weui-cell__hd{
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body ontouchstart>
+
+<div id="container">
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i"></i>企业名称</label></div>
+            <div class="weui-cell__bd">
+                <span th:text="${reserve.name}" id="name" style="word-break:normal; width:auto;white-space:pre-wrap;word-wrap : break-word;overflow: hidden ;"></span>
+<!--                <input id="name" readonly="readonly" class="weui-input" th:value="${reserve.name}">-->
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i"></i>企业类型</label></div>
+            <div class="weui-cell__bd">
+                <span th:text="${reserve.type}" id="type" style="word-break:normal; width:auto;white-space:pre-wrap;word-wrap : break-word;overflow: hidden ;"></span>
+<!--                <input id="type" readonly="readonly" class="weui-input" th:value="${reserve.type}">-->
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i"></i>企业地址</label></div>
+            <div class="weui-cell__bd">
+                 <span th:text="${reserve.address}" id="address" style="word-break:normal; width:auto;white-space:pre-wrap;word-wrap : break-word;overflow: hidden ;"></span>
+<!--                <input id="address" readonly="readonly" class="weui-input" th:value="${reserve.address}">-->
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active" id="create_date">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i"></i>申报日期</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input font-input weui-input" readonly="readonly" type="text" data-toggle='date'
+                       id="createDate" th:value="${#dates.format(reserve.createDate, 'yyyy-MM-dd HH:mm:ss')}"/>
+            </div>
+        </div>
+        <div style="margin: 0 0 10px 0;">
+            <p style="color: red;font-size: 13px;padding-left: 20px;">
+                下一次申报日期：<span id="next_time"></span>凌晨0点后
+            </p>
+        </div>
+        <hr style="background: #1ba3e4;"/>
+
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>复工情况</label></div>
+            <div class="weui-cell__bd" id="my_radio">
+                    <span class="working">
+                        <a href="javascript:;" class="weui-icon-circle selected " data-type="1" id="radio-one"></a>
+                        <span class="user-type">已复工</span>
+                     </span>
+                <span class="notWorking">
+                        <a href="javascript:;" class="weui-icon-circle" data-type="2" id="radio-two"></a>
+                        <span class="user-type">未复工</span>
+                     </span>
+            </div>
+        </div>
+
+        <!--<div class="weui-cell weui-cell_active" id="date_resumedWork">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>复工日期</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input font-input weui-input" readonly="readonly" type="text" data-toggle='date'
+                       id="resumedWorkDate" th:value="${#dates.format(reserve.resumedWorkDate, 'yyyy/MM/dd')}"/>
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active" id="date_toResumeWork">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>拟复工日期</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input font-input weui-input" readonly="readonly" type="text" data-toggle='date'
+                       id="toResumeWorkDate" th:value="${#dates.format(reserve.toResumeWorkDate, 'yyyy/MM/dd')}"/>
+            </div>
+        </div>-->
+
+
+        <div class="weui-cell weui-cell_active" id="date_resumedWork">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>已复工日期</label></div>
+            <div class="weui-cell__bd">
+                <span style="display: inline-block;height: 48px;line-height: 44px;font-size: 18px;" th:text="${#dates.format(reserve.resumedWorkDate, 'yyyy/MM/dd')}" id="span_resumedWorkDate"></span>
+                <input style="display: none;" readonly="readonly" class="weui-input font-input date-input" type="text" data-toggle='date' id="resumedWorkDate"
+                       placeholder="请选择日期" th:value="${#dates.format(reserve.resumedWorkDate, 'yyyy/MM/dd')}"/>
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active" id="date_toResumeWork" style="display: none;">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>拟复工日期</label></div>
+            <div class="weui-cell__bd">
+                <span style="display: inline-block;height: 48px;line-height: 44px;font-size: 18px;" th:text="${#dates.format(reserve.toResumeWorkDate, 'yyyy/MM/dd')}" id="span_toResumeWorkDate"></span>
+                <input style="display: none;" readonly="readonly" class="weui-input font-input date-input" type="text" data-toggle='date' id="toResumeWorkDate"
+                       placeholder="请选择日期" th:value="${#dates.format(reserve.toResumeWorkDate, 'yyyy/MM/dd')}"/>
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>企业人数</label></div>
+            <div class="weui-cell__bd">
+                <input id="peopleNumber" class="weui-input" placeholder="请填写企业人数" th:value="${reserve.peopleNumber}"
+                       type="number" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>复工人数</label></div>
+            <div class="weui-cell__bd">
+                <input id="resumedWorkNumber" class="weui-input" placeholder="请填写复工人数"
+                       th:value="${reserve.resumedWorkNumber}" type="number" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active" style="padding-bottom: 4px;">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>口罩申请量</label></div>
+            <div class="weui-cell__bd">
+                <input id="numberMasks" class="weui-input" placeholder="填写口罩申请量（个）" th:value="${reserve.numberMasks}"
+                       type="number" readonly="readonly">
+            </div>
+        </div>
+<!--        <div>-->
+<!--            <p style="color: red;font-size: 13px;padding-left: 20px;">申请量不能超过参保人数的10倍（共<span id="three_time" th:text="${insuredNumber}*10"></span>个）-->
+<!--            </p>-->
+<!--        </div>-->
+
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>企业联系人</label></div>
+            <div class="weui-cell__bd">
+                <input id="contactPerson" class="weui-input" placeholder="填写企业联系人" readonly="readonly"
+                       th:value="${reserve.contactPerson}">
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_active">
+            <div class="weui-cell__hd"><label class="weui-label"><i class="red_i">*</i>联系方式</label></div>
+            <div class="weui-cell__bd">
+                <input id="phoneNumber" class="weui-input" placeholder="填写企业联系人联系方式" type="number" pattern="[0-9]*"
+                       th:value="${reserve.phoneNumber}" readonly="readonly">
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-form__opr-area" style="margin-top: 40px;text-align: center;">
+        <p style="font-size: 13px;color: red;margin-bottom: 10px;">请务必保证填写信息的准确性，以免影响贵企业的口罩预约</p>
+        <a style="width: 35%; position: relative; left: 40%;margin: 0 0 10px 0;display: inline-block"
+           class="weui-btn weui-btn_primary gray_btn" href="javascript:;" id="showTooltips">保存</a>
+        <a style="width: 35%; position: relative; left: -40%;margin: 0 0 10px 0;display: inline-block"
+           class="weui-btn weui-btn_primary" href="javascript:;" id="editable">修改</a>
+        <a style="width: 35%;position: relative; left: 40%;margin: 0px;display: inline-block"
+           class="weui-btn weui-btn_primary" href="javascript:;" id="cancelEdit">取消</a>
+        <a style="width: 35%;position: relative; left: -40%;margin: 0px;display: inline-block"
+           class="weui-btn weui-btn_primary" href="javascript:;" id="back">返回</a>
+    </div>
+
+    <div class="footer_tip">
+        <p>1.口罩申请量，按每人每天一个口罩的标准统计。</p>
+        <p>2.企业对复工人数应如实填写，镇街经促部门将适时进行抽查。</p>
+    </div>
+
+    <div class="footer">
+        <p style="text-indent: 2em;">
+            为坚持疫情防控与经济发展两手抓、两手硬，全力支持企业安全有序复工复产，我区将通过多渠道解决企业复工复产的口罩紧缺问题。请复工复产过程中切实存在口罩需求的各企业，按照实际需求进行网上预约申购，每家企业再次申购需间隔7天以上。如有疑问，请与属地镇（街道）经科部门联系。企业承诺所填资料真实有效，如因企业错报、漏报、瞒报所产生的不良后果及法律责任，均由企业自行承担。
+        </p>
+        <p style="text-indent: 2em;">
+            特别提示：预约成功并经各镇（街道）经科部门审核后，将以短信通知企业。企业可凭企业营业执照复印件加盖单位公章后，到指定的场所购买口罩（口罩按成本价每个2元收费）。
+        </p>
+        <ul>
+            <li>1.大良街道: 29938269</li>
+            <li>2.容桂街道: 28386883</li>
+            <li>3.伦教街道: 27720001</li>
+            <li>4.勒流街道: 25533391</li>
+            <li>5.陈村镇: 23833342</li>
+            <li>6.北滘镇: 26335948</li>
+            <li>7.乐从镇: 28338823</li>
+            <li>8.龙江镇: 23638077</li>
+            <li>9.杏坛镇: 27388231</li>
+            <li>10.均安镇: 25518319</li>
+        </ul>
+
+        <p style="margin-top: 20px;" class="bottom_saying">主办单位：佛山市顺德区发展和改革局</p>
+        <p class="bottom_saying">技术支持单位：佛山市顺德区政务服务数据管理局</p>
+    </div>
+</div>
+
+<!--BEGIN toast-->
+<div id="toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-cancel weui-icon_toast"></i>
+        <p class="weui-toast__content">登录成功</p>
+    </div>
+</div>
+<!--end toast-->
+
+
+<script th:inline="javascript">
+    //获取是否可编辑标记
+    var isModify = [[${reserve.isModify}]];
+    console.log(isModify);
+
+    var dateCredit = "false";
+    var radioEdit = false;
+
+    //下次申报日期
+    $("#next_time").text(daysLater([[${reserve.createDate}]]));
+
+    //页面加载时的初始化事件
+    $(function () {
+        //根据标识设置修改，保存按钮是否隐藏
+        if (isModify == "false") {
+            $("#showTooltips").hide();
+            $("#editable").hide();
+            //可编辑，设置返回按钮为取消
+            $("#cancelEdit").hide();
+            $("#back").css({
+                width: "80%",
+                left:0,
+                marginBottom:"20px"
+            })
+
+        }else{
+            //取消事件
+            $("#cancelEdit").click(function (e) {
+                $("#peopleNumber").attr("readonly", "readonly");
+                $("#resumedWorkNumber").attr("readonly", "readonly");
+                $("#numberMasks").attr("readonly", "readonly");
+                $("#contactPerson").attr("readonly", "readonly");
+                $("#phoneNumber").attr("readonly", "readonly");
+                //如果不可修改是，返回事件返回到登陆页
+                if (isModify == "false") {
+                    window.history.back(-1);
+                }
+                //日期变回不可编辑
+                $("#span_resumedWorkDate").show();
+                $("#span_toResumeWorkDate").show();
+                $("#resumedWorkDate").hide();
+                $("#toResumeWorkDate").hide();
+                //单选框不可选
+                radioEdit = false;
+                //按钮样式
+                $("#editable").removeClass("gray_btn");
+                $("#showTooltips").addClass("gray_btn");
+                //数据变回原来的值
+                var resumedWorkDate = [[${reserve.resumedWorkDate}]];
+                if (resumedWorkDate == null || resumedWorkDate == "") {
+                    $("#radio-one").removeClass("selected");
+                    $("#radio-two").addClass("selected");
+                    $("#date_resumedWork").hide();
+                    $("#date_toResumeWork").show();
+                }else{
+                    $("#radio-one").addClass("selected");
+                    $("#radio-two").removeClass("selected");
+                    $("#date_resumedWork").show();
+                    $("#date_toResumeWork").hide();
+                }
+                $("#span_resumedWorkDate").text(formatTime([[${reserve.resumedWorkDate}]]));
+                $("#resumedWorkDate").val(formatTime([[${reserve.resumedWorkDate}]]));
+                $("#span_toResumeWorkDate").val(formatTime([[${reserve.toResumeWorkDate}]]));
+                $("#toResumeWorkDate").val(formatTime([[${reserve.toResumeWorkDate}]]));
+                $("#peopleNumber").val([[${reserve.peopleNumber}]]);
+                $("#resumedWorkNumber").val([[${reserve.resumedWorkNumber}]]);
+                $("#numberMasks").val([[${reserve.numberMasks}]]);
+                $("#contactPerson").val([[${reserve.contactPerson}]]);
+                $("#phoneNumber").val([[${reserve.phoneNumber}]]);
+            })
+        }
+
+        //初始化单选框
+        var resumedWorkDate = [[${reserve.resumedWorkDate}]];
+        console.log(resumedWorkDate);
+        if (resumedWorkDate == null || resumedWorkDate == "") {
+            $("#radio-one").removeClass("selected");
+            $("#radio-two").addClass("selected");
+            $("#date_resumedWork").hide();
+            $("#date_toResumeWork").show();
+        }else{
+            $("#radio-one").addClass("selected");
+            $("#radio-two").removeClass("selected");
+            $("#date_resumedWork").show();
+            $("#date_toResumeWork").hide();
+        }
+    });
+
+    function formatTime(dateStr) {
+        if(dateStr == null){
+            return "";
+        }
+        var date = new Date(dateStr);
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        return year+"/"+month+"/"+day;
+    }
+
+    function daysLater(dateStr) {
+        if(dateStr == null){
+            return "";
+        }
+        var date = new Date(dateStr);
+        //判断是4月2号前还是后
+        var standard = new Date("2020-04-02 00:00:00");
+        var someDays =  "";
+        if(compareTime(standard,date)){
+            //4月2号前
+            someDays = new Date(date.getTime() + 1000*60*60*24*3)
+        }else{
+            //4月2号后
+            someDays = new Date(date.getTime() + 1000*60*60*24*7)
+        }
+        var year = someDays.getFullYear();
+        var month = addZero(someDays.getMonth()+1);
+        var day = addZero(someDays.getDate());
+        return year+"/"+month+"/"+day;
+    }
+
+    function compareTime(date1,date2) {
+        return date1.getTime()>=date2.getTime();
+    }
+
+    function showToast(msg, isSuccess) {
+        var $toast = $('#toast');
+        if ($toast.css('display') != 'none') return;
+        $("#toast .weui-toast__content").text(msg);
+        if (isSuccess) {
+            $("#toast i").removeClass("weui-icon-cancel").addClass("weui-icon-success-no-circle");
+        } else {
+            $("#toast i").removeClass("weui-icon-success-no-circle").addClass("weui-icon-cancel");
+        }
+        $toast.fadeIn(100);
+        setTimeout(function () {
+            $toast.fadeOut(100);
+        }, 2000);
+    }
+
+    function isToday(str) {
+        var d = new Date();
+        var y = d.getFullYear(); // 年
+        var m = addZero(d.getMonth() + 1); // 月份从0开始的
+        var day = addZero(d.getDate()); //日
+        return str == (y + '/' + m + '/' + day);
+    }
+
+    function addZero(num) {
+        if (num < 10) {
+            return "0" + num;
+        } else {
+            return "" + num;
+        }
+    }
+
+    function compareDate(date1, date2) {
+        if (isToday(date1)) {
+            return true
+        }
+        var oDate1 = new Date(date1);
+        var oDate2 = new Date(date2);
+        if (oDate1.getTime() > oDate2.getTime()) {
+            return true; //第一个大
+        } else {
+            return false; //第二个大
+        }
+    }
+
+    function compareDate2(date1, date2) {
+        if (isToday(date2)) {
+            return false
+        }
+        var oDate1 = new Date(date1);
+        var oDate2 = new Date(date2);
+        if (oDate1.getTime() > oDate2.getTime()) {
+            return true; //第一个大
+        } else {
+            return false; //第二个大
+        }
+    }
+
+    //时间控件初始化
+    $("#resumedWorkDate").calendar({
+        maxDate: [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()],
+        onOpen: function (p) {
+            //设置日期控件不可编辑事件
+            if (dateCredit == "false") {
+                $("#resumedWorkDate").calendar("close");  //关闭弹窗
+            }
+        },
+        onChange(val1,val2){
+            $("#span_resumedWorkDate").text(val2);
+        }
+    });
+    $("#toResumeWorkDate").calendar({
+        minDate: [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()],
+        onOpen: function (p) {
+            if (dateCredit == "false") {
+                $("#toResumeWorkDate").calendar("close");  //关闭弹窗
+            }
+        },
+        onChange(val1,val2){
+            $("#span_toResumeWorkDate").text(val2);
+        }
+    });
+    //单选框事件
+    $("#my_radio>span>a").click(function (e) {
+        if(radioEdit) {
+            $("#my_radio>span").find(".selected").removeClass("selected");
+            $(this).addClass("selected");
+            if ($(this).attr("data-type") == "1") {
+                $("#date_resumedWork").show();
+                $("#date_toResumeWork").hide();
+            } else if ($(this).attr("data-type") == "2") {
+                $("#date_resumedWork").hide();
+                $("#date_toResumeWork").show();
+            }
+        }
+    })
+    //输入框赋值
+    // $("#name").text($("#model_name").text())
+    // $("#type").text($("#model_type").text() == "null" ? "" : $("#model_type").text())
+    // $("#address").text($("#model_address").text())
+
+    //修改事件
+    $("#editable").click(function (e) {
+        console.log("dianji")
+        $("#peopleNumber").removeAttr("readonly");
+        $("#resumedWorkNumber").removeAttr("readonly");
+        $("#numberMasks").removeAttr("readonly");
+        $("#contactPerson").removeAttr("readonly");
+        $("#phoneNumber").removeAttr("readonly");
+        //设置日期控件可修改
+        dateCredit = "true";
+        $("#span_resumedWorkDate").hide();
+        $("#span_toResumeWorkDate").hide();
+        $("#resumedWorkDate").show();
+        $("#toResumeWorkDate").show();
+        //单选框可选
+        radioEdit = true;
+        //按扭样式
+        $(this).addClass("gray_btn");
+        $("#showTooltips").removeClass("gray_btn");
+    })
+    //返回事件
+    $("#back").click(function (e) {
+        window.history.back(-1);
+    })
+    //保存事件
+    $("#showTooltips").click(submitEvent);
+
+    function submitEvent(e) {
+        //判断是否是可编辑状态
+        var flag1 = $("#peopleNumber").attr("readonly");
+        var flag2 = $("#resumedWorkNumber").attr("readonly");
+
+        if (flag1 == flag2 && flag2 == "readonly") {
+            $.alert("请先点击修改", "提示", function () {
+            });
+            return
+        }
+
+        var resumedWorkDate = $("#resumedWorkDate").val().trim();
+        var toResumeWorkDate = $("#toResumeWorkDate").val().trim();
+        var peopleNumber = $("#peopleNumber").val().trim();
+        var resumedWorkNumber = $("#resumedWorkNumber").val().trim();
+        var numberMasks = $("#numberMasks").val().trim();
+        var contactPerson = $("#contactPerson").val().trim();
+        var phoneNumber = $("#phoneNumber").val().trim();
+        if (parseInt(peopleNumber) < parseInt(resumedWorkNumber)) {
+            $.alert("企业人数应大于等于复工人数", "提示", function () {
+            });
+            return
+        }
+
+        var id = [[${reserve.id}]];
+
+        var obj = {
+            id: id,
+            peopleNumber: peopleNumber,
+            resumedWorkNumber: resumedWorkNumber,
+            numberMasks: numberMasks,
+            contactPerson: contactPerson,
+            phoneNumber: phoneNumber
+        }
+
+        var type = $("#my_radio>span").find(".selected").attr("data-type");
+        if (type == "1") {
+            if (resumedWorkDate == "") {
+                $.alert("请填写复工日期", "提示", function () {
+                });
+                return
+            }
+            obj.resumedWorkDate = resumedWorkDate;
+            obj.toResumeWorkDate = "";
+            if (compareDate(resumedWorkDate, new Date())) {
+                $.alert("已复工日期不得晚于今天", "提示", function () {
+                });
+                return
+            }
+        } else if (type == "2") {
+            if (toResumeWorkDate == "") {
+                $.alert("请填写拟复工日期", "提示", function () {
+                });
+                return
+            }
+            obj.resumedWorkDate = "";
+            obj.toResumeWorkDate = toResumeWorkDate;
+            if (compareDate2(new Date(), toResumeWorkDate)) {
+                $.alert("拟复工日期不得早于今天", "提示", function () {
+                });
+                return
+            }
+        }
+
+        if (peopleNumber == "") {
+            $.alert("请填写企业人数", "提示", function () {
+            });
+            return
+        }
+
+        if (resumedWorkNumber == "") {
+            $.alert("请填写复工人数", "提示", function () {
+            });
+            return
+        }
+
+        if (numberMasks == "") {
+            $.alert("请填写申请的口罩数量", "提示", function () {
+            });
+            return
+        }
+
+        if (parseInt(numberMasks) > parseInt($("#three_time").text())) {
+            $.alert("口罩申请量超过规定量，请重新输入", "提示", function () {
+            });
+            return
+        }
+
+        if (contactPerson == "") {
+            $.alert("请填写联系人姓名", "提示", function () {
+            });
+            return
+        }
+
+        if (phoneNumber == "") {
+            $.alert("请填写联系人联系方式", "提示", function () {
+            });
+            return
+        }else if(!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(phoneNumber)){
+            $.alert("请输入正确的手机号码","提示",function(){
+            });
+            return
+        }
+
+
+        $.ajax({
+            url: basePath() + "/enterprise/modifySubmit",
+            data: obj,
+            type: "post",
+            dataType: "json",
+            async: true,
+            beforeSend:function(){
+                $('#showTooltips').unbind('click');
+            },
+            success: function (data) {
+                console.log(data.code)
+                if (data.code == 200) {
+                    $.alert("信息保存成功！", "提示", function () {
+                        //按钮样式
+                        $("#editable").removeClass("gray_btn");
+                        $("#showTooltips").addClass("gray_btn");
+                        //日期变回不可编辑
+                        $("#span_resumedWorkDate").show();
+                        $("#span_toResumeWorkDate").show();
+                        $("#resumedWorkDate").hide();
+                        $("#toResumeWorkDate").hide();
+                    });
+                    // $.toast("预约成功");
+                    // showToast("预约成功",true);
+                } else if (data.code == 0) {
+                    $.alert("登录信息失效，请重新登录", "提示", function () {
+                        window.location.href = basePath() + '/enterprise/login';
+                    });
+                    // showToast("登录信息失效，请重新登录",true);
+
+                } else {
+                    $.alert("保存失败！", "提示", function () {
+                    });
+                    // showToast("预约失败",false);
+                }
+                $("#showTooltips").click(submitEvent);
+            },
+            error: function (err) {
+                console.log(err);
+                $.alert("预约失败", "提示", function () {
+                });
+                $("#showTooltips").click(submitEvent);
+                // showToast("预约失败",false);
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

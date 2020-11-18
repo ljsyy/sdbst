@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.sdcount.SdTwoyearhavenuitMapper">
+
+	<sql id="sdTwoyearhavenuitColumns">
+		a."id" AS "id",
+		a."year_date" AS "yearDate",
+		a."name" AS "name",
+		a."nuit" AS "nuit",
+		a."first_num" AS "firstNum",
+		a."last_num" AS "lastNum",
+		to_char(a."zzl",'fm9999990.00') AS "zzl",
+		a."type" AS "type",
+		a."parent_type" AS "parentType",
+		a."big_type" AS "bigType"
+	</sql>
+	
+	<sql id="sdTwoyearhavenuitJoins">
+	</sql>
+    
+	<select id="get" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		<include refid="sdTwoyearhavenuitJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		<include refid="sdTwoyearhavenuitJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		<include refid="sdTwoyearhavenuitJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sd_twoyearhavenuit(
+			"id",
+			"year_date",
+			"name",
+			"nuit",
+			"first_num",
+			"last_num",
+			"zzl",
+			"type",
+			"parent_type",
+			"big_type"
+		) VALUES (
+			#{id},
+			#{yearDate},
+			#{name},
+			#{nuit},
+			#{firstNum},
+			#{lastNum},
+			#{zzl},
+			#{type},
+			#{parentType},
+			#{bigType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sd_twoyearhavenuit SET 	
+			"year_date" = #{yearDate},
+			"name" = #{name},
+			"nuit" = #{nuit},
+			"first_num" = #{firstNum},
+			"last_num" = #{lastNum},
+			"zzl" = #{zzl};
+			"type" = #{type},
+			"parent_type" = #{parentType},
+			"big_type" = #{bigType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sd_twoyearhavenuit
+		WHERE id = #{id}
+	</update>
+	<select id="year" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		where 
+		a."year_date" =#{year}
+		AND a."type" = #{type}
+	</select>
+	<select id="yearTwo" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		where 
+		a."year_date" =#{year}
+		AND a."type" = #{type}
+		AND a."name" = #{name}
+	</select>
+	<select id="yearTwozl" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		where 
+		a."year_date" =#{year}
+		AND a."type" = #{type}
+		AND (a."parent_type" = #{parentType} or a."name" = #{name})
+		AND a."name"!='完成投资总计'
+	</select>
+	<select id="yearGm" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		where 
+		a."year_date" =#{year}
+		AND a."type" = #{type}
+		AND a."parent_type" = #{parentType} 
+	</select>
+	<select id="findName" resultType="com.unifs.sdbst.app.bean.sdcount.SdTwoyearhavenuit">
+		SELECT 
+			<include refid="sdTwoyearhavenuitColumns"/>
+		FROM sd_twoyearhavenuit a
+		where 
+		a."year_date" =#{year}
+		AND a."type" = #{type}
+		AND a."name" = #{name}
+	</select>
+</mapper>

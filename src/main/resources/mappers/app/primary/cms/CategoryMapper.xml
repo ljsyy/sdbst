@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.cms.CategoryMapper">
+
+
+	<sql id="cmsCategoryDaoColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS
+		"parentIds",
+		a.site_id AS "site.id",
+		a.office_id AS "office.id",
+		a.module AS "module",
+		a.name AS "name",
+		a.image AS "image",
+		a.href AS
+		"href",
+		a.target AS "target",
+		a.description AS "description",
+		a.keywords
+		AS "keywords",
+		a.sort AS "sort",
+		a.in_menu AS "inMenu",
+		a.in_list AS
+		"inList",
+		a.show_modes AS "showModes",
+		a.allow_comment AS
+		"allowComment",
+		a.is_audit AS "isAudit",
+		a.custom_list_view AS
+		"customListView",
+		a.custom_content_view AS "customContentView",
+		a.view_config AS "viewConfig",
+-- 		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+-- 		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS
+		"delFlag",
+		c.name AS "parent.name",
+		c.view_config AS
+		"parent.viewConfig",
+		o.name AS "office.name",
+		s.theme AS "site.theme"
+	</sql>
+
+	<sql id="cmsCategoryDaoColumn">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS
+		"parentIds",
+		a.site_id AS "site.id",
+		a.office_id AS "office.id",
+		a.module AS "module",
+		a.name AS "name",
+		a.image AS "image",
+		a.href AS
+		"href",
+		a.target AS "target",
+		a.description AS "description",
+		a.keywords
+		AS "keywords",
+		a.sort AS "sort",
+		a.in_menu AS "inMenu",
+		a.in_list AS
+		"inList",
+		a.show_modes AS "showModes",
+		a.allow_comment AS
+		"allowComment",
+		a.is_audit AS "isAudit",
+		a.custom_list_view AS
+		"customListView",
+		a.custom_content_view AS "customContentView",
+		a.view_config AS "viewConfig",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS
+		"delFlag"
+
+	</sql>
+	<sql id="cmsCategoryDaoJoins">
+		LEFT JOIN cms_category c ON c.id = a.parent_id
+		JOIN sys_office o ON o.id =
+		a.office_id
+		JOIN sys_user u ON u.id = a.create_by
+		JOIN cms_site s ON
+		a.site_id = s.id
+	</sql>
+	<select id="findByParentIdsLike" resultType="com.unifs.sdbst.app.bean.cms.Category">
+		SELECT
+		<include refid="cmsCategoryDaoColumns" />
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins" />
+		<where>
+			a.parent_id LIKE
+			'%'||#{id}||'%'
+		</where>
+		order by a.site_id, a.sort
+	</select>
+
+	<select id="findModule" resultType="com.unifs.sdbst.app.bean.cms.Category">
+		SELECT
+		<include refid="cmsCategoryDaoColumn" />
+		FROM cms_category a
+		<!-- <include refid="cmsCategoryDaoJoins"/> -->
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<!-- <if test=" site.id != null and site.id != ''"> AND a.site_id = #{site.id}
+				</if> <if test="parent.id != null and parent.id != ''"> AND a.parent_id =
+				#{parent.id} </if> -->
+			<if test="inMenu != null and inMenu != '' ">
+				AND a.in_menu = #{inMenu}
+			</if>
+			${sqlMap.dsf}
+		</where>
+		ORDER BY <!-- a.site_id, -->
+		a.sort ASC
+	</select>
+
+	<select id="getList" resultType="com.unifs.sdbst.app.bean.cms.Category">
+		SELECT
+		<include refid="cmsCategoryDaoColumn" />
+		FROM cms_category a
+		WHERE a.del_flag = #{delFlag}
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="selectByName" parameterType="String" resultType="com.unifs.sdbst.app.bean.cms.Category">
+		SELECT
+		<include refid="cmsCategoryDaoColumn" />
+		from cms_category a where name=#{_parameter,jdbcType=VARCHAR}
+	</select>
+</mapper>

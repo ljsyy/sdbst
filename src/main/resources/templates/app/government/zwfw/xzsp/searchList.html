@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="css/app/list.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/list.js"></script>
+    <title>${param.name}</title>
+
+    <style>
+        .container #content {margin-top: 0px;}
+        .red{color: #4281cd;background: #f6f6f6;font-size: 20px;padding-top: 20px;}
+        .error{height: 135px;padding-top: 30%;}
+        .goback{background: #4281cd;color: #fff;border: 0;border-radius: 5px;width: 74%;padding: 8px;margin-top: 20px;}
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <!--内容-->
+    <div id="content"></div>
+</div>
+
+</body>
+
+<script th:inline="javascript">
+
+    $(document).ready(function(){
+        query();
+    });
+
+    function query(){
+        var keyword=[[${keyword}]]
+        $.ajax({
+            url:basePath()+"/government/xzsp?keyword="+keyword,
+            type:"get",
+            dataType:"xml",
+            success:function(result){
+                console.log(result)
+                var arr=$(result).find("Response").find("Body").find("items").find("item");
+                var count = 0;
+                $(arr).each(function(){
+                    var id= $(this).children("id").text();
+                    var name= $(this).children("name").text();
+                    //链接地址
+                    var tempUrl=basePath()+"/government/guideDetail?id="+id+"&title=详情&noHead=true";
+                    $(".container #content").append("<dl><dt><a href='"+ tempUrl +"'><div class='dl-l'>"+ name +"</div><div class='dl-r'><img src='${ctxStatic}/modules/app/img/interface/right.png' /></div></a></dt></dl>");
+                    count++;
+                });
+                if(count == 0){
+                    //alert("查询失败")
+                    $(".container #content").css("text-align","-webkit-center");
+                    $(".container #content").append(
+                        '<img class="error" src="'+basePath()+'/img/menu/error.png">'+
+                        '<p class="red">没有符合查询条件的结果！</p>'+
+                        '<button class="goback" onclick="javascript:history.go(-1);">返回</button>'
+                    );
+                }
+            }
+        });
+    }
+</script>
+
+</html>

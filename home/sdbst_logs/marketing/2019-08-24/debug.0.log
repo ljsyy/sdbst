@@ -1,0 +1,164 @@
+[DEBUG] 2019-08-24 10:45:04 [http-nio-127.0.0.1-8080-exec-10:173179:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 10:45:04 [http-nio-127.0.0.1-8080-exec-8:173179:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 10:45:04 [http-nio-127.0.0.1-8080-exec-8:173249:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 10:45:04 [http-nio-127.0.0.1-8080-exec-10:173249:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 10:45:06 [http-nio-127.0.0.1-8080-exec-10:174387:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 10:45:06 [http-nio-127.0.0.1-8080-exec-8:174387:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 10:48:55 [http-nio-127.0.0.1-8080-exec-1:116597:com.unifs.sdbst.app.dao.primary.user.UserMapper.update:159] - ==>  Preparing: update APP_USER set password=? where ID=?
+[DEBUG] 2019-08-24 10:48:55 [http-nio-127.0.0.1-8080-exec-1:116637:com.unifs.sdbst.app.dao.primary.user.UserMapper.update:159] - ==> Parameters: bc6c8bbae4eacfc9f038e8d0a566a3769066864147a56170b31bab8d(String), b914950786b4451bb279fb1fe7302645(String)
+[DEBUG] 2019-08-24 10:48:56 [http-nio-127.0.0.1-8080-exec-1:116747:com.unifs.sdbst.app.dao.primary.user.UserMapper.update:159] - <==    Updates: 1
+[DEBUG] 2019-08-24 10:49:21 [http-nio-127.0.0.1-8080-exec-4:141756:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 10:49:21 [http-nio-127.0.0.1-8080-exec-4:141757:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 10:49:21 [http-nio-127.0.0.1-8080-exec-4:141779:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 11:43:45 [http-nio-127.0.0.1-8080-exec-10:48749:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 11:43:45 [http-nio-127.0.0.1-8080-exec-10:48795:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 11:43:45 [http-nio-127.0.0.1-8080-exec-10:48814:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 14:29:49 [http-nio-0.0.0.0-8080-exec-5:58666:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 14:29:49 [http-nio-0.0.0.0-8080-exec-5:58738:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 14:29:49 [http-nio-0.0.0.0-8080-exec-5:58780:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 14:32:05 [http-nio-0.0.0.0-8080-exec-8:194685:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 14:32:05 [http-nio-0.0.0.0-8080-exec-8:194685:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 14:32:05 [http-nio-0.0.0.0-8080-exec-8:194691:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 14:48:17 [http-nio-0.0.0.0-8080-exec-1:39944:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 14:48:17 [http-nio-0.0.0.0-8080-exec-1:39988:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 14:48:17 [http-nio-0.0.0.0-8080-exec-1:40009:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 15:05:24 [http-nio-0.0.0.0-8080-exec-1:44077:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 15:05:24 [http-nio-0.0.0.0-8080-exec-1:44140:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 15:05:24 [http-nio-0.0.0.0-8080-exec-1:44168:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 15:16:13 [http-nio-0.0.0.0-8080-exec-1:32080:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 15:16:13 [http-nio-0.0.0.0-8080-exec-1:32119:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 15:16:13 [http-nio-0.0.0.0-8080-exec-1:32139:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 15:42:18 [http-nio-0.0.0.0-8080-exec-6:1031266:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 15:42:18 [http-nio-0.0.0.0-8080-exec-6:1031335:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: sdbst88(String)
+[DEBUG] 2019-08-24 15:42:18 [http-nio-0.0.0.0-8080-exec-6:1031362:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:01:30 [http-nio-0.0.0.0-8080-exec-5:116889:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:01:30 [http-nio-0.0.0.0-8080-exec-5:116948:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:01:30 [http-nio-0.0.0.0-8080-exec-5:116970:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:02:20 [http-nio-0.0.0.0-8080-exec-8:166608:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:02:20 [http-nio-0.0.0.0-8080-exec-8:166608:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:02:20 [http-nio-0.0.0.0-8080-exec-8:166614:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:04:19 [http-nio-0.0.0.0-8080-exec-1:286075:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:04:19 [http-nio-0.0.0.0-8080-exec-1:286076:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:04:19 [http-nio-0.0.0.0-8080-exec-1:286080:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:05:18 [http-nio-0.0.0.0-8080-exec-4:344880:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:05:18 [http-nio-0.0.0.0-8080-exec-4:344881:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:05:18 [http-nio-0.0.0.0-8080-exec-4:344888:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:10:25 [http-nio-0.0.0.0-8080-exec-2:58149:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:10:25 [http-nio-0.0.0.0-8080-exec-2:58216:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:10:25 [http-nio-0.0.0.0-8080-exec-2:58248:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:14:43 [http-nio-0.0.0.0-8080-exec-1:42910:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:14:43 [http-nio-0.0.0.0-8080-exec-1:42982:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:14:43 [http-nio-0.0.0.0-8080-exec-1:43013:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:18:01 [http-nio-0.0.0.0-8080-exec-9:32844:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:18:01 [http-nio-0.0.0.0-8080-exec-9:32908:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:18:01 [http-nio-0.0.0.0-8080-exec-9:32935:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:22:07 [http-nio-0.0.0.0-8080-exec-2:31500:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:22:07 [http-nio-0.0.0.0-8080-exec-2:31563:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:22:07 [http-nio-0.0.0.0-8080-exec-2:31594:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:30:30 [http-nio-0.0.0.0-8080-exec-1:71974:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:30:30 [http-nio-0.0.0.0-8080-exec-1:72013:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:30:30 [http-nio-0.0.0.0-8080-exec-1:72033:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:34:02 [http-nio-0.0.0.0-8080-exec-2:283244:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:34:02 [http-nio-0.0.0.0-8080-exec-2:283245:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:34:02 [http-nio-0.0.0.0-8080-exec-2:283256:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:41:49 [http-nio-0.0.0.0-8080-exec-8:70317:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:41:50 [http-nio-0.0.0.0-8080-exec-8:70532:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:41:50 [http-nio-0.0.0.0-8080-exec-8:70596:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:42:47 [http-nio-0.0.0.0-8080-exec-1:128477:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:42:47 [http-nio-0.0.0.0-8080-exec-1:128477:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:42:47 [http-nio-0.0.0.0-8080-exec-1:128483:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:43:02 [http-nio-0.0.0.0-8080-exec-4:142760:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:43:02 [http-nio-0.0.0.0-8080-exec-4:142761:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:43:02 [http-nio-0.0.0.0-8080-exec-4:142767:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:43:21 [http-nio-0.0.0.0-8080-exec-5:161729:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:43:21 [http-nio-0.0.0.0-8080-exec-5:161730:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:43:21 [http-nio-0.0.0.0-8080-exec-5:161734:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:43:51 [http-nio-0.0.0.0-8080-exec-8:191634:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:43:51 [http-nio-0.0.0.0-8080-exec-8:191634:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:43:51 [http-nio-0.0.0.0-8080-exec-8:191639:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:44:27 [http-nio-0.0.0.0-8080-exec-1:227772:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:44:27 [http-nio-0.0.0.0-8080-exec-1:227773:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:44:27 [http-nio-0.0.0.0-8080-exec-1:227777:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:47:52 [http-nio-0.0.0.0-8080-exec-4:433237:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:47:52 [http-nio-0.0.0.0-8080-exec-4:433238:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:47:52 [http-nio-0.0.0.0-8080-exec-4:433244:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:50:20 [http-nio-0.0.0.0-8080-exec-1:29878:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:50:21 [http-nio-0.0.0.0-8080-exec-1:29920:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:50:21 [http-nio-0.0.0.0-8080-exec-1:29939:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:51:16 [http-nio-0.0.0.0-8080-exec-5:85117:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:51:16 [http-nio-0.0.0.0-8080-exec-5:85118:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:51:16 [http-nio-0.0.0.0-8080-exec-5:85123:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:57:28 [http-nio-0.0.0.0-8080-exec-2:103776:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:57:28 [http-nio-0.0.0.0-8080-exec-2:103816:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:57:28 [http-nio-0.0.0.0-8080-exec-2:103835:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:58:53 [http-nio-0.0.0.0-8080-exec-3:188708:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:58:53 [http-nio-0.0.0.0-8080-exec-3:188709:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:58:53 [http-nio-0.0.0.0-8080-exec-3:188714:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 16:59:45 [http-nio-0.0.0.0-8080-exec-7:240560:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 16:59:45 [http-nio-0.0.0.0-8080-exec-7:240560:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 16:59:45 [http-nio-0.0.0.0-8080-exec-7:240567:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:00:27 [http-nio-0.0.0.0-8080-exec-8:283417:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:00:27 [http-nio-0.0.0.0-8080-exec-8:283418:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:00:27 [http-nio-0.0.0.0-8080-exec-8:283423:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:16:37 [http-nio-0.0.0.0-8080-exec-2:64974:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:16:38 [http-nio-0.0.0.0-8080-exec-2:65018:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:16:38 [http-nio-0.0.0.0-8080-exec-2:65035:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:19:12 [http-nio-0.0.0.0-8080-exec-1:219204:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:19:12 [http-nio-0.0.0.0-8080-exec-1:219205:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:19:12 [http-nio-0.0.0.0-8080-exec-1:219215:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:19:33 [http-nio-0.0.0.0-8080-exec-4:240806:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:19:33 [http-nio-0.0.0.0-8080-exec-4:240807:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:19:33 [http-nio-0.0.0.0-8080-exec-4:240811:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:25:13 [http-nio-0.0.0.0-8080-exec-1:129326:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:25:13 [http-nio-0.0.0.0-8080-exec-1:129370:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:25:13 [http-nio-0.0.0.0-8080-exec-1:129390:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:25:40 [http-nio-0.0.0.0-8080-exec-3:156815:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:25:40 [http-nio-0.0.0.0-8080-exec-3:156816:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:25:40 [http-nio-0.0.0.0-8080-exec-3:156820:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:27:16 [http-nio-0.0.0.0-8080-exec-4:252262:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:27:16 [http-nio-0.0.0.0-8080-exec-4:252262:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:27:16 [http-nio-0.0.0.0-8080-exec-4:252268:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:29:08 [http-nio-0.0.0.0-8080-exec-9:364749:com.unifs.sdbst.app.dao.primary.menus.MenuMapper.find1To3Menu:159] - ==>  Preparing: SELECT * FROM sys_menu a LEFT JOIN sys_menu p ON p.id = a.parent_id LEFT JOIN sys_menu q ON q.id = a.show_menu WHERE (nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<=4 AND a.del_flag = 0
+[DEBUG] 2019-08-24 17:29:08 [http-nio-0.0.0.0-8080-exec-9:364750:com.unifs.sdbst.app.dao.primary.menus.MenuMapper.find1To3Menu:159] - ==> Parameters:
+[DEBUG] 2019-08-24 17:53:27 [http-nio-0.0.0.0-8080-exec-6:184833:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:53:27 [http-nio-0.0.0.0-8080-exec-6:184875:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:53:27 [http-nio-0.0.0.0-8080-exec-6:184893:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 17:59:53 [http-nio-0.0.0.0-8080-exec-2:570677:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 17:59:53 [http-nio-0.0.0.0-8080-exec-2:570678:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 17:59:53 [http-nio-0.0.0.0-8080-exec-2:570686:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:04:57 [http-nio-0.0.0.0-8080-exec-1:874727:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:04:57 [http-nio-0.0.0.0-8080-exec-1:874728:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:04:57 [http-nio-0.0.0.0-8080-exec-1:874734:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:10:35 [http-nio-0.0.0.0-8080-exec-2:1212308:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:10:35 [http-nio-0.0.0.0-8080-exec-2:1212308:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:10:35 [http-nio-0.0.0.0-8080-exec-2:1212314:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:13:47 [http-nio-0.0.0.0-8080-exec-3:1404565:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:13:47 [http-nio-0.0.0.0-8080-exec-3:1404566:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:13:47 [http-nio-0.0.0.0-8080-exec-3:1404571:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:42:56 [http-nio-0.0.0.0-8080-exec-7:3152995:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:42:56 [http-nio-0.0.0.0-8080-exec-7:3152995:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:42:56 [http-nio-0.0.0.0-8080-exec-7:3153001:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:44:47 [http-nio-0.0.0.0-8080-exec-2:3264815:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:44:47 [http-nio-0.0.0.0-8080-exec-2:3264816:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:44:47 [http-nio-0.0.0.0-8080-exec-2:3264822:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:46:28 [http-nio-0.0.0.0-8080-exec-1:3365782:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:46:28 [http-nio-0.0.0.0-8080-exec-1:3365782:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:46:28 [http-nio-0.0.0.0-8080-exec-1:3365787:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 18:46:38 [http-nio-0.0.0.0-8080-exec-4:3375835:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 18:46:38 [http-nio-0.0.0.0-8080-exec-4:3375836:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 18:46:38 [http-nio-0.0.0.0-8080-exec-4:3375841:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 19:20:43 [http-nio-0.0.0.0-8080-exec-2:5420202:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 19:20:43 [http-nio-0.0.0.0-8080-exec-2:5420203:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 19:20:43 [http-nio-0.0.0.0-8080-exec-2:5420211:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 19:23:05 [http-nio-0.0.0.0-8080-exec-4:5562204:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 19:23:05 [http-nio-0.0.0.0-8080-exec-4:5562204:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 19:23:05 [http-nio-0.0.0.0-8080-exec-4:5562209:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 19:27:20 [http-nio-0.0.0.0-8080-exec-9:5817804:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 19:27:20 [http-nio-0.0.0.0-8080-exec-9:5817805:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 19:27:20 [http-nio-0.0.0.0-8080-exec-9:5817810:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 19:29:42 [http-nio-0.0.0.0-8080-exec-1:67047:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 19:29:42 [http-nio-0.0.0.0-8080-exec-1:67089:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 19:29:42 [http-nio-0.0.0.0-8080-exec-1:67106:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1
+[DEBUG] 2019-08-24 19:41:42 [http-nio-0.0.0.0-8080-exec-5:787234:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==>  Preparing: select * from APP_USER where LOGIN_NAME=? and DEL_FLAG='0'
+[DEBUG] 2019-08-24 19:41:42 [http-nio-0.0.0.0-8080-exec-5:787234:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - ==> Parameters: qingtian(String)
+[DEBUG] 2019-08-24 19:41:42 [http-nio-0.0.0.0-8080-exec-5:787241:com.unifs.sdbst.app.dao.primary.user.UserMapper.getByLoginName:159] - <==      Total: 1

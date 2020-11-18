@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+
+    <meta charset="UTF-8">
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>政府部门电话</title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="mui/css/mui.min.css" />
+    <script src="mui/js/mui.min.js"></script>
+    <script th:src="@{/js/base.js}"></script>
+    <style type="text/css">
+        body, dd, dl, html, ol, p, ul {background:white;margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background: #f7f7f7;}
+        body{}
+        a{text-decoration:none;color: #000;}
+
+        .container{}
+        .navi{
+            display: -webkit-inline-box;
+            background: #fff;
+            width: 100%;
+            border-bottom: solid 1px #EFEFEF;
+            color: #6f6666;
+        }
+        .navi .naviBlock{
+            /*width: 20%;*/
+            text-align: center;
+            padding: 14px 0;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .dep{
+            width: 100%;
+            text-align: -webkit-auto;
+            margin-top: 2px;
+        }
+        .dep .depBlock{
+            display: -webkit-inline-box;
+            width: 42%;
+            background: #fff;
+            padding: 10px 5px;
+            text-align: -webkit-left;
+            margin: 10px 2% 0 2%;
+            vertical-align: -webkit-baseline-middle;
+        }
+        .naviBlock{
+            font-size: 14px;
+        }
+        .btom-line{
+            position: relative;
+        }
+        .btom-line:after{
+            content: " ";
+            width: 46px;
+            height: 2px;
+            background: #4285F4;
+            position: absolute;
+            bottom: -0.1rem;
+            left: 50%;
+            transform: translateX(-50%);//居中处理
+        }
+        .dep ul li a{
+            border-bottom: 1px solid #E5E5E5;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .dep ul{
+            margin-left: 15px;
+        }
+        .dep ul li{
+            padding-left: 10px;
+        }
+        .mui-table-view-cell.mui-collapse.mui-active{
+            margin-top: 0;
+        }
+        .dep ul li a img{
+            padding-right: 8px;
+            width: 17px;
+        }
+        .content{
+            padding: 10px 0 8px 25px;
+            border-bottom: 1px dashed #E5E5E5;
+        }
+        .content-one{
+            padding-bottom: 8px;
+            font-size: 14px;
+            color: #252525;
+        }
+        .content-two{
+            padding: 8px 0;
+            font-size: 14px;
+            color: #999999;
+        }
+        .content-three{
+            padding: 8px 0;
+            font-size: 14px;
+            color: #999999;
+        }
+        .mui-table-view-cell:after{
+            height: 0;
+        }
+        .mui-collapse-content{
+            padding-bottom: 0 !important;
+        }
+        .tel{
+            width: 19px;
+            margin-left: 11px;
+        }
+        .ui-flex {
+            display: -webkit-box !important;
+            display: -webkit-flex !important;
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap
+        }
+
+        .ui-flex, .ui-flex *, .ui-flex :after, .ui-flex :before {
+            box-sizing: border-box
+        }
+
+        .ui-flex.justify-center {
+            /*   -webkit-box-pack: center;
+               -webkit-justify-content: center;
+               -ms-flex-pack: center;
+               justify-content: center */
+        }
+        .ui-flex.center {
+            /* -webkit-box-pack: center;
+             -webkit-justify-content: center;
+             -ms-flex-pack: center;
+             justify-content: center;
+             -webkit-box-align: center;
+             -webkit-align-items: center;
+             -ms-flex-align: center; */
+            align-items: center
+        }
+        .mui-table-view-cell.mui-active{
+            background-color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 四级滑块 -->
+    <div class="navi">
+        <!-- <div class="naviBlock">党政机关</div>
+        <div class="naviBlock">党政机关2</div>
+        <div class="naviBlock">党政机关3</div>
+        <div class="naviBlock">党政机关4</div> -->
+    </div>
+
+    <!-- 部门 -->
+    <div class="dep">
+        <ul class="ul">
+            <!-- <li class="mui-table-view-cell mui-media">
+                 <a class="mui-navigate-right" href="#">阿斯顿</a>
+                <div class="mui-collapse-content info close">
+                </div></li> -->
+        </ul>
+    </div>
+
+</div>
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        getDepartmentType();
+        $(".naviBlock").eq(0).click();
+
+    });
+
+    function getPhone(my){
+        var phone = my.prev().text();
+
+        console.log(phone);
+
+
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+            //alert("wx");
+            window.location.href="tel:"+phone;
+        }else{
+            if (isAndroid) {
+                //alert("Android");
+                // myobj.callServerPhone(phone);
+                window.location.href="tel:"+phone;
+            }else if (isiOS) {
+                //alert("ios");
+                window.location.href="tel:"+phone;
+            }
+        }
+    }
+
+    var text = '';
+    function getDepartmentType(){
+        $.ajax({
+            url: basePath()+'/department/getDepartmentType',
+            type: 'GET',
+            dataType: 'json',
+            async:false,
+            success: function(data) {
+                var list = data.data;
+                var html = "";
+                for(var i in list){
+                    html += '<div class="naviBlock">'+list[i]+'</div>';
+                };
+                $(".navi").html(html);
+                $(".navi .naviBlock").css("width",100/list.length+"%")
+                /* 点击效果 */
+                $(".naviBlock").click(function(){
+                    $(".naviBlock").removeClass('btom-line');
+                    $(this).addClass('btom-line');
+                    text = $(this).text();
+                    getDepartmentByType();
+                });
+            },
+            error: function(data) {
+                console.error(data);
+            }
+        })
+    }
+    function getDepartmentByType(){
+        $.ajax({
+            url: basePath()+'/department/getDepartmentByType',
+            type: 'GET',
+            data:{
+                department_type:text
+            },
+            dataType: 'json',
+            async:false,
+            success: function(data) {
+                var html = '';
+                var list = data.data;
+                for(var i in list){
+                    var href = basePath()+'/department/departmentDetailContact?dep_name='+list[i];
+                    html += '<li class="mui-table-view-cell mui-collapse">'+
+                        ' <a class="mui-navigate-right" href="'+href+'"><img src="img/department/circle.png" />'+list[i]+'</a>'+
+                        '<div class="mui-collapse-content info close num'+[i]+'">'+
+                        '</div></li>';
+                    getDetail(list[i] , [i]);
+                }
+                $('.ul').html(html);
+            },
+            error: function(data) {
+                console.error(data);
+            }
+        })
+    }
+    function getDetail(dep_name , num){
+        // var dataStr = obj.find('.mui-navigate-right').text();
+        $.ajax({
+            url: basePath()+'/department/getDepartmentContactByDepName',
+            data:{
+                dep_name:dep_name
+            },
+            type: "post",
+            dataType:"json",
+            async:true,
+            success:function(result){
+                var list = result.data;
+                var html = '';
+                if(list.length === 0){
+                    html += '<div class="line"><div class="phone"><p style="text-align: center;"><span>暂无数据</span></p></div></div>';
+                }else {
+                    for (var i in list) {
+                        html += '<div class="content">' +
+                            ' <div class="content-two ui-flex justify-center center"><span>'+list[i].name+'：' + list[i].value + '</span>' ;
+                            if (list[i].name.indexOf("电话") >= 0) {
+                                html += '<img class="call" style="margin-left: 10px;width: 20px;" src="' + basePath() + '/img/department/tel-green.png" onclick="getPhone($(this))" />'
+                            };
+                        html +='</div>' +
+                            // '<div class="content-three">'+list[i].name+'：' + list[i].value + '</div>' +
+                            '</div>';
+                    }
+                }
+                $(".num"+num).html(html);
+            }
+        });
+    }
+</script>
+</html>

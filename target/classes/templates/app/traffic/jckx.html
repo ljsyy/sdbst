@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>机场快线</title>
+    <style>
+        html,body{
+            -webkit-overflow-scrolling: touch;
+            overflow-scrolling: touch;
+            height:100%;
+            background: #f6f6f6;
+            overflow: auto;
+        }
+        body, dd, dl, html, ol, p, ul {
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+			font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;
+		}
+        .container {
+			padding: 0;
+			max-width: 750px;
+		}
+        /*header{*/
+		/*	height: 50px;*/
+		/*	background: #4281cd;*/
+		/*	text-align: center;*/
+		/*	color: #fff;*/
+		/*	line-height: 50px;*/
+		/*	overflow: hidden;*/
+		/*}*/
+        /*header input{*/
+		/*	background: rgba(0,0,0,0.1);*/
+		/*	border-radius: 5px;*/
+		/*	border: none;*/
+		/*	width: 55%;*/
+		/*	line-height: 30px;*/
+		/*	color: #eee;*/
+		/*	padding: 0 10px;*/
+		/*}*/
+        /*@media only screen and (min-width: 100px) and (max-width: 340px) {*/
+		/*	header input{*/
+		/*		background: rgba(0,0,0,0.1);*/
+		/*		width: 50%;*/
+		/*	}*/
+		/*}*/
+        #jckx .jckx-contant{
+			margin-bottom: 10px;
+		}
+        .red{
+            background: #4281cd;
+            color: #fff;
+            padding: 5px 15px;
+            font-size: 15px;
+            left: -10px;
+            position: relative;
+            display: inline-block;
+        }
+        .list{
+			margin: 10px 30px 5px 30px;
+			background: #fff;
+		}
+        /*#jckx .title{*/
+        /*    height: 100%;*/
+        /*    padding: 10px;*/
+        /*    margin-top: 0px;*/
+        /*    font-size: 22px;*/
+        /*    text-align: center;*/
+        /*    color: #fff;*/
+        /*    background: #4C3E3E;*/
+        /*}*/
+        #jckx .h1 {
+            /*height: 100%;*/
+            padding: 5px;
+            padding-left: 7px;
+            font-size: 12px;
+            color: #4281cd;
+        }
+
+        #jckx .h2 {
+            /*height: 100%;*/
+            width: calc(100% - 12px);
+            font-size: 12px;
+            display: table;
+            padding: 5px;
+            padding-left: 7px;
+            color: #303030;
+        }
+
+        #jckx .h2 .day {
+            width: 40px;
+            display: table-cell;
+            text-align: left;
+        }
+    </style>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script>
+        // function backPageFn() {
+        //     window.history.back();
+        // };
+        // $(window).resize(windowSizeFn);
+        // function windowSizeFn(){
+        //     var h=$(window).height();
+        //     $("#jckx").height(h);
+        // }
+        // $(document).ready(function(){
+        //     windowSizeFn()
+        // })
+    </script>
+</head>
+<body>
+<div id="zwgk-czyslist" class="container">
+    <!--头部-->
+
+    <!--列表-->
+    <div id="jckx">
+        <div id="sdx" class="jckx-contant">
+            <!-- <div class="title">顺德线</div> -->
+
+            <div class="list">
+                <div class="red">顺德->新白云机场（时刻表）</div>
+                <div class="h1">● 顺德新城区候机楼</div>
+                <div class="h2"><p class="day">上午：</p><p>04:30 05:00 05:30 06:00 06:30 07:00 07:30 08:00 08:30 09:00 09:30 10:00 10:30 11:00 11:30</p></div>
+                <div class="h2"><p class="day">下午：</p><p>12:00 12:30 13:00 13:30 14:00 14:30 15:00 15:30 16:00 16:30 17:00 17:30</p></div>
+                <div class="h2" style="border-bottom: solid 1.5px #e5e5e5;"><p class="day">晚上：</p><p>18:00 18:40 19:20 20:00</p></div>
+                <div class="h1">● 顺德大良候机楼</div>
+                <div class="h2"><p class="day">上午：</p><p>04:40 05:10 05:40 06:10 06:40 07:10 07:40 08:10 08:40 09:10 09:40 10:10 10:40 11:10 11:40</p></div>
+                <div class="h2"><p class="day">下午：</p><p>12:10 12:40 13:10 13:40 14:10 14:40 15:10 15:40 16:10 16:40 17:10 17:40</p></div>
+                <div class="h2" style="border-bottom: solid 1.5px #e5e5e5;"><p class="day">晚上：</p><p>18:10 18:50 19:30 20:10</p></div>
+                <div class="h1">● 顺德北滘候机楼</div>
+                <div class="h2"><p class="day">上午：</p><p>05:00 05:30 06:00 06:30 07:00 07:30 08:00 08:30 09:00 09:30 10:00 10:30 11:00 11:30</p></div>
+                <div class="h2"><p class="day">下午：</p><p>12:00 12:30 13:00 13:30 14:00 14:30 15:00 15:30 16:00 16:30 17:00 17:30</p></div>
+                <div class="h2"><p class="day">晚上：</p><p>18:00 18:30 19:10 19:50 20:30</p></div>
+            </div>
+
+            <div class="list">
+                <div class="red">新白云机场->顺德（时刻表）</div>
+                <div class="h1">● B区</div>
+                <div class="h2"><p class="day">上午：</p><p>07:30 08:00 08:30 09:00 09:30 10:00 10:30 11:00 11:30</p></div>
+                <div class="h2"><p class="day">下午：</p><p>12:00 12:30 13:00 13:30 14:00 14:30 15:00 15:30 16:00 16:30 17:00 17:40</p></div>
+                <div class="h2" style="border-bottom: solid 1.5px #e5e5e5;"><p class="day">晚上：</p><p>18:20 19:00 19:40 20:20 21:00 21:40 22:20 23:10 00:20 01:30</p></div>
+                <div class="h1">● A区</div>
+                <div class="h2"><p class="day">上午：</p><p>07:40 08:10 08:40 09:10 09:40 10:10 10:40 11:10 11:40</p></div>
+                <div class="h2"><p class="day">下午：</p><p>12:10 12:40 13:10 13:40 14:10 14:40 15:10 15:40 16:10 16:40 17:10 17:50</p></div>
+                <div class="h2"><p class="day">晚上：</p><p>18:30 19:10 19:50 20:30 21:10 21:50 22:30 23:20 00:30 01:40</p></div>
+                <div class="h2"><p class="day">票价：</p>顺德、大良、北滘<p style="color: #eb3f29;display: inline;">&nbsp;&nbsp;人民币：41元</p></div>
+                <div class="h2"><p class="day" style="width: 80px;">参考车程：</p><p style="color: #eb3f29;">全程单向约80分钟</p></div>
+            </div>
+
+            <div class="list">
+                <div class="red">空港快线新机场售票柜台信息</div>
+                <div class="h1">● A区到达厅</div>
+                <div class="h2"><p class="day" style="width: 165px;padding-right: 20px;padding-left: 10px;">A04号门（扶梯附近）：020-36066038</p></div>
+                <div class="h2" style="border-bottom: solid 1.5px #e5e5e5;"><p class="day" style="width: 165px;padding-right: 20px;padding-left: 10px;">A11号门：020-37152752</p></div>
+                <div class="h1">● B区到达厅</div>
+                <div class="h2"><p class="day" style="width: 165px;padding-right: 20px;padding-left: 10px;">B03号门：020-36066039</p></div>
+                <div class="h2"><p class="day" style="width: 165px;padding-right: 20px;padding-left: 10px;">B05号门：020-36066040</p></div>
+                <div class="h2" style="border-bottom: solid 1.5px #e5e5e5;"><p class="day" style="width: 165px;padding-right: 20px;padding-left: 10px;">B12号门：020-37152807</p></div>
+                <div class="h1">● 上客点</div>
+                <div class="h2"><p>A5-A6号门</p></div>
+                <div class="h2" style="border-bottom: solid 1.5px #e5e5e5;"><p>B11-B13号门</p></div>
+
+                <div class="h1">● 地址</div>
+                <div class="h2"><p>顺德：顺德新城区嘉信社区中心首层</p></div>
+                <div class="h2"><p>大良：顺德大良东乐路格林商务公寓首层</p></div>
+                <div class="h2"><p>北滘：北滘怡和路和怡兴路交界处的美的总部大楼下</p></div>
+            </div>
+
+        </div>
+
+        <div id="sdx1" class="jckx-contant">
+            <div class="h1" style="margin-top: 10px;text-indent: 2em;">以上结果仅供参考，最终解释权归顺德候机楼所有，</div>
+            <div class="h1" style="text-indent: 2em;padding:0 5px;">为不影响您出行，请致电咨询:</div>
+            <div class="h2"><p class="day" style="padding-right: 20px;width:auto;text-indent: 2em;">顺德：0757-22295578</p></div>
+            <div class="h2" style="padding-top:0px;"><p class="day" style="padding-right: 20px;width:auto;text-indent: 2em;">大良：0757-22602881</p></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

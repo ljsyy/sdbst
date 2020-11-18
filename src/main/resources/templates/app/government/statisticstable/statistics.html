@@ -1,0 +1,698 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+<title>统计月报</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="prefetch" href="img/highcharts/table-o.png">
+<link rel="prefetch" href="img/highcharts/zhu-o.png">
+<link rel="prefetch" href="img/highcharts/cookie-o.png">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/highcharts.js"></script>
+<script src="js/lib/highcharts-3d.js"></script>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>
+body{background:#f6f6f6;margin: 0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+p{margin: 0;padding: 0;}
+li{list-style-type: none;}
+.red{color:red;}
+/* 加载动画 */
+#load-now{top: 0;opacity:1;width:100%;height:100%;display:block;position: fixed;z-index:100000;background: rgba(0,0,0,0.2);	-webkit-transition: opacity 300ms linear;-moz-transition: opacity 300ms linear;-ms-transition: opacity 300ms linear;-o-transition: opacity 300ms linear;transition: opacity 300ms linear;}
+.spinner {position: absolute;margin: 0 auto;right: 0;top: 50%;left: 0;margin-top: -17px;width: 150px;text-align: center;} 
+.spinner > div {width: 30px;height: 30px;background-color: #fff;border-radius: 100%;display: inline-block;-webkit-animation: bouncedelay 1.4s infinite ease-in-out;animation: bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode: both;animation-fill-mode: both;}
+.spinner .bounce1 {-webkit-animation-delay: -0.32s;animation-delay: -0.32s;}
+.spinner .bounce2 {-webkit-animation-delay: -0.16s;animation-delay: -0.16s;}
+@-webkit-keyframes bouncedelay {0%, 80%, 100% { -webkit-transform: scale(0.0) }40% { -webkit-transform: scale(1.0) }}
+@keyframes bouncedelay { 0%, 80%, 100% {transform: scale(0.0);-webkit-transform: scale(0.0);} 40% {transform: scale(1.0);-webkit-transform: scale(1.0);}}
+/* 表格 */
+#table{width: 100%;background: #fff;    position: relative;}
+#table .border{position:absolute;border-left:3px solid #fff;border-bottom:3px solid #fff;width:10px;height:10px;transform:rotate(45deg);top:14px;left:6px;display:block;z-index:99999}
+#table .content{font-size: 0px;position: relative; overflow-x: auto;     white-space: nowrap;}
+#table .content .list-zhishu{font-size: 13px;display: inline-block;width: 170px;position: relative;text-align: center;}
+#table .content .list-zhishu.lzhishu{position: absolute;background: #fff;z-index: 1;top: 0;}
+#table .content .list-zhishu.lzhishu .list-title{background: #dfeef9;}
+#table .content .list-zhishu.list-zsmonth{width:120px;}
+#table .content .list-title{background:#f9dfdf;border-bottom: solid 1px #e7e7e7;border-right: solid 1px #e7e7e7;padding: 3px;}
+#table .content .list-content li{    border-bottom: solid 1px #e7e7e7;border-right: solid 1px #e7e7e7;padding: 3px;}
+/*mycode*/
+.screen .d-type{    margin:5px 10px 10px;box-shadow: 0 0 10px rgba(0,0,0,.1);}
+.screen .d-type divp .flextop{flex: 1;text-align: center;}
+.screen .d-type divp .flexbuttom{flex: 1;}
+.screen .d-type divp{display: block;box-sizing: border-box;padding: 1px 0;}
+.screen .d-type .format{background: #fff;display: flex;    padding: 5px;box-sizing: border-box;    align-items: center;}
+.screen .d-type text{height: 25px;line-height: 25px;padding-left: 5px;text-align: center;}
+.screen .d-type .select-ui{display: inline-block;position: relative;}
+.screen .d-type .select-ui span{width: 100%;height: 100%;background: #fff;white-space: nowrap;}
+.screen .d-type select{height: 25px;line-height: 25px;padding-left: 5px;text-align: center;border: none;}
+.screen .d-type select:focus{outline: none;}
+.screen .highcharts{    overflow: hidden;background: #fff;box-sizing: border-box;margin:1px 10px 10px;    position: relative;box-shadow: 0 0 10px rgba(0,0,0,.1);}
+/*搜索*/
+.screen .search{position:absolute;right: 0px;}
+.screen .search span{-webkit-transform: rotate(-45deg);-moz-transform: rotate(-45deg);transform: rotate(-45deg);position: relative;display: inline-block;width: 22px;height: 22px;vertical-align: middle;}
+.screen .search span:before{position: absolute;content: '';    top: 14px;left: 9px;width: 3px;height: 10px;border-radius: 2px;background: #ccc;}
+.screen .search span:after{position: absolute;content: '';      top: 0;left: 3px;width: 11px;height: 11px;border: 2px solid #ccc;border-radius: 16px;}
+/*highcharts*/
+.highcharts .switch{background: #fff;text-align: center;font-size: 0;padding: 15px 0 25px;}
+.highcharts .switch img{padding: 5px 15px;border: solid 1px #ccc;border-right: 0;}
+.highcharts .switch img:last-child{border-right: solid 1px #ccc;}
+.highcharts .highcharts-credits{display:none;}
+.highchartsani{-webkit-transition: all 200ms linear;-ms-transition: all 200ms linear;transition: all 200ms linear;}
+/* 提示页面  */
+.prompt.ani{visibility: visible; opacity: 1;}
+.prompt{visibility: hidden; opacity: 0;height:100%;width:100%;background:rgba(0,0,0,0.3);position:fixed;z-index: 99999999;-webkit-transition: all 0.3s;-moz-transition: all 0.3s;transition: all 0.3s;}
+.prompt .prompt-contant{ background: #2e3846;width: 300px;border-radius: 5px;left: 0;right: 0;margin: 0 auto;position: absolute;top:50%;-webkit-transform: translate(0,-50%);-ms-transform: translate(0,-50%);transform:translate(0,-50%);}
+.prompt .jiaocha{  position: absolute;right: 7px;top: 13px;width: 20px;height: 4px;background: #fff;transform: rotate(45deg);cursor: pointer;}
+.prompt .jiaocha:hover{ background-color: #3e4b5d;}
+.prompt .jiaocha:before{position: absolute;content: '';width: 20px;height: 4px;background:inherit;transform: rotate(-90deg);}
+.prompt .prompt-font{color:#fff;padding: 22px 35px 10px 20px;line-height: 25px;letter-spacing: 1px;    word-break: break-all;}
+.prompt .prompt-button{white-space: nowrap;padding: 0 30px 20px;text-align: center;}
+.prompt .prompt-button a:hover{background-color: #3e4b5d;}
+.prompt .prompt-button a{display: inline-block;cursor:pointer;background-color: #795aac;color: #fff;border:none;padding: 5px 25px;border-radius: 5px;}
+</style>
+</head>
+<body>
+<div id="load-now">
+	<div class="spinner">
+		<div class="bounce1"></div>
+		<div class="bounce2"></div>
+		<div class="bounce3"></div>
+	</div>
+</div>
+<div id="prompt" class="prompt">
+	<div class="prompt-contant">
+		<p class="jiaocha"></p>
+		<p class="prompt-font"></p>
+		<div class="prompt-button"><a></a></div>
+	</div>
+</div>
+<div id="screen" class="vertical screen">
+    <div class="d-type">
+    <div class="d-type" style="position: fixed;top: 0;left: 0;z-index: 10;width: calc(100% - 40px);margin: 0 20px;background: #fff;">
+        <divp class="vertical-s">
+			<div class="format" style="border-bottom: solid 1px #ccc;">
+					<div class="flextop">
+						<select name="year" class="year-id" onchange="changeYearFn()">
+								<option selected='selected'  value="2018">2018年</option>
+								<option value="2017">2017年</option>
+								<option value="2016">2016年</option>
+								<option value="2015">2015年</option>
+								<option value="2014">2014年</option>
+								<option value="2013">2013年</option>
+								<option value="2012">2012年</option>
+								<option value="2011">2011年</option>
+								<option value="2010">2010年</option>
+								<option value="2009">2009年</option>
+								<option value="2008">2008年</option>
+								<option value="2007">2007年</option>
+								<option value="2006">2006年</option>
+								<option value="2005">2005年</option>
+						</select>
+					</div>
+			</div>
+        </divp>
+        <divp>
+			<div class="format">
+				<div class="flexbuttom" style="text-align: center;overflow: hidden;    position: relative;">
+					<div class="search">
+						<span></span>
+					</div>
+					<div class="select-ui">
+						<span id="selectname"></span>
+						<select id="zhishu" class="content" name="count" onchange="changeFn()" style="height: 100%;width: 100%;padding: 0;position: absolute;margin: 0px auto;top: 0;left: 0;right: 0;opacity: 0;"></select>
+					</div>
+				</div>
+			</div>
+		</divp>
+	</div>
+	<div id="slide" style="overflow:hidden;position: relative;padding-top: 75px;">
+		<div class="highcharts hb">
+			<div style="background:#e7f9ed;color: #4bb5f5;padding:10px;">环比</div>
+			<div class="switch">
+				<img src="img/highcharts/zhu-o.png" width="25px" onclick="imghbFn()"/>
+				<img src="img/highcharts/cookie.png" width="25px" onclick="cookiesFn()"/>
+			</div>
+			<div id="container_hb" style="width: 100%; height: 400px; margin: 0 auto"></div>
+		</div>
+		<div class="highcharts tb">
+			<div style="background:#e7f9ed;color: #5cb174;padding:10px;">同比</div>
+			<div id="container_tb" style="width: 100%; height: 400px; margin: 0 auto"></div>
+		</div>
+		<div class="highcharts table">
+			<div style="background:#e7f9ed;color: #5cb174;padding:10px;">表格</div>
+			<div id="table">
+				<div id="tablezs" onscroll="tablelist(this)" class="content">
+					<div id="list_zs" class="list-zhishu">
+						<li class="list-title">指数</li>
+						<div id="table_content" class="list-content"></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">2月</li>
+						<div class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">3月</li>
+						<div  class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">4月</li>
+						<div class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">5月</li>
+						<div  class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">6月</li>
+						<div class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">7月</li>
+						<div   class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">8月</li>
+						<div   class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">9月</li>
+						<div   class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">10月</li>
+						<div  class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">11月</li>
+						<div  class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+					<div class="list-zhishu list-zsmonth">
+						<li class="list-title">12月</li>
+						<div  class="list-content month"><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li><li>x</li></div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script language="JavaScript">
+//加载动画
+function loadAni(sta){
+	if(sta == "open"){
+		$('#load-now').css('display','block');
+		setTimeout("$('#load-now').css('opacity','1');",1);
+	}
+	if(sta == "close"){
+		$('#load-now').css('opacity','0');
+		setTimeout("$('#load-now').css('display','none');",300);
+	}
+}
+//提示框
+var prompt={
+	promptAll:$("#prompt"),
+	promptContant:$("#prompt .prompt-contant"),
+	jiaocha:$("#prompt .jiaocha"),
+	promptFont:$("#prompt .prompt-font"),
+	promptButton:$("#prompt .prompt-button"),
+	hidden_button:false,//是否隐藏按钮
+	config:false//选择自己配置颜色
+}
+prompt.configStyle={//自己配置颜色
+	background:"#fff",//背景颜色
+	contant_background:"#fff",//内容框颜色
+	contantfont_color:"#fff",//内容字体颜色
+	contantjiaocha_background:"#fff",//交叉字体颜色
+	contantbutton_background:"#fff"//按钮颜色
+}
+prompt.print=function(font,buttonname){
+	this.promptFont.text(font);
+	this.promptButton.children("a").text(buttonname);
+	this.promptAll.attr("class","prompt ani");
+}
+prompt.init=function(){
+	this.jiaocha.bind("click",{parent:this},this.close);
+	this.promptButton.children("a").bind("click",{parent:this},this.sure);
+	if(this.hidden_button)
+		this.promptButton.css("display","none");
+	if(this.config){
+		this.promptAll.css("background",this.configStyle.background);
+		this.promptContant.css("background",this.configStyle.contant_background);
+		this.promptFont.css("background",this.configStyle.contantfont_color);
+		this.jiaocha.css("color",this.configStyle.contantjiaocha_background);
+		this.promptButton.css("background",this.configStyle.contantbutton_background);
+	}
+}
+prompt.close=function(my){
+	var parent=my.data.parent;
+	parent.promptAll.attr("class","prompt");
+}
+prompt.sure=function(my){
+	var parent=my.data.parent;
+	parent.promptAll.attr("class","prompt");
+}
+
+//==imgclick
+var switchclass = ".switch";
+function cookiesFn(){
+		var print = false;
+		var nodata = new Array();
+		hbImgChange(1);
+		saveImgIndex = 1;
+		var data = savehb;
+		var newdata = [];
+		for(var i = 0; i < data.bar.length;i++){
+			var index = [];
+			index.push(data.categories[i]);
+			index.push(data.bar[i]);
+			newdata.push(index);
+		}
+		var chart = {      
+		    type: 'pie',     
+		    options3d: {
+		       enabled: true,
+		         alpha: 45,
+		          beta: 0
+		    }
+	   };
+		var title = {
+			text: ''
+		};
+	    var plotOptions = {
+		      pie: {
+		         allowPointSelect: true,
+		         cursor: 'pointer',
+		         depth: 35,
+		         dataLabels: {
+		            enabled: true,
+		            format: '<b>{point.name}月份</b>: {point.percentage:.1f} %',
+		            style: {
+		               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+		            }
+		         }
+		      }
+		   };
+		   var series= [{
+		      type: 'pie',
+		      name: savehb.series,
+		      data:newdata
+		   }];     
+		   var json = {};   
+		   json.chart = chart; 
+		   json.title = title;
+		   json.series = series;
+		   json.plotOptions = plotOptions;
+		   $('#container_hb').highcharts(json); 
+			for(var i = 0; i < data.bar.length;i++){
+				if(data.bar[i] == 0){
+					nodata.push(data.categories[i] + "月份");
+					print = true;
+				}
+			}
+			if(print)
+				prompt.print(nodata.join() + "暂无数据","确定");
+}
+//--表格
+function tableRed(){
+	//红色字体
+	$("#table").find(".red").removeClass("red");
+	var listzhishu = $("#table").find(".list-zhishu:eq(" + (parseInt(month) - 1) +")");
+	var length = listzhishu.find(".month li").length;
+	for(var i = 0; i < length; i++){
+		var liname = listzhishu.find(".month li:eq(" + i + ")").attr("changeName");
+		
+		if(liname == $(zhishu).val()){
+			listzhishu.find(".month li:eq(" + i + ")").addClass("red");
+			break;
+		}
+	}
+}
+function tableFn(){
+	var print = false;
+	var nodata = new Array();
+	var year = $(".year-id").val();
+	var zhishuT = $(zhishu).val();
+	var listcontent = "#table_content";
+	var listlength  = $(listcontent).find("li").length;
+	function tablerun(data){
+		var newdata = data.data;
+		var str = '';
+		var addmonth = ".list-zhishu .list-content.month";
+		$(addmonth).empty();
+		for(var i = 0; i < listlength; i++){
+			var name = $(listcontent + " li:eq(" + i + ")").text();
+			var index = 0;
+			for(var j = 0; j < newdata.length; j++){
+				var red = "";
+				if((index + 2) == parseInt(month) && zhishuT == newdata[j].name){
+					red = "red";
+				}
+				if(newdata[j].name == "居民消费价格指数"){
+					if(newdata[j].total != 0){
+						var changeName = newdata[j].name;
+						var click = 'tableClickFn($(this),"' + newdata[j].name + '",' + (index + 2) +')';
+						$(addmonth + ":eq(" + index + ")").append("<li changeName=" + changeName + " onclick='" + click + "' class=" + red + ">" + newdata[j].total+ "(%)</li>");
+					}else{
+						$(addmonth + ":eq(" + index + ")").append("<li class=" + red + ">暂无数据</li>");
+					}
+					index++;
+				}else if(newdata[j].name == name){
+					if(newdata[j].total != 0){
+						var changeName = newdata[j].name;
+						var click = 'tableClickFn($(this),"' + newdata[j].name + '",' + (index + 2) +')';
+						$(addmonth + ":eq(" + index + ")").append("<li changeName=" + changeName + "  onclick='" + click + "'  class=" + red + ">" + newdata[j].total / 10000 + "(亿元)</li>");
+					}else{
+						$(addmonth + ":eq(" + index + ")").append("<li class=" + red + ">暂无数据</li>");
+					}
+					index++;
+				}
+			}
+		}
+	}
+	ajaxTableFn(year,tablerun);
+}
+function tableClickFn(my,name,cmonth){
+	var newmonth = (cmonth < 10) ? "0" + cmonth : String(cmonth);
+	/* my.addClass("red"); */
+	month = newmonth;
+	$("#zhishu").val(name);
+	 changeFn();
+}
+function tablelist(my){
+	if(my.scrollLeft >= 100){
+		$("#list_zs").addClass("lzhishu");
+		$("#tablezs").css("padding-left","150px");
+		$("#list_zs").css("left",my.scrollLeft + "px");
+	}else{
+		$("#list_zs").removeClass("lzhishu");
+		$("#tablezs").css("padding-left","0");
+		$("#list_zs").css("left","0");
+	}
+}
+//--环比
+function imghbFn(){
+	var print = false;
+	var nodata = new Array();
+	var data = savehb;
+	hbImgChange(0);
+	saveImgIndex = 0;
+	$('#container_hb').highcharts(highchartsH(savehb));
+	for(var i = 0; i < data.bar.length;i++){
+		if(data.bar[i] == 0){
+			nodata.push(data.categories[i] + "月份");
+			print = true;
+		}
+	}
+	if(print)
+		prompt.print(nodata.join() + "暂无数据","确定");
+}
+
+//===highcharts
+//--统计表
+function highchartsH(datanum) {
+    var data = datanum
+	var title = {
+		text: ''
+	};
+	var xAxis = {
+		categories: data.categories
+	};
+	var yAxis = [
+	    {
+	       title: {
+	          text: '',
+	          style: {
+	             color: Highcharts.getOptions().colors[0]
+	          }
+	       },
+	       labels: {
+	          format: '{value}',
+	          style: {
+	             color: Highcharts.getOptions().colors[0]
+	          }
+	       }      
+	    },
+	    {
+		      labels: {
+		          format: '{value} %',
+		          style: {
+		             color: Highcharts.getOptions().colors[1]
+		          }
+		       },
+		       title: {
+		          text: '',
+		          style: {
+		             color: Highcharts.getOptions().colors[1]
+		          }
+		       },
+		 	  opposite: true
+		    }
+	   ];
+	var legend = {
+		layout: 'vertical',
+		align: 'right',
+		verticalAlign: 'top',
+		x: 0,
+		y: 0,
+		floating: true,
+		borderWidth: 1,
+		backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+		shadow: true
+	};
+	var series = [{
+		type: 'column',
+		//column bar
+		name: data.series,
+		data: data.bar,
+        color: '#3aaff5',
+        yAxis: 0,
+	},
+	{
+		type: 'line',
+		name: '增长率（%）',
+		data: data.line,
+		yAxis: 1,
+		color: '#d868e6',
+		tooltip: {
+            valueSuffix: '%'
+       }
+	}];
+	var json = {};
+	json.title = title;
+	json.xAxis = xAxis;
+	json.yAxis = yAxis;
+	json.series = series;
+	return json;
+}
+//环比图片切换
+function hbImgChange(index){
+	$(switchclass + " img:eq(0)").attr("src","img/highcharts/zhu.png");
+	$(switchclass + " img:eq(1)").attr("src","img/highcharts/cookie.png");
+	switch(index){
+		case 0:
+			$(switchclass + " img:eq(0)").attr("src","img/highcharts/zhu-o.png");
+		break;
+		case 1:
+			$(switchclass + " img:eq(1)").attr("src","img/highcharts/cookie-o.png");
+		break;
+	}
+}
+//头部年份事件
+function changeYearFn(){
+	var cDate = $(".year-id").val() + "-" + month;//手动
+	ajaxzbMonthFn(cDate);
+	tableFn();
+	changeFn();
+}
+function changeFn(){
+	hbImgChange(saveImgIndex);
+	var year   = $(".year-id").val();
+	var cDate  = year + "-" + month;
+	//获取同比和环比的数据
+	var data   = '';
+	var tbdata = '';
+	$(selectname).text($("#zhishu").val());
+	if(year != "" && month != "" && $(zhishu).val() != ""){
+		savehb = dataZFn("hb",ajaxzbtbFn(hb,cDate,$("#zhishu").val()));
+		tbdata = ajaxzbtbFn(tb,cDate,$("#zhishu").val());
+	}
+	tableRed();
+	if(saveImgIndex == 0){
+		//同比
+		imghbFn();
+		//环比
+		TB_obj.highcharts(highchartsH(dataZFn("tb",tbdata)));  
+	}
+	if(saveImgIndex == 1){
+		cookiesFn();
+		//环比
+		TB_obj.highcharts(highchartsH(dataZFn("tb",tbdata)));  
+	}
+}
+//-----接口
+//指数列表
+function ajaxzbMonthFn(date){
+	var data = "";
+	var tablestr = "";
+	$.ajax({
+ 		url:basePath()+"/sdCount/zbMonth",
+		type:"get",
+		async:false,
+		data:{
+			"cDate":date,
+			"mobileLogin":"true"
+		},
+		dataType:"json",
+		success:function(result){
+			data = result;
+		}
+ 	});
+	$(zhishu).empty();
+	if(data.data != undefined){
+		for(var o in data.data){
+			$(zhishu).append('<option value="' + data.data[o].name + '">' + data.data[o].name + '</option>');
+			tablestr += "<li>" + data.data[o].name + "</li>";
+		}
+		$("#table_content").html(tablestr);
+		$(selectname).text(data.data[0].name);
+	}else{
+		var myslite = ["全社会工业总产值","股票总成交额","金融机构本外币存款余额","金融机构本外币贷款余额","规模以上企业工业增加值","社会消费品零售总额","财政总收入（全口径）","全社会固定资产投资","税收合计","地方一般公共预算支出","居民消费价格指数"];
+		for(var o in myslite){
+			$(zhishu).append('<option value="' + myslite[o] + '">' + myslite[o] + '</option>');
+			tablestr += "<li>" + myslite[o] + "</li>";
+		}
+		$("#table_content").html(tablestr);
+		$(selectname).text(myslite[0])
+	}
+	option = $(zhishu + " option");
+}
+//表格年份列
+function ajaxTableFn(year,callback){
+	var data = '';
+	loadAni("open");
+	$.ajax({
+ 		url:basePath()+"/sdCount/year",
+		type:"get",
+		async:true,
+		data:{
+			"cDate":year,
+			"mobileLogin":"true"
+		},
+		dataType:"json",
+		success:function(result){
+			console.log(result)
+			data = result;
+			callback(data);
+			loadAni("close");
+		}
+ 	});
+}
+//环比-获取月份   ||  同比 -年份
+function dataZFn(str,data){
+	var newdata = data;
+	var bardata        = new Array();
+	var categoriesdata = new Array();
+	var linedata       = new Array();
+	if(str == "hb"){
+		for(var o in newdata.categories){
+			newdata.categories[o] = newdata.categories[o].split("-")[1];
+		}
+	}
+	if(str == "tb"){
+		for(var o in newdata.categories){
+			newdata.categories[o] = newdata.categories[o].split("-")[0]
+		}
+	}
+	if(str != null){
+		for(var i = newdata.categories.length - 1; i >= 0; i--){
+			bardata.push(newdata.bar[i]);
+			categoriesdata.push(newdata.categories[i]);
+			linedata.push(newdata.line[i]);
+		}
+		data.bar        = bardata;
+		data.categories = categoriesdata;
+		data.line       = linedata;
+	}
+	return data;	
+}
+/**
+ * url: [tb | hb]
+ * data: 日期
+ * name: 指数
+ */
+function ajaxzbtbFn(url,date,name){
+	var ajaxdata = '';
+	$.ajax({
+ 		url:basePath()+"/sdCount/" + url,
+		type:"get",
+		async:false,
+		data:{
+			"cDate":date,
+			"name":name,
+			"mobileLogin":"true"
+		},
+		dataType:"json",
+		success:function(result){
+			//console.log(result)
+			var bm = 0;
+			var data = {
+				categories : [],
+				bar : [],
+				line : [],
+				series : ''
+			}
+			for(var o in result.data){
+				data.categories.push(result.data[o].cDate);
+				var total = 0;
+				if(result.data[o].name == "居民消费价格指数"){
+					total = parseFloat(result.data[o].total.toFixed(3));
+					data.series = "总产值（%）";
+				}else{
+					total = result.data[o].total / 10000;
+					data.series = "总产值（亿元）";
+				}
+				data.bar.push(total);
+				if(url == hb){
+					data.line.push(parseFloat((result.data[o].hbRate).toFixed(0)));
+				}
+				if(url == tb){
+					data.line.push(parseFloat((result.data[o].tbRate).toFixed(0)));
+				}
+			}
+			ajaxdata = data;
+		}
+ 	});
+	return ajaxdata;
+}
+//==程序入口
+var HB_obj = ''; //环比对象
+var TB_obj = '';//同比对象
+var hb = "sameCompara";
+var tb = "tb";
+var savehb = '';
+var zhishu = "#zhishu";
+var option = '';
+var selectname = "#selectname";
+var saveImgIndex = 0;
+var month = "02";
+$(document).ready(function() {
+	HB_obj = $('#container_hb');
+	TB_obj = $('#container_tb');
+	//提示框初始化
+	prompt.init();
+	//更新最新数据
+	
+	var cDate = $(".year-id").val() + "-" + month;//手动
+	ajaxzbMonthFn(cDate);
+	tableFn();//表格
+	savehb = ajaxzbtbFn(hb,cDate,$("#zhishu").val());
+	tbdata = ajaxzbtbFn(tb,cDate,$("#zhishu").val());
+	//同比
+	HB_obj.highcharts(highchartsH(dataZFn("hb",savehb)));  
+	//环比
+	TB_obj.highcharts(highchartsH(dataZFn("tb",tbdata)));
+	
+});
+</script>
+</body>
+</html>

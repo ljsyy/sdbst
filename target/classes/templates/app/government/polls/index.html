@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>统计分析</title>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/lib/highcharts.js"></script>
+    <style>
+        body {
+            background: #edeef0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        }
+        .format{
+            padding:10px 15px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="format"><div id="oneAnnular" style="width: 100%; height: 100%; margin: 0 auto;background:#fff;border-radius:15px;padding: 5px;box-sizing: border-box;"></div></div>
+<!--<div class="format"><div id="column" style="width: 100%; height: 100%; margin: 0 auto;background:#fff;border-radius:15px;padding: 5px;box-sizing: border-box;"></div></div>-->
+<script th:inline="none" language="JavaScript">
+    //柱形图
+    function column(datanum) {
+        var data = datanum;
+        var dtitle = data.title;
+        var dcategories = data.categories;
+        console.log(dcategories)
+        var dunit = datanum.unit;
+        var dbar = () => {
+            var length = data.bar.length;
+            var savedata = new Array();
+            var colors = data.colors;
+            for (var i = 0; i < length; i++) {
+                console.log(data.bar[i]);
+                var cache = {
+                    type: 'column',
+                    name: data.series[i],
+                    data: data.bar[i],
+                    color: colors[i],
+                    yAxis: 0,
+                    tooltip: { valueSuffix: dunit }
+                }
+                savedata.push(cache);
+            }
+            return savedata;
+        }
+        var dline = data.line;
+        var title = { text: dtitle };
+        var xAxis = { categories: dcategories };
+        var credits = {
+            enabled: false
+        };
+        var yAxis = [
+            {
+                title: {
+                    text: '',
+                    style: { color: Highcharts.getOptions().colors[0] }
+                },
+                labels: {
+                    format: '{value}',
+                    style: { color: Highcharts.getOptions().colors[0] },
+                    enabled: false
+                }
+            }
+        ];
+        var series = [];
+        var getbar = dbar();
+        for (var s = 0; s < getbar.length; s++) { series.push(getbar[s]); }
+        for (var dl in dline) {
+            dline[dl].yAxis = 1;
+            series.push(dline[dl]);
+        }
+        var plotOptions = {
+            column: {
+                pointWidth:30,
+                pointPadding: 0.1,
+                /* dataLabels: {//数据显示在柱子上方
+                    enabled: true,
+                    formatter: function () {
+                        return '<b>' + this.point.y + '</b><br>';
+                    }
+                } */
+            }
+        }
+        var json = {};
+        json.title = title;
+        json.xAxis = xAxis;
+        json.yAxis = yAxis;
+        json.series = series;
+        json.credits = credits;
+        json.plotOptions = plotOptions;//柱形图距离大小
+        return json;
+    }
+    //单环图
+    function oneAnnular(datanum) {
+        var title = datanum.title;
+        var tooltipunit = datanum.tooltipunit;
+        var unit = datanum.unit;
+        var name = datanum.name;
+        var data = datanum.pie;
+        var color = datanum.colors;
+        var title = { text: title };
+        var tooltip = {
+            formatter: function () {
+                return Highcharts.numberFormat(this.percentage, 1) + '% (' + Highcharts.numberFormat(this.y, 0, '.') + tooltipunit + ')';
+            }
+        };
+        var size = "200px";
+        var innerS = "60%";
+        var series = [{
+            type: 'pie',
+            size: size,
+            innerSize: innerS,
+            name: name,
+            data: data,
+            colors: color
+        }];
+        var credits = {
+            enabled: false
+        };
+        var plotOptions = {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                depth: 35,
+                connectorColor: '#000',
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.percentage:.1f}' + unit,
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                },
+                showInLegend: true
+            }
+        };
+        var json = {};
+        json.title = title;
+        json.tooltip = tooltip;
+        json.plotOptions = plotOptions;
+        json.series = series;
+        json.credits = credits;
+        return json;
+    }
+
+    //----main
+    $(document).ready(function () {
+        $.ajax({
+            url: basePath()+"/qy/polls/resultTotal",
+            type: "get",
+            async: true,
+            //data: data,
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                var data_column = {
+                    title: "",
+                    categories: [""],
+                    unitBar: "",
+                    bar: [[result.totalA], [result.totalB], [result.totalC], [result.totalD]],
+                    series: ["非常满意", "满意", "一般", "不满意"],
+                    colors: ["#ea413c", "#fbb531", "#01c8ff", "#ebe5e5"],
+                    line: []
+                }
+                // $("#column").highcharts(column(data_column));
+                var data_oneAnnular = {
+                    title: "",
+                    name: "",
+                    unit: "%",
+                    tooltipunit: "人",
+                    pie: [
+                        ['非常满意', result.totalA],
+                        ['满意', result.totalB],
+                        ['一般', result.totalC],
+                        ['不满意', result.totalD]
+                    ],
+                    colors: ["#ea413c", "#fbb531", "#01c8ff", "#ebe5e5"]
+                }
+                $("#oneAnnular").highcharts(oneAnnular(data_oneAnnular));
+            }
+        });
+
+    });
+</script>
+</body>
+
+</html>

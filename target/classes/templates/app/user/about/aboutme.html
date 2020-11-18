@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>关于软件</title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .list {
+            padding: 5px 15px;
+            position: relative;
+            white-space: pre-line;
+            line-height: 25px;
+        }
+    </style>
+    <script type="text/javascript" th:inline="javascript">
+        var num = [[${num}]];
+        window.onload = function () {
+            if (num != "") {
+                var str = '';
+                num = parseInt(num);
+                switch (num) {
+                    case 1:
+                        str = '&nbsp;“i顺德”平台是顺德区行政服务中心通过整合顺德区现有的各种信息化资源打造而成的，自2015年6月上线运行以来，一直秉承便民、惠民的理念，积极推进政务服务平台化、简便化、移动化，为市民提供更多的政务、交通、生活服务类的资讯和服务，目前已经建设了政务服务、交通服务、生活服务三大频道，涵盖你生活的方方面面。<br><br>主办方：佛山市顺德区政务服务数据管理局  <br>开发公司：中国联合网络通信有限公司佛山市分公司'
+                        break;
+                    case 2:
+                        str = '&nbsp;&nbsp;在使用i顺德前，请您务必仔细阅读并透彻理解本声明。您的使用行为将被视为对本声明全部内容的认可。任何通过使用i顺德而链接到的第三方网页均系他方制作或提供，您从该第三方网页上获得资讯及享用服务，i顺德对其合法性概不负责，亦不承担任何法律责任。';
+                        break;
+                    case 3:
+                        str = '&nbsp;&nbsp;i顺德诚挚欢迎您访问本网站。<br>&nbsp;&nbsp;当您访问我们经营的网站时，我们会按照本隐私声明条款收集、使用您的个人信息并予以保护，请您完整阅读本隐私声明。<br><br>一、我们为什么需要收集、使用您的信息<br>我们收集您的信息是为了在遵守国家法律法规的规定的前提下，向您提供更优质的服务，提高用户体验，保证网络安全及改进网站内容，为了实现这一总体目的，我们会把您的信息用于下列用途：<br>1.为了向您提供我们经营的网站上的各项服务及实现相关功能，并维护、改进这些服务和功能。<br>2.为了改进i顺德的服务质量，便于收取您对百事通及其服务的各种意见和建议，及时有针对性地向您提供反馈或解决方案。<br>3.为了系统安全并协助您解决在使用i顺德服务时可能遇到的相关问题，我们会收集您的个人信息。<br>4.我们因业务分析、市场调研需要，也会使用到您的个人信息。<br>5.我们可能会将您的个人信息跨境转移用于关联公司的调研和分析，或者共享给第三方服务提供者、商业伙伴用于联合向您提供服务、调研和分析。在此情况下，i顺德要求相关公司也必须遵守本声明的规定。<br><br>二、我们收集、使用您的个人信息的方式<br>1.当您访问i顺德，通过互联网获取i顺德的任一服务，或使用i顺德的某项功能时，您会主动向我们提供一些个人信息，我们也将会收集您的一些个人信息。<br>2.除非另行书面说明，本声明不适用于i顺德通过其他方式，如通过非网络的离线方式收集的信息。<br><br>三、我们收集和使用哪些个人信息<br>1.为了向您提供更个性化、更便捷的服务，您可能要根据网站要求主动向我们提供相关信息，例如您的姓名、地址、电话号码、电子邮件地址。<br>2.出于保证系统安全，解决您使用网站服务时可能遇到的相关问题等原因，我们会保存您登录系统的时间、访问的菜单或链接、IP地址、操作日志等信息，并严格按照法律法规的规定对这些信息进行妥善保管。如果您拒绝提供相关的信息可能导致您的要求或者需要的服务。'
+                        $('title').html("用户隐私协议");
+                        break;
+                    case 4:
+                        str = '暂时没有最新版本'
+                        break;
+
+                }
+                $(".list").html(str);
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="list">
+</div>
+</body>
+</html>

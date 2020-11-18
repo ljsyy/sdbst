@@ -1,0 +1,1989 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+<meta charset="UTF-8" />
+<title>统计年报</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/base.js"></script>
+<script src="js/app/lib/highcharts.js"></script>
+<style>
+body{height: 100%;background:#f6f6f6;margin: 0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+p{margin: 0;padding: 0;}
+li{list-style-type: none;}
+/*mycode*/
+.screen .d-type{    margin:5px 10px 10px;box-shadow: 0 0 10px rgba(0,0,0,.1);}
+.screen .d-type divp .flextop{flex: 1;text-align: center;}
+.screen .d-type divp .flexbuttom{flex: 1;}
+.screen .d-type divp{display: block;box-sizing: border-box;padding: 1px 0;}
+.screen .d-type .format{background: #fff;display: flex;    padding: 5px;box-sizing: border-box;    align-items: center;}
+.screen .d-type text{height: 25px;line-height: 25px;padding-left: 5px;text-align: center;}
+.screen .d-type .select-ui{display: inline-block;position: relative;}
+.screen .d-type .select-ui span{width: 100%;height: 100%;background: #fff;white-space: nowrap;}
+.screen .d-type select{height: 25px;line-height: 25px;padding-left: 5px;text-align: center;border: none;}
+.screen .d-type select:focus{outline: none;}
+.screen .highcharts{overflow-x: auto;overflow: hidden;background: #fff;box-sizing: border-box;margin:1px 10px 10px;    position: relative;box-shadow: 0 0 10px rgba(0,0,0,.1);}
+/*搜索*/
+.screen .search{position:absolute;right: 5px;}
+.screen .search span{-webkit-transform: rotate(-45deg);-moz-transform: rotate(-45deg);transform: rotate(-45deg);position: relative;display: inline-block;width: 22px;height: 22px;vertical-align: middle;}
+.screen .search span:before{position: absolute;content: '';    top: 14px;left: 9px;width: 3px;height: 10px;border-radius: 2px;background: #ccc;}
+.screen .search span:after{position: absolute;content: '';      top: 0;left: 3px;width: 11px;height: 11px;border: 2px solid #ccc;border-radius: 16px;}
+/*highcharts*/
+.highcharts .switch{background: #fff;text-align: center;font-size: 0;padding: 15px 0 25px;}
+.highcharts .switch img{padding: 5px 15px;border: solid 1px #ccc;border-right: 0;}
+.highcharts .switch img:last-child{border-right: solid 1px #ccc;}
+.highcharts .highcharts-credits{display:none;}
+.highchartsani{-webkit-transition: all 200ms linear;-ms-transition: all 200ms linear;transition: all 200ms linear;}
+/*table*/
+#container_table{padding: 10px;box-sizing: border-box;align-items: center;overflow: auto;height: 350px;}
+.highcharts .format-table {border-left: solid 1px #cee9fb;border-right: solid 1px #cee9fb;border-top: solid 1px #cee9fb;}
+.highcharts .format-table .f-table{text-align: center;display: flex;}
+.highcharts .format-table .f-table li{padding: 5px;}
+.highcharts .format-table .f-table.title li{font-weight:bold;}
+.highcharts .format-table .f-table li:nth-child(1){width: 55px;border-right: solid 1px #cee9fb;border-bottom: solid 1px #cee9fb;}
+.highcharts .format-table .f-table li:nth-child(2){flex:1;border-bottom: solid 1px #cee9fb;    word-break: break-all;}
+.highcharts .my_choose{
+    width: 200px;
+    margin: 0 auto 15px;
+    border: solid 1px #bbbbbb;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    color: b8b8b8;
+    overflow: hidden;
+}
+.highcharts .my_choose .tuxing,
+.highcharts .my_choose .biaoge{flex: 1;text-align: center;    height: 100%;    line-height: 35px;}
+.highcharts .my_choose .tuxing.click,
+.highcharts .my_choose .biaoge.click{background: #bbbbbb;color: #fff;}
+
+#qs_biaoge,#bn_biaoge{
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 0 10px;
+    box-sizing: border-box;color:#555555;}
+#qs_biaoge .title,
+#bn_biaoge .title{width: 100%;
+    height: 35px;
+    display: flex;
+    background: #e7f2f9;
+    border-bottom: solid 1px #c9c9c9;}
+#qs_biaoge .c-format,
+#bn_biaoge .c-format{
+	width: 100%;
+    height: 35px;
+    display: flex;
+   
+}
+#qs_biaoge .fl,
+#bn_biaoge .fl{text-align:center;width:100px;height:100%;overflow: hidden;text-overflow: ellipsis;line-height: 35px;padding: 0 5px;overflow: hidden;text-overflow: ellipsis;box-sizing: border-box;}
+</style>
+</head>
+<body>
+	<style>
+	/*开始加载页面样式1：*/
+	#load-now{display:none;opacity:0;width:100%;height:100%;position: fixed;z-index:100000;background: rgba(0,0,0,0.2);	-webkit-transition: opacity 300ms linear;-moz-transition: opacity 300ms linear;-ms-transition: opacity 300ms linear;-o-transition: opacity 300ms linear;transition: opacity 300ms linear;}
+	/*加载样式1：*/
+	.spinner {position: absolute;margin: 0 auto;right: 0;top: 50%;left: 0;margin-top: -17px;width: 150px;text-align: center;} 
+	.spinner > div {width: 30px;height: 30px;background-color: #fff;border-radius: 100%;display: inline-block;-webkit-animation: bouncedelay 1.4s infinite ease-in-out;animation: bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode: both;animation-fill-mode: both;}
+	.spinner .bounce1 {-webkit-animation-delay: -0.32s;animation-delay: -0.32s;}
+	.spinner .bounce2 {-webkit-animation-delay: -0.16s;animation-delay: -0.16s;}
+	@-webkit-keyframes bouncedelay {0%, 80%, 100% { -webkit-transform: scale(0.0) }40% { -webkit-transform: scale(1.0) }}
+	@keyframes bouncedelay { 0%, 80%, 100% {transform: scale(0.0);-webkit-transform: scale(0.0);} 40% {transform: scale(1.0);-webkit-transform: scale(1.0);}}
+	</style>
+ 	<div id="load-now"><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>
+ 	<script>
+ 	function loadNowFn(str) {      
+        if(str == "vis") {
+	        setTimeout("$('#load-now').css('opacity','0');",1000);
+	       	setTimeout("$('#load-now').css('display','none');",1310);
+        }
+        if(str == "hidden") {
+	        setTimeout("$('#load-now').css('opacity','1');",2);
+	       	setTimeout("$('#load-now').css('display','block');",1);
+        }
+    }
+ 	</script>
+<div id="screen" class="vertical screen">
+    <div class="d-type">
+    <div class="d-type" style="position: fixed;z-index: 50;width: calc(100% - 40px);background: #fff;top: 0;margin-top: 0;">
+        <divp>
+			<div class="format">
+					<div class="flextop">
+						<select name="year" onchange="changeYear()" class="year-id" >
+								<option selected='selected' value="2017">2017年</option>
+								<option value="2016">2016年</option>
+								<option value="2015">2015年</option>
+								<option value="2014">2014年</option>
+								<option value="2013">2013年</option>
+								<option value="2012">2012年</option>
+								<option value="2011">2011年</option>
+								<option value="2010">2010年</option>
+								<option value="2009">2009年</option>
+								<option value="2008">2008年</option>
+								<option value="2007">2007年</option>
+						</select>
+					</div>
+			</div>
+        </divp>
+        <divp>
+			<div class="format">
+				<div class="flexbuttom" style="text-align:center;overflow: hidden;position: relative;">
+					<div class="search">
+						<span></span>
+					</div>
+					<div class="select-ui">
+						<span id="Category">财政、税收、金融、保险业</span>
+						<select id="CategoryS" onchange="TypeFn('one')" class="content" name="count" style="height: 100%;width: 100%;padding: 0;position: absolute;margin: 0px auto;top: 0;left: 0;right: 0;opacity: 0;">
+							<option value="0">财政、税收、金融、保险业</option>
+							<option value="1">从业人员、在岗职工及工资</option>
+							<option value="2">工业</option>
+							<option value="3">固定资产投资</option>
+							<option value="4">农业</option>
+							<!-- option value="5">批发零售贸易业、对外经济与旅游业</option-->
+							<option value="6">人民生活</option>
+							<option value="7">文化、教育、卫生、科技、计划生育</option>
+							<!--  option value="8">运输、邮电、电力</option-->
+							<option value="9">综合</option>				
+						</select>
+					</div>
+				</div>
+			</div>
+		</divp>
+		<divp>
+			<div class="format">
+				<div class="flexbuttom" style="text-align:center;overflow: hidden;position: relative;">
+					<div class="search">
+						<span></span>
+					</div>
+					<div class="select-ui">
+						<span id="Subcategories"></span>
+						<select id="SubcategoriesS" onchange="TypeFn('two')" class="content" name="count" style="height: 100%;width: auto;padding: 0;position: absolute;margin: 0px auto;top: 0;left: 0;right: 0;opacity: 0;"></select>
+					</div>
+				</div>
+			</div>
+		</divp>
+	</div>
+	
+	<div id="slide" style="overflow:hidden;position: relative;padding-top: 115px;">
+		<div class="highcharts" id="close_bn">
+			<div style="background:#e7f9ed;color: #5cb174;padding:10px;margin-bottom: 15px;">本年具体情况</div>
+			<div id="bn_ajax"  style="display:none;">
+				<div id="bn_choose" class="my_choose">
+					<div class="biaoge" onclick="bnchooseFn(0)">表格</div>
+					<div class="tuxing">图形</div>
+				</div>
+				<div id="container_table" style="width: 100%;margin: 0 auto;padding-top: 15px;display:none;"></div>
+				<div  class="nomove"  style="overflow:auto;">
+					<div id="container_pie" style="width: 100%;margin: 0 auto;padding-top: 25px;display:none;"></div>
+					<div id="container_polyline" style="width: 100%; margin: 0 auto;padding-top: 25px;display:none;"></div>
+					<div id="bn_biaoge">
+						<div style="border: solid 1px #c9c9c9;width:100%;">
+							<div class="title"></div>
+							<div class="content"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<div class="highcharts" id="close_qs">
+			<div style="background:#e7f2f9;color: #4bb5f5;padding:10px;margin-bottom: 15px;">近几年趋势</div>
+			<div id="qs_ajax" style="display:none;">
+				<div id="qs_choose" class="my_choose">
+					<div class="biaoge"  onclick="qschooseFn(0)">图形</div>
+					<div class="tuxing"  onclick="qschooseFn(1)">表格</div>
+				</div>
+				<div class="nomove" style="overflow:auto;">
+					<div id="container_qs" style="width: 100%;margin: 0 auto;padding-top: 25px;height:350px;"></div>
+					<div id="qs_biaoge">
+						<div style="border: solid 1px #c9c9c9;width:100%;">
+							<div class="title"></div>
+							<div class="content"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>-->
+		
+	</div>
+</div>
+<script language="JavaScript">
+//只使用一次发代码
+function tableBN(datanum) {
+    visBN("table");
+    var str = "";
+    var categories = datanum.categories;
+    var hero = datanum.hero;
+    var company = datanum.company;
+    str += '<div class="format-table">';
+    str += '<div class="f-table title"><li>' + categories[0] + '</li><li>' + categories[1] + '</li></div>';
+    for (var h in hero)
+        str += '<div class="f-table"><li>' + hero[h] + '</li><li>' + company[h] + '</li></div>';
+    str += '</div>';
+    containerTABLE.html(str);
+}
+function onceFn_one(){
+	ajaxDate("SdThreetype", 0, function (data) {
+        var temp;
+        var arr = data;
+        //var longlengt = (data.length >= 10) ? 10 : data.length;
+        var longlengt = data.length;
+        var hero = [], company = [];
+        for (var i = 0; i < arr.length - 1; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+                if (parseInt(arr[i].sort) > parseInt(arr[j].sort)) {
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        for (var j = 0; j < longlengt; j++) {
+            hero.push(arr[j].sort);
+            company.push(arr[j].name);
+        }
+        var tabledata = {
+            hero: hero,
+            company: company,
+            categories: ["排行", "单位"]
+        }
+        tableBN(tabledata);
+    });
+}
+//模板格式化（正则替换）
+var FormatModel = function (str, model) {
+    for (var k in model) {
+        var re = new RegExp("{" + k + "}", "g");
+        str = str.replace(re, model[k]);
+    }
+    return str;
+}
+//----大类与小类
+function getTypeTwoData() {
+    var getdalei_index = CategoryS.val();//大类顺序
+    var getxiaolei_index = SubcategoriesS.val();//小类值
+    closeQS.css("display", "block");
+    closeBN.css("display", "block");
+    qsajax.css("display", "none");
+    bnajax.css("display", "none");
+    
+   
+    $(qschoose).css("display","flex");
+   
+    $(bnchoose).css("display","none");
+    $(bnbiaoge).css("display","none");
+    
+    containerQs.css("width", "150%");
+    containerPIE.css("width", "150%");
+    containerPOLYLINE.css("width", "150%");
+    $(qsbiaoge).css("width", "450px");
+    $(bnbiaoge).css("width", "450px");
+    closeVisBN();
+    
+    is_qsbn();//趋势本年是否隐藏，隐藏就显示暂无数据
+    switch (getdalei_index) {
+        case "0"://完
+        	first();
+        	break;
+        case "1"://完
+        	containerQs.css("width", "800px");
+        	qsbiaoge.css("width", "500px");
+        	second();
+            break;
+        case "2":
+        	third();
+            break;
+        case "3":
+        	fourth();
+            break;
+        case "4":
+        	qsbiaoge.css("width", "450px");
+            fifth();
+            break;
+        case "5":
+        	qsbiaoge.css("width", "450px");
+            sixth();
+            break;
+        case "6":
+        	qsbiaoge.css("width", "1100px");
+        	seventh();
+            break;
+        case "7":
+        	containerQs.css("width", "800px");
+        	qsbiaoge.css("width", "500px");
+        	eighth();
+            break;
+        case "8":
+        	containerQs.css("width", "800px");
+        	$(bnbiaoge).css("width", "650px");
+        	qsbiaoge.css("width", "500px");
+        	nineth();
+            break;
+        case "9":
+        	qsbiaoge.css("width", "500px");
+        	$(bnbiaoge).css("width", "650px");
+            tenth();
+            break;
+    }
+}
+//--------------------------------------------------------------------------------------------重复使用
+//趋势和本年都没有
+function is_qsbn(){
+	if( closeQS.css("display") == "none" && closeBN.css("display") == "none"){
+		$("#qsbn").css("display","block");
+	}else{
+		$("#qsbn").css("display","none");
+	}
+}
+function is_data(data){
+	 var str = "暂无数据";
+	 if(data != undefined && data != "0"){
+		 return parseFloat(data);
+	 }else{
+		 return str;
+	 }
+}
+function cf_Twoyearnotnuit(num){
+	var qs_str = '';
+	var is_qschoose = true;//是否显示图形
+	if(num == 1){//趋势
+		ajaxDate("Twoyearnotnuit", 0, function (data) {
+	        var newdata = {
+	            title: "",
+	            categories: [],
+	            unitBar: "",
+	            bar: [],
+	            series: ['当年(万元)', '去年(万元)'],
+	            colors: ['#3aaef4', '#75de60'],
+	            line: [{
+	                type: 'line',
+	                name: '增长率(%)',
+	                data: [],
+	                color: '#d868e6',
+	                tooltip: { 
+	                	valueSuffix: '%' 
+	                }
+	            }]
+	        }
+	        for (var i = (data.length - 1); i >= 0; i--) {
+	            newdata.categories.push(data[i].yearDate);
+		        var firstNum = is_data(data[i].firstNum);
+	            var lastNum = is_data(data[i].lastNum);
+	            var zzl =  is_data(data[i].zzl);
+	            newdata.bar.push(firstNum);
+	            newdata.bar.push(lastNum);
+	            newdata.line[0].data.push(zzl);
+	            qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + firstNum + '</div><div  style="width:{c}" class="fl">' + lastNum + '</div><div  style="width:{d}" class="fl">' + zzl + '</div></div>'
+	        }
+	        containerQs.highcharts(containerQS(newdata));
+	        if(is_qschoose){
+	        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">当年(万元)</div><div  style="width:{c}" class="fl">去年(万元)</div><div  style="width:{d}" class="fl">增长率(%)</div>'
+				var a = "100px",b="50%",c="50%",d = "150px";
+	        	var qsdata = {
+						title : FormatModel(title,{
+							a: a,
+							b: b,
+							c: c,
+							d: d
+						}),
+						str :FormatModel(qs_str,{
+							a: a,
+							b: b,
+							c: c,
+							d: d
+						})
+				}
+				containerbiaoge(qsdata);
+			}
+	        qsajax.css("display", "block");
+	    });
+	}
+	if(num == 2){//本年
+		ajaxDate("Twoyearnotnuit", 1, function (data) {
+			console.log(data)
+			var newdata = {
+				title: "",
+				name: data[0].yearDate + "年",
+				unit: "%",
+				tooltipunit: "",
+				pie: [],
+				colors: ["#e581f1","#ff4747","#ffcd47","#75de60","#608cde"]
+			}
+	        for (var i = (data.length - 1); i >= 0; i--) {
+	        	var array = new Array();
+	        	array.push(data[i].name);
+	        	array.push(parseFloat(data[i].firstNum));
+	            newdata.pie.push(array);
+	        }
+	        containerPIE.highcharts(one_PIE(newdata));
+	        bnajax.css("display", "block");
+	    });
+	}
+	if(num == 3){//本年
+		ajaxDate("Twoyearnotnuit", 0, function (data) {
+		    var bn_str = "";
+			console.log(data)
+			if(data != undefined){
+				var newdata = {
+					title: "",
+					name: data[0].yearDate + "年",
+					unit: "%",
+					tooltipunit: "",
+					pie: [],
+					colors: ["#e581f1","#ff4747","#ffcd47","#75de60","#608cde"]
+				}
+		        for (var i = (data.length - 1); i >= 0; i--) {
+		        	var array = new Array();
+		        	array.push(data[i].name);
+		        	array.push(parseFloat(data[i].firstNum));
+		        	bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].firstNum + '</div><div style="width:{d}" class="fl">' + data[i].zzl + '</div></div>';
+		            newdata.pie.push(array);
+		        }
+		        containerPIE.highcharts(one_PIE(newdata));
+		        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">本年</div><div  style="width:{d}" class="fl">增长率(%)</div>';
+		        var a = "100px", b = c = d = "50%";
+		        var bndata = {
+		            title: FormatModel(title, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d
+		            }),
+		            str: FormatModel(bn_str, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d
+		            })
+		        }
+		        bn_biaoge(bndata);
+		        bnajax.css("display", "block");
+		        bnchooseFn(0);
+		 		bnchoose.find("div").eq(1).unbind().click(function(){
+	 				bnchooseFn(1,'visBN("pie")');
+	 			});
+			}else{
+				closeBN.css("display", "none");
+				is_qsbn();
+			}
+	    });
+	}
+}
+
+function cf_SdTwoyearhavenuit(num){
+	var qs_str = '';
+	var is_qschoose = true;//是否显示图形
+	var bn_str = '';
+	var is_bnchoose = true;//是否显示图形
+	if(num == 1){
+		ajaxDate("SdTwoyearhavenuit", 0, function (data) {
+	        var newdata = {
+	            title: "",
+	            categories: [],
+	            unitBar: '(' + data[0].nuit + ')',
+	            bar: [],
+	            series: ['当年(' + data[0].nuit + ')', '去年(' + data[0].nuit + ')'],
+	            colors: ['#3aaef4', '#75de60'],
+	            line: [{
+	                type: 'line',
+	                name: '增长率(%)',
+	                data: [],
+	                color: '#d868e6',
+	                tooltip: { valueSuffix: '%' }
+	            }]
+	        }
+	        for (var i = (data.length - 1); i >= 0; i--) {
+	        	var firstNum = is_data(data[i].firstNum);
+	        	var lastNum = is_data(data[i].lastNum);
+	        	var nuit = (data[i].nuit == undefined) ? "暂无数据" : data[i].nuit;
+	        	var zzl = is_data(data[i].zzl);
+	            newdata.categories.push(data[i].yearDate);
+	            newdata.bar[0].push(firstNum);
+	            newdata.bar[1].push(lastNum);
+	            newdata.line[0].data.push(zzl);
+	            qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + firstNum + '</div><div  style="width:{c}" class="fl">' + lastNum + '</div><div  style="width:{d}" class="fl">' + nuit + '</div><div  style="width:{e}" class="fl">' + zzl + '</div></div>'
+	        }
+	        containerQs.highcharts(containerQS(newdata));
+	        if(is_qschoose){
+	        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">当年</div><div  style="width:{c}" class="fl">去年</div><div  style="width:{d}" class="fl">单位</div><div  style="width:{e}" class="fl">增长率(%)</div>'
+				var a = "100px",b = c = d ="50%",e ="200px";
+	        	var qsdata = {
+						title : FormatModel(title,{
+							a: a,
+							b: b,
+							c: c,
+							d: d,
+							e: e
+						}),
+						str :FormatModel(qs_str,{
+							a: a,
+							b: b,
+							c: c,
+							d: d,
+							e: e
+						})
+				}
+				containerbiaoge(qsdata);
+			}
+	        qsajax.css("display", "block");
+	    });
+	}
+	if(num == 2){//列表
+		ajaxDate("SdTwoyearhavenuit", 0, function (data) {
+			console.log(data)
+			if(data != undefined){
+				var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">本年</div><div  style="width:{d}" class="fl">单位</div><div  style="width:{e}" class="fl">增长率(%)</div>';
+				var bn_str = '';
+				for(var i in data){
+					if(data[i].nuit != undefined)
+					bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].firstNum + '</div><div style="width:{d}" class="fl">' + data[i].nuit + '</div><div style="width:{e}" class="fl">' + data[i].zzl + '</div></div>';
+				}
+		        var a = "100px",b ="230px", c = d = "50%",e ="200px";
+		        var bndata = {
+		            title: FormatModel(title, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d,
+		                e: e
+		            }),
+		            str: FormatModel(bn_str, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d,
+		                e: e
+		            })
+		        }
+		        bn_biaoge(bndata);
+		        bnajax.css("display", "block");
+			}else{
+				closeBN.css("display", "none");
+				is_qsbn();
+			}
+    	});
+	}
+	if(num == 3){//列表
+		ajaxDate("SdTwoyearhavenuit", 1, function (data) {
+			console.log(data)
+				var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">本年</div><div  style="width:{d}" class="fl">单位</div><div  style="width:{e}" class="fl">增长率(%)</div>';
+				var bn_str = '';
+				for(var i in data){
+					if(data[i].nuit != undefined)
+					bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].firstNum + '</div><div style="width:{d}" class="fl">' + data[i].nuit + '</div><div style="width:{e}" class="fl">' + data[i].zzl + '</div></div>';
+				}
+		        var a = "100px", b = c = d = e = "50%";
+		        var bndata = {
+		            title: FormatModel(title, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d,
+		                e: e
+		            }),
+		            str: FormatModel(bn_str, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d,
+		                e: e
+		            })
+		        }
+		        bn_biaoge(bndata);
+		        bnajax.css("display", "block");
+    	});
+	}
+}
+//--------------------------------------------------------------------------------------------财政、税收、金融、保险业       完
+function first(){
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	//qs选择
+	qschooseFn(0);//显示表格还是图形
+	if (getxiaolei_index == "存贷差额") {
+		cf_Twoyearnotnuit(1);
+	    closeBN.css("display", "none");
+	} else {
+	    cf_Twoyearnotnuit(1);
+	    containerPIE.css("display", "block");
+	    cf_Twoyearnotnuit(2)
+	}
+}
+//--------------------------------------------------------------------------------------------从业人员、在岗职工及工资  完 
+function second(){
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示图型
+	ajaxDate("SdTwotype", 0, function (data) {//-----完
+	    var newdata = {
+	        title: "",
+	        categories: [],
+	        unitBar: "",
+	        bar: [],
+	        series: ['总金额', '国有', '集体', '其他'],
+	        colors: ['#3aaef4', '#75de60', '#ffcd47', '#e581f1'],
+	        line: []
+	    }
+	    for (var i = (data.length - 1); i >= 0; i--) {
+	        newdata.categories.push(data[i].yearDate);
+	        var total = is_data(data[i].total);
+            var gy =  is_data(data[i].gy);
+            var jt =  is_data(data[i].jt);
+            var other =  is_data(data[i].other);
+	        newdata.bar[0].push(total);
+	        newdata.bar[1].push(gy);
+	        newdata.bar[2].push(jt);
+	        newdata.bar[3].push(other);
+	        qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + total + '</div><div  style="width:{c}" class="fl">' + gy + '</div><div  style="width:{d}" class="fl">' + jt + '</div><div  style="width:{e}" class="fl">' + other + '</div></div>';
+	    }
+	    containerQs.highcharts(containerQS(newdata));
+	    if (is_qschoose) {
+	        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">总金额</div><div  style="width:{c}" class="fl">国有</div><div  style="width:{d}" class="fl">集体</div><div  style="width:{e}" class="fl">其他</div>';
+	        var a = "100px", b = c = d = e = "50%";
+	        var qsdata = {
+	            title: FormatModel(title, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            }),
+	            str: FormatModel(qs_str, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            })
+	        }
+	        containerbiaoge(qsdata);
+	    }
+	    qsajax.css("display", "block");
+	});
+	//bn
+	ajaxDate("SdTwotype", 1, function (data) {
+		visBN("pie");
+		//console.log(data)
+		var newdata = {
+			    title: "",
+			    name: data[0].yearDate + "年",
+			    unit: "%",
+			    tooltipunit: "",
+			    pie: [],
+			    colors: ["#e581f1","#ff4747","#ffcd47","#75de60","#608cde"]
+			}
+			for (var i = (data.length - 1); i >= 0; i--) {
+			    var array = new Array();
+			    array.push(data[i].name);
+			    array.push(parseFloat(data[i].total));
+			    newdata.pie.push(array);
+			}
+			containerPIE.highcharts(one_PIE(newdata));
+	        bnajax.css("display", "block");
+	});
+}
+//--------------------------------------------------------------------------------------------工业 完
+function third(){
+	//qs选择
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	closeQS.css("display", "none");//关闭趋势
+    if (getxiaolei_index == "工业企业名录") {//完
+    	onceFn_one();
+        bnajax.css("display", "block");
+    } else if (getxiaolei_index == "单位数" || getxiaolei_index == "总产值") {//完
+        closeQS.css("display", "block");
+        cf_Twoyearnotnuit(1);
+	    containerPIE.css("display", "block");
+	    cf_Twoyearnotnuit(2);
+    } else {
+    	bnchooseFn(0);//显示表格还是图形
+    	cf_SdTwoyearhavenuit(2);
+    }
+}
+//--------------------------------------------------------------------------------------------固定资产投资 完
+function fourth(){
+	//qs选择
+	qschooseFn(0);//显示表格还是图形
+	bnchooseFn(0);
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	 if (getxiaolei_index == "全社会固定资产投资情况") {
+         closeBN.css("display", "none");
+         cf_Twoyearnotnuit(1);
+     } else {
+         closeQS.css("display", "none");
+         cf_SdTwoyearhavenuit(2);
+     }
+}
+//--------------------------------------------------------------------------------------------农业 wan
+function fifth(){
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+    if (getxiaolei_index == "农业化肥用量") {
+    	closeBN.css("display", "none");
+        ajaxDate("SdSix", 0, function (data) {
+        	console.log(data)
+            containerQs.css("width", "500px");
+            var newdata = {
+                categories: [],
+                bar: [],
+                series: ["纯量", "物量"],
+                colors: ['#3aaef4', '#75de60'],
+                line: []
+            }
+            for (var i = (data.length - 1); i >= 0; i--) {
+            	var cl = is_data(data[i].cl);
+            	var wl = is_data(data[i].wl);
+                newdata.categories.push(data[i].yearDate);
+                newdata.bar[0].push(cl);
+                newdata.bar[1].push(wl);
+                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + cl + '</div><div  style="width:{c}" class="fl">' + wl + '</div></div>';
+            }
+            containerQs.highcharts(containerQS(newdata));
+            if (is_qschoose) {
+    	        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">纯量</div><div  style="width:{c}" class="fl">物量</div>';
+    	        var a = "100px", b = c = "50%";
+    	        var qsdata = {
+    	            title: FormatModel(title, {
+    	                a: a,
+    	                b: b,
+    	                c: c
+    	            }),
+    	            str: FormatModel(qs_str, {
+    	                a: a,
+    	                b: b,
+    	                c: c
+    	            })
+    	        }
+    	        containerbiaoge(qsdata);
+    	    }
+            qsajax.css("display", "block");
+        });
+        /* ajaxDate("SdSix", 1, function (data) {
+           console.log(data)
+        }); */
+    } else {
+        ajaxDate("SdFivenotyear", 0, function (data) {
+        	
+        	//console.log(data)
+            var newdata = {
+                categories: [],
+                bar: [],
+                series: ["增加值"],
+                colors: ['#3aaff5'],
+                line: [{
+                    type: 'line',
+                    name: '发展速度',
+                    data: [],
+                    unit: "",
+                    color: '#d868e6',
+                    tooltip: { valueSuffix: '' }
+                }]
+            }
+            for (var i = (data.length - 1); i >= 0; i--) {
+            	var zzl = is_data(data[i].zzl);
+            	var deSpeed = is_data(data[i].deSpeed);
+                newdata.categories.push(data[i].yearDate);
+                newdata.bar[0].push(zzl);
+                newdata.line[0].data.push(deSpeed);
+                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + zzl + '</div><div  style="width:{c}" class="fl">' + deSpeed + '</div></div>';
+            }
+            containerQs.highcharts(containerQS(newdata));
+            if (is_qschoose) {
+    	        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">增加值</div><div  style="width:{c}" class="fl">发展速度</div>';
+    	        var a = "100px", b = c = "50%";
+    	        var qsdata = {
+    	            title: FormatModel(title, {
+    	                a: a,
+    	                b: b,
+    	                c: c
+    	            }),
+    	            str: FormatModel(qs_str, {
+    	                a: a,
+    	                b: b,
+    	                c: c
+    	            })
+    	        }
+    	        containerbiaoge(qsdata);
+    	    }
+            qsajax.css("display", "block");
+        });
+        ajaxDate("SdFivenotyear", 1, function (data) {
+            console.log(data)
+    		bnchoose.find("div").eq(1).unbind().click(function(){
+    			bnchooseFn(1,'visBN("pie")');
+    		});
+            var bn_str = '';
+    		//console.log(data)
+    		var newdata = {
+    			    title: "",
+    			    name: data[0].yearDate + "年",
+    			    unit: "%",
+    			    tooltipunit: "",
+    			    pie: [],
+    			    colors: ["#e581f1","#ff4747","#ffcd47","#75de60","#608cde"]
+    			}
+    			for (var i = (data.length - 1); i >= 0; i--) {
+    			    var array = new Array();
+    			    array.push(data[i].name);
+    			    array.push(parseFloat(data[i].zzl));
+    			    bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].deSpeed + '</div><div style="width:{d}" class="fl">' + data[i].zzl + '</div></div>';
+    			    newdata.pie.push(array);
+    			}
+    			containerPIE.highcharts(one_PIE(newdata));	
+    			var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">发展速度</div><div  style="width:{d}" class="fl">增长值</div>';
+		        var a = "100px", b = c = d = "50%";
+		        var bndata = {
+		            title: FormatModel(title, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d
+		            }),
+		            str: FormatModel(bn_str, {
+		                a: a,
+		                b: b,
+		                c: c,
+		                d: d
+		            })
+		        }
+		        bn_biaoge(bndata);
+		        $(bnchoose).css("display","flex");
+		        bnajax.css("display", "block");
+		        bnchooseFn(0);
+        });
+    }
+}
+//--------------------------------------------------------------------------------------------批发零售贸易业、对外经济与旅游业 wan
+function sixth(){
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	 if (getxiaolei_index == "旅游人数") {
+		 qschooseFn(0);//显示表格还是图形
+         cf_SdTwoyearhavenuit(1);
+         bnchooseFn(0);//显示表格还是图形
+         cf_SdTwoyearhavenuit(3);
+     } else if (getxiaolei_index == "酒店经营情况") {
+         closeQS.css("display", "none");
+         cf_SdTwoyearhavenuit(2);
+         bnchooseFn(0);//显示表格还是图形
+     } else if (getxiaolei_index == "批发和零售总额") {
+         closeBN.css("display", "none");
+         cf_Twoyearnotnuit(1);
+     } else if (getxiaolei_index == "限额住宿餐饮财务指标" || getxiaolei_index == "限额批发零售财务指标") {
+	        closeQS.css("display", "none");
+         	$(bnchoose).css("display","flex");
+         	cf_Twoyearnotnuit(3);
+     } else {
+    	cf_Twoyearnotnuit(1);
+ 	    containerPIE.css("display", "block");
+ 	    cf_Twoyearnotnuit(2)
+     }
+}
+//--------------------------------------------------------------------------------------------人民生活
+function seventh(){
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	if (getxiaolei_index == "城镇抽查经济指标" || getxiaolei_index == "顺德区抽查经济指标") {
+        ajaxDate("SdSevenone", 0, function (data) {
+            var changedata = {
+                yearDate: [],
+                bar1: [],
+                bar2: [],
+                line1: [],
+                line2: []
+            };
+            for (var j = 0; j < data.length; j++) {
+            	var total = is_data(data[j].total);
+            	var zzl = is_data(data[j].zzl);
+                if (j % 2 != 0) {
+                	changedata.bar2.push(total);
+                    changedata.line2.push(zzl);
+                } else {
+                    changedata.yearDate.push(data[j].yearDate);
+                    changedata.bar1.push(total);
+                    changedata.line1.push(zzl);
+                }
+            }
+            var newdata = {
+                title: "",
+                categories: [],
+                unitBar: "",
+                bar: [],
+                series: [data[0].name + "(" + data[0].unit + ")", data[1].name + "(" + data[1].unit + ")"],
+                colors: ['#3aaef4', '#75de60'],
+                line: [{
+                    type: 'line',
+                    name: data[0].name + '增长率(%)',
+                    data: [],
+                    color: '#d868e6',
+                    tooltip: { valueSuffix: '%' }
+                }, {
+                    type: 'line',
+                    name: data[1].name + '增长率(%)',
+                    data: [],
+                    color: '#d86416',
+                    tooltip: { valueSuffix: '%' }
+                }]
+            }
+            console.log(changedata)
+            for (var i = (changedata.yearDate.length - 1); i >= 0; i--) {
+                newdata.categories.push(changedata.yearDate[i]);
+                newdata.bar[0].push(changedata.bar1[i]);
+                newdata.line[0].data.push(changedata.line1[i]);
+                newdata.bar[1].push(changedata.bar2[i]);
+                newdata.line[1].data.push(changedata.line2[i]);
+                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + changedata.yearDate[i] + '</div><div style="width:{b}" class="fl">' + changedata.bar1[i] + '</div><div  style="width:{c}" class="fl">' + changedata.bar2[i] + '</div><div  style="width:{d}" class="fl">' + changedata.line1[i] + '</div><div  style="width:{e}" class="fl">' + changedata.line2[i] + '</div></div>';
+            }
+            containerQs.highcharts(containerQS(newdata));
+            if (is_qschoose) {
+    	        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">' + data[0].name + '(' + data[0].unit + ')' + '</div><div  style="width:{c}" class="fl">' + data[1].name + '(' + data[1].unit + ')' + '</div><div  style="width:{d}" class="fl">' + data[0].name + '(%)</div><div  style="width:{e}" class="fl">' + data[1].name + '(%)</div>';
+    	        var a = "100px", b = c = d = e = "50%";
+    	        var qsdata = {
+    	            title: FormatModel(title, {
+    	                a: a,
+    	                b: b,
+    	                c: c,
+    	                d: d,
+    	                e: e
+    	            }),
+    	            str: FormatModel(qs_str, {
+    	                a: a,
+    	                b: b,
+    	                c: c,
+    	                d: d,
+    	                e: e
+    	            })
+    	        }
+    	        containerbiaoge(qsdata);
+    	    }
+            qsajax.css("display", "block");
+        });
+        ajaxDate("SdSevenone", 1, function (data) {
+        	if(data != undefined){
+	        	$(bnchoose).css("display","flex");
+	    		bnchooseFn(0);
+	    		bnchoose.find("div").eq(1).unbind().click(function(){
+	    			bnchooseFn(1,'visBN("pie")');
+	    		});
+	            var bn_str = '';
+	    		//console.log(data)
+	    		var newdata = {
+	    			    title: "",
+	    			    name: data[0].yearDate + "年",
+	    			    unit: "%",
+	    			    tooltipunit: "",
+	    			    pie: [],
+	    			    colors: ["#e581f1","#ff4747","#ffcd47","#75de60","#608cde"]
+	    			}
+	    			for (var i = (data.length - 1); i >= 0; i--) {
+	    			    var array = new Array();
+	    			    array.push(data[i].name);
+	    			    array.push(parseFloat(data[i].zzl));
+	    			    bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].total + '</div><div style="width:{d}" class="fl">' + data[i].unit + '</div><div style="width:{e}" class="fl">' + data[i].zzl + '</div></div>';
+	    			    newdata.pie.push(array);
+	    			}
+	    			containerPIE.highcharts(one_PIE(newdata));	
+	    			var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">总额值</div><div  style="width:{d}" class="fl">单位</div><div  style="width:{e}" class="fl">增长值</div>';
+			        var a = "100px", b = c = d = "50%",e ="150px";
+			        var bndata = {
+			            title: FormatModel(title, {
+			                a: a,
+			                b: b,
+			                c: c,
+			                d: d,
+			                e: e
+			            }),
+			            str: FormatModel(bn_str, {
+			                a: a,
+			                b: b,
+			                c: c,
+			                d: d,
+			                e: e
+			            })
+			        }
+			        bn_biaoge(bndata);
+			        bnajax.css("display", "block");
+			        bnchooseFn(0);
+			 		bnchoose.find("div").eq(1).unbind().click(function(){
+		 				bnchooseFn(1,'visBN("pie")');
+		 			});
+        	}else{
+				closeBN.css("display", "none");
+				
+			}
+        });
+    } else {
+        ajaxDate("SdSeventwo", 0, function (data) {
+        	if(data != undefined && data[0] != ""){
+	            var topdata = [];
+	            var longlengt = (data.length >= 10) ? 10 : data.length;
+	            for (var j = 0; j < longlengt; j++) {
+	                if (data[j] != "")
+	                    topdata.push(data[j]);
+	            }
+	            var newdata = {
+	                title: "",
+	                categories: [],
+	                unitBar: "",
+	                bar: [],
+	                series: ['总量'],
+	                colors: ['#3aaef4'],
+	                line: [{
+	                    type: 'line',
+	                    name: '增长率(%)',
+	                    data: [],
+	                    color: '#d868e6',
+	                    tooltip: { valueSuffix: '%' }
+	                }]
+	            }
+	            for (var i = (topdata.length - 1); i >= 0; i--) {
+	                newdata.categories.push(topdata[i].yaerDate);
+	                newdata.bar[0].push(parseFloat(topdata[i].total));
+	                newdata.line[0].data.push(parseFloat(data[i].zzl));
+	                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + topdata[i].yaerDate + '</div><div style="width:{b}" class="fl">' + parseFloat(topdata[i].total) + '</div><div  style="width:{c}" class="fl">' + parseFloat(data[i].zzl) + '</div></div>';
+	            }
+	            containerQs.highcharts(containerQS(newdata));
+	            if (is_qschoose) {
+	    	        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">总量</div><div  style="width:{c}" class="fl">增长率(%)</div>';
+	    	        var a = "100px", b = c = "50%";
+	    	        var qsdata = {
+	    	            title: FormatModel(title, {
+	    	                a: a,
+	    	                b: b,
+	    	                c: c,
+	    	            }),
+	    	            str: FormatModel(qs_str, {
+	    	                a: a,
+	    	                b: b,
+	    	                c: c,
+	    	            })
+	    	        }
+	    	        containerbiaoge(qsdata);
+	    	    }
+	            qsajax.css("display", "block");
+	        }else{
+	        	closeQS.css("display", "none");
+	        	is_qsbn();
+			}
+        });
+        ajaxDate("SdSeventwo", 1, function (data) {
+        	if(data != undefined){
+	        	$(bnchoose).css("display","flex");
+	    		bnchooseFn(0);
+	    		bnchoose.find("div").eq(1).unbind().click(function(){
+	    			bnchooseFn(1,'visBN("pie")');
+	    		});
+	            var bn_str = '';
+	    		console.log(data)
+	    		var newdata = {
+	    			    title: "",
+	    			    name: data[0].yaerDate + "年",
+	    			    unit: "%",
+	    			    tooltipunit: "",
+	    			    pie: [],
+	    			    colors: ["#e581f1","#ff4747","#ffcd47","#75de60","#608cde"]
+	    			}
+	    			for (var i = (data.length - 1); i >= 0; i--) {
+	    			    var array = new Array();
+	    			    array.push(data[i].name);
+	    			    array.push(parseFloat(data[i].total));
+	    			    bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yaerDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].total + '</div><div style="width:{d}" class="fl">' + data[i].zzl + '</div></div>';
+	    			    newdata.pie.push(array);
+	    			}
+	    			containerPIE.highcharts(one_PIE(newdata));	
+	    			var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">总额值</div><div  style="width:{d}" class="fl">增长值</div>';
+			        var a = "100px", b = c =  "50%",d ="150px";
+			        var bndata = {
+			            title: FormatModel(title, {
+			                a: a,
+			                b: b,
+			                c: c,
+			                d: d
+			            }),
+			            str: FormatModel(bn_str, {
+			                a: a,
+			                b: b,
+			                c: c,
+			                d: d
+			            })
+			        }
+			        bn_biaoge(bndata);
+			        bnajax.css("display", "block");
+			        bnchooseFn(0);
+			 		bnchoose.find("div").eq(1).unbind().click(function(){
+		 				bnchooseFn(1,'visBN("pie")');
+		 			});
+        	}else{
+					closeBN.css("display", "none");
+					is_qsbn();
+			}
+        });
+    }
+}
+//--------------------------------------------------------------------------------------------文化、教育、卫生、科技、计划生育
+function eighth(){
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	if (getxiaolei_index == "计划生育") {
+	    ajaxDate("SdEigthjhsy", 0, function (data) {
+	        var topdata = [];
+	        var longlengt = (data.length >= 10) ? 10 : data.length;
+	        for (var j = 0; j < longlengt; j++) {
+	            topdata.push(data[j]);
+	        }
+	        var newdata = {
+	            title: "",
+	            categories: [],
+	            unitBar: "",
+	            bar: [],
+	            series: ['已婚人数', '计划生育手术', '落实节育措施'],
+	            colors: ['#3aaef4', '#75de60', '#ffcd47'],
+	            line: [{
+	                type: 'line',
+	                name: '节育率（%）',
+	                data: [],
+	                color: '#d868e6',
+	                tooltip: { valueSuffix: '%' }
+	            }]
+	        }
+	        for (var i = (topdata.length - 1); i >= 0; i--) {
+	        	var yearDate = (topdata[i].yearDate != undefined) ? topdata[i].yearDate : "暂无数据";
+	        	var yhrs = (topdata[i].yhrs != undefined && topdata[i].yhrs != "") ? topdata[i].yhrs : "暂无数据";;
+	        	var jhsysh = is_data(topdata[i].jhsysh);
+	        	var lsjycs = is_data(topdata[i].lsjycs);
+	        	var jyl = is_data(topdata[i].jyl);
+	            newdata.categories.push(yearDate);
+	            newdata.bar[0].push(yhrs);
+	            newdata.bar[1].push(jhsysh);
+	            newdata.bar[2].push(lsjycs);
+	            newdata.line[0].data.push(jyl);
+	            qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + yearDate + '</div><div style="width:{b}" class="fl">' + yhrs + '</div><div  style="width:{c}" class="fl">' + jhsysh + '</div><div  style="width:{d}" class="fl">' + lsjycs + '</div><div  style="width:{e}" class="fl">' + jyl + '</div></div>';
+	        }
+	        containerQs.highcharts(containerQS(newdata));
+	        if (is_qschoose) {
+    	        var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">已婚人数</div><div  style="width:{c}" class="fl">计划生育手术</div><div  style="width:{d}" class="fl">落实节育措施</div><div  style="width:{e}" class="fl">节育率（%）</div>';
+    	        var a = "200px", b = c =d=e = "50%";
+    	        var qsdata = {
+    	            title: FormatModel(title, {
+    	                a: a,
+    	                b: b,
+    	                c: c,
+    	                d: d,
+    	                e: e
+    	            }),
+    	            str: FormatModel(qs_str, {
+    	                a: a,
+    	                b: b,
+    	                c: c,
+    	                d: d,
+    	                e: e
+    	            })
+    	        }
+    	        containerbiaoge(qsdata);
+    	    }
+	        qsajax.css("display", "block");
+	    });
+	    ajaxDate("SdEigthjhsy", 1, function (data) {
+	    	console.log(data);
+	    	var polylinebgdata = {
+					title: "",
+					unit: "",
+					categories: [],
+					colors : ["#2bc7c9","#b7a4df","#f65c5c"],
+					series:[
+						{
+							name:'已婚人数',
+							data: []
+						},
+						{
+							name:'计划生育手术',
+							data: []
+						},
+						{
+							name:'落实节育措施',
+							data: []
+						}
+					]
+				}
+		    	for(var d in data){
+		    		polylinebgdata.categories.push(data[d].name);
+		    		polylinebgdata.series[0].data.push(parseInt(data[d].yhrs));
+		    		polylinebgdata.series[1].data.push(parseInt(data[d].jhsysh));
+		    		polylinebgdata.series[2].data.push(parseInt(data[d].lsjycs));
+		    	}
+				containerPOLYLINE.highcharts(container_POLYLINE(polylinebgdata));
+		        bnajax.css("display", "block");
+	    });
+	}
+	if (getxiaolei_index == "卫生") {
+	    cf_SdTwoyearhavenuit(1);
+	    bnchooseFn(0);
+        cf_SdTwoyearhavenuit(3);
+	}
+	if (getxiaolei_index != "卫生" && getxiaolei_index != "计划生育") {//wan
+	    closeQS.css("display", "none");
+	    bnchooseFn(0);
+        cf_SdTwoyearhavenuit(2);
+	}
+}
+//--------------------------------------------------------------------------------------------运输、邮电、电力 wan
+function nineth(){
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	if (getxiaolei_index == "全社会用电量") {
+        cf_Twoyearnotnuit(1);
+        cf_Twoyearnotnuit(2);
+    } 
+    if (getxiaolei_index == "交通") {
+    		bnchooseFn(0);
+            closeQS.css("display", "none");
+            cf_SdTwoyearhavenuit(2);
+    } 
+	if(getxiaolei_index != "全社会用电量" && getxiaolei_index != "交通") {
+		 	closeQS.css("display", "none");
+			bnchooseFn(0);
+            cf_SdTwoyearhavenuit(2);
+    }
+}
+//--------------------------------------------------------------------------------------------综合
+function tenth(){
+	//qs选择
+	var qs_str = "";
+	var is_qschoose = true;//是否显示图形
+	qschooseFn(0);//显示表格还是图形
+	var getxiaolei_index = SubcategoriesS.val();//小类值
+	if (getxiaolei_index == "人口与户数") {
+        ajaxDate("SdTenrkhs", 0, function (data) {
+            visBN("bn");
+            var topdata = [];
+            var longlengt = (data.length >= 10) ? 10 : data.length;
+            for (var j = 0; j < longlengt; j++) {
+                topdata.push(data[j]);
+            }
+            var newdata = {
+                title: "",
+                categories: [],
+                unitBar: "",
+                bar: [],
+                series: ['户数', '人口'],
+                colors: ['#3aaef4', '#75de60'],
+                line: []
+            }
+            for (var i = (topdata.length - 1); i >= 0; i--) {
+            	var yaerDate = (topdata[i].yaerDate != undefined) ? topdata[i].yaerDate : "暂无数据";
+            	var hs = is_data(topdata[i].hs);
+            	var rk = is_data(topdata[i].rk);
+                newdata.categories.push(yaerDate);
+                newdata.bar[0].push(hs);
+                newdata.bar[1].push(rk);
+                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + yaerDate + '</div><div style="width:{b}" class="fl">' + hs + '</div><div  style="width:{c}" class="fl">' + rk + '</div></div>'
+            }
+            containerQs.highcharts(containerQS(newdata));
+            if(is_qschoose){
+	        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">户数</div><div  style="width:{c}" class="fl">人口</div>'
+				var a = "100px",b="50%",c="50%";
+	        	var qsdata = {
+						title : FormatModel(title,{
+							a: a,
+							b: b,
+							c: c,
+						}),
+						str :FormatModel(qs_str,{
+							a: a,
+							b: b,
+							c: c,
+						})
+				}
+				containerbiaoge(qsdata);
+			}
+            qsajax.css("display", "block");
+        });
+        ajaxDate("SdTenrkhs", 1, function (data) {
+        	bnchooseFn(0);
+        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">户数</div><div  style="width:{d}" class="fl">人口</div>';
+			var bn_str = '';
+			for(var i in data){
+				bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yaerDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].hs + '</div><div style="width:{d}" class="fl">' + data[i].rk + '</div></div>';
+			}
+	        var a = "100px", b = c = d = e = "50%";
+	        var bndata = {
+	            title: FormatModel(title, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            }),
+	            str: FormatModel(bn_str, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            })
+	        }
+	        bn_biaoge(bndata);
+	        bnajax.css("display", "block");
+        });
+    }
+    if (getxiaolei_index == "面积与行政区") {
+        ajaxDate("SdTenarea", 0, function (data) {
+            visBN("bn");
+            var topdata = [];
+            var longlengt = (data.length >= 10) ? 10 : data.length;
+            for (var j = 0; j < longlengt; j++) {
+                topdata.push(data[j]);
+            }
+            var newdata = {
+                title: "",
+                categories: [],
+                unitBar: "",
+                bar: [],
+                series: ['土地面积', '居委会', '村委会'],
+                colors: ['#3aaef4', '#75de60', '#ffcd47'],
+                line: []
+            }
+            for (var i = (topdata.length - 1); i >= 0; i--) {
+            	var areaMj = is_data(topdata[i].areaMj);
+            	var jwh = is_data(topdata[i].jwh);
+            	var cwh = is_data(topdata[i].cwh);
+                newdata.categories.push(topdata[i].yearDate);
+                newdata.bar[0].push(areaMj);
+                newdata.bar[1].push(jwh);
+                newdata.bar[2].push(cwh);
+                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + topdata[i].yearDate + '</div><div style="width:{b}" class="fl">' + areaMj + '</div><div  style="width:{c}" class="fl">' + jwh + '</div><div  style="width:{d}" class="fl">' + cwh + '</div></div>'
+            }
+            containerQs.highcharts(containerQS(newdata));
+            if(is_qschoose){
+	        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">土地面积</div><div  style="width:{c}" class="fl">居委会</div><div  style="width:{d}" class="fl">村委会</div>'
+				var a = "100px",b="50%",c=d="50%";
+	        	var qsdata = {
+						title : FormatModel(title,{
+							a: a,
+							b: b,
+							c: c,
+							d: d
+						}),
+						str :FormatModel(qs_str,{
+							a: a,
+							b: b,
+							c: c,
+							d: d
+						})
+				}
+				containerbiaoge(qsdata);
+			}
+            qsajax.css("display", "block");
+        });
+        ajaxDate("SdTenarea", 1, function (data) {
+        	bnchooseFn(0);
+        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">土地面积</div><div  style="width:{d}" class="fl">居委会</div><div  style="width:{e}" class="fl">村委会</div>';
+			var bn_str = '';
+			for(var i in data){
+				bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yearDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].areaMj + '</div><div style="width:{d}" class="fl">' + data[i].jwh + '</div><div style="width:{e}" class="fl">' + data[i].cwh + '</div></div>';
+			}
+	        var a = "100px", b = c = d = e = "50%";
+	        var bndata = {
+	            title: FormatModel(title, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            }),
+	            str: FormatModel(bn_str, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            })
+	        }
+	        bn_biaoge(bndata);
+	        bnajax.css("display", "block");
+        });
+    }
+    if (getxiaolei_index == "人口变动") {
+        ajaxDate("SdTenrkbd", 0, function (data) {
+            visBN("bn");
+            var topdata = [];
+            var longlengt = (data.length >= 10) ? 10 : data.length;
+            for (var j = 0; j < longlengt; j++) {
+                topdata.push(data[j]);
+            }
+            var newdata = {
+                title: "",
+                categories: [],
+                unitBar: "",
+                bar: [],
+                series: ['人数'],
+                colors: ['#3aaef4'],
+                line: [{
+                    type: 'line',
+                    name: '出生率（%）',
+                    data: [],
+                    color: '#d868e6',
+                    tooltip: { valueSuffix: '%' }
+                }, {
+                    type: 'line',
+                    name: '计划生育率（%）',
+                    data: [],
+                    color: '#d86416',
+                    tooltip: { valueSuffix: '%' }
+                }]
+            }
+            for (var i = (topdata.length - 1); i >= 0; i--) {
+            	var sh = is_data(topdata[i].sh);
+            	var csl = is_data(topdata[i].csl);
+            	var jhsyl = is_data(topdata[i].jhsyl);
+                newdata.categories.push(topdata[i].yaerDate);
+                newdata.bar[0].push(sh);
+                newdata.line[0].data.push(csl);
+                newdata.line[1].data.push(jhsyl);
+                qs_str += '<div class="c-format"><div style="width:{a}" class="fl">' + topdata[i].yaerDate + '</div><div style="width:{b}" class="fl">' + sh + '</div><div  style="width:{c}" class="fl">' + csl + '</div><div  style="width:{d}" class="fl">' + jhsyl + '</div></div>'
+            }
+            containerQs.highcharts(containerQS(newdata));
+            if(is_qschoose){
+	        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">人数</div><div  style="width:{c}" class="fl">出生率（%）</div><div  style="width:{d}" class="fl">计划生育率（%）</div>'
+				var a = "100px",b="50%",c=d="50%";
+	        	var qsdata = {
+						title : FormatModel(title,{
+							a: a,
+							b: b,
+							c: c,
+							d: d
+						}),
+						str :FormatModel(qs_str,{
+							a: a,
+							b: b,
+							c: c,
+							d: d
+						})
+				}
+				containerbiaoge(qsdata);
+			}
+            qsajax.css("display", "block");
+        });
+        ajaxDate("SdTenrkbd", 1, function (data) {
+        	bnchooseFn(0);
+        	var title = '<div class="fl" style="width:{a}">年份</div><div  style="width:{b}" class="fl">名称</div><div  style="width:{c}" class="fl">人数</div><div  style="width:{d}" class="fl">出生率</div><div  style="width:{e}" class="fl">计划生育率%</div>';
+			var bn_str = '';
+			for(var i in data){
+				bn_str += '<div class="c-format"><div style="width:{a}" class="fl">' + data[i].yaerDate + '</div><div style="width:{b}" class="fl">' + data[i].name + '</div><div style="width:{c}" class="fl">' + data[i].sh + '</div><div style="width:{d}" class="fl">' + data[i].csl + '</div><div style="width:{e}" class="fl">' + data[i].jhsyl + '</div></div>';
+			}
+	        var a = "100px", b = c = d = e = "50%";
+	        var bndata = {
+	            title: FormatModel(title, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            }),
+	            str: FormatModel(bn_str, {
+	                a: a,
+	                b: b,
+	                c: c,
+	                d: d,
+	                e: e
+	            })
+	        }
+	        bn_biaoge(bndata);
+	        bnajax.css("display", "block");
+        });
+    }
+    if (getxiaolei_index == "人均指标") {//
+        closeQS.css("display", "none");
+        bnchooseFn(0);
+        cf_SdTwoyearhavenuit(2);
+    }
+    if (getxiaolei_index == "综合生产总值") {//
+    	closeBN.css("display", "none");
+        cf_Twoyearnotnuit(1);
+    }
+}
+//----近几年的趋势表格、图形
+function containerbiaoge(datanum){
+	var title = $(qsbiaoge).find(".title");
+	var content = $(qsbiaoge).find(".content");
+	title.html(datanum.title);
+	content.html(datanum.str);
+}
+function containerQS(datanum) {
+    var data = datanum;
+    var dtitle = data.title;
+    var dcategories = data.categories;
+    var dunitBar = datanum.unitBar;
+    var dbar = () => {
+        var length = data.bar.length;
+        var savedata = new Array();
+        var colors = data.colors;
+        for (var i = 0; i < length; i++) {
+            var cache = {
+                type: 'column',
+                name: data.series[i],
+                data: data.bar[i],
+                color: colors[i],
+                yAxis: 0,
+                tooltip: { valueSuffix: dunitBar }
+            }
+            savedata.push(cache);
+        }
+        return savedata;
+    }
+    var dline = data.line;
+
+    //highcharts
+    var title = { text: dtitle };
+    var xAxis = { categories: dcategories };
+    var yAxis = [
+        {
+            title: {
+                text: '',
+                style: { color: Highcharts.getOptions().colors[0] }
+            },
+            labels: {
+                format: '{value}',
+                style: { color: Highcharts.getOptions().colors[0] }
+            }
+        },
+        {
+            labels: {
+                format: '{value}',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: '',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            opposite: true
+        }
+    ];
+    var series = [];
+    var getbar = dbar();
+    for (var s = 0; s < getbar.length; s++) { series.push(getbar[s]); }
+    for (var dl in dline) {
+        dline[dl].yAxis = 1;
+        series.push(dline[dl]);
+    }
+    var plotOptions = {
+        column: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    };
+    var json = {};
+    json.title = title;
+    json.xAxis = xAxis;
+    json.yAxis = yAxis;
+    json.plotOptions = plotOptions;
+    json.series = series;
+    return json;
+}
+//----本年具体情况表格、图形
+function closeVisBN() {
+    containerTABLE.css("display", "none");
+    containerPOLYLINE.css("display", "none");
+    containerPIE.css("display", "none");
+}
+function visBN(o) {
+    var table = "none";
+    var polyline = "none";
+    var pie = "none";
+    switch (o) {
+        case "table":
+            table = "block";
+            break;
+        case "pie":
+            pie = "block";
+            break;
+        case "polyline":
+            polyline = "block";
+            break;
+    }
+    containerTABLE.css("display", table);
+    containerPOLYLINE.css("display", polyline);
+    containerPIE.css("display", pie);
+}
+function bn_biaoge(datanum){
+	var title = $(bnbiaoge).find(".title");
+	var content = $(bnbiaoge).find(".content");
+	title.html(datanum.title);
+	content.html(datanum.str);
+}
+function container_PIE(datanum) {
+	visBN("pie");
+    var data = datanum;
+    var unit = data.unit;
+    var color = data.colors;
+    var pdata = () => {
+        var length = data.pie.length;
+        var savedata = new Array();
+        for (var i = 0; i < length; i++) {
+            var size = "135px";
+            var innerS = "40%";
+            if (i == 0) { size = "200px"; innerS = "70%"; }
+            var cache = {
+                type: 'pie',
+                size: size,
+                innerSize: innerS,
+                name: datanum.name[i],
+                data: data.pie[i],
+                colors: color[i]
+            }
+            savedata.push(cache);
+        }
+        return savedata;
+    }
+    var title = { text: datanum.title };
+    var tooltip = { valueSuffix: unit }
+    var plotOptions = {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            depth: 35,
+            connectorColor: '#000',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>' + unit,
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    };
+    var series = [];
+    var getpie = pdata();
+
+    for (var s = 0; s < getpie.length; s++) { series.push(getpie[s]); }
+    var json = {};
+    json.title = title;
+    json.series = series;
+    json.plotOptions = plotOptions;
+    return json;
+}
+//单环图
+function one_PIE(datanum) {
+	visBN("pie");
+	var title = datanum.title;
+	var tooltipunit = datanum.tooltipunit;
+	var unit = datanum.unit;
+	var name = datanum.name;
+	var data = datanum.pie;
+	var color = datanum.colors;
+	var title = { text: title };
+	var tooltip = {
+		    //pointFormat: '{series.name}: <b>{series.data}' + tooltipunit + '</b>'
+		    formatter: function () {
+		        return '<b>年份:' + this.series.name  + '</b> <br>' + 
+		        	'<b>名称:' + this.point.name + '</b> <br>' +
+		        	'<b>对比率:' + Highcharts.numberFormat(this.percentage, 1) + '% </b><br>' +
+		        	'<b>数值:' + Highcharts.numberFormat(this.y, 0, ',') + tooltipunit + '</b>';
+		    }
+		};
+	var plotOptions = {
+		pie: {
+			allowPointSelect: true,
+			cursor: 'pointer',
+			connectorColor: '#000',
+			dataLabels: {
+				enabled: true,
+				format: '<b>{point.name}</b>: {point.percentage:.1f}' + unit,
+				style: {
+					color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+				}
+			}
+		}
+	};
+	var size = "200px";
+	var innerS = "70%";
+	var series = [{
+		type: 'pie',
+		size: size,
+		innerSize: innerS,
+		name: name,
+		data: data,
+		colors: color
+	}];
+	var json = {};
+	json.title = title;
+	json.tooltip = tooltip;
+	json.series = series;
+	json.plotOptions = plotOptions;
+	return json;
+}
+function container_POLYLINE(datanum) {
+    visBN("polyline");
+    var data = datanum;
+	var pcategories = data.categories;
+	var dseries = data.series;
+	var punit = data.unit;
+	var colors = data.colors;
+
+	var chart = { type: 'areaspline' }
+	var title = { text: data.title };
+	var xAxis = { categories: pcategories };
+	var yAxis = {title: {text: ''}};
+	var tooltip = {shared: true,valueSuffix: punit}
+	var plotOptions = {areaspline: {fillOpacity: 0.1}}
+	for(var d in dseries){
+		dseries[d].color = colors[d];
+	}
+	var series = dseries;
+	var json = {};
+	json.chart = chart;
+	json.title = title;
+	json.xAxis = xAxis;
+	json.yAxis = yAxis;
+	json.tooltip = tooltip;
+	json.plotOptions = plotOptions;
+	json.series = series;
+	return json;
+}
+//----表格和图形切换
+function qschooseFn(num){
+	$(qschoose).find("div").removeClass("click");
+	$(qschoose).find("div").eq(num).addClass("click");
+	if(num == 1){
+		containerQs.css("display","none");
+		qsbiaoge.css("display","block");
+	}
+	if(num == 0){
+		containerQs.css("display","block");
+		qsbiaoge.css("display","none");
+	}
+}
+function bnchooseFn(num,change){
+	$(bnchoose).find("div").removeClass("click");
+	$(bnchoose).find("div").eq(num).addClass("click");
+	if(num == 0){
+		bnbiaoge.css("display","block");
+		closeVisBN();
+	}
+	if(num == 1){
+		bnbiaoge.css("display","none");
+		if(change != undefined)
+			eval(change);
+	}
+}
+//----接口
+function ajaxDate(ctype, num, callback) {
+    var url = "";
+    var data = {};
+    var year = YEAR;
+    var type = SubcategoriesS.val();//获取小类的值
+    switch (ctype) {
+        case "Twoyearnotnuit":
+            url = (num == 0) ? "twoyearnotnuit/yearnotnuit" : "twoyearnotnuit/yearnotnuitzl";
+            data = {
+                "year": year,
+                "type": type,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdTwoyearhavenuit":
+
+            url = (num == 0) ? "sdTwoyearhavenuit/twoyearhavenuit" : "sdTwoyearhavenuit/twoyearhavenuitzl";
+            data = {
+                "year": year,
+                "type": type,
+                "mobileLogin": "true"
+            }
+
+            break;
+        case "SdTwotype":
+            url = (num == 0) ? "sdTwotype/twotype" : "sdTwotype/twotypezl";
+            data = {
+                "year": year,
+                "type": type,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdThreetype":
+            url = "sdThreetype/threetype";
+            data = {
+                "year": year,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdFivenotyear":
+            url = (num == 0) ? "sdFivenotyear/fivenotyear" : "sdFivenotyear/fivenotyearzl";
+            data = {
+                "year": year,
+                "type": type,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdSix":
+            url = (num == 0) ? "sdSix/six" : "sdSix/sixzl";
+            data = {
+                "year": year,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdSevenone":
+            url = (num == 0) ? "sdSevenone/sevenone" : "sdSevenone/sevenonezl";
+            data = {
+                "year": year,
+                "type": type,
+                "mobileLogin": "true"
+            }
+
+            break;
+        case "SdSeventwo":
+            url = (num == 0) ? "sdSeventwo/seventwo" : "sdSeventwo/seventwozl";
+            data = {
+                "year": year,
+                "type": type,
+                "mobileLogin": "true"
+            }
+
+            break;
+        case "SdEigthjhsy":
+            url = (num == 0) ? "sdEigthjhsy/eigthjhsy" : "sdEigthjhsy/eigthjhsyzl";
+            data = {
+                "year": year,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdTenrkhs":
+            url = (num == 0) ? "sdTenrkhs/tenrkhs" : "sdTenrkhs/tenrkhszl";
+            data = {
+                "year": year,
+                "mobileLogin": "true"
+            }
+            break;
+        case "SdTenarea":
+            url = (num == 0) ? "sdTenarea/tenarea" : "sdTenarea/tenareazl";
+            data = {
+                "year": year,
+                "mobileLogin": "true"
+            }
+
+            break;
+        case "SdTenrkbd":
+            url = (num == 0) ? "sdTenrkbd/tenrkbd" : "sdTenrkbd/tenrkbdzl";
+            data = {
+                "year": year,
+                "mobileLogin": "true"
+            }
+            break;
+    }
+    $.ajax({
+        url: basePath()+"/sdcount/" + url,
+        type: "get",
+        async: true,
+        data: data,
+        dataType: "json",
+        success: function (result) {
+            console.log(result)
+            callback(result.data);
+        }
+    });
+}
+//----图标切换
+//年份切换
+function changeYear() {
+    YEAR = $(".year-id").val();
+    TypeFn("one");//初始化
+}
+//类型切换
+function TypeFn(type) {
+    switch (type) {
+        case "one":
+            var str = "";
+            var xiao = xiaolei[CategoryS.val()];
+            $("#Category").text(CategoryS.find("option:eq(" + CategoryS.val() + ")").text());
+            for (var i = 0; i < xiao.length; i++) {
+                str += "<option value=" + xiao[i] + ">" + xiao[i] + "</option>"
+            }
+            SubcategoriesS.html(str);
+            $("#Subcategories").text(SubcategoriesS.val());
+            getTypeTwoData();
+            break;
+        case "two":
+            $("#Subcategories").text(SubcategoriesS.val());
+            getTypeTwoData();
+            break;
+    }
+}
+
+//----main
+var CategoryS;//大类
+var SubcategoriesS;//小类
+var containerQs;//趋势--h
+var containerTABLE;
+var containerPOLYLINE;
+var containerPIE;
+var qsbiaoge,qschoose;
+var bnbiaoge,bnchoose;
+var qsajax,bnajax;
+var closeQS;//趋势整体
+var closeBN;//本年整体
+const xiaolei = [
+    ["地方税收合计", "财政支出", "国家税收合计", "贷款", "存贷差额", "存款"],//Twoyearnotnuit ok
+    ["工资总额", "年末人数", "平均工资", "从业人员"],//SdTwotype
+    ["工业企业名录", "大中型企业活动情况", "规模以上企业企业活动情况", "产品质量", "能源消费情况", "单位数", "总产值"],//SdThreetype-1,SdTwoyearhavenuit
+    ["房地产开发情况", "全社会固定资产投资情况 ", "全社会企业生产情况"],//SdTwoyearhavenuit
+    ["农业化肥用量", "生产值", "农业增加值"],//SdSix-1,SdFivenotyear
+    ["旅游人数", "酒店经营情况", "合同利用外资", "利用外贸项目", "利用外资", "进出口贸易总和", "批发和零售总额", "社会消费品总额", "限额批发零售财务指标", "限额住宿餐饮财务指标"],//SdTwoyearhavenuit-2,Twoyearnotnuit
+    ["城镇抽查经济指标", "顺德区抽查经济指标", "商品零售价格总指数", "居民消费价格指数", "出厂价格指数"],//SdSevenone-2,SdSeventwo
+    ["计划生育", "教育", "卫生", "文化"],//SdEigthjhsy-1,SdTwoyearhavenuit
+    ["全社会用电量", "电力", "交通", "	邮电"],//Twoyearnotnuit-1,SdTwoyearhavenuit
+    ["综合生产总值", "人均指标", "人口变动", "面积与行政区", "人口与户数"],//Twoyearnotnuit,SdTwoyearhavenuit,SdTenrkbd,SdTenarea,SdTenrkhs
+]
+var YEAR = "";
+$(document).ready(function () {
+    CategoryS = $("#CategoryS");
+    SubcategoriesS = $("#SubcategoriesS");
+    containerQs = $("#container_qs");
+    containerTABLE = $("#container_table");
+    containerPOLYLINE = $("#container_polyline");
+    containerPIE = $("#container_pie");
+    qschoose = $("#qs_choose");
+    qsbiaoge = $("#qs_biaoge");
+    bnchoose = $("#bn_choose");
+    bnbiaoge = $("#bn_biaoge");
+    qsajax = $("#qs_ajax");
+    bnajax = $("#bn_ajax");
+    closeQS = $("#close_qs");
+    closeBN = $("#close_bn");
+    //----初始化
+   /*  $(".nomove").unbind().bind("touchmove",function(){
+    	$("body").css("overflow","hidden");
+    });
+    $("body").unbind().bind("touchend",function(){
+    	$("body").css("overflow","auto");
+    }); */
+    YEAR = $(".year-id").val();
+    TypeFn('one');//初始化
+});
+</script>
+<div id="qsbn" style="text-align: center;font-size: 30px;">暂无数据</div>
+</body>
+</html>

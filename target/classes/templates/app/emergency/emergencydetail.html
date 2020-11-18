@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <!-- 引入 WeUI -->
+    <link rel="stylesheet" href="weui/css/weui.css"/>
+    <link rel="stylesheet" href="weui/css/weuix.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="weui/js/zepto.min.js"></script>
+    <script src="weui/js/zepto.weui.min.js"></script>
+
+    <script type="text/javascript" src="js/index.js"></script>
+
+<title></title>
+</head>
+<body ontouchstart>
+
+<div class="page__bd">
+    <article class="weui-article">
+                <div id="liAll"> </div>
+    </article>
+</div>
+
+
+
+<script th:inline="javascript">
+    $(function () {
+        detailById();
+    });
+
+    function detailById() {
+        var warnid = [[${warnid}]];
+        $.ajax({
+            url: getRootPath() + "/app/emergency/word",
+            // url:"http://19.202.137.139:8080/admin/emergency/isd/list",
+            data: {
+                warnid:warnid
+            },
+            type: "post",
+            dataType: "json",
+            beforeSend: function () {
+                $.showLoading();
+            },
+            success:function (data){
+                console.log(data.data);
+                var html = '';
+                if (data.code==0){
+                    var res = data.data;
+                    console.log(res.prevennr);
+                    html +='<section>\n' +'<h2 class="title" style="text-align: center;font-size: larger;">' +'<b>'+res.title+'</b>'+'</h2>'+ '<br>' +
+                        '<h3 style="text-align: right">'+res.createtime+'</h3>'+
+                        '<p style=\'width: 100%;white-space: pre-line;\'>'+res.prevennr+'</p>'+'</section>'
+                    $.hideLoading();
+                    $("#liAll").html(html);
+                    // $("title").text(res.title)
+                }else {
+                    html +='应急平台维护中，请稍后再试！'+'<button onclick="detailById()">'+ "刷新页面" +'</button>';
+                    $.hideLoading();
+                    $("#liAll").html(html);
+                    $("title").text("平台维护中")
+                }
+
+
+
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <title>危险化学品行政审批许可办事指南</title>
+
+    <style type="text/css">
+        body, dd, dl, html{margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;background: #e5e5e5;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        a{text-decoration:none;color: #000;}
+
+        .main{}
+        .title{font-size: 15px;padding: 10px 10px 0px 10px;}
+        .showList{}
+        .block{background: #fff;margin: 15px;border-radius: 5px;padding: 10px;border: solid 1px #c7c7c7;}
+        .block p{background: #fff;vertical-align: middle;line-height: normal;display: table-cell;}
+        .list{width: 100%;display: table;margin: 5px 0;}
+        .left{width: 30%;text-align: center;}
+        .right{background: #e5e5e5;border-radius: 5px;padding: 10px 5px 10px 10px;box-sizing: border-box;position: relative;}
+        .right span{vertical-align: middle;}
+        .right img{height: 15px;vertical-align: middle;position: absolute;right: 5px;top: 50%;transform: translateY(-50%);}
+        .bottom{padding: 10px;color: #4281cd;}
+    </style>
+
+</head>
+<body>
+
+<div class="main">
+    <p class="title">危险化学品行政审批许可办事指南</p>
+    <div class="showList">
+
+    </div>
+
+    <p class="bottom">只提供办事指南，需要网上办理该业务请到广东省网上办事大厅佛山分厅</p>
+</div>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        getList();
+    });
+
+    function getList(){
+        $.ajax({
+            url:basePath()+"/government/chemicalGuide/getList",
+            type:"get",
+            dataType:"json",
+            async:true,
+            success:function(result){
+                console.log(result)
+                var data = result.data;
+                for(var i in data){
+                    var applyHref = basePath()+"/government/chemicalGuide/detail?type=apply&id="+data[i].id;
+                    var lawHref = basePath()+"/government/chemicalGuide/detail?type=law&id="+data[i].id;
+                    $(".showList").append(
+                        '<div class="block">'+
+                        '<div class="list">'+
+                        '<p class="left">事项编号</p>'+
+                        '<div class="right">'+data[i].guideNum+'</div>'+
+                        '</div>'+
+                        '<div class="list">'+
+                        '<p class="left">事项名称</p>'+
+                        '<div class="right">'+data[i].guideName+'</div>'+
+                        '</div>'+
+                        '<div class="list">'+
+                        '<p class="left">申请资料</p>'+
+                        '<div class="right" onclick=window.location.href="'+applyHref+'">'+
+                        '<span>查看详情</span>'+
+                        '<img src="img/menu/right-red.png" />'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="list">'+
+                        '<p class="left">相关法律法规</p>'+
+                        '<div class="right" onclick=window.location.href="'+lawHref+'">'+
+                        '<span>查看详情</span>'+
+                        '<img src="img/menu/right-red.png" />'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'
+                    );
+                }
+
+            }
+        });
+    }
+</script>

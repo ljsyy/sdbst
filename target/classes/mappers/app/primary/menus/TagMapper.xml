@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.menus.TagMapper">
+
+	<select id="findByDate" resultType="com.unifs.sdbst.app.bean.menus.Tag">
+		select a.id,a.create_date,a.tag from SYS_MENU_TAGS  a
+		where a.create_date>=#{dayStart} and a.create_date &lt;=#{dayEnd} 
+		and a.NUMS = 0
+	</select>
+	
+	<insert id="insert">
+		insert into sys_menu_tags(id,create_date,tag,NUMS,TAGS)
+		values(#{id},#{createDate},#{tag},#{nums},#{tag})
+	</insert>
+	
+	<update id="update">
+		update sys_menu_tags
+		set tag=#{tag} where id=#{id}
+	</update>
+	<update id="updateNums">
+		update sys_menu_tags
+		set NUMS=#{nums} where id=#{id}
+	</update>
+	<select id="findName" resultType="com.unifs.sdbst.app.bean.menus.Tag">
+		select a.id,a.create_date,a.tag,a.NUMS,a.TAGS 
+		from SYS_MENU_TAGS  a
+		where a.TAGS=#{tag} 
+		AND a.NUMS <![CDATA[ <> ]]> 0
+	</select>
+	<select id="findHotTags" resultType="com.unifs.sdbst.app.bean.menus.Tag">
+		SELECT 
+			id,create_date,tag,NUMS,TAGS  
+		FROM 
+		(SELECT 
+			a.id,a.create_date,a.tag,a.NUMS,a.TAGS  
+		FROM SYS_MENU_TAGS a
+		WHERE a.NUMS is not  null
+		and a.NUMS <![CDATA[ <> ]]> 0
+		ORDER BY NUMS DESC)	
+		where ROWNUM <![CDATA[ < ]]> 6
+	</select>
+</mapper>

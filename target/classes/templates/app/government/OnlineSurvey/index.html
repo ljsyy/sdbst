@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>问卷调查</title>
+    <script src="js/jquery.min.js"></script>
+    <style>
+        body{font: 12px/1.5 tahoma,arial,\5b8b\4f53,sans-serif;background: #f05150;font-family: "微软雅黑";margin:0;position:absolute;width:100%;height:100%;overflow: hidden;}
+        p{margin: 0;}
+        a{text-decoration:none;}
+        .main{top:0;position:absolute;width:100%;height:100%;}
+        .ani{-webkit-transition: all 1000ms;-moz-transition: all 1000ms;-ms-transition: all 1000ms;-o-transition: all 1000ms;transition: all 1000ms;}
+        .img-move{width: 100%;height: 100%;position: absolute;    overflow: hidden;}
+
+        .c-title{position: relative; color:#000;font-size:45px;text-align:center;letter-spacing: 5px;height: 90px;line-height: 70px;}
+
+        .font-go{position: relative;    overflow-y: auto;height: 100%;}
+
+        .content{text-shadow: #000 1px 1px 1px;font-family: 'Ubuntu Mono', sans-serif;    margin: 0 auto 20px;width: 90%;background-color: rgba(0, 0, 0, 0.5);border-radius: 5px;padding: 5px 10px;box-sizing: border-box;}
+        .content p{color:#fff;letter-spacing: 2px;}
+        .content p.title{text-align: center;font-size: 30px;    margin: 5px 0;}
+        .content p.list{font-size: 17px;    margin-bottom: 5px;}
+        .content img{width: 80%;display: block;margin: 10px auto;}
+        /*V箭头*/
+        .gd{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:relative;height:103px;width:100%;white-space:nowrap;text-shadow:#000 1px 1px 1px}
+        .gd p{margin:0;font-size:16px;text-align:center;font-weight:700;color:#FFF}
+        .gd .jt{width: 30px;height: 30px;position: absolute;top: 20px;left: 50%;margin-left: -15px;border-right: 5px solid #FFF;border-bottom: 5px solid #FFF;transform: rotate(45deg);-ms-transform: rotate(45deg);-webkit-transform: rotate(45deg);animation: sy-bg-gd 3s ease infinite;-webkit-animation: sy-bg-gd 3s ease infinite;}
+        @keyframes sy-bg-gd{50% {top:35px;}100% {top:20px;}}
+        @-webkit-keyframes sy-bg-gd{50% {top:35px;}100% {top:20px;}}
+        /*^箭头*/
+        .gd-up{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:relative;height:50px;width:100%;white-space:nowrap;text-shadow:#000 1px 1px 1px}
+        .gd-up p{padding-top: 17px;margin:0;font-size:13px;text-align:center;font-weight:700;color:#FFF}
+        .gd-up .jt{width: 10px;height: 10px;position: absolute;top: 2px;left: 50%;margin-left: -5px;border-right: 3px solid #FFF;border-bottom: 3px solid #FFF;transform: rotate(-135deg);-ms-transform: rotate(-135deg);-webkit-transform: rotate(-135deg);animation: sy-bg-gd-up 3s ease infinite;-webkit-animation: sy-bg-gd-up 3s ease infinite;}
+        @keyframes sy-bg-gd-up{50% {top:10px;}100% {top:2px;}}
+        @-webkit-keyframes sy-bg-gd-up{50% {top:10px;}100% {top:2px;}}
+
+        .into{top: 100%;position: absolute;width: 100%;height: 100%;    z-index: -1;overflow: auto;}
+        .into .href{background: #fff;position: relative;width: 65px;height: 65px;color: #000;font-size: 18px;border-radius: 50%;line-height: 65px;text-align: center;margin: 0 auto;margin-bottom: 20px;}
+        .into .href:active{background: #fab033;color: #fff;}
+
+    </style>
+</head>
+<body>
+<style>
+    /*开始加载页面样式1：*/
+    #load-now{opacity:1;width:100%;height:100%;display:block;position: fixed;z-index:100000;background: rgba(0,0,0,1);	-webkit-transition: opacity 300ms linear;-moz-transition: opacity 300ms linear;-ms-transition: opacity 300ms linear;-o-transition: opacity 300ms linear;transition: opacity 300ms linear;}
+    /*加载样式1：*/
+    .spinner {position: absolute;margin: 0 auto;right: 0;top: 50%;left: 0;margin-top: -17px;width: 150px;text-align: center;}
+    .spinner > div {width: 30px;height: 30px;background-color: #fff;border-radius: 100%;display: inline-block;-webkit-animation: bouncedelay 1.4s infinite ease-in-out;animation: bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode: both;animation-fill-mode: both;}
+    .spinner .bounce1 {-webkit-animation-delay: -0.32s;animation-delay: -0.32s;}
+    .spinner .bounce2 {-webkit-animation-delay: -0.16s;animation-delay: -0.16s;}
+    @-webkit-keyframes bouncedelay {0%, 80%, 100% { -webkit-transform: scale(0.0) }40% { -webkit-transform: scale(1.0) }}
+    @keyframes bouncedelay { 0%, 80%, 100% {transform: scale(0.0);-webkit-transform: scale(0.0);} 40% {transform: scale(1.0);-webkit-transform: scale(1.0);}}
+</style>
+<div id="load-now"><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>
+<script>
+    document.onreadystatechange = function () {
+        if(document.readyState=="complete") {
+            setTimeout("$('#load-now').css('opacity','0');",1000);
+            setTimeout("$('#load-now').remove();$('#main_container').css('overflow-y','');",1310);
+        }
+    }
+</script>
+<div style="position:absolute;width:100%;height:100%;overflow: hidden;">
+    <div id="main" class="main">
+        <div class="img-move"><img  id="img_move"  src="img/OnlineSurvey/bg.jpg" style="position: absolute;height: 100%;left:0;"/></div>
+        <div id="font_on" class="font-go">
+            <div id="font_move" style="    display: inline-block;">
+                <div class="c-title">问卷调查</div>
+                <div class = "content">
+                    <p class="title">活动内容</p>
+                    <p class="list">
+                        1.顺德区行政服务中心通过整合顺德区现有的各种信息化资源开发了“顺德百事通”APP，为顺德区人民提供更加便捷的办事途径、出行指南及生活便利。
+                    </p>
+                    <p class="list">
+                        2.2017年末，顺德百事通平台刚完成改版，为了给顺德市民更好的用户体验与服务，我们诚邀您参与本次有关《“顺德百事通”平台有奖调研》。
+                    </p>
+                    <p class="list">
+                        3.认真完成所有题目并正确填写信息的市民即有机会获得“2018年特制台历”，我们将在问卷结束后的5个工作日内评选出最有代表性的调研参与者，邀请参与”顺德百事通“平台粉丝互动座谈会，并现场派发精美大礼。
+                    </p>
+                </div>
+                <div class = "content">
+                    <p class="title">奖品设置</p>
+                    <p class="list" style="text-align: center;">
+                        最具民意代表奖奖品（5个）<br>
+                        <img src="img/OnlineSurvey/a.jpg"/>
+                        粉丝代表奖奖品（10个）<br>
+                        <img src="img/OnlineSurvey/b.jpg"/>
+                        幸运大奖奖品（100个）
+                        <img src="img/OnlineSurvey/c.jpg"/>
+                    </p>
+                </div>
+                <div class="gd">
+                    <p>“点击箭头”开始调查</p>
+                    <div class="jt" onclick="ani()"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="into" class="into">
+        <div class="gd-up">
+            <div class="jt" onclick="ani_back()"></div>
+            <p>“点击箭头”回看规则</p>
+        </div>
+        <div>
+            <div class = "content">
+                <p class="title">活动时间</p>
+                <p class="list">开始时间-结束时间：<br>2018年X月X日—X日</p>
+            </div>
+            <!-- <div class = "content">
+                   <p class="title">活动倒计时</p>
+                   <p class="list date"></p>
+                   <p class="list xing"></p>
+                   <p class="list djs"></p>
+
+            </div> -->
+
+        </div>
+        <div class="href"><a href="government/OnlineSurvey/satic">进入</a></div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        var fontmove  = $("#font_move");
+        var imgmove   = $("#img_move");
+        $("#font_on").scroll(function(){
+            var scrollmax = fontmove.height() - $(window).height();
+            var dis       = ((imgmove.width() - fontmove.width()) / scrollmax);
+            var left      = (-($(this).scrollTop() * dis));
+            if(Math.abs(left) > imgmove.width()){
+                left = imgmove.width();
+            }
+            if(Math.abs(left) < 0){
+                left = 0;
+            }
+            imgmove.css("left",left + "px");
+        });
+
+        //----时间
+        var d = new Date()
+        var hours = (24 - d.getHours()) + (((25 - 1) - d.getDate()) * 24);
+        var day = ["一","二","三","四","五","六","日"];
+        $(".date").text("日期：" + d.getFullYear() + "年" + parseInt(d.getMonth())+1 + "月" + d.getDate() + "日");
+        $(".xing").text("周数：星期" + day[parseInt(d.getDay())]);
+        $(".djs").text("倒数时：" + hours + "小时");
+    });
+    function ani(){
+        $("#main").addClass("ani");
+        $("#main").css("top","-100%");
+        $("#into").addClass("ani");
+        $("#into").css("top","0");
+        setTimeout(function(){
+            $("#into").css("z-index","0");
+            $("#main").removeClass("ani");
+            $("#into").removeClass("ani");
+        },1300);
+    }
+    function ani_back(){
+        $("#font_on").scrollTop(0);
+        $("#main").addClass("ani");
+        $("#main").css("top","0%");
+        $("#into").addClass("ani");
+        $("#into").css("z-index","-1");
+        $("#into").css("top","100%");
+        setTimeout(function(){
+            $("#into").removeClass("ani");
+            $("#main").removeClass("ani");
+        },1300);
+    }
+</script>

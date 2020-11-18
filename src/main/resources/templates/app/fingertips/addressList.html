@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>地址管理</title>
+    <link rel="stylesheet" href="mui/css/mui.min.css">
+    <link rel="stylesheet" href="css/app/fingertips/common.css">
+</head>
+<body>
+    <ul class="address_list">
+        <li>
+            <div>
+                <span class="user_name ellipsis">xff</span>
+                <span class="set_default">设置默认</span>
+                <span class="user_phone">15673738282</span>
+                <p class="user_address ellipsis">广东省佛山市禅城区联通</p>
+            </div>
+            <img src="img/department/phone.png" alt="" class="address_edit">
+        </li>
+    </ul>
+    <div id="step"></div>
+    <div class="fix_footer_btns">
+        <button type="button" class="add_btn">添加地址</button>
+    </div>
+
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            $(".add_btn").click(function () {
+                window.location.href = "./app/fingertips/addAddress"
+            })
+        })
+
+        //请求数据
+        $(".address_list>li").click(function () {
+            window.history.go(-1)
+        })
+
+        //绑定点击编辑图标，跳转编辑页面事件
+        $(".address_edit").click(function (e) {
+            e.stopPropagation()
+            window.location.href = "./app/fingertips/editAddress"
+        })
+    </script>
+</body>
+</html>

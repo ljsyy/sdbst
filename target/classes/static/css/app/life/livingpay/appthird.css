@@ -1,0 +1,90 @@
+.paymethodUI{
+    z-index:10000 ;
+    display: none;
+}
+.paymethod{
+    width: 8rem;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left: -4rem;
+    background: #fff;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: -144px;
+}
+.paymethodTitle{
+    margin: 29px 0 12px 0;
+    font-size: 18px;
+}
+.payMethodText{
+    color: #999999;
+    font-size: 15px;
+}
+.paymethodclose{
+    font-size: 30px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+/*.paymethod ul{*/
+/*margin: 30px 0 32px 0;*/
+/*}*/
+/*.paymethod ul li{*/
+/*display: inline-block;*/
+/*}*/
+/*.paymethod ul li:first-child{*/
+/*margin-right: 1.5rem;*/
+/*}*/
+
+.line{
+    width: 100%;
+    background: #d2d3d5;
+    height: 1px;
+    transform: scaleY(0.5);
+}
+.paymethod_btn{
+    height: 50px;
+    line-height: 50px;
+    color:#f39b73 ;
+    font-size: 18px;
+}
+.paymethodicon{
+    margin: 30px 0 32px 0;
+}
+.pay_list_app{
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background-image: url(../images/appily.png);
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: -40px 0;
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.pay_list_ali{
+    margin-right: 1.55rem;
+}
+.pay_list_weixin{
+    background-image: url(../images/weixin.png);
+}
+.pay_list_app input{
+    vertical-align: top;
+}
+.radioInfo{
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    margin:0 0.2rem;
+}
+.radioclass {
+    opacity: 0;
+    cursor: pointer;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+}
+.on {
+    background-position: 0 0;
+}

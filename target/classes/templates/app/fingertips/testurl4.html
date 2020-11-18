@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>测试put</title>
+    <link rel="stylesheet" href="wui/dist/style/weui.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+</head>
+<style>
+    body{
+        font-size: 16px;
+    }
+    textarea{
+        width: 100%;
+    }
+    .weui-btn{
+        display: inline-block;
+    }
+</style>
+<body>
+
+<div style="width: 80%;margin: 0 auto;margin-top: 100px;">
+
+</div>
+<script>
+    var id = [[${formUrl}]]
+
+    $(document).ready(function(){
+        window.location.href=id;
+    });
+</script>
+</body>
+</html>

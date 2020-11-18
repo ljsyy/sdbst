@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <style type="text/css">
+        html,body { height:96%; margin:0px; padding:0px; list-style-type:none;
+            font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti; }
+        header { height:50px; background:#eb413d; text-align:center; color:#fff; line-height:50px; overflow: hidden;
+            width:100%; font-size:16px; position:fixed; top:0px; left:0px; right:0px; }
+        header .headl { float:left; width:50px; height:50px; }
+        header .headl .icon { height:100%; margin-top:10px; width:2em; height:2em; vertical-align:middle;
+            fill:currentColor; overflow:hidden; font-size:15px; }
+        header span{font-size:18px;}
+        header .headr { float:right; width:50px; height:50px; margin-right:10px; }
+
+        dl dd{ display:none; }
+        #show1{ display:none; }
+        #show2{ display:none; }
+        #show3{ display:none; text-align:center; }
+        #show3 a{ display:inline-block; margin:10px; width:40%; text-align:center;
+            line-height:50px; background-color:#eb413d; color:white; }
+    </style>
+    <script  type="text/javascript">
+        $(function(){
+            $(".retrun-icon").click(function(){
+                window.history.back();
+            });
+        })
+    </script>
+    <title>机构职能</title>
+</head>
+<body>
+<!--头部-->
+<div id="title" style="background: white;">
+    <div id="1">领导班子</div>
+    <div id="2">职能部门</div>
+    <div id="3">街镇领导</div>
+</div>
+
+<div id="show1"></div>
+
+<div id="show2">
+    <dl>
+        <dt class="dt" index="2-1">
+            <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+            党政机关
+            <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+        </dt>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/sfb/page.php?singleid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委区政府办公室</dd>
+        <dd class="dd" onclick="window.location.href='http://zx.shunde.gov.cn/page.php?singleid=23'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区政协办</dd>
+        <dd class="dd" onclick="window.location.href='http://rd.shunde.gov.cn/page.php?Sid=1&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区人大办</dd>
+        <dd class="dd" onclick="window.location.href='http://jwjcj.shunde.gov.cn/page.php?Sid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区纪委机关（区监察局）</dd>
+        <dd class="dd" onclick="window.location.href='http://zzb.shunde.gov.cn/sdqwzzb/page.php?tId=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委组织部</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/xcb/page2.php?Sid=11&Tid=1&Mid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委宣传部（区文化体育局）</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/zfsf/page.php?Sid=1&Tid=2&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委政法委员会（区司法局）</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/sdshgz/page.php?Sid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委统一战线工作部（区外事侨务局）</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/sg/page.php?Sid=1&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区发展规划和统计局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/est/jgzn/index.php?fid=7230602'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区经济和科技促进局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/jyj/?id=202'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区教育局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/gongan/page.php?Sid=4'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区公安局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/sdcz/main.php?id=6610-7240032'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区财税局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/hrss/page.php?Aid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区民政和人力资源社会保障局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/gtcjsl/page.php?Sid=1&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区国土城建和水利局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/wsjs/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区卫生和计划生育局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/scaj/detail.php?fid=7160003&aid=3474-7160003'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区市场监督管理局</dd>
+        <dd class="dd" onclick="window.location.href='http://ajj.shunde.gov.cn/jgsz.php'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区安全生产监督管理局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/hycg/page.php?Sid=1&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区环境运输和城市管理局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/sdaudit/page.php?Sid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区审计局</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/nyj/list.php?fid=7570005'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区农业局</dd>
+    </dl>
+    <dl>
+        <dt class="dt" index="2-2">
+            <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+            法院、检察院
+            <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+        </dt>
+        <dd class="dd" onclick="window.location.href='http://sdfy.shunde.gov.cn/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>顺德区人民法院</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn'"><img  src='img/menu/oye.png' width='15px' height='15px'/>顺德区检察院</dd>
+    </dl>
+    <dl>
+        <dt class="dt" index="2-3">
+            <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+            区属事业单位
+            <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+        </dt>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/gdsdsi/page.php?Sid=1&Cid=14'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区社会保险基金管理局</dd>
+        <dd class="dd" onclick="window.location.href='http://djjy.shunde.gov.cn/?Aid=0503'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区土地房产登记发证与交易中心</dd>
+        <dd class="dd" onclick="window.location.href='http://zfcg.shunde.gov.cn/data/main.php?id=1346-4200004'"><img  src='img/menu/oye.png' width='15px' height='15px'/>政府采购中心</dd>
+        <dd class="dd" onclick="window.location.href='http://www.sdrc.gov.cn/#1342060162296'"><img  src='img/menu/oye.png' width='15px' height='15px'/>人才交流中心</dd>
+        <dd class="dd" onclick="window.location.href='http://www.sdggzy.cn/page.php?singleid=1&ClassID=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区公共资源交易中心</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/xzfwzx/page.php?Aid=1&Bid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区行政服务中心</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/gzb/?Aid=1&Bid=5'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区国有资产监督管理办公室</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/da/page.php?Sid=11&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>档案馆</dd>
+    </dl>
+    <dl>
+        <dt class="dt" index="2-4">
+            <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+            各镇街道
+            <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+        </dt>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/daliang/page.php?singleid=2&ClassID=4'"><img  src='img/menu/oye.png' width='15px' height='15px'/>大良街道办事处</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/ronggui/page.php?Sid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>容桂街道办事处</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/lunjiao/page.php?Aid=3&Bid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>伦教街道办事处</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/leliu/page.php?Sid=3&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>勒流街道办事处</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/chencun/zwgk.php?Sid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>陈村镇政府</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/beijiao/page.php?Aid=1&Bid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>北滘镇政府</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/lecong/page.php?singleid=4&ClassID=4'"><img  src='img/menu/oye.png' width='15px' height='15px'/>乐从镇政府</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/longjiang/page.php?Sid=31&L=28'"><img  src='img/menu/oye.png' width='15px' height='15px'/>龙江镇政府</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/xingtan/zwgk/?Sid=1&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>杏坛镇政府</dd>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/jun-an/page.php?Sid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>均安镇政府</dd>
+    </dl>
+    <dl>
+        <dt class="dt" index="2-5">
+            <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+            人民团体
+            <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+        </dt>
+        <dd class="dd" onclick="window.location.href='http://gcc.shunde.gov.cn/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区工商联</dd>
+        <dd class="dd" onclick="window.location.href='http://zgh.shunde.gov.cn/new2/page.php?singleid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区总工会</a></dd>
+        <dd class="dd" onclick="window.location.href='http://sdwoman.shunde.gov.cn/new/page.php?singleid=1&ClassID=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区妇联</dd>
+        <dd class="dd" onclick="window.location.href='http://cyl.shunde.gov.cn/page.php?Sid=6&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>团区委</dd>
+    </dl>
+    <dl>
+        <dt class="dt" index="2-6">
+            <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+            各部门业务咨询联系方式
+            <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+        </dt>
+        <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/zmhd/?id=5'"><img  src='img/menu/oye.png' width='15px' height='15px'/>各部门业务咨询联系方式</dd>
+    </dl>
+    <%-- <dl>
+    <dt class="dt">
+        <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+        党政机关
+        <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+    </dt>
+    <dd class="dd" onclick="window.location.href='http://sfb.shunde.gov.cn/page.php?singleid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委区政府办公室</a></dd>
+    <dd class="dd" onclick="window.location.href='http://zx.shunde.gov.cn/page.php?singleid=23'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区政协办</a></dd>
+    <dd class="dd" onclick="window.location.href='http://rd.shunde.gov.cn/page.php?Sid=1&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区人大办</a></dd>
+    <dd class="dd" onclick="window.location.href='http://jwjcj.shunde.gov.cn/page.php?Sid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区纪委机关（区监察局）</a></dd>
+    <dd class="dd" onclick="window.location.href='http://zzb.shunde.gov.cn/sdqwzzb/page.php?tId=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委组织部</a></dd>
+    <dd class="dd" onclick="window.location.href='http://xcb.shunde.gov.cn/new/page2.php?Sid=11&Tid=1&Mid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委宣传部（区文化体育局）</a></dd>
+    <dd class="dd" onclick="window.location.href='http://zfsf.shunde.gov.cn/page.php?Sid=1&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委政法委员会（区司法局）</a></dd>
+    <dd class="dd" onclick="window.location.href='http://sdshgz.shunde.gov.cn/page.php?Sid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区委统一战线工作部（区外事侨务局）</a></dd>
+    <dd class="dd" onclick="window.location.href='http://sg.shunde.gov.cn/page.php?Sid=1&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区发展规划和统计局</a></dd>
+    <dd class="dd" onclick="window.location.href='http://sdet.shunde.gov.cn/jgzn/index.php'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区经济和科技促进局</a></dd>
+    <dd class="dd" onclick="window.location.href='http://jyj.shunde.gov.cn/?id=202'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区教育局</a></dd>
+    <dd class="dd" onclick="window.location.href='http://gongan.shunde.gov.cn/page.php?Sid=4'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区公安局</a></dd>
+    <dd class="dd" onclick="window.location.href='http://sdcz.shunde.gov.cn/portal/upload/resource/cms/previewcontent1.jsp?contentId=73'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区财税局</dd>
+    <dd class="dd" onclick="window.location.href='http://hrss.shunde.gov.cn/page.php?Aid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区民政和人力资源社会保障局</dd>
+    <dd class="dd" onclick="window.location.href='http://js.shunde.gov.cn/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区国土城建和水利局</dd>
+    <dd class="dd" onclick="window.location.href='http://wsjs.shunde.gov.cn/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区卫生和计划生育局</dd>
+    <dd class="dd" onclick="window.location.href='http://scaj.shunde.gov.cn/new/main.php?id=3474-7160003'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区市场监督管理局</dd>
+    <dd class="dd" onclick="window.location.href='http://ajj.shunde.gov.cn/jgsz.php'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区安全生产监督管理局</dd>
+    <dd class="dd" onclick="window.location.href='http://hycg.shunde.gov.cn/page.php?Sid=1&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区环境运输和城市管理局</dd>
+    <dd class="dd" onclick="window.location.href='http://sdaudit.shunde.gov.cn/page.php?Sid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区审计局</dd>
+    <dd class="dd" onclick="window.location.href='http://nyj.shunde.gov.cn/list.php?fid=7570005'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区农业局</dd>
+</dl> --%>
+    <%-- <dl>
+    <dt class="dt">
+        <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+        法院、检察院
+        <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+    </dt>
+    <dd class="dd" onclick="window.location.href='http://sdfy.shunde.gov.cn/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>顺德区人民法院</dd>
+    <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn'"><img  src='img/menu/oye.png' width='15px' height='15px'/>顺德区检察院</dd>
+</dl> --%>
+    <%-- <dl>
+    <dt class="dt">
+        <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+        区属事业单位
+        <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+    </dt>
+    <dd class="dd" onclick="window.location.href='http://www.gdsdsi.com/News/Detail/00041102#'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区社会保险基金管理局</dd>
+    <dd class="dd" onclick="window.location.href='http://djjy.shunde.gov.cn/?Aid=0503'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区土地房产登记发证与交易中心</dd>
+    <dd class="dd" onclick="window.location.href='http://zfcg.shunde.gov.cn/data/main.php?id=1346-4200004'"><img  src='img/menu/oye.png' width='15px' height='15px'/>政府采购中心</dd>
+    <dd class="dd" onclick="window.location.href='http://www.sdrc.gov.cn/#1342060162296'"><img  src='img/menu/oye.png' width='15px' height='15px'/>人才交流中心</dd>
+    <dd class="dd" onclick="window.location.href='http://www.sdcin.com.cn/page.php?singleid=1&ClassID=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区建设工程交易中心</dd>
+    <dd class="dd" onclick="window.location.href='http://xzfwzx.shunde.gov.cn/page.php?Aid=1&Bid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区行政服务中心</dd>
+    <dd class="dd" onclick="window.location.href='http://gzb.shunde.gov.cn/?Aid=1&Bid=5'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区国有资产监督管理办公室</dd>
+    <dd class="dd" onclick="window.location.href='http://da.shunde.gov.cn/data/main.php?id=4208-2010102'"><img  src='img/menu/oye.png' width='15px' height='15px'/>档案馆</dd>
+</dl> --%>
+    <%-- <dl>
+    <dt class="dt">
+        <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+        各镇街道
+        <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+    </dt>
+    <dd class="dd" onclick="window.location.href='http://daliang.shunde.gov.cn/page.php?singleid=2&ClassID=4'"><img  src='img/menu/oye.png' width='15px' height='15px'/>大良街道办事处</dd>
+    <dd class="dd" onclick="window.location.href='http://ronggui.shunde.gov.cn/page.php?Sid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>容桂街道办事处</dd>
+    <dd class="dd" onclick="window.location.href='http://lunjiao.shunde.gov.cn/page.php?Aid=3&Bid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>伦教街道办事处</dd>
+    <dd class="dd" onclick="window.location.href='http://leliu.shunde.gov.cn/page.php?Sid=3&Tid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>勒流街道办事处</dd>
+    <dd class="dd" onclick="window.location.href='http://www.chencun.gov.cn/zwgk/?id=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>陈村镇政府</dd>
+    <dd class="dd" onclick="window.location.href='http://www.beijiao.gov.cn/page.php?Aid=5&Bid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>北滘镇政府</dd>
+    <dd class="dd" onclick="window.location.href='http://lecong.shunde.gov.cn/page.php?singleid=4&ClassID=4'"><img  src='img/menu/oye.png' width='15px' height='15px'/>乐从镇政府</dd>
+    <dd class="dd" onclick="window.location.href='http://longjiang.shunde.gov.cn/www/page.php?Sid=2&Tid=1&Fid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>龙江镇政府</dd>
+    <dd class="dd" onclick="window.location.href='http://xingtan.shunde.gov.cn/newxingtan/zwgk/?Sid=1&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>杏坛镇政府</dd>
+    <dd class="dd" onclick="window.location.href='http://jun-an.shunde.gov.cn/page.php?Sid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>均安镇政府</dd>
+</dl> --%>
+    <%-- <dl>
+    <dt class="dt">
+        <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+        人民团体
+        <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+    </dt>
+    <dd class="dd" onclick="window.location.href='http://gcc.shunde.gov.cn/page.php?Sid=1&Tid=3'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区工商联</dd>
+    <dd class="dd" onclick="window.location.href='http://zgh.shunde.gov.cn/new2/page.php?singleid=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区总工会</dd>
+    <dd class="dd" onclick="window.location.href='http://sdwoman.shunde.gov.cn/new/page.php?singleid=1&ClassID=2'"><img  src='img/menu/oye.png' width='15px' height='15px'/>区妇联</dd>
+    <dd class="dd" onclick="window.location.href='http://cyl.shunde.gov.cn/page.php?Sid=6&Tid=1'"><img  src='img/menu/oye.png' width='15px' height='15px'/>团区委</dd>
+</dl> --%>
+    <%-- <dl>
+    <dt class="dt">
+        <img class='img1' src='img/menu/note.png' width='20px' height='25px'/>
+        各部门业务咨询联系方式
+        <img class='img2' height='10px;' src='img/menu/shangla.png'/>
+    </dt>
+    <dd class="dd" onclick="window.location.href='http://www.shunde.gov.cn/zmhd/?id=5'"><img  src='img/menu/oye.png' width='15px' height='15px'/>各部门业务咨询联系方式</dd>
+</dl> --%>
+</div>
+
+
+<div id="show3">
+    <a href="http://www.shunde.gov.cn/daliang/page.php?singleid=2&ClassID=3">大良街道</a>
+    <a href="http://www.shunde.gov.cn/ronggui/main.php?id=1613-4260021">容桂街道</a>
+    <a href="http://www.shunde.gov.cn/lunjiao/page.php?Aid=3">伦教街道</a>
+    <a href="http://www.shunde.gov.cn/leliu/page.php?Sid=3&Tid=1">勒流街道</a>
+    <a href="http://www.shunde.gov.cn/chencun/main.php?id=6867-7041117">陈村镇</a>
+    <a href="http://www.shunde.gov.cn/beijiao/page.php?Aid=1&Bid=2">北滘镇</a>
+    <a href="http://www.shunde.gov.cn/lecong/main.php?id=5446-4130838">乐从镇</a>
+    <a href="http://www.shunde.gov.cn/longjiang/main.php?id=5784-4080180">龙江镇</a>
+    <a href="http://www.shunde.gov.cn/xingtan/main.php?id=5870-4180382">杏坛镇</a>
+    <a href="http://www.shunde.gov.cn/jun-an/main.php?id=5815-4170104">均安镇</a>
+</div>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+    $(function(){
+        //缓存
+        var IdCache=sessionStorage.getItem('institution-id');
+        var titleId=1;	//当前要显示的菜单下标 1 2 3
+        if(typeof(IdCache)=='string' && IdCache!=''){
+            titleId=IdCache;
+        }
+        $("#"+titleId).css("border-bottom","2px #eb413d solid").css("color","#eb413d");// 初始化样式
+        //$("div[id^='show']").hide();
+        $("#show"+titleId).show();
+
+
+        //<div id="show1"></div>赋值
+        if($("#show1").html()==''){
+            //获取缓存
+            var show1Cache=sessionStorage.getItem('institution-show1');
+            if(typeof(show1Cache)=='string' && show1Cache!=''){
+                //使用缓存数据
+                $("#show1").html(show1Cache)
+            }else{
+                //查询接口
+                var data=eval('('+[[${ri.data}]]+')');
+                showData(data.obj,true);
+            }
+        }
+
+
+        //缓存
+        var indexCache=sessionStorage.getItem('institution-index');
+        var indexArr=new Array();		//显示的dt标签index属性集合
+        if(typeof(indexCache)=='string' && indexCache!='' && indexCache.indexOf(",")>=0){
+            indexArr=indexCache.split(',');
+        }
+        //显示缓存的dt标签
+        for(var i in indexArr){
+            if(indexArr[i] != ''){
+                var that=$("[index='"+ indexArr[i] +"']");
+                that.nextAll("dd").show(200);
+                that.children(".img2").attr("src","img/menu/xiala.png");
+            }
+        }
+
+
+        $("#title div").click(function(){ // title 相应样式重置
+            $("#title div").css("border-bottom","").css("color","#888");
+            $(this).css("border-bottom","2px #eb413d solid").css("color","#eb413d");
+            $("div[id^='show']").hide();
+            $("#show"+$(this).attr("id")).show();
+            //缓存
+            sessionStorage.setItem('institution-id', $(this).attr("id"));
+        })
+
+        $("dt").click(function(){
+            if($(this).next().is(":hidden")){
+                $(this).children(".img2").attr("src","img/menu/xiala.png");
+            }else{
+                $(this).children(".img2").attr("src","img/menu/shangla.png");
+            }
+
+            $(this).nextUntil("dt").toggle(300);
+
+            //缓存
+            var indexCache=sessionStorage.getItem('institution-index');
+            console.log(typeof(indexCache));
+            //dt标签index属性值
+            var value=$(this).attr("index")
+            if(typeof(indexCache)=='object'){
+                //没有保存过institution-index
+                indexCache=value+',';
+            }else if(typeof(indexCache)=='string'){
+                if(indexCache.indexOf(value)>=0){
+                    //保存过value，则删除掉
+                    indexCache=indexCache.replace(value+',', '');
+                }else{
+                    indexCache+=value+',';
+                }
+            }
+            sessionStorage.setItem('institution-index', indexCache);
+
+        });
+
+    });
+
+
+
+    function getLabel(data){
+        var str="";
+        $(data).each(function(index){
+            str+="<dl><dt id='a"+index+"' class='dt' index='1-"+(index+1)+"'><img class='img1' src='img/menu/note.png' width='20px' height='25px'/>"+
+                data[index].title +
+                "<img class='img2' height='10px;' src='img/menu/shangla.png'/></dt>";
+
+            var items=data[index].items;
+            $(items).each(function(index){
+                var hr=basePath()+"/government/institution/detail?id="+items[index].id+"_"+items[index].fid+"&no="+items[index].no+"&title=领导班子";
+                hr="onclick=\"window.location.href=\'"+hr+"\'\"";
+                str+="<dd class='dd' "+hr+"><img  src='img/menu/oye.png' width='15px' height='15px'/>"+items[index].name+"</dd>";
+
+            });
+            str+="</dl>";
+        });
+        $("#show1").html(str);
+        //缓存
+        sessionStorage.setItem('institution-show1', str);
+    }
+
+</script>
+</body>
+</html>

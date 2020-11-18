@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.menus.HealthCareMapper">
+
+	<sql id="healthCareColumns">
+		a.id AS "id",
+		
+		a.one_num AS "oneNum",
+		a.one_name AS "oneName",
+		a.two_num AS "twoNum",
+		a.two_name AS "twoName",
+		a.three_num AS "threeNum",
+		a.three_name AS "threeName",
+		a.four_num AS "fourNum",
+		a.four_name AS "fourName",
+		
+		a.content AS "content",
+		a.other_content AS "otherContent",
+		a.unit AS "unit",
+		
+		a.three_explain AS "threeExplain",
+		a.two_explain AS "twoExplain",
+		a.three_price AS "threePrice",
+		a.two_price AS "twoPrice"
+	</sql>
+	
+	<resultMap id="base" type="com.unifs.sdbst.app.bean.menus.HealthCare">
+		<result column="one_num" property="oneNum" jdbcType="VARCHAR"></result>
+		<result column="one_name" property="oneName" jdbcType="VARCHAR"></result>
+		<result column="two_num" property="twoNum" jdbcType="VARCHAR"></result>
+		<result column="two_name" property="twoName" jdbcType="VARCHAR"></result>
+		<result column="three_num" property="threeNum" jdbcType="VARCHAR"></result>
+		<result column="three_name" property="threeName" jdbcType="VARCHAR"></result>
+		<result column="four_num" property="fourNum" jdbcType="VARCHAR"></result>
+		<result column="four_name" property="fourName" jdbcType="VARCHAR"></result>
+		<result column="content" property="content" jdbcType="VARCHAR"></result>
+		<result column="other_content" property="otherContent" jdbcType="VARCHAR"></result>
+		<result column="unit" property="unit" jdbcType="VARCHAR"></result>
+		<result column="three_explain" property="threeExplain" jdbcType="VARCHAR"></result>
+		<result column="two_explain" property="twoExplain" jdbcType="VARCHAR"></result>
+		<result column="three_price" property="threePrice" jdbcType="VARCHAR"></result>
+		<result column="two_price" property="twoPrice" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<sql id="healthCareJoins">
+	</sql>
+
+	<select id="get" resultType="com.unifs.sdbst.app.bean.menus.HealthCare">
+		SELECT
+			<include refid="healthCareColumns" />
+		FROM APP_HEALTH_CARE a
+			<include refid="healthCareJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.menus.HealthCare">
+		SELECT
+			<include refid="healthCareColumns" />
+		FROM APP_HEALTH_CARE a
+			<include refid="healthCareJoins" />
+			ORDER by one_num,two_num,three_num,four_num ASC
+	</select>
+	
+	<select id="oneNumList" resultType="String">
+		select one_num oneNum from APP_HEALTH_CARE t
+		group by one_num
+		order by one_num asc
+	</select>
+	
+	<select id="twoNumList" resultType="String">
+		select two_num twoNum from APP_HEALTH_CARE t
+		<if test="oneNum !=null and oneNum !=''">
+			where one_num = #{oneNum}
+		</if>
+		group by two_num
+		order by two_num asc
+	</select>
+	
+	<select id="getTwoList" resultType="com.unifs.sdbst.app.bean.menus.HealthCare">
+		select a.two_num twoNum,a.two_name twoName
+		from APP_HEALTH_CARE a
+		where one_num = #{oneNum}
+		group by a.two_num,a.two_name
+		order by a.two_num asc
+	</select>
+	
+	<select id="getThreeList" resultType="com.unifs.sdbst.app.bean.menus.HealthCare">
+		select a.three_num threeNum,a.three_name threeName
+		from APP_HEALTH_CARE a
+		where two_num = #{twoNum}
+		group by a.three_num,a.three_name
+		order by a.three_num asc
+	</select>
+	
+	<select id="getFourList" resultType="com.unifs.sdbst.app.bean.menus.HealthCare">
+		select <include refid="healthCareColumns" />
+		from APP_HEALTH_CARE a
+		where three_num = #{threeNum}
+		order by a.four_num asc
+	</select>
+	
+	<select id="getExplain" resultType="com.unifs.sdbst.app.bean.menus.HealthExplain">
+		select one_num oneNum,one_name oneName,one_explain oneExplain
+		from APP_HEALTH_EXPLAIN
+		where one_num = #{oneNum}
+	</select>
+	
+	<select id="getKeyWord" resultMap="base">
+		select *
+		from APP_HEALTH_CARE
+		where four_name LIKE '%'||#{keyword}||'%'
+	</select>
+
+
+
+</mapper>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>服务列表</title>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"></link>
+    <link rel="stylesheet" href="wui/css/weui.css"></link>
+    <style>
+        ul{
+            list-style: none;
+        }
+        ul>li{
+            min-height: 40px;
+            line-height: 38px;
+        }
+        ul>li>span{
+            color: #555;
+        }
+        #list{
+            margin-top: 54px;
+            margin-bottom: 30px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+    </style>
+
+    <script th:src="@{/js/jquery.js}" ></script>
+    <script th:src="@{/js/base.js}"></script>
+    <script type="application/javascript" src="wui/js/jquery-weui.min.js"></script>
+</head>
+<body>
+    <div>
+        <div class="weui-search-bar" id="searchBar" style="position: fixed;top: 0;width: 100%;">
+            <form class="weui-search-bar__form">
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                    <a href="javascript:cancelSearch()" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+            <a href="javascript:cancelSearch()" class="weui-search-bar__cancel-btn" id="searchCancel" style="color: #1ba3e4">取消</a>
+        </div>
+        <ul id="list">
+
+        </ul>
+
+        <div class="weui-loadmore">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            getServiceList();
+
+            $("#searchInput").bind("input propertychange", function(){
+                showByKeyword($(this).val().trim());
+            });
+        })
+
+        function getServiceList() {
+            $.ajax({
+                url:basePath()+"/bankMap/getServiceList",
+                type: "GET",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    var html = "";
+                    for(var i=0;i<result.length;i++){
+                        html += '<li serviceId="'+result[i].id+'">'+result[i].serviceName+'</li>'
+                    }
+                    $("#list").html(html);
+                    $(".weui-loadmore").hide();
+                }
+            });
+        }
+
+        function showByKeyword(keyword) {
+            if(keyword != "") {
+                $("#list>li").show();
+                $("#list>li:not(:contains('" + keyword + "'))").hide();
+            }else{
+                $("#list>li").show();
+            }
+        }
+
+        function cancelSearch() {
+            showByKeyword("");
+        }
+
+    </script>
+
+</body>
+</html>

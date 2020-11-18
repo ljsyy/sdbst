@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>关于软件</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .list {
+            position: relative;
+        }
+
+        .list .fm {
+            position: relative;
+            border-bottom: solid 1px #ccc;
+            padding: 15px;
+            display: flex;
+            width: 100%;
+            box-sizing: border-box;
+            align-items: center;
+        }
+
+        .list .fm name {
+            position: relative;
+            flex: 1;
+        }
+
+        .list .fm left {
+            position: relative;
+            border-bottom: solid 2px #ccc;
+            border-right: solid 2px #ccc;
+            width: 10px;
+            height: 10px;
+            display: block;
+            transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript">
+        function clickFn(num) {
+            switch (num) {
+                case 1:
+                    window.location.href = basePath()+"/app/personal/aboutMe?num=1";
+                    break;
+                case 2:
+                    window.location.href = basePath()+"/app/personal/aboutMe?num=2";
+                    break;
+                case 3:
+                    window.location.href = basePath()+"/app/personal/aboutMe?num=3";
+                    break;
+                case 4:
+                    window.location.href = basePath()+"/app/personal/aboutMe?num=4";
+                    break;
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="list">
+    <div class="fm" onclick="clickFn(1)">
+        <name>关于我们</name>
+        <left></left>
+    </div>
+    <div class="fm" onclick="clickFn(2)">
+        <name>免责声明</name>
+        <left></left>
+    </div>
+    <div class="fm" onclick="clickFn(3)">
+        <name>隐私说明</name>
+        <left></left>
+    </div>
+    <!--<div class="fm" onclick="clickFn(4)">
+        <name>版本更新</name>
+        <left></left>
+    </div>-->
+</div>
+</body>
+</html>

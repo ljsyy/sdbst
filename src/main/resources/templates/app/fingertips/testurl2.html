@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>测试map</title>
+    <link rel="stylesheet" href="wui/dist/style/weui.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+</head>
+<style>
+    body{
+        font-size: 16px;
+    }
+    textarea{
+        width: 100%;
+    }
+    .weui-btn{
+        display: inline-block;
+    }
+</style>
+<body>
+
+<div style="width: 80%;margin: 0 auto;margin-top: 100px;">
+    <form >
+
+        <div style="margin-top: 100px;">
+            <div>网址：
+                <div>事项接口：http://19.200.93.98:9301/dtrouting/api/v1</div>
+                <div>办件接口：http://19.200.93.98:9303/dtrouting/api/v1</div>
+            </div>
+            <div><input style="height: 30px;font: 16px/18px arial;line-height: 30px;width: 100%;" type="text" name="url" id="url"placeholder="需要添加http://"></div>
+        </div>
+        <div style="margin-top: 20px;">
+            <div> 参数：</div>
+            <div><textarea class="" placeholder="参数：a=b&c=d&f=e" name="parm" id="parm" cols="30" rows="10"></textarea></div>
+        <div>
+        <a href="javascript:; " onclick="geturl()" class="weui-btn weui-btn_plain-default">get</a>
+            <a href="javascript:;" onclick="posturl()"class="weui-btn weui-btn_plain-default">post</a>
+            <a href="javascript:;" onclick="puturl()"class="weui-btn weui-btn_plain-default">put</a>
+    </form>
+    <div style="border: 1px saddlebrown solid;width: 100%;height: 500px;" id="result">
+
+    </div>
+</div>
+<script>
+    function geturl() {
+        var url = $("#url").val().trim();
+        var parm = $("#parm").val().trim();
+        var type = "get";
+        $.ajax({
+            type: "get",
+            url: basePath()+"/app/fingertips/testUrlInterface2",
+            data:{"url":url,"parm":parm,"type":type},
+            success: function (result) {
+                $("#result").html(result);
+            }
+        });
+
+    }
+    function posturl() {
+        var url = $("#url").val().trim();
+        var parm = $("#parm").val().trim();
+        var type = "post";
+
+        $.ajax({
+            type: "post",
+            url: basePath()+"/app/fingertips/testUrlInterface2",
+            data:{"url":url,"parm":parm,"type":type},
+            success: function (result) {
+                $("#result").html(result);
+
+            }
+        });
+    }
+
+    function posturl() {
+        var url = $("#url").val().trim();
+        var parm = $("#parm").val().trim();
+        var type = "put";
+
+        $.ajax({
+            type: "post",
+            url: basePath()+"/app/fingertips/testUrlInterface2",
+            data:{"url":url,"parm":parm,"type":type},
+            success: function (result) {
+                $("#result").html(result);
+
+            }
+        });
+    }
+</script>
+</body>
+</html>

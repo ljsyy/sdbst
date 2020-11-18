@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="wui/css/weui.css"/>
+    <link rel="stylesheet" href="wui/css/weuix.css"/>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="wui/js/city-picker.min.js"></script>
+    <style type="text/css">
+        tr {
+            text-indent: 5px;
+        }
+
+        .brief {
+            /*line-height: 30px;*/
+            /*color: #95ccfd;*/
+            /*background: #1d73ca;*/
+            padding: 5% 6% 2% 6%;
+            /*font-size: 20px;*/
+            position: relative;
+        }
+
+        p.gonggao {
+            text-align: center;
+            font-size: 26px;
+            /*font-weight: 700;*/
+            margin-bottom: 10px;
+            line-height: 40px;
+        }
+
+        .brief .inscription {
+            text-align: right;
+        }
+
+        .weui-btn_default:not(.weui-btn_disabled):visited {
+            color: #1d73ca;
+        }
+
+        .weui-btn_default {
+            color: #1d73ca;
+        }
+
+        .weui-label {
+            font-weight: normal;
+        }
+
+        .weui-toptips {
+            height: 40px;
+            font-size: 18px;
+            line-height: 40px;
+        }
+
+        .weui-btn_primary:not(.weui-btn_disabled):active {
+            color: rgba(255, 255, 255, 0.6);
+            background-color: #10aeff;
+        }
+
+        .weui-form-li {
+            margin: 0 20px;
+        }
+
+        .weui-form-checkbox[type="radio"]:checked + label .weui-icon-radio {
+            background-color: #10aeff;
+            border: 1px solid #10aeff;
+        }
+
+        .selecth {
+            height: 30px;
+            width: 100%;
+            background: #fff;
+            border: 0;
+        }
+    </style>
+
+</head>
+<body ontouchstart>
+<div class="weui-pull-to-refresh__layer">
+    <div class='weui-pull-to-refresh__arrow'></div>
+    <div class='weui-pull-to-refresh__preloader'></div>
+    <div class="down">下拉刷新</div>
+    <div class="up">释放刷新</div>
+    <div class="refresh">正在刷新</div>
+</div>
+<div id="content" style="">
+    <div class="weui-panel weui-panel_access" style="margin: 0 auto;">
+        <div class="weui-panel__bd">
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入个人姓名" type="text" id="name">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手机号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入手机号" type="tel" id="phone">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells" style="margin-top:0px;">
+        <div class="weui-cell__bd weui-cell weui-cell_access">
+            <p>搜索结果如下（可下拉刷新）：</p>
+        </div>
+    </div>
+    <div class="weui-cells" style="margin-top:0px;" id="table">
+        <!--<a class="weui-cell weui-cell_access" href="javascript:;" onclick="detail(1)">-->
+        <!--<div class="weui-cell__bd">-->
+        <!--<p>姓名1</p>-->
+        <!--</div>-->
+        <!--<div class="weui-cell__ft">18688281234</div>-->
+        <!--</a>-->
+        <!--<a class="weui-cell weui-cell_access" href="javascript:;"onclick="detail(2)">-->
+        <!--<div class="weui-cell__bd">-->
+        <!--<p>姓名2</p>-->
+        <!--</div>-->
+        <!--<div class="weui-cell__ft">18688281234</div>-->
+        <!--</a>-->
+    </div>
+</div>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+    });
+    $(document.body).pullToRefresh({
+        distance: 10,
+        onRefresh:function() {
+            $('#name').val("")
+            $('#phone').val("")
+            getData("", "", 1, 50);
+            $(document.body).pullToRefreshDone();
+
+        }});
+</script>
+<script type="text/javascript" th:inline="javascript">
+    var list = [[${list}]];
+
+    function detail(id) {
+        window.location.href = basePath() + '/data/sjMedicalDrugs/recordDetail?rid=' + id ;
+    }
+
+    $("#name").on('blur', function () {
+        getData($('#name').val(), $('#phone').val(), 1, 50);
+    })
+    $("#phone").on('blur', function () {
+        getData($('#name').val(), $('#phone').val(), 1, 50);
+    })
+    getData("", "", 1, 50);
+
+    function getData(name, phones, page, limit) {
+        $.ajax({
+            url: basePath() + "/data/sjMedicalDrugs/ywRecordsMore",
+            type: "post",
+            data: {
+                "ctm": list,
+                "names": name,
+                "phones": phones,
+                "limit": limit,
+                "page": page,
+            },
+            beforeSend: function (xhr) {
+                $.showLoading();
+            },
+            success: function (data) {
+                $.hideLoading();
+                if (data.code == 200) {
+                    var html = '';
+                    if (data.data.length > 0) {
+                        $.toast("获取数据成功！请稍候操作", "text");
+                        $.each(data.data, function (i, val) {
+                            // console.log(val)
+
+                            html += '<a class="weui-cell weui-cell_access" href="javascript:;" onclick="detail(\'' + val.id + '\')">\n' +
+                                '            <div class="weui-cell__bd">\n' +
+                                '                <p>' + val.name + '：'+val.phone +'</p>\n' +
+                                '            </div>\n' +
+                                '            <div class="weui-cell__ft">' + val.insertDate + '</div>\n' +
+                                '        </a>';
+                        })
+                    } else {
+                        $.toast("暂无数据！\n 请重新输入条件搜索", "text");
+                        html += "<div class=\"weui-panel__hd\">暂无数据，请重新输入条件搜索</div>"
+                    }
+                    $("#table").html(html);
+                } else if (data.code == 0) {
+                    $.toast("身份失效！请重试", "text");
+                    window.location.href = basePath() + "/data/sjMedicalDrugs/workIn";
+                } else {
+                    $.toast("没有加载到数据！", "text");
+                }
+            },
+            error: function () {
+                $.hideLoading();
+                $.toast("没有加载到数据", "text");
+            }
+        });
+    }
+</script>
+</body>
+</html>

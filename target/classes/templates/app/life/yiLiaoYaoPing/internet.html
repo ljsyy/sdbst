@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>新型冠状病毒防控咨询</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="wui/css/weui.css"/>
+    <link rel="stylesheet" href="wui/css/weuix.css"/>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="wui/js/city-picker.min.js"></script>
+    <style type="text/css">
+        tr {
+            text-indent: 5px;
+        }
+
+        .brief {
+            /*line-height: 30px;*/
+            /*color: #95ccfd;*/
+            /*background: #1d73ca;*/
+            padding: 5% 6% 2% 6%;
+            /*font-size: 20px;*/
+            position: relative;
+        }
+
+        p.gonggao {
+            text-align: center;
+            font-size: 26px;
+            /*font-weight: 700;*/
+            margin-bottom: 10px;
+            line-height: 40px;
+        }
+
+        .brief .inscription {
+            text-align: right;
+        }
+
+        .weui-btn_default:not(.weui-btn_disabled):visited {
+            color: #1d73ca;
+        }
+
+        .weui-btn_default {
+            color: #1d73ca;
+        }
+
+        .weui-label {
+            font-weight: normal;
+        }
+        .weui-toptips{
+            height: 40px;
+            font-size: 18px;
+            line-height: 40px;
+        }
+        .weui-btn_primary:not(.weui-btn_disabled):active {
+            color: rgba(255, 255, 255, 0.6);
+            background-color: #10aeff;
+        }
+    </style>
+
+</head>
+<body ontouchstart>
+<div class="container" style="background: url(img/life/h119.png);">
+    <!-- 简介 -->
+    <div class="brief radius" style="margin: 0 auto;width: 85%; font-size: 14px;line-height: 30px;">
+        <p class="gonggao">顺德区新型冠状病毒感染的肺炎防控咨询专线</p>
+        <p>
+            　　为坚决抑制新型冠状病毒疫情蔓延势头，贯彻落实中央、省、市上级行动部署，把人民群众生命安全和身体健康放在第一位，以对人民群众健康高度负责的态度，全力以赴做好防控工作，
+            根据顺德区防控新型冠状病毒感染的肺炎疫情工作领导小组(指挥部)办公室相关部署，迅速成立顺德区新型冠状病毒感染的肺炎防控咨询专线。
+
+        </p>
+        <p>　　市民可在“i顺德”APP上进行留言咨询，政务热线8180平台将会及时回复您。</p>
+        <a href="javascript:;" class="weui-btn weui-btn_default" style="margin-top: 30px;" onclick="liuyan()">我要留言</a>
+
+    </div>
+
+</div>
+
+<div id="liuyan" style="background: url(img/life/h119.png);display: none;">
+    <div class="weui-header bg-blue" style="position: fixed;z-index: 10;width: 100%;">
+        <div class="weui-header-left"><a class="icon icon-109 f-white" id="back">返回</a></div>
+        <h1 class="weui-header-title">肺炎防控咨询专线</h1>
+    </div>
+    <div class="weui-panel weui-panel_access" style="margin: 0 auto;width: 90%;border: 1px #f2f2f2 solid;padding-top: 40px;">
+        <div class="weui-panel__hd" style="font-weight: bold;font-size: 18px;">个人信息</div>
+        <div class="weui-panel__bd">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入个人姓名" type="text" id="name">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手机号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入手机号" type="tel" id="phone">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">验证码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="验证码" type="number" id="code">
+                </div>
+                <div class="weui-cell__ft">
+                    <button class="weui-vcode-btn bg-blue" onclick="settime(this)" style="color: #10aeff">获取验证码</button>
+                </div>
+            </div>
+            <div class="weui-panel__bd">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="start" class="weui-label">省市</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" id="start" type="text" value="广东省 佛山市 顺德区">
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">详细地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入详细地址" type="text" id="address">
+                </div>
+            </div>
+            <!--<div class="weui-cell">-->
+                <!--<div class="weui-cell__hd"><label for="position" class="weui-label">职业</label></div>-->
+                <!--<div class="weui-cell__bd">-->
+                    <!--<input class="weui-input" id="position" type="text" placeholder="请选择职业">-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <!--<br>-->
+    <!--<div class="weui-panel weui-panel_access" style="margin: 0 auto;width: 90%;border: 1px #f2f2f2 solid;">-->
+        <!--<div class="weui-panel__hd" style="font-weight: bold;font-size: 18px;">选择问题归属</div>-->
+        <!---->
+    <!--</div>-->
+    <!--<br>-->
+    <div class="weui-panel weui-panel_access" style="margin: 0 auto;width: 90%;border: 1px #f2f2f2 solid;">
+        <div class="weui-panel__hd" style="font-weight: bold;font-size: 18px;">留言内容</div>
+        <div class="weui-panel__bd">
+            <!--<div class="weui-cell">-->
+            <!--<div class="weui-cell__hd">&lt;!&ndash;<span class="icon icon-67"></span>&ndash;&gt; 标题</div>-->
+            <!--</div>-->
+
+            <!--<div class="weui-cell">-->
+                <!--<div class="weui-form-li">-->
+                    <!--<input class="weui-input" placeholder="请填写标题" id="title">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-cell">-->
+            <!--<div class="weui-cell__hd">&lt;!&ndash;<span class="icon icon-67"></span>&ndash;&gt; 详细内容</div>-->
+            <!--</div>-->
+
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请填写详细内容" rows="10" id="question"></textarea>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="weui-btn-area" style="">
+        <a class="weui-btn weui-btn_primary bg-blue" href="javascript:" id="showTooltips"  >提交留言</a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+    });
+</script>
+
+<script>
+    var provinceId = "440000";
+    var cityId = "440600";
+    var streetId = "440606";
+    var province = "广东省";
+    var city = "佛山市";
+    var street = "顺德区";
+
+    // var position = "";
+
+    $("#start").cityPicker({
+        title: "选择问题归属",
+        onChange: function (picker, values, displayValues) {
+            console.log(values, displayValues);
+            provinceId = values[0];
+            cityId = values[1];
+            streetId = values[2];
+            console.log(provinceId, cityId, streetId);
+            province = displayValues[0];
+            city = displayValues[1];
+            street = displayValues[2];
+            console.log(province, city, street);
+        }
+    });
+    // $("#position").picker({
+    //     title: "请选择您的职业",
+    //     cols: [
+    //         {
+    //             textAlign: 'center',
+    //             values: ['工人', '农民', '学生', '教师', '医生', '律师', '公务员', '事业单位工作人员', '专业技术人员', '企业管理人员', '人体人员', '现役军人', '自由职业者', '个体经营者','其他']
+    //         }
+    //     ],
+    //     onChange: function (p, v, dv) {
+    //         // console.log(p, v, dv);
+    //         position = v[0];
+    //     },
+    //     onClose: function (p, v, d) {
+    //     }
+    // });
+
+    function liuyan() {
+        $("#liuyan").css("display", "block");
+        $(".container").css("display", "none");
+    }
+
+    $("#back").click(function () {
+        $("#liuyan").css("display", "none");
+        $(".container").css("display", "block");
+    })
+    var countdown = 60;
+
+    function settime2(obj) {
+        var code = $(obj);
+        if (countdown == 0) {
+            code.removeAttr('disabled');
+            code.text("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            code.text("重新发送(" + countdown + ")");
+            code.attr('disabled', true);
+            countdown--;
+        }
+        setTimeout(function () {
+            settime2(obj)
+        }, 1000);
+    }
+
+    function settime(obj) {
+
+        var tel = $("#phone").val();
+        if (!tel || !/1[3|4|5|7|8]\d{9}/.test(tel)) {
+            $.toptip('请输入手机号');
+        } else {
+            var url = basePath() + "/public/sendPhoneCode?phone=" + tel;
+            $.showLoading();
+            settime2(obj);
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.toast("验证码已发送！请注意查收！", "text");
+                    } else {
+                        $.toast("没有加载到数据", "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据", "text");
+                }
+            });
+        }
+
+    }
+
+    $("#showTooltips").click(function () {
+        var tel = $('#phone').val();
+        var code = $('#code').val();
+        var name = $('#name').val();
+        // var title = $('#title').val();
+        var content = $('#question').val();
+        var address = $('#address').val();
+        if (!tel || !/1[3|4|5|7|8]\d{9}/.test(tel)) {
+            $.toptip('请输入手机号');
+        } else if (!code || !/\d{6}/.test(code)) {
+            $.toptip('请输入六位手机验证码');
+        } else if (name == "") {
+            $.toptip('请输入您的名字');
+        } /*else if (position == "") {
+            $.toptip('请选择您的职业');
+        }*/ else if (address == "") {
+            $.toptip('请输入详细地址');
+        } /*else if (title == "") {
+            $.toptip('请输入标题');
+        }*/ else if (content == "") {
+            $.toptip('请输入详细内容');
+        } else {
+            $.ajax({
+                url: basePath() + "/data/sjMedicalDrugs/internetWord",
+                type: "post",
+                data: {
+                    "phone": tel,
+                    "code": code,
+                    "name": name,
+                    // "position": position,
+                    // "title": title,
+                    "content": content,
+                    "proviceId": provinceId,
+                    "proviceName": province,
+                    "cityId": cityId,
+                    "cityName": city,
+                    "streetId": streetId,
+                    "streetName": street,
+                    "address": address
+                },
+                beforeSend: function (xhr) {
+                    $.showLoading();
+                },
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.toast("您的留言已经成功提交，我们将第一时间将结果反馈！", "text");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
+                    } else if (data.code == 0) {
+                        $.toast(data.msg, "text");
+                        var code = $("#weui-vcode-btn");
+                        // code.removeAttr('disabled');
+                        code.text("获取验证码");
+                        countdown = 0;
+                    } else {
+                        $.toast("没有加载到数据", "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据", "text");
+                }
+            });
+        }
+        // $.toptip('提交成功', 'success');
+    });
+</script>
+</body>
+</html>

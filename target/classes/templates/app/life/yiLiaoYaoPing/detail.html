@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>医疗机构  社会保险定点医疗机构</title>
+<meta name="decorator" content="blank"/>
+<style type="text/css">
+	tr{text-indent:5px;}
+</style>
+	<link rel="stylesheet" href="css/app/detail.css"/>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>
+	<script type="text/javascript" src="js/detail.js"></script>
+</head>
+<body style="background:white;">
+	
+
+	<h2 style="border-bottom:1px gray solid;line-height: 36px;text-align: center;">药品详情</h2>
+	<table id="list"></table>
+
+<script type="text/javascript" th:inline="javascript">
+	var id=[[${id}]];
+
+	$(function(){
+		load();	//初次加载数据
+	});
+	
+	//函数  将读取的数据拼接 显示
+	function show(data){
+		if(data!=null ){
+			var remark;
+			if(data[0].remarks == ""){
+				remark = "暂无" ;
+			}
+			$("#list").append(
+				"<tr><td>药品中文名称:</td><td>"+data[0].chineseName+"</td></tr>"+
+				"<tr><td>分类:</td><td>"+data[0].fenClass+"</td></tr>"+
+				"<tr><td>剂型:</td><td>"+data[0].formulation+"</td></tr>"+
+				"<tr><td>备注:</td><td>"+remark+"</td></tr>"+
+				"<tr><td>编号:</td><td>"+data[0].numbering+"</td></tr>"+
+				"<tr><td>大类:</td><td>"+data[0].bigClass+"</td></tr>"+
+				"<tr><td>中类:</td><td>"+data[0].inClass+"</td></tr>"+
+				"<tr><td>小类:</td><td>"+data[0].smallClass+"</td></tr>"+
+				"<tr><td>细类:</td><td>"+data[0].fineClass+"</td></tr>"+
+				"<tr><td>药品英文名称:</td><td>"+data[0].englishName+"</td></tr>"
+			);
+		}else{
+			alert("没有加载到数据!");
+		}
+	}
+	
+	//从接口获取数据
+	function load(){
+		/* var url="http://sdbst.shunde.gov.cn/RXWSSTWeb/m_medical.web?getDetail&id=${id}";
+		url="${ct}/api/getjson?post=true&url="+url.replace(/&/g,"*"); */
+		var url=basePath()+"/public?id="+id;
+		$.ajax({url:url,
+		    dataType:"json",
+			success:function (data) {
+		        if(data!=null && data.success==true){
+		        	show(data.obj);
+		        }else{
+		        	alert("没有加载到数据!");
+		        }
+		    }
+		});
+	}
+</script>
+</body>
+</html>

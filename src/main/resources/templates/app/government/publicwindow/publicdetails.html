@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+	<meta charset="utf-8">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>市民之窗详情</title>
+	<script src="js/jquery.min.js"></script>
+<style>
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+.container {padding: 15px !important;max-width: 750px;}
+h3{font-weight:500;}
+</style>
+
+
+<script type="text/javascript" th:inline="javascript">
+	var id = [[${id}]];
+	$(document).ready(function(){
+		var urlnew="${ct}/app/menu/getjson?url=http://202.104.25.196/RXWSSTWeb/m_smzcTerminal.web?getDetail&id="+id;
+		$.getJSON(urlnew.replace(/&/g,'*'),function(result){
+			var obj=result.obj;
+			$("h1").text(obj.servicePoint);
+			$("#address").text("地方："+obj.address);
+			$("#typename").text("终端类型："+obj.typeName);
+			$("#num").text("终端数量："+obj.recordStatus);
+			$("#starttime").text("开始时间："+obj.openingHours);
+		});
+
+	});
+</script>
+</head>
+<body>
+	<div class="container">
+		<img src="img/map/psp.png" width="100%"/>
+		<h1></h1>
+		<h3 id="address"></h3>
+		<h3 id="typename"></h3>
+		<h3 id="num"></h3>
+		<h3 id="starttime"></h3>
+	</div>	
+</body>
+</html>
+
+
+
+

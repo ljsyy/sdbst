@@ -1,0 +1,85 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<base th:href="${#request.getContextPath()}+'/'">
+
+<meta name="decorator" content="blank"/>
+<!--<link rel="stylesheet" href="app/css/base.css" />-->
+<script src="js/jquery.min.js"></script>
+<!--<script src="js/iconfont.js"></script>-->
+<script src="js/list.js"></script>
+	<script th:src="@{/js/base.js}"></script>
+
+<script src="js/md5.min.js"></script>
+
+<title>电子眼分布</title>
+
+<style>
+
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+.container {padding: 0;max-width: 750px;}
+ html,.container{height: 100%;}
+ html{background:#fff;}
+body{background: #F3F3F3;}
+a{text-decoration:none;color: #000;}
+
+.list-first{
+	background: #fff;
+    border-bottom: solid 1px #bbbbbb;
+    padding: 15px;
+}
+.right{    
+	position: relative;
+    float: right;
+    height: 20px;
+}
+.map{position: relative;height: 35px;background: #fff;padding: 5px;}
+.xuanzepos{background: #f6f6f6;height: 100%;border: solid 1.5px #C5C4C4;border-radius: 5px;    position: relative;}
+.xuanzepos img{    position: absolute;right: 10px;top: 5px;}
+.xuanzepos .pos-font{position:absolute;left:10px;line-height: 35px;}
+</style>
+
+<script type="text/javascript">
+
+function getType(){		//查询一类
+	$.ajax({ 
+		url: basePath()+"/traffic/getType",
+		//data: {"param":"action=searchHis&oppo="+oppo+"&pwd="+hash+"&cardId="+cardid+"&appCode="+code},
+		type:"post",
+		dataType:"json",
+		async:false,
+		success:function(result){
+			console.log(result.list)
+			var json = result.list;
+			for(var i in json){
+				var href = "window.location.href='"+basePath()+"/traffic/digitalList?typeid="+json[i].typeid+"'";
+				$(".first").append(
+					'<div class="list-first" onClick="'+href+'">'+json[i].type+
+					'<img class="right" src="img/interface/right.png" />'+
+					'</div>'		
+				);
+			}
+		}
+	});
+};
+
+$(document).ready(function(){	
+	getType();
+});
+</script>
+
+</head>
+<body>
+
+<div class="first">
+	<div class="map">
+		<div class="xuanzepos" onClick="window.location.href=basePath()+'/traffic/digitalMap'">
+			<div class="pos-font">返回地图</div><img src="img/map/map.png" height="25"/>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

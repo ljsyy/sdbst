@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title ></title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+
+    <style>
+        .font {
+        }
+
+        .list {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+
+</head>
+<body>
+<div id="show">
+    <!-- <div class="list">123</div>
+    <div class="list">456</div>
+    <div class="list">789</div> -->
+</div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+    var url;
+    var hasChildren;	//是否有下一层
+    var type = [[${type}]];
+    console.log(type);
+    console.log([[${url}]]);
+    if([[${url}]]==""||[[${url}]]==null){
+        if (type == "pregnant") {	//怀孕生育
+            url = "/scene/getNav?optFlag=homeNav&bid=1";
+            document.title = '怀孕生育';
+        } else if (type == "household") {	//户籍办理
+            url = "/scene/getNav?optFlag=homeNav&bid=2";
+            document.title = '户籍办理';
+        } else if (type == "abroad") {	//出入境
+            url = "/scene/getNav?optFlag=homeNav&bid=3";
+            document.title = '出入境';
+        } else if (type == "traffic") {	//交通出行
+            url = "/scene/getNav?optFlag=homeNav&bid=4";
+            document.title = '交通出行';
+        } else if (type == "project") {	//工程报建
+            url = "/scene/getNav?optFlag=homeNav&bid=5";
+            document.title = '工程报建';
+        } else if (type == "jobs") {	//求职就业
+            url = "/scene/getNav?optFlag=homeNav&bid=6";
+            document.title = '求职就业';
+        } else if (type == "house") {	//买卖租住房
+            url = "/scene/getNav?optFlag=homeNav&bid=7";
+            document.title = '买卖租住房';
+        } else if (type == "driver") {	//驾驶员
+            url = "/scene/getNav?optFlag=homeNav&bid=8";
+            document.title = '驾驶员';
+        } else if (type == "business") {	//工商注册
+            url = "/scene/getNav?optFlag=homeNav&bid=9";
+            document.title = '工商注册';
+        } else if (type == "qualification") {	//资质认定
+            url = "/scene/getNav?optFlag=homeNav&bid=510";
+            document.title = '资质认定';
+        }
+    }else {
+        if(type == "pregnant"){	//怀孕生育
+            document.title = '怀孕生育';
+        }else if(type == "household"){	//户籍办理
+            document.title = '户籍办理';
+        }else if(type == "abroad"){	//出入境
+            document.title = '出入境';
+        }else if(type == "traffic"){	//交通出行
+            document.title = '交通出行';
+        }else if(type == "project"){	//工程报建
+            document.title = '工程报建';
+        }else if(type == "jobs"){	//求职就业
+            document.title = '求职就业';
+        }else if(type == "house"){	//买卖租住房
+            document.title = '买卖租住房';
+        }else if(type == "driver"){	//驾驶员
+            document.title = '驾驶员';
+        }else if(type == "business"){	//工商注册
+            document.title = '工商注册';
+        }else if(type == "qualification"){	//资质认定
+            document.title = '资质认定';
+        }
+        url = unescape([[${url}]]);
+    }
+
+
+    $(document).ready(function () {
+        scene();
+    });
+
+    function scene() {
+        console.log(url);
+        $("#show").empty();
+
+        $.ajax({
+            url: basePath()+ url,
+            data: {},
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                console.log(result);
+                var obj = result.obj;
+                for (var i in obj) {
+                    $("#show").append(
+                        '<div class="list" hasChildren="' + obj[i].hasChildren + '" url="' + obj[i].url + '">' +
+                        '<p class="font">' + obj[i].name + '</p>' +
+                        '<img src="img/menu/right.png">' +
+                        '</div>'
+                    );
+                }
+                if (result.success == false) {	//文档解析失败
+                    alert(result.msg);
+                    window.history.back()
+                }
+                $("#show .list").click(function () {
+                    ajaxurl = $(this).attr("url");
+                    hasChildren = $(this).attr("hasChildren");
+
+                    if (hasChildren == "true" && ajaxurl != "") {
+                        window.location.href = window.location.origin + window.location.pathname + "?type="+type+"&url=" + escape(ajaxurl);
+                    } else if (hasChildren == "false" && ajaxurl.match("http") != null) {
+                        //alert("1");
+                        window.location.href = ajaxurl;
+                    } else if (hasChildren == "false" && ajaxurl != "") {
+                        //alert("2");
+                        window.location.href = basePath()+"/public/detail?id=" + ajaxurl + "&choose=2";
+                    } else if (ajaxurl == "") {
+                        alert("暂无内容");
+                    } else {
+                        alert(ajaxurl);
+                    }
+                });
+            }
+        });
+    }
+</script>
+</html>

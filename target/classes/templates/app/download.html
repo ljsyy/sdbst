@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>i顺德</title>
+    <link href="mui/css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="mui/js/mui.min.js"></script>
+</head>
+<style>
+    * {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .btn-down-left {
+        background-repeat: no-repeat;
+        border: 0px;
+        position: absolute;
+        bottom: 5%;
+        left: 10%;
+        width: 34%;
+        height: 6%
+    }
+
+    .btn-down-right {
+        border: 0px;
+        position: absolute;
+        bottom: 5%;
+        right: 10%;
+        width: 34%;
+        height: 6%
+    }
+    .container{
+        background: url("img/download.jpg") no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+    }
+</style>
+<body>
+<div class="container" >
+    <img class="btn-down-left" src="img/left.png" onclick="download('ios')">
+    <img class="btn-down-right" src="img/right.png" onclick="download('android')">
+</div>
+</body>
+<script type="text/javascript">
+    function download(type) {
+        var u = navigator.userAgent;
+        var ua = navigator.userAgent.toLowerCase();
+        if(type=='android'){
+            if(ua.match(/MicroMessenger/i)=="micromessenger"){
+                mui.alert("请在浏览器端下载！","提示");
+            }else {
+                // mui.alert("新版即将上线，敬请期待！","提示");
+                window.location.href=basePath()+"/public/download?type=android";
+            }
+        }else if(type=='ios'){
+            //判断是否是ios环境
+            var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            if (isIOS) {
+                //这个是ios操作系统
+                window.location.href="https://apps.apple.com/us/app/i%E9%A1%BA%E5%BE%B7/id1049626661?l=zh&ls=1";
+            }
+            mui.alert("请在苹果手机上下载！","提示");
+        }
+    }
+    //默认字体随屏幕宽度改变而改变，原开发屏幕比例为1rem=15.54px
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 12.5 * (clientWidth / 320) + 'px';
+                console.log(docEl.style.fontSize);
+            };
+        //文档加载完后马上执行一次适应不同大小屏幕
+        recalc();
+        //绑定缩放窗口大小行为时执行自适应函数
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+
+
+
+    })(document, window);
+
+    function resize(idName){
+        //设置image宽高为网页正文宽高
+        $("#"+idName).css("height",document.body.scrollHeight);
+        $("#"+idName).css("width",document.body.scrollWidth)
+    }
+    function classResize(idName){
+        //设置image宽高为网页正文宽高
+        $("."+idName).css("height",$(window).height());
+        $("."+idName).css("width",$(window).width())
+    }
+    classResize("container");//背景图片div的id
+
+</script>
+</html>

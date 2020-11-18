@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.enterprise.EnterpriseUserMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.enterprise.EnterpriseUser" >
+    <id column="CREDIT_CODE" property="creditCode" jdbcType="VARCHAR" />
+    <result column="IDENTITY_NUMBER" property="identityNumber" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="INSURED_NUMBER" property="insuredNumber" jdbcType="DECIMAL" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ENTERPRISE_USER
+    where CREDIT_CODE = #{creditCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.enterprise.EnterpriseUser" >
+    insert into ENTERPRISE_USER (CREDIT_CODE, IDENTITY_NUMBER, NAME, 
+      TYPE, ADDRESS, INSURED_NUMBER
+      )
+    values (#{creditCode,jdbcType=VARCHAR}, #{identityNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{insuredNumber,jdbcType=DECIMAL}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.enterprise.EnterpriseUser" >
+    update ENTERPRISE_USER
+    set IDENTITY_NUMBER = #{identityNumber,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      INSURED_NUMBER = #{insuredNumber,jdbcType=DECIMAL}
+    where CREDIT_CODE = #{creditCode,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select CREDIT_CODE, IDENTITY_NUMBER, NAME, TYPE, ADDRESS, INSURED_NUMBER
+    from ENTERPRISE_USER
+    where CREDIT_CODE = #{creditCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select CREDIT_CODE, IDENTITY_NUMBER, NAME, TYPE, ADDRESS, INSURED_NUMBER
+    from ENTERPRISE_USER
+  </select>
+</mapper>

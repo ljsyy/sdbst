@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${ri.headName}"></title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+</head>
+<body>
+
+<div id="show" style="margin-top:0px;"></div>
+
+<script type="text/javascript" th:inline="javascript">
+    var wait = false;		//下拉加载等待
+    var pageIndex = 0;	//请求页数
+    var ri = [[${ri}]];
+    $(function () {
+        var result = eval('(' + ri.data + ')');
+        console.log(result);
+        if (ri.returnType == "pagey") {
+            getLabel(result);
+        } else {
+            console.log(result.obj)
+            getLabel(result.obj);
+        }
+
+        $(window).scroll(function () {//下拉到底,加载数据
+            mui.showLoading("正在加载更多", "div");
+            if (wait == true) {
+                return false;
+            }
+            if ($(window).scrollTop() + 2 >= $(document).height() - $(window).height()) {
+                //mui.toast("pageIndex:"+pageIndex);
+                wait = true;	//下拉触发等待
+                if (ri.returnType == null || ri.returnType == "json") {
+                    pageIndex = pageIndex + 10;
+                } else if (ri.returnType == "page" || ri.returnType == "pagey") {
+                    pageIndex = pageIndex + 1;
+                }
+                var url = basePath() + "/public/afterGetJson?function=" + ri.function + "&pageIndex=" + pageIndex;
+                getJson(url, false);
+            }
+        });
+    });
+
+
+    function getJson(url, flag) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                mui.hideLoading(function () {
+                    if (data != null && data != "") {
+                        if (ri.returnType == "pagey") {
+                            showData(data);
+                        } else {
+                            showData(data.obj, flag);
+                        }
+                    } else {
+                        mui.toast("没有加载到数据！");
+                    }
+                });
+            },
+            error: function () {
+                mui.hideLoading(function () {
+                    mui.toast("出错啦...");
+                });            }
+
+        });
+    }
+
+    //处理展示数据
+    function showData(data, flag) {
+        if (data != null && data != "") {
+            if (flag) {	//判断是否初次加载数据
+                $("#show").children().remove();	//重新加载前清空 <div id="list">
+            }
+            getLabel(data);
+            wait = false;
+        } else {
+            mui.toast("没有加载到数据！");
+        }
+    }
+
+
+    function getLabel(data) {
+        if (data == null || data == "") {
+            mui.toast("没有加载到数据！")
+            return;
+        }
+        $(data).each(function (index) {
+            console.log("23");
+            var word = "";
+            if (ri.returnType == "pagey") {
+                word = data[index].title;
+            } else {
+                word = data[index].bt;
+            }
+            word = getWord(word);
+
+            if (ri.returnType == null || ri.returnType == "json") {
+                var hr = "onclick=\"window.parent.location.href=\'" + basePath() + "/public/getDetail?fid=" + data[index].fold_id + "&id=" + data[index].id + "&titleName=" + ri.titleName + "&headName=" + ri.headName + "/详情&html=/app/government/trade/detail\'\"";
+                $("#show").append(
+                    "<div class='list' " + hr + ">" +
+                    word + "<div style='color: #888;text-align: right;min-width: 30%;right: 40px;bottom: 8px;'>" + data[index].cjrq + "</div>" +
+                    "<img src='img/menu/right.png'></div>"
+                );
+            } else if (ri.returnType == "page") {
+                // "<a href='http://sdcin.shunde.gov.cn/viewtownzbgg.php?id="+data[index].id+"'>"+
+                var hr = "onclick=\"window.location.href=\'http://sdcin.shunde.gov.cn/viewtownzbgg.php?id=" + data[index].id + "\'\"";
+                $("#show").append(
+                    "<div class='list' " + hr + " style='background:url(img/menu/right.png) no-repeat right center;background-size:20px 20px;'>" + "<p style='width:90%;'>" +
+                    word + "</p><p style='text-align: right;width:90%;'>" + data[index].cjrq + "</p>" +
+                    "</div>"
+                );
+            } else if (ri.returnType == "pagey") {
+                // "<a href='"+data[index].url+"'>"+
+                var hr = "onclick=\"window.location.href=\'" + data[index].url + "\'\"";
+                $("#show").append(
+                    "<div class='list' " + hr + " style='background:url(img/menu/right.png) no-repeat right center;background-size:20px 20px;'>" + "<p style='width:90%;'>" +
+                    word + "</p><p style='text-align: right;width:90%;'>" + data[index].date + "</p>" +
+                    "</div>"
+                );
+            }
+        });
+        data = null;
+    }
+
+</script>
+</body>
+</html>

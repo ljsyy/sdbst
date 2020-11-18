@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<base th:href="${#request.getContextPath()}+'/'">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<meta name="decorator" content="blank"/>
+<link rel="stylesheet" href="css/app/detail.css"/>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/base.js"></script>
+<script type="text/javascript" src="js/detail.js"></script>
+
+<style type="text/css">
+	#show{ overflow: scroll; }
+	table{ WIDTH: 100% !important; }
+	img{ WIDTH: 100%;height: auto;}
+	h3{font-size:18px;background:rgb(251, 250, 250);padding:10px 0 0 0;}
+	.sdjj,.lsyg,.xzqh,.yswhjj,.sdms{display:none;}
+	.image{margin: 5px 0;}
+	.sdp{text-indent: 2em;font-size: 18px;line-height: 30px;}
+	strong{font-size: 18px;}
+	.time{background:rgb(251, 250, 250);border-bottom:none;font-size:15px;padding:10px 0;}
+	#show{padding:0 !important;}
+	#main{padding:10px;}
+	.center{text-align: -webkit-center;}
+</style>
+</head>
+<body>
+	
+	<div id="show" class="detailpad">
+		<!--传递参数-->
+		<input type="hidden" id="type" th:value="${type}"/>
+		<!-- 顺德简介 -->
+		<div class="sdjj">
+			<h3 style='text-align:center;'>顺德简介</h3>
+			<p class='time' style='text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:2015-03-16</p>
+			<div id='main'>
+				<img class="image" src="img/inshunde/pic1.jpg" />
+				<p class="sdp">顺德位于珠江三角洲中部，全区面积806平方公里,紧靠广州，毗邻港澳,交通便利。自古就是一个物华天宝的富庶之地，岭南文化积淀深厚。</p>
+				<p class="sdp">顺德旅游资源丰富，广府文化、生态休闲、都市风光、岭南美食、特色产业交相辉映。拥有1个国家5A级旅游景区，4个4A级旅游景区，3个3A级旅游景区。广东四大名园之一清晖园，是岭南园林的杰出代表；碧江金楼、逢简水乡展现了岭南古建筑艺术及原始的珠江水乡风貌；遍饰砖雕、灰塑、陶塑的西山庙和广东最大的寺院之一宝林寺，具有浓郁岭南地方色彩；顺德是一个旅游度假地，长鹿休闲度假农庄是领略岭南历史文化、顺德水乡风情、农家生活情趣的绝好去处；国际功夫巨星李小龙祖籍在顺德，李小龙乐园讲述一代巨星的成长故事；规模宏大的顺峰山公园，自然与人文景观完美结合。这里还有集花卉生产、销售、观赏、旅游于一体的陈村花卉世界、全世界最大规模的家具市场——“乐从家具城”集旅游观光商贸为一体的罗浮宫国际家具博览中心、展示顺德丝绸产业发展历程的南国丝都丝绸博物馆、周大福珠宝文化展示中心，产业旅游发达。</p>
+				<p class="sdp">顺德民间传统和文化世代延续，有龙舟之乡、粤剧之乡、武术之乡的美誉，龙舟竞渡、粤曲技艺、咏春功夫远近闻名，观音开库、生菜会、龙母诞等民俗活动气氛热烈</p>
+				<p class="sdp">顺德旅游配套完善，有各种类型酒店200多家，其中星级酒店22家，五星级酒店3家，接待设施齐全。区内旅行社有35家，其中出境游组团社10家，具有较高旅游接待水平。同时，顺德休闲娱乐设施完善，拥有一流的购物场所、一流的高尔夫球场、娱乐和健身休闲场所，休闲生活精彩纷呈。</p>
+				<img class="image" src="img/inshunde/pic2.jpg" />
+				<img class="image" src="img/inshunde/pic3.jpg" />
+				<p class="sdp"><strong>» 地理位置</strong></p>
+				<p class="sdp">佛山市顺德区位于珠江三角洲中部，北临广州，毗邻港澳，面积806平方公里。境内绝大部分是江河冲积的平原，河涌交错，土地肥沃、气候温和、雨量充沛、四季常春。顺德建县于明景泰三年（1452年），1992年3月撤县建市，2003年1月撤市设区。全区现有10个镇（街道），202个村（社区），常住人口248万人，旅居海外乡亲50多万人。</p>
+				<img class="image" src="img/inshunde/pic4.jpg" />
+				<p class="sdp"><strong>» 经济发展</strong></p>
+				<p class="sdp">顺德是全国县域经济发展的排头兵。经过改革开放30多年发展，逐步形成了家用电器、机械装备、电子信息、纺织服装、精细化工、包装印刷、家具制造、医药保健、汽车配件等支柱行业。顺德于1993年被批准为广东省综合改革试点，1999年被确定为广东省率先基本实现现代化试点，2000 年至2003年连续四年居国家统计局公布的全国县域经济百强之首。2012年全年实现地区生产总值2338.8亿元，增长8%，财政一般预算收入136.5亿元，增长11.9%。顺德积极引进和培育战略性新兴产业，确定新型电子信息、新能源、新材料、环保装备、生命医药、物联网等作为战略性新兴产业发展方向，成为全国首个也是唯一的国家级装备工业两化融合暨智能制造试点。中国南方智谷、广东顺德清远（英德）经济合作区、西部生态产业新区等重大战略性发展平台建设扎实推进。“十二五”时期，顺德各项事业加快发展。特别是2015年，顺德坚持开放创新，努力提升区域综合竞争力，保持经济社会持续健康发展。预计全年地区生产总值增长8.3%，全社会固定资产投资增长15.5%，社会消费品零售总额增长12.2%，地方公共财政预算收入增长7.6%。</p>
+				<p class="sdp">2016年，顺德连续5年位居全国市辖区综合实力百强首位，第八次获评“中国全面小康十大示范县市”，全年实现地区生产总值2793.2亿元，增长8.4％；全社会固定资产投资764亿元，增长18.9％；地方一般公共预算收入201.8亿元，增长7.85％。</p>
+				<img class="image" src="img/inshunde/pic5.jpg" />
+				<img class="image" src="img/inshunde/pic6.jpg" />
+				<p class="sdp"><strong>» 气候条件</strong></p>
+				<p class="sdp">顺德区地处北回归线以南，属亚热带海洋性季风气候，日照时间长，雨量充沛，常年温暖湿润，四季如春，景色怡人。年平均气温为21.9℃ ；1月份最冷，月平均气温13.1℃；7月份最热，月平均气温 28.7 ℃ 。 雨水充沛，年平均降雨量多达1649毫米，年平均湿度为81%。2至3月份多低温阴雨天气，7至9月份为台风活动季节，台风期间有时发生强台风，对农作物造成较大损害。</p>
+				<img class="image" src="img/inshunde/pic7.jpg" />
+				<img class="image" src="img/inshunde/pic8.jpg" />
+				<p class="sdp"><strong>» 世界美食之都——顺德</strong></p>
+				<p class="sdp">自古“食在广州，厨出凤城”，顺德是粤菜重要的发源地，中国三大厨师之乡之一，全国首个“中国美食名城”，联合国教科文组织授予的“世界美食之都”，著名的美食之乡，餐饮业发达，金牌菜、特色菜无数，名店名厨荟萃。“中国厨乡，美食天堂”名不虚传。顺德点心亦以制作精细、外形雅致、松脆可口见长，有双皮奶等11种名特小吃入选“中华名小吃”。顺德还是全国餐饮名店、名师最密集的地区之一。目前拥有各类餐饮企业6000余家，顺峰山庄、龙的酒楼等21家酒楼拥有“中华餐饮名店”之称。拥有23位“中国烹饪大师”和22位“中国烹饪名师”。</p>
+				<img class="image" src="img/inshunde/pic9.jpg" />
+				<img class="image" src="img/inshunde/pic10.jpg" />
+				<img class="image" src="img/inshunde/pic11.jpg" />
+				<img class="image" src="img/inshunde/pic12.jpg" />
+				<img class="image" src="img/inshunde/pic13.jpg" />
+				<img class="image" src="img/inshunde/pic14.bmp" />
+				<img class="image" src="img/inshunde/pic15.jpg" />
+				<img class="image" src="img/inshunde/pic16.jpg" />
+				<img class="image" src="img/inshunde/pic17.jpg" />
+				<img class="image" src="img/inshunde/pic18.jpg" />
+			</div>
+		</div>
+		<!-- 历史沿革 -->
+		<div class="lsyg">
+			<h3 style='text-align:center;'>历史沿革</h3>
+			<p class='time' style='text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:2015-03-16</p>
+			<div id='main'>
+				<p class="sdp">顺德建县以前，是南海、新会两县的地方。明朝英宗正统十四年(公元1449年)，南海县冲鹤堡番村发生由雇农黄萧养领导的农民暴动，很快遭到镇压。为了强化统治，明王朝在景泰三年(公元1452年)，将南海的东涌、马宁、 鼎安、西淋四都和新会的白藤一堡划出，设置顺德县，以其中的太艮堡为县治， 并改名大良。</p>
+				<p class="sdp">顺德建县以后，明、清均属广州府，辛亥革命隶属粤海道，1920年道废，顺德先后隶属国民党政权广东省政府和中区绥靖委员公署、第一行政督察教导员公署。</p>
+				<img class="image" src="img/inshunde/pic19.jpg" />
+				<p class="sdp">顺德自古就是一个物华天宝、经济发达的富庶之地。据《顺德县志》记载，早在宋代，顺德就以“鱼米花果之乡”闻名遐迩。明代，顺德凭借“桑基鱼塘”的种养模式，使缫丝业迅速兴旺起来。十九世纪末二十世纪初，缫丝业达到鼎盛期，并带动了民间金融业的蓬勃发展，顺德因此而享有“南国丝都”和“广东银行”的美誉。</p>
+				<p class="sdp">新中国成立后，特别是改革开放以来，顺德人民充分发挥政策、地缘和人文优势，团结拼搏，求实创新，以敢为天下先的气魄，率先进行了企业产权制度改革、行政体制改革等一系列综合体制改革，逐步使顺德由一个传统的农业县发展成为现代新兴工业城市。顺德的迅速崛起，引起了全国的广泛关注，被誉为“顺德现象”和“顺德模式”。</p>
+				<img class="image" src="img/inshunde/pic20.jpg" />
+				<p class="sdp">中国改革开放的总设计师邓小平曾两度亲临顺德视察。1992年，小平同志南巡视察顺德时提出了“发展才是硬道理”的著名论断，并且勉励顺德“思想要更解放一些，胆子要更大一些，步子要更快一些。”在上级的亲切关怀和大力支持下，顺德先后完成了计划经济向市场经济、农村经济向城市经济、区域经济向国际经济的跨越。1993年顺德被批准成为广东省综合改革试点。1999年顺德被广东省确定为率先基本实现现代化试点。2001年至2003年，顺德连续四年居国家统计局公布的全国县域经济百强之首。</p>
+				<img class="image" src="img/inshunde/pic21.jpg" />
+				<p class="sdp">2004年12月，中共中央总书记、国家主席、中央军委主席胡锦涛亲临顺德考察，勉励顺德加快推进新型工业化，进一步做大做强民族工业，积极参与国际竞争。 </p>
+				<p class="sdp">今天的顺德，经济社会全面、快速、协调发展，综合竞争力稳步提升。</p>
+			</div>
+		</div>
+		<!-- 行政区划 -->
+		<div class="xzqh">
+			<h3 style='text-align:center;'>行政区划</h3>
+			<p class='time' style='text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:2015-03-16</p>
+			<div id='main'>
+				<img class="image" src="img/inshunde/pic22.jpg" />
+				<p class="sdp">顺德区辖4个街道（大良、容桂、伦教、勒流）、6个镇（陈村、均安、杏坛、龙江、乐从、北滘）。</p>
+				<p class="sdp"><strong>大良街道办事处&nbsp;&nbsp;</strong>辖19个社区居委会（南华、升平、府又、中区、文秀、北区、金榜、新桂、顺峰、云路、新松、新滘、红岗、大门、近良、南江、苏岗、五沙、德和），2个村委会（古鉴、逢沙）。</p>
+				<p class="sdp"><strong>容桂街道办事处&nbsp;&nbsp;</strong>辖23个社区居委会（卫红、朝阳、东风、容新、德胜、振华、容山、桂洲、红星、细滘、海尾、幸福、红旗、四基、南区、容里、高黎、扁滘、华口、容边、上佳市、大福基、小黄圃），3个村委会（穗香、马冈、龙涌口）。</p>
+				<p class="sdp"><strong>伦教街道办事处&nbsp;&nbsp;</strong>辖2个社区居委会（三洲、常教），8个村委会（永丰、鸡洲、熹涌、霞石、荔村、新塘、羊额、仕版）。</p>
+				<p class="sdp"><strong>勒流街道办事处&nbsp;&nbsp;</strong>辖5个社区居委会（黄连、勒流、光大、新城、大晚），17个村委会（勒北、东风、新明、江义、扶闾、稔海、上涌、江村、南水、众涌、龙眼、西华、富裕、连杜、新安、裕源、冲鹤）。</p>
+				<p class="sdp"><strong>北滘镇&nbsp;&nbsp;</strong>辖8个社区居委会（碧江、北滘、槎涌、广教、林头、碧桂园、三洪奇、顺江），10个村委会（上僚、三桂、桃村、莘村、西海、水口、马龙、西滘、高村、黄龙）。</p>
+				<p class="sdp"><strong>陈村镇&nbsp;&nbsp;</strong>辖8个社区居委会（旧圩、勒竹、赤花、锦龙、南涌、合成、永兴、花城），7个村委会（弼教、石洲、仙涌、庄头、大都、潭洲、绀现）。</p>
+				<p class="sdp"><strong>乐从镇&nbsp;&nbsp;</strong>辖5个社区居委会（乐从、平步、腾冲、沙滘、东平），19个村委会（新隆、葛岸、良教、上华、小布、荷村、大墩、小涌、岳步、良村、劳村、道教、大罗、路州、大闸、水藤、沙边、罗沙、杨滘）。</p>
+				<p class="sdp"><strong>龙江镇&nbsp;&nbsp;</strong>辖10个社区居委会（龙江、龙山、苏溪、西溪、坦西、排沙、陈涌、世埠、东涌、文华），13个村委会（旺岗、仙塘、沙富、集北、东海、官田、麦朗、西庆、万安、南坑、东头、左滩、新华西）。</p>
+				<p class="sdp"><strong>杏坛镇&nbsp;&nbsp;</strong>辖6个社区居委会（齐杏、杏坛、罗水、吕地、雁园、马齐），24个村委会（海凌、桑麻、逢简、龙潭、北水、吉祐、西北、上地、高赞、新联、昌教、路涌、马宁、马东、西登、麦村、光华、古朗、东村、南华、右滩、南朗、光辉、安富）。</p>
+				<p class="sdp"><strong>均安镇&nbsp;&nbsp;</strong>辖8个社区居委会（均安、仓门、沙头、三华、新华、天湖、鹤峰、南沙），5个村委会（星槎、南浦、沙浦、天连、太平）。</p>
+			</div>
+		</div>
+		
+		<!-- 饮食文化简介 -->
+		<div class="yswhjj">
+			<h3 style='text-align:center;'>饮食文化简介</h3>
+			<p class='time' style='text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:2010-03-17</p>
+			<div id='main'>
+				<p class="sdp">顺德地处南粤水网平原洲腹地，物阜民丰，果蔬鲜嫩，鱼虾生猛，为岭南著名的鱼米之乡。顺德人素喜调味烹饪，自古就食不厌精，脍不厌细，美食之风自清代便已盛行，时人称道“顺德乳蜜之乡，言饮食，广州逊其精美”(梁介香《凤城梦游录》)。及至近世，“食在广州，厨出凤城（顺德大良别称）”的说法，更是得到外界公认。 </p>
+				<p class="sdp">顺德美食，香飘四海，名满天下。顺德菜在粤菜中独树一帜，以“清、鲜、爽、嫩、滑、真”为特色，“五滋”（香、松、脆、肥、浓）、“六味”（酸、甜、苦、咸、辣、鲜）俱佳，金牌菜、特色菜一百多道，名菜广为流传而新菜层出不穷。顺德美食中，不仅顺德菜享有较高的声誉，顺德点心亦以制作精细、外形雅致、松脆可口见长，有双皮奶等11种名特小吃入选“中华名小吃”，成为顺德美食中的另一朵奇葩。餐饮人才更是群星璀璨，拥有9位“中国烹饪大师”和34位“中国烹饪名师”、26位“广东烹饪名师”。物华天宝，俊采星驰，顺德是全国餐饮名店、名师最密集的地区之一。目前，全区共有各类餐饮企业近5000家，2008年全区餐饮总收入达92亿元。顺峰山庄、龙的酒楼、凤城酒店、勒流东海海鲜酒家、勒流聚福山庄、福盈酒店、龙江山庄、皆大欢喜园林食府、容桂东海一族海鲜酒楼、新君悦皇朝食府、宏图海鲜酒家、君王酒店等12家酒楼拥有“中华餐饮名店”之称。2004年，顺德被中国烹饪协会评为“中国厨师之乡”，成为目前中国三大厨师之乡之一。中心城区大良被评为全国首个"中华餐饮名镇"，勒流镇被评为全国首个“中华美食名镇”。 </p>
+				<p class="sdp">2006年10月，顺德成功举办第十六届“中国厨师节”暨首届顺德岭南美食文化节，更开创了厨师节首次在县级城市举办的历史，再次证明了顺德美食在国内外的影响力。2007年10月、2008年10月，顺德陆续举办了第二届、第三届岭南岭南美食文化节，以“厨出凤城，美味顺德，六百年真味传承”为轴线，集美食品尝、休闲游乐、商贸旅游为一体，用多个极具创新的活动，凸显顺德悠久的饮食文化，展现顺德美食魅力，打造“美食顺德”旅游品牌。目前，“顺德岭南美食文化节”已成为我区独具特色的旅游节庆活动，成为我区又一张亮丽的名片。</p>
+			</div>
+		</div>
+		
+		<!-- 顺德美食 -->
+		<div class="sdms">
+			<h3 style='text-align:center;'>顺德美食</h3>
+			<p class='time' style='text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:2010-03-17</p>
+			<div id='main'>
+				<img class="image" alt="子姜手撕鸡" src="img/inshunde/shundeFood/SDF1.jpg" />
+				<p class="center">子姜手撕鸡</p>
+				<img class="image" alt="绉沙鱼卷爽雪蛤" src="img/inshunde/shundeFood/SDF2.jpg" />
+				<p class="center">绉沙鱼卷爽雪蛤</p>
+				<img class="image" alt="招牌盐香鸡" src="img/inshunde/shundeFood/SDF3.jpg" />
+				<p class="center">招牌盐香鸡</p>
+				<img class="image" alt="招牌干捞翅" src="img/inshunde/shundeFood/SDF4.jpg" />
+				<p class="center">招牌干捞翅</p>
+				<img class="image" alt="枣香鸡" src="img/inshunde/shundeFood/SDF5.jpg" />
+				<p class="center">枣香鸡</p>
+				<img class="image" alt="云耳蒸桂花鲈" src="img/inshunde/shundeFood/SDF6.jpg" />
+				<p class="center">云耳蒸桂花鲈</p>
+				<img class="image" alt="玉树金沙鸡" src="img/inshunde/shundeFood/SDF7.jpg" />
+				<p class="center">玉树金沙鸡</p>
+				<img class="image" alt="鲜虾白菜饺" src="img/inshunde/shundeFood/SDF8.jpg" />
+				<p class="center">鲜虾白菜饺</p>
+				<img class="image" alt="鱼皮饺" src="img/inshunde/shundeFood/SDF9.jpg" />
+				<p class="center">鱼皮饺</p>
+				<img class="image" alt="燕麦汁肉排" src="img/inshunde/shundeFood/SDF10.jpg" />
+				<p class="center">燕麦汁肉排</p>
+				<img class="image" alt="燕麦天鹅酥" src="img/inshunde/shundeFood/SDF11.jpg" />
+				<p class="center">燕麦天鹅酥</p>
+				<img class="image" alt="雪梨煲生鱼" src="img/inshunde/shundeFood/SDF12.jpg" />
+				<p class="center">雪梨煲生鱼</p>
+				<img class="image" alt="蚬肉生菜包" src="img/inshunde/shundeFood/SDF13.jpg" />
+				<p class="center">蚬肉生菜包</p>
+				<img class="image" alt="夏日笑虾虾" src="img/inshunde/shundeFood/SDF14.jpg" />
+				<p class="center">夏日笑虾虾</p>
+				<img class="image" alt="西杏南瓜枣" src="img/inshunde/shundeFood/SDF15.jpg" />
+				<p class="center">西杏南瓜枣</p>
+				<img class="image" alt="甜龙笋饼" src="img/inshunde/shundeFood/SDF16.jpg" />
+				<p class="center">甜龙笋饼</p>
+				<img class="image" alt="腾龙鲍瑞" src="img/inshunde/shundeFood/SDF17.jpg" />
+				<p class="center">腾龙鲍瑞</p>
+				<img class="image" alt="特色乳猪件" src="img/inshunde/shundeFood/SDF18.jpg" />
+				<p class="center">特色乳猪件</p>
+				<img class="image" alt="特色酿鱼皮" src="img/inshunde/shundeFood/SDF19.jpg" />
+				<p class="center">特色酿鱼皮</p>
+				<img class="image" alt="塘里鱼欢唱" src="img/inshunde/shundeFood/SDF20.jpg" />
+				<p class="center">塘里鱼欢唱</p>
+				<img class="image" alt="堂煎牛仔骨" src="img/inshunde/shundeFood/SDF21.jpg" />
+				<p class="center">堂煎牛仔骨</p>
+				<img class="image" alt="泰汁柚皮大明虾" src="img/inshunde/shundeFood/SDF22.jpg" />
+				<p class="center">泰汁柚皮大明虾</p>
+				<img class="image" alt="蒜香猪颈肉" src="img/inshunde/shundeFood/SDF23.jpg" />
+				<p class="center">蒜香猪颈肉</p>
+				<img class="image" alt="蒜头豆豉蒸缩骨大头" src="img/inshunde/shundeFood/SDF24.jpg" />
+				<p class="center">蒜头豆豉蒸缩骨大头</p>
+				<img class="image" alt="酸姜鱼饼" src="img/inshunde/shundeFood/SDF25.jpg" />
+				<p class="center">酸姜鱼饼</p>
+				<img class="image" alt="酥皮菠萝包" src="img/inshunde/shundeFood/SDF26.jpg" />
+				<p class="center">酥皮菠萝包</p>
+				<img class="image" alt="顺德火龙大鱼头" src="img/inshunde/shundeFood/SDF27.jpg" />
+				<p class="center">顺德火龙大鱼头</p>
+				<img class="image" alt="顺德公扣焖大蟮" src="img/inshunde/shundeFood/SDF28.jpg" />
+				<p class="center">顺德公扣焖大蟮</p>
+				<img class="image" alt="水鱼炖翅" src="img/inshunde/shundeFood/SDF89.jpg" />
+				<p class="center">水鱼炖翅</p>
+				<img class="image" alt="水蛇粥" src="img/inshunde/shundeFood/SDF90.jpg" />
+				<p class="center">水蛇粥</p>
+				<img class="image" alt="桑基蚕茧香" src="img/inshunde/shundeFood/SDF91.jpg" />
+				<p class="center">桑基蚕茧香</p>
+				<img class="image" alt="群鱼戏水" src="img/inshunde/shundeFood/SDF29.jpg" />
+				<p class="center">群鱼戏水</p>
+				<img class="image" alt="清酒鹅肝乳猪件" src="img/inshunde/shundeFood/SDF30.jpg" />
+				<p class="center">清酒鹅肝乳猪件</p>
+				<img class="image" alt="麒麟金猪" src="img/inshunde/shundeFood/SDF31.jpg" />
+				<p class="center">麒麟金猪</p>
+				<img class="image" alt="七彩烧汁蟮柳" src="img/inshunde/shundeFood/SDF32.jpg" />
+				<p class="center">七彩烧汁蟮柳</p>
+				<img class="image" alt="葡汁焗桂虾" src="img/inshunde/shundeFood/SDF33.jpg" />
+				<p class="center">葡汁焗桂虾</p>
+				<img class="image" alt="琵琶乳鸽" src="img/inshunde/shundeFood/SDF34.jpg" />
+				<p class="center">琵琶乳鸽</p>
+				<img class="image" alt="南乳花生" src="img/inshunde/shundeFood/SDF35.jpg" />
+				<p class="center">南乳花生</p>
+				<img class="image" alt="南瓜扣水牛掌" src="img/inshunde/shundeFood/SDF36.jpg" />
+				<p class="center">南瓜扣水牛掌</p>
+				<img class="image" alt="秘制穿心水鱼" src="img/inshunde/shundeFood/SDF37.jpg" />
+				<p class="center">秘制穿心水鱼</p>
+				<img class="image" alt="美极榕蛇腩" src="img/inshunde/shundeFood/SDF38.jpg" />
+				<p class="center">美极榕蛇腩</p>
+				<img class="image" alt="满载而归多宝鱼" src="img/inshunde/shundeFood/SDF39.jpg" />
+				<p class="center">满载而归多宝鱼</p>
+				<img class="image" alt="麦香鳗柳" src="img/inshunde/shundeFood/SDF40.jpg" />
+				<p class="center">麦香鳗柳</p>
+				<img class="image" alt="伦教糕" src="img/inshunde/shundeFood/SDF41.jpg" />
+				<p class="center">伦教糕</p>
+				<img class="image" alt="鲮鱼两食" src="img/inshunde/shundeFood/SDF42.jpg" />
+				<p class="center">鲮鱼两食</p>
+				<img class="image" alt="荔茸桂花卷" src="img/inshunde/shundeFood/SDF43.jpg" />
+				<p class="center">荔茸桂花卷</p>
+				<img class="image" alt="均安煎鱼饼" src="img/inshunde/shundeFood/SDF44.jpg" />
+				<p class="center">均安煎鱼饼</p>
+				<img class="image" alt="君王叉烧包" src="img/inshunde/shundeFood/SDF45.jpg" />
+				<p class="center">君王叉烧包</p>
+				<img class="image" alt="晶莹裹香" src="img/inshunde/shundeFood/SDF46.jpg" />
+				<p class="center">晶莹裹香</p>
+				<img class="image" alt="金箔珍珠挞" src="img/inshunde/shundeFood/SDF47.jpg" />
+				<p class="center">金箔珍珠挞</p>
+				<img class="image" alt="金箔石榴翅" src="img/inshunde/shundeFood/SDF48.jpg" />
+				<p class="center">金箔石榴翅</p>
+				<img class="image" alt="金榜牛乳" src="img/inshunde/shundeFood/SDF49.jpg" />
+				<p class="center">金榜牛乳</p>
+				<img class="image" alt="金榜牛奶炒龙虾球" src="img/inshunde/shundeFood/SDF50.jpg" />
+				<p class="center">金榜牛奶炒龙虾球</p>
+				<img class="image" alt="姜汁奶" src="img/inshunde/shundeFood/SDF51.jpg" />
+				<p class="center">姜汁奶</p>
+				<img class="image" alt="姜葱焗鲤鱼" src="img/inshunde/shundeFood/SDF52.jpg" />
+				<p class="center">姜葱焗鲤鱼</p>
+				<img class="image" alt="健康杂粮蛋挞" src="img/inshunde/shundeFood/SDF53.jpg" />
+				<p class="center">健康杂粮蛋挞</p>
+				<img class="image" alt="煎焗鱼嘴" src="img/inshunde/shundeFood/SDF54.jpg" />
+				<p class="center">煎焗鱼嘴</p>
+				<img class="image" alt="煎焗爽鳝" src="img/inshunde/shundeFood/SDF55.jpg" />
+				<p class="center">煎焗爽鳝</p>
+				<img class="image" alt="煎焗魽鱼" src="img/inshunde/shundeFood/SDF56.jpg" />
+				<p class="center">煎焗魽鱼</p>
+				<img class="image" alt="煎焗鳄鱼尾" src="img/inshunde/shundeFood/SDF57.jpg" />
+				<p class="center">煎焗鳄鱼尾</p>
+				<img class="image" alt="家乡烧鹅" src="img/inshunde/shundeFood/SDF58.jpg" />
+				<p class="center">家乡烧鹅</p>
+				<img class="image" alt="家乡酿鲮鱼" src="img/inshunde/shundeFood/SDF59.jpg" />
+				<p class="center">家乡酿鲮鱼</p>
+				<img class="image" alt="极品金沙瓜" src="img/inshunde/shundeFood/SDF60.jpg" />
+				<p class="center">极品金沙瓜</p>
+				<img class="image" alt="火龙果伊面焗罗氏虾" src="img/inshunde/shundeFood/SDF61.jpg" />
+				<p class="center">火龙果伊面焗罗氏虾</p>
+				<img class="image" alt="皇帝脆皮鸡" src="img/inshunde/shundeFood/SDF62.jpg" />
+				<p class="center">皇帝脆皮鸡</p>
+				<img class="image" alt="化皮金猪" src="img/inshunde/shundeFood/SDF63.jpg" />
+				<p class="center">化皮金猪</p>
+				<img class="image" alt="荷香雪蛤糕" src="img/inshunde/shundeFood/SDF64.jpg" />
+				<p class="center">荷香雪蛤糕</p>
+				<img class="image" alt="灌汤鹿丸" src="img/inshunde/shundeFood/SDF65.jpg" />
+				<p class="center">灌汤鹿丸</p>
+				<img class="image" alt="鼓汁蒸排骨" src="img/inshunde/shundeFood/SDF66.jpg" />
+				<p class="center">鼓汁蒸排骨</p>
+				<img class="image" alt="古法彭公" src="img/inshunde/shundeFood/SDF67.jpg" />
+				<p class="center">古法彭公</p>
+				<img class="image" alt="翡翠东星球" src="img/inshunde/shundeFood/SDF68.jpg" />
+				<p class="center">翡翠东星球</p>
+				<img class="image" alt="鹅肝片皮乳猪" src="img/inshunde/shundeFood/SDF69.jpg" />
+				<p class="center">鹅肝片皮乳猪</p>
+				<img class="image" alt="东瀛锦绣拼" src="img/inshunde/shundeFood/SDF70.jpg" />
+				<p class="center">东瀛锦绣拼</p>
+				<img class="image" alt="当红脆皮鸡" src="img/inshunde/shundeFood/SDF71.jpg" />
+				<p class="center">当红脆皮鸡</p>
+				<img class="image" alt="丹心拱照" src="img/inshunde/shundeFood/SDF72.jpg" />
+				<p class="center">丹心拱照</p>
+				<img class="image" alt="大良双皮奶" src="img/inshunde/shundeFood/SDF73.jpg" />
+				<p class="center">大良双皮奶</p>
+				<img class="image" alt="虫草花水晶鸡" src="img/inshunde/shundeFood/SDF74.jpg" />
+				<p class="center">虫草花水晶鸡</p>
+				<img class="image" alt="豉味肉" src="img/inshunde/shundeFood/SDF75.jpg" />
+				<p class="center">豉味肉</p>
+				<img class="image" alt="陈村粉" src="img/inshunde/shundeFood/SDF76.jpg" />
+				<p class="center">陈村粉</p>
+				<img class="image" alt="菜胆蠔皇鲍鱼" src="img/inshunde/shundeFood/SDF77.jpg" />
+				<p class="center">菜胆蠔皇鲍鱼</p>
+				<img class="image" alt="藉饼拼鲜鲍" src="img/inshunde/shundeFood/SDF78.jpg" />
+				<p class="center">藉饼拼鲜鲍</p>
+				<img class="image" alt="冰极大莲鲍" src="img/inshunde/shundeFood/SDF79.jpg" />
+				<p class="center">冰极大莲鲍</p>
+				<img class="image" alt="碧绿炒魽腩" src="img/inshunde/shundeFood/SDF80.jpg" />
+				<p class="center">碧绿炒魽腩</p>
+				<img class="image" alt="鲍鱼焗鸡" src="img/inshunde/shundeFood/SDF81.jpg" />
+				<p class="center">鲍鱼焗鸡</p>
+				<img class="image" alt="白玉橘汁糕" src="img/inshunde/shundeFood/SDF82.jpg" />
+				<p class="center">白玉橘汁糕</p>
+				<img class="image" alt="白雪映金龙" src="img/inshunde/shundeFood/SDF83.jpg" />
+				<p class="center">白雪映金龙</p>
+				<img class="image" alt="原个南瓜蒸肉排" src="img/inshunde/shundeFood/SDF84.jpg" />
+				<p class="center">原个南瓜蒸肉排</p>
+				<img class="image" alt="金榜牛奶炒龙虾球" src="img/inshunde/shundeFood/SDF85.jpg" />
+				<p class="center">金榜牛奶炒龙虾球</p>
+				<img class="image" alt="菜远炒水蛇片" src="img/inshunde/shundeFood/SDF86.jpg" />
+				<p class="center">菜远炒水蛇片</p>
+				<img class="image" alt="雪衣上素" src="img/inshunde/shundeFood/SDF87.jpg" />
+				<p class="center">雪衣上素</p>
+				<img class="image" alt="玲珑爽卷(点心)" src="img/inshunde/shundeFood/SDF88.jpg" />
+				<p class="center">玲珑爽卷(点心)</p>
+			</div>
+		</div>
+	</div>
+	
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    var type = $("#type").val();
+	if(type == "sdjj"){	//顺德简介
+		document.title = '顺德简介';
+		$(".sdjj").css("display","block");
+	}else if(type == "lsyg"){	//历史沿革
+		document.title = '历史沿革';
+		$(".lsyg").css("display","block");
+	}else if(type == "xzqh"){	//行政区划
+		document.title = '行政区划';
+		$(".xzqh").css("display","block");
+	}else if(type == "yswhjj"){	//饮食文化简介
+		document.title = '饮食文化简介';
+		$(".yswhjj").css("display","block");
+	}else if(type == "sdms"){	//顺德美食
+		document.title = '顺德美食';
+		$(".sdms").css("display","block");
+	}
+});
+	
+	function getLabel(data){
+		$(data).each(function(index){
+			//alert(data[index].bt);
+			//alert(data.fold_id);
+			$("#show").append(
+				"<h3 style='text-align:center;'>"+data.bt+"</h1>"+
+				"<p class='time' style='border-bottom:1px gray solid;text-align:center;padding: 5px 0;color: #9A9A9A;'>发布时间:"+data.cjrq+" "+data.cjsj+"</p><hr/>"+
+				"<div id='main'>"+data.content+"</div>"
+			);
+			if(data.fold_id == "10917" || data.fold_id == "10918" || data.fold_id == "10921" || data.fold_id == "10919" || data.fold_id == "10920" || data.fold_id == "10926" || data.fold_id == "10927" || data.fold_id == "10928" || data.fold_id == "10929" || data.fold_id == "10939" || data.fold_id == "10940"){
+				$("#main p").css("font-size","18px");
+				$("#main p").css("line-height","30px");
+				$("#main>div").css("display","none");
+				$("#divDetail").css("display","block");
+				$("#divDetail").css("font-size","18px");
+				$("#divDetail").css("line-height","30px");
+				$("strong").css("font-size","18px");
+				$("span").css("font-size","18px");
+				$("h3").css("font-size","18px");
+				$("h3").css("background","rgb(255, 255, 255)");
+				$("h3").css("padding","10px 0 0 0");
+				$(".time").css("background","rgb(255, 255, 255)");
+				$(".time").css("border-bottom","none");
+				$(".time").css("font-size","15px");
+				$(".time").css("padding","10px 0");
+				$("#show").css("padding","0");
+				$("#main").css("padding","10px");
+			}
+		});
+	}
+</script>
+</body>
+</html>

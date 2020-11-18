@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/base.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/list.js"></script>
+    <title>详情</title>
+
+    <style>
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body, dd, dl, html, ol, p, ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 750px;
+        }
+
+        html, .container {
+            height: 100%;
+        }
+
+        html {
+            background: #fff;
+        }
+
+        body {
+            background: #F3F3F3;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .main {
+            background: white;
+            height: 100%;
+        }
+
+        .content {
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .time {
+            text-align: center;
+        }
+
+        .keyword {
+            text-align: center;
+        }
+
+        .digest {
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            padding: 13px 0px;
+        }
+
+        .eptTop {
+            border-bottom: solid 1px #bbbbbb;
+        }
+
+        .eptTop .left {
+            border-right: solid 1px #bbbbbb;
+            width: calc(50% - 1px);
+            display: inline-block;
+            padding: 10px;
+            box-sizing: border-box;
+            vertical-align: top;
+        }
+
+        .eptTop .right {
+            width: 50%;
+            display: inline-block;
+            padding: 10px;
+            box-sizing: border-box;
+            vertical-align: top;
+        }
+
+        .eptTop span {
+            font-size: 18px;
+        }
+
+        .eptTop p {
+            color: #999;
+            font-size: 15px;
+            padding-top: 5px;
+        }
+
+        .eptArea {
+            padding: 15px 10px 5px 10px;
+        }
+
+        .eptArea span {
+            font-size: 18px;
+        }
+
+        .eptArea p {
+            color: #999;
+            font-size: 15px;
+            line-height: 25px;
+            padding-top: 5px;
+        }
+
+        .faqDetail {
+        }
+
+        .faqDetail .title {
+            background: rgb(251, 250, 250);
+            padding: 15px 5px;
+        }
+
+        .faqDetail .answer {
+            padding: 0px 15px;
+        }
+
+        .faqDetail .answer p {
+            line-height: 25px;
+        }
+
+        .policyDetail {
+        }
+
+        .policyDetail .title {
+            background: rgb(251, 250, 250);
+            padding: 5px;
+        }
+
+        .policyDetail .time {
+            background: rgb(251, 250, 250);
+        }
+
+        .policyDetail .content {
+            padding: 0 10px;
+        }
+
+        .policyDetail .digest {
+            padding: 0 10px;
+        }
+
+        .policyDetail .file {
+            padding: 0 10px;
+        }
+
+        .bigdataDetail .title {
+            background: rgb(251, 250, 250);
+            padding: 10px 5px;
+        }
+
+        .bigdataDetail .content {
+            padding: 0 10px;
+        }
+    </style>
+
+
+    <!-- 获取政策列表 -->
+    <script type="text/javascript" th:inline="javascript">
+
+
+        $(document).ready(function () {
+            var id = [[${id}]];
+            var type = [[${type}]];
+            console.log(type)
+            var uri = basePath() + "/public/getJsonGet";
+            var url;
+            var data;
+            if (type == "PolicyList") {	//政策详情
+                url = "http://sdztc.shunde.gov.cn/QYZTCWS/policy.do?";
+                data = "getPolicyById*id=" + id; //
+                document.title = '政策详情';
+            }
+            if (type == "BigdataList") {	//数据详情
+                url = "http://sdztc.shunde.gov.cn/QYZTCWS/bigdata.do?";
+                data = "getBigdataById*id=" + id; //
+                document.title = '数据详情';
+            }
+            if (type == "FaqList") {	//获取咨询详情
+                url = "http://sdztc.shunde.gov.cn/QYZTCWS/faq.do?";
+                data = "getFaqById*id=" + id; //
+                document.title = '咨询详情';
+            }
+            if (type == "EptList") {	//企业详情
+                url = "http://sdztc.shunde.gov.cn/QYZTCWS/common.do?";
+                data = "getEptById*id=" + id; //
+                document.title = '企业详情';
+            }
+
+            if (type == "superiorList") {	//上级政策
+                url = "http://sdztc.shunde.gov.cn/policy.do?";
+                data = "getPolicyById*id=" + id; //
+                document.title = '上级政策';
+            }
+            var temp=url+data;
+            console.log(temp);
+            $.ajax({
+                url: uri,
+                data: {"url":temp,"type":""},
+                type:"post",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    console.log(result);
+                    choosefun(result,type);
+                }
+            });
+        });
+
+        function choosefun(result, str) {
+            switch (str) {
+                case "PolicyList":	//政策详情
+                    var data = result.data;
+                    var file = data.attachmentList;
+
+                    $(".main").append(
+                        '<div class="policyDetail">' +
+                        '<h3 class="title">' + data.title + '</h3>' +
+                        /* '<p class="time">'+data.publicDate+'</p>'+ */
+                        /* '<h4 class="keyword">关键词：'+data.keyword+'</h4>'+ */
+                        '<p class="digest">' + data.digest + '</p>' +
+                        '<div class="content">' + data.description + '</div>' +
+                        '<div class="file"></div>' +
+                        '</div>'
+                    )
+
+                    for (var i in file) {
+                        $(".file").append(
+                            '<div style="padding: 5px 0;"><a href="' + file[i].path + '">' + file[i].name + '</a></div>'
+                        )
+                    }
+                    break;
+
+                case "BigdataList":	//数据详情
+                    var data = result.data;
+
+                    $(".main").append(
+                        '<div class="bigdataDetail">' +
+                        '<h3 class="title">' + data.title + '</h3>' +
+                        /* '<hr>'+
+                        '<h4 class="keyword">关键词：'+data.keyword+'</h4>'+ */
+                        '<div class="content">' + data.description + '</div>' +
+                        '<div class="file"></div>' +
+                        '</div>'
+                    )
+                    break;
+
+                case "FaqList":	//咨询详情
+                    var data = result.data;
+
+                    $(".main").append(
+                        '<div class="faqDetail">' +
+                        '<h3 class="title">' + data.title + '</h3>' +
+                        '<div class="answer">' + data.answer + '</div>' +
+                        '<div class="file"></div>' +
+                        '</div>'
+                    )
+                    break;
+
+                case "EptList":	//企业详情
+                    var data = result.data;
+                    var fddbr = data.fddbr;
+                    if (fddbr == "" || fddbr == null) {	//法定代表人
+                        fddbr = "暂无记录";
+                    } else {
+                        fddbr = data.fddbr;
+                    }
+                    var jyfw = data.jyfw;
+                    if (jyfw == "" || jyfw == null) {	//经营范围
+                        jyfw = "暂无记录";
+                    } else {
+                        jyfw = data.jyfw;
+                    }
+
+                    $(".main").append(
+                        '<div class="content">' +
+                        '<div class="eptTop">' +
+                        '<div class="left">' +
+                        '<span>公司名：</span>' +
+                        '<p>' + data.etpName + '</p>' +
+                        '</div>' +
+                        '<div class="right">' +
+                        '<span>法人代表：</span>' +
+                        '<p>' + fddbr + '</p>' +
+                        '</div>' +
+                        '</div>' +
+
+                        '<div class="eptArea">' +
+                        '<span>经营范围：</span>' +
+                        '<p>' + jyfw + '</p>' +
+                        '</div>' +
+
+                        '<div class="eptArea">' +
+                        '<span>地址：</span>' +
+                        '<p>' + data.address + '</p>' +
+                        '</div>' +
+
+                        '</div>'
+                    )
+                    break;
+
+                case "superiorList":	//上级政策详情
+                    var data = result.data;
+                    var file = data.attachmentList;
+
+                    $(".main").append(
+                        '<div class="policyDetail">' +
+                        '<h3 class="title">' + data.title + '</h3>' +
+                        /* '<p class="time">'+data.publicDate+'</p>'+ */
+                        /* '<h4 class="keyword">关键词：'+data.keyword+'</h4>'+ */
+                        '<p class="digest">' + data.digest + '</p>' +
+                        '<div class="content">' + data.description + '</div>' +
+                        '<div class="file"></div>' +
+                        '</div>'
+                    )
+
+                    for (var i in file) {
+                        $(".file").append(
+                            '<div style="padding: 5px 0;"><a href="' + file[i].path + '">' + file[i].name + '</a></div>'
+                        )
+                    }
+                    break;
+
+            }
+        }
+
+    </script>
+</head>
+<body>
+<!--头部-->
+
+<div class="main">
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区发热门诊上报系统</title>
+    <meta name="decorator" content="blank"/>
+    <!--    <link rel="stylesheet" href="../../../../static/layui/back/demo.css"/>-->
+    <!--    <link rel="stylesheet" href="../../../../static/layui/admin.css"/>-->
+    <!--    <link rel="stylesheet" href="../../../../static/layui/css/layui.css"/>-->
+    <!--    <script type="text/javascript" src="../../../../static/js/jquery.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/js/base.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/wui/js/jquery-weui.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/wui/js/fastclick.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/layui/layui.all.js"></script>-->
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <link rel="stylesheet" href="layui/back/demo.css"/>
+    <link rel="stylesheet" href="layui/admin.css"/>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <!--    <script type="text/javascript" src="../static/wui/js/jquery-weui.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../static/wui/js/fastclick.js"></script>-->
+    <!--    <script type="text/javascript" src="layui/layui.all.js"></script>-->
+    <style type="text/css">
+        .layui-nav-item .layui-nav-child dd.layui-this a {
+            background-color: #177ce3;
+            background-repeat: repeat-y;
+            background-image: -moz-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -webkit-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -o-linear-gradient(left, #29adeb, #177ce3);
+            background-image: linear-gradient(left, #29adeb, #177ce3);
+        }
+        .layui-form-select dl dd.layui-this {
+            background-color: #1E9FFF;
+        }
+        .layui-laydate .layui-this {
+            background-color: #1E9FFF!important;
+        }
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #1E9FFF;
+            background-color: #1E9FFF;
+        }
+        .layui-btn {
+            background-color: #1E9FFF;
+        }
+    </style>
+
+</head>
+<body>
+<form class="layui-form" style="padding-top:30px;padding-bottom: 60px;">
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">姓名</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <input type="text" name="name" value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <select name="sex" lay-verify="required">
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">证件号码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="idCode"  value=""  lay-verify="id_num" placeholder="请输入身份证号码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="age"  value=""  lay-verify="number" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="phone"  value=""  lay-verify="phone" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">地区</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="col1"  value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">镇街</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="col4"  value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">居住地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="col3"  value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-inline">
+                <label class="layui-form-label">病前2周疫情发生地停留情况</label>
+                <div class="layui-input-inline">
+                    <select name="fromWuhan"  lay-verify="required">
+                        <option value="武汉">武汉市</option>
+                        <option value="湖北非武汉地区">湖北省非武汉地区</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+        </div>
+
+        <div class="layui-inline">
+                <label class="layui-form-label">病前2周非湖北地区填写</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="fromOther"  value=""  placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">发病日期</label>
+            <div class="layui-input-inline">
+                <input readonly="readonly" type="text" name="illTime" id="f_date" value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">就诊日期</label>
+                <div class="layui-input-inline">
+                    <input readonly="readonly" type="text" name="doctorTime" id="c_date" value=""  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+                <label class="layui-form-label">体温</label>
+                <div class="layui-input-block">
+                    <input type="text" name="temperature"  value=""  lay-verify="tempreture" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">临床诊断</label>
+        <div class="layui-input-block">
+            <textarea name="diagnosis" placeholder="请输入诊断内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">呼吸道症状</label>
+        <div class="layui-input-block">
+            <input type="text" name="respiratory"  value="" lay-verify="required" autocomplete="off" class="layui-textarea">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">消化道症状</label>
+        <div class="layui-input-block">
+            <input type="text" name="digestive"  value=""   placeholder="" autocomplete="off" class="layui-textarea">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">采样人群</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="traffic" value="是" title="交通联合检疫" lay-skin="primary" checked>
+            <input type="checkbox" name="contacts" value="是" title="密切接触者" lay-skin="primary">
+            <input type="checkbox" name="toGuangdong" value="是" title="湖北来粤人员" lay-skin="primary">
+            <input type="checkbox" name="clinic" value="是" title="发热门诊患者" lay-skin="primary">
+            <input type="checkbox" name="noClinic" value="是" title="非发热门诊患者" lay-skin="primary">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+        </div>
+    </div>
+</form>
+
+
+<!--    <script src="//res.layui.com/layui/src/layui.js?t=1579809530540" charset="utf-8"></script>-->
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element','form','layedit','laydate','layer'], function(){
+        var element = layui.element;
+        var form = layui.form;
+        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        //…
+        form.verify({
+            phone: [
+                /^1[34578]\d{9}$/
+                ,'请输入正确的手机号码'
+            ],
+            id_num: [/(^\d{15}$)|(^\d{17}(x|X|\d)$)/
+                ,'请输入正确的身份证号码'
+            ],
+            number:
+                [/(^$)|^\d+$/
+                    ,'请输入数字'
+                ],
+            tempreture:[
+                /^(([^0][0-9]+|0)\.([0-9]{1,2})$)|^(([^0][0-9]+|0)$)|^(([1-9]+)\.([0-9]{1,2})$)|^(([1-9]+)$)/
+                ,'请输入正确温度'
+            ]
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#f_date' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#c_date' //指定元素
+        });
+
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+
+            $.ajax({
+                url:basePath()+'/data/hospital/clinic/clinicSub',
+                type:'post',
+                data:data.field,
+                dataType:"json",
+                success:function(data){
+                    if(data.code == 200){
+                        layer.open({
+                            title: '提示'
+                            ,content: '录入成功'
+                            ,btn: ['我知道了']
+                            ,time:1000000
+                            ,yes: function(){
+                                window.location.reload()
+                            }
+                        });
+
+                    }else if(data.code == 0){
+                        layer.msg();
+                        layer.open({
+                            title: '提示'
+                            ,content: '身份失效，请重新登录'
+                        });
+                        parent.window.location.href = basePath() + '/data/hospital/clinic/main';
+
+                    }else{
+                        layer.open({
+                            title: '提示'
+                            ,content: '录入失败'
+                        });
+                    }
+                },
+                error:function(e){
+                    layer.open({
+                        title: '提示'
+                        ,content: '录入失败'
+                    });
+                }
+            });
+            return false;
+        });
+    });
+
+    // layui.upload({
+    //     url: '' //上传接口
+    //     ,success: function(res){ //上传成功后的回调
+    //         console.log(res)
+    //     }
+    // });
+
+    // layui.upload({
+    //     url: '/test/upload.json'
+    //     ,elem: '#test' //指定原始元素，默认直接查找class="layui-upload-file"
+    //     ,method: 'get' //上传接口的http类型
+    //     ,success: function(res){
+    //         LAY_demo_upload.src = res.url;
+    //     }
+    // // });
+    // });
+</script>
+</body>
+</html>

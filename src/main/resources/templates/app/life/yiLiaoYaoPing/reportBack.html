@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="layui/back/demo.css"/>
+    <link rel="stylesheet" href="layui/admin.css"/>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+
+    <style type="text/css">
+        .layui-nav-item .layui-nav-child dd.layui-this a {
+            background-color: #177ce3;
+            background-repeat: repeat-y;
+            background-image: -moz-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -webkit-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -o-linear-gradient(left, #29adeb, #177ce3);
+            background-image: linear-gradient(left, #29adeb, #177ce3);
+        }
+    </style>
+
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--<div class="layui-header">-->
+    <!--<div class="layui-logo">顺德区联合检疫点登记管理系统</div>-->
+
+    <!--</div>-->
+    <div class="layui-header" style="background-color: #001529;">
+        <!--<div class="layui-logo" style="color: #fff;">顺德区联合检疫点登记管理系统</div>-->
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item">顺德区联合检疫点登记管理系统</li>
+        </ul>
+
+    </div>
+    <div class="layui-side ">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">数据报表</a>
+                    <!--<dl class="layui-nav-child">-->
+                    <!--<dd><a href="javascript:;" id="totalTab">数据总览</a></dd>-->
+                    <!--<dd><a href="javascript:;" id="detailTab">数据明细</a></dd>-->
+                    <!--</dl>-->
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;" id="main_section">
+
+        </div>
+        <div style="padding: 15px;" id="main_section2">
+
+        </div>
+    </div>
+
+</div>
+<script src="//res.layui.com/layui/src/layui.js?t=1579809530540" charset="utf-8"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+    $('#main_section').load(basePath() + '/data/sjMedicalDrugs/workTotal?timestamp=' + (new Date()).valueOf());
+    $('#main_section2').load(basePath() + '/data/sjMedicalDrugs/workPage?timestamp=' + (new Date()).valueOf());
+
+    $('#totalTab').on('click', function () {
+        $('#main_section').load(basePath() + '/data/sjMedicalDrugs/workTotal?timestamp=' + (new Date()).valueOf());
+    })
+    $('#detailTab').on('click', function () {
+        $('#main_section').load(basePath() + '/data/sjMedicalDrugs/workPage?timestamp=' + (new Date()).valueOf());
+    })
+
+    function myrefresh() {
+        window.location.reload();
+    }
+
+    // setTimeout('myrefresh()', 600000);    //5s后执行函数刷新页面
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>

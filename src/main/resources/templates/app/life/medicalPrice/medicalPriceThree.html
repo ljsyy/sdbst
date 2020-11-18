@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>公立医院基本医疗服务项目和价格</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/detail.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/app/detail.js"></script>
+    <script src="js/app/load-ani.js"></script>
+    <style>
+
+        .list1{margin-bottom: 10px;background: #fff;}
+        .list1 .title span{
+            font-size: 18px;
+            margin-left: 0px;
+            flex: 1;
+            padding-left: 10px;
+        }
+        .list1 .title{
+            border-bottom: 0;
+            line-height: 40px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        .list1 .title .xiala{float: right;}
+        .list1 .title .xiala.up{
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+        }
+        .list1 .info.close{display:none;	}
+        .icon{vertical-align: top;}
+        .info{}
+        .info .line{
+            display: flex;
+            border-top: solid 1px #dcdcdc;
+            background: #fff;
+        }
+        .info .line .type{
+            background: #fcf5f5;
+            width: 40%;
+            padding: 5px;
+        }
+        .info .line .value{padding: 5px;width: 60%;word-break: break-all;}
+
+    </style>
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            start();
+
+        });
+
+        function start(){
+            load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+            $.ajax({
+                url:basePath()+"/app/menu/interface/HealthCareFourList",
+                data:"threeNum="+[[${threeNum}]],
+                type: "post",
+                dataType:"json",
+                async:false,
+                success:function(result){
+                    load_ani.remove();
+                    var data = result.data;
+                    for(var i in data){
+                        var otherContent = data[i].otherContent;	//除外内容
+                        if(otherContent == "" || otherContent == undefined || otherContent == null){
+                            otherContent = "暂无信息";
+                        }else{
+                            otherContent = data[i].otherContent;
+                        }
+                        var content = data[i].content;			//项目内涵
+                        if(content == "" || content == undefined || content == null){
+                            content = "暂无信息";
+                        }else{
+                            content = data[i].content;
+                        }
+                        var unit = data[i].unit;			//计价单位
+                        if(unit == "" || unit == undefined || unit == null){
+                            unit = "暂无信息";
+                        }else{
+                            unit = data[i].unit;
+                        }
+                        var threeExplain = data[i].threeExplain;	//三级说明
+                        if(threeExplain == "" || threeExplain == undefined || threeExplain == null){
+                            threeExplain = "暂无信息";
+                        }else{
+                            threeExplain = data[i].threeExplain;
+                        }
+                        var twoExplain = data[i].twoExplain;	//二级说明
+                        if(twoExplain == "" || twoExplain == undefined || twoExplain == null){
+                            twoExplain = "暂无信息";
+                        }else{
+                            twoExplain = data[i].twoExplain;
+                        }
+                        var threePrice = data[i].threePrice;	//三级价格
+                        if(threePrice == "" || threePrice == undefined || threePrice == null){
+                            threePrice = "暂无信息";
+                        }else{
+                            threePrice = data[i].threePrice + "元";
+                        }
+                        var twoPrice = data[i].twoPrice;	//二级价格
+                        if(twoPrice == "" || twoPrice == undefined || twoPrice == null){
+                            twoPrice = "暂无信息";
+                        }else{
+                            twoPrice = data[i].twoPrice + "元";
+                        }
+                        $(".main").append(
+                            '<div class="list1">'+
+                            '<div class="title">'+
+                            '<img class="icon" src="img/new/medical.png" height="25" />'+
+                            '<span>项目名称：'+data[i].fourName+'</span>'+
+                            '<img class="xiala" src="img/menu/shangla.png" height="10" />'+
+                            '</div>'+
+                            '<div class="info close">'+
+                            '<div class="line">'+
+                            '<p class="type">编码</p>'+
+                            '<p class="value">'+data[i].fourName+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">项目内涵</p>'+
+                            '<p class="value">'+content+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">除外内容</p>'+
+                            '<p class="value">'+otherContent+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">计价单位</p>'+
+                            '<p class="value">'+unit+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">三级说明</p>'+
+                            '<p class="value">'+threeExplain+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">二级说明</p>'+
+                            '<p class="value">'+twoExplain+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">三级价格</p>'+
+                            '<p class="value">'+threePrice+'</p>'+
+                            '</div>'+
+                            '<div class="line">'+
+                            '<p class="type">二级价格</p>'+
+                            '<p class="value">'+twoPrice+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'
+                        );
+                    }
+
+                    $(".list1 .title").unbind().click(function(){
+                        if($(this).parent().find(".info").hasClass("open")){
+                            $(this).parent().find(".info").removeClass("open").addClass("close");
+                            $(this).find(".xiala").removeClass("up");
+                        }else{
+                            $(this).parent().find(".info").removeClass("close").addClass("open");
+                            $(this).find(".xiala").addClass("up");
+
+                        }
+
+                    });
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+
+<div class="main">
+
+</div>
+
+</body>
+</html>

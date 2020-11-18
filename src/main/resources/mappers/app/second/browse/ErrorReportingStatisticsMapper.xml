@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.second.browse.ErrorReportingStatisticsMapper">
+    
+	<sql id="errorReportingStatisticsColumns">
+		a.id AS "id",
+		a.error_message AS "errorMessage",
+		a.module_name AS "moduleName",
+		a.wrong_time AS "wrongTime",
+		a.phone_code AS "phoneCode",
+		a."versions" AS "versions",
+		a.brand AS "brand",
+		a.user_id AS "userid",
+		a.area AS "area",
+		u8.name AS "user.name"
+	</sql>
+	
+	<sql id="errorReportingStatisticsJoins">
+		LEFT JOIN sys_user u8 ON u8.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="com.unifs.sdbst.app.bean.browse.ErrorReportingStatistics">
+		SELECT 
+			<include refid="errorReportingStatisticsColumns"/>
+		FROM error_reporting_statistics a
+		<include refid="errorReportingStatisticsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.browse.ErrorReportingStatistics">
+		SELECT 
+			<include refid="errorReportingStatisticsColumns"/>
+		FROM error_reporting_statistics a
+		<include refid="errorReportingStatisticsJoins"/>
+		<where>
+			
+			<if test="errorMessage != null and errorMessage != ''">
+				AND a.error_message = #{errorMessage}
+			</if>
+			<if test="moduleName != null and moduleName != ''">
+				AND a.module_name = #{moduleName}
+			</if>
+			<if test="wrongTime != null and wrongTime != ''">
+				AND a.wrong_time = #{wrongTime}
+			</if>
+			<if test="phoneCode != null and phoneCode != ''">
+				AND a.phone_code = #{phoneCode}
+			</if>
+			<if test="versions != null and versions != ''">
+				AND a.versions = #{versions}
+			</if>
+			<if test="brand != null and brand != ''">
+				AND a.brand = #{brand}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="area != null and area != ''">
+				AND a.area = #{area}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.unifs.sdbst.app.bean.browse.ErrorReportingStatistics">
+		SELECT 
+			<include refid="errorReportingStatisticsColumns"/>
+		FROM error_reporting_statistics a
+		<include refid="errorReportingStatisticsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="ErrorRe" resultType="com.unifs.sdbst.app.bean.browse.ErrorReportingStatistics">
+           SELECT e."ID",e.BRAND,e."versions",e.WRONG_TIME,e.PHONE_CODE,e.ERROR_MESSAGE 
+    FROM  ERROR_REPORTING_STATISTICS e 
+WHERE
+ e."versions" IS NOT NULL
+	</select> 
+	
+	<insert id="insert">
+		INSERT INTO error_reporting_statistics(
+			id,
+			error_message,
+			module_name,
+			wrong_time,
+			phone_code,
+			versions,
+			brand,
+			user_id,
+			area,
+			create_date
+		) VALUES (
+			#{id},
+			#{errorMessage,jdbcType=VARCHAR},
+			#{moduleName,jdbcType=VARCHAR},
+			#{wrongTime,jdbcType=VARCHAR},
+			#{phoneCode,jdbcType=VARCHAR},
+			#{versions,jdbcType=VARCHAR},
+			#{brand,jdbcType=VARCHAR},
+			#{userid,jdbcType=VARCHAR},
+			#{area,jdbcType=VARCHAR},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE error_reporting_statistics SET 	
+			error_message = #{errorMessage},
+			module_name = #{moduleName},
+			wrong_time = #{wrongTime},
+			phone_code = #{phoneCode},
+			"versions" = #{versions},
+			brand = #{brand},
+			user_id = #{userid},
+			area = #{area}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM error_reporting_statistics
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

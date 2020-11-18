@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <!-- <title th:text="${article.name}"></title>-->
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+
+    <style>
+        body {
+            background: #fff;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .span10 p {
+            line-height: 25px;
+        }
+
+        .span10 > h3 {
+            color: #555555;
+            font-size: 20px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .fabu {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        div img {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .publicity {
+            text-align: center;
+        }
+
+        img.wxcode {
+            width: 90% !important;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="span10">
+        <div class="row">
+            <div class="span10">
+                <h3 th:text="${article.title}"></h3>
+                <div class="fabu">
+                    <a style="display: inline;">来源：顺德城市网</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    创建时间：<span th:text="${#dates.format(article.createDate, 'yyyy-MM-dd')}"></span>
+                </div>
+                <div id="context"></div>
+                <br/>
+                <div class="detail"></div>
+                <!--<div class="publicity"><img src="img/index/wxcode1.jpg" class="wxcode"/></div>-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+    var article = [[${article}]];
+    console.log(article)
+    $(document).ready(function () {
+        if (article.category.allowComment == "1" && article.articleData.allowComment == "1") {
+            $("#comment").show();
+            page(1);
+        }
+        //shezhicontextdezhi
+        document.getElementById("context").innerHTML=article.articleData.content;
+        getDetail();
+        $("a").click(function () {
+            var url = $(this).attr("href");
+            if (url.indexOf("mp.weixin.qq.com") > 0) {
+                parent.location.href = "url";
+            } else if (url.indexOf("/userfiles") >= 0) {
+                alert("如果不能下载，请使用浏览器打开下载...");
+                parent.location.href = basePath() + "/api/download?fileName=" + url;
+            } else {
+                location.href = url;
+            }
+        });
+    });
+
+    function page(n, s) {
+        $.get("/comment", {
+            theme: '${site.theme}', 'category.id': article.category.id,
+            contentId: article.id, title: article.title, pageNo: n, pageSize: s, date: new Date().getTime()
+        }, function (data) {
+            $("#comment").html(data);
+        });
+    }
+
+    var name;
+    var article = [[${article}]]
+
+    function getDetail() {
+        //alert("${article.title}")
+        var paramArray = article.title.split("德");
+        name = paramArray[1];
+        //alert(name);
+
+        var param = basePath()+"/education/getList?zjname=&school=" + name + "&pageSize=10&pageIndex=1";
+        $.ajax({
+            url: param,
+            type: "GET",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                console.log(result)
+                var obj = result.obj;
+                if (result.success == true && result.msg == "操作成功") {
+                    for (var i in obj) {
+                        $(".detail").append(
+                            "地址：" + obj[i].address + "<br/>" +
+                            "学段：" + obj[i].levels + "<br/>" +
+                            "电话：" + obj[i].mobile
+                        );
+                    }
+                }
+            }
+        });
+    }
+</script>
+</html>
+

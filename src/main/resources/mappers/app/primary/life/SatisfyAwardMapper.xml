@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.SatisfyAwardMapper">
+	
+    <sql id="appSatisfyAwardColumns">
+    	a.id AS "id",
+    	a.name AS "name",
+    	a.sort AS "sort",
+    	a.total AS "total",
+    	a.remarks AS "remarks",
+    	a.create_date AS "createDate",
+    	a.del_flag AS "delFlag"
+    </sql>
+    
+    <sql id="appSatisfyAwardJoins">
+    </sql>
+	
+	<select id="get" resultType="com.unifs.sdbst.app.bean.life.SatisfyAward">
+		SELECT
+			<include refid="appSatisfyAwardColumns"/>
+		FROM APP_SATISFY_AWARD a
+			<include refid="appSatisfyAwardJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.life.SatisfyAward">
+		SELECT
+			<include refid="appSatisfyAwardColumns" />
+		FROM APP_SATISFY_AWARD a
+			<include refid="appSatisfyAwardJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="getMaxSort" resultType="Integer">
+		select max(sort) from APP_SATISFY_AWARD where del_flag = '0'
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO APP_SATISFY_AWARD(
+			id,
+	    	name,
+	    	sort,
+	    	total,
+	    	remarks,
+	    	create_date,
+	    	del_flag
+		) VALUES (
+			#{id}, 
+			#{name},
+			#{sort},
+			#{total},
+			#{remarks}, 
+			#{createDate}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE APP_SATISFY_AWARD SET 
+			name = #{name}, 
+			sort = #{sort},
+			total = #{total}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSort">
+		UPDATE APP_SATISFY_AWARD SET 
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE APP_SATISFY_AWARD SET 
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+</mapper>

@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.menus.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.menus.Menu">
+        <id column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="PARENT_ID" jdbcType="VARCHAR" property="parent.id"/>
+        <result column="PARENT_IDS" jdbcType="VARCHAR" property="parentIds"/>
+        <result column="NAME" jdbcType="OTHER" property="name"/>
+        <result column="SORT" jdbcType="DECIMAL" property="sort"/>
+        <result column="HREF" jdbcType="VARCHAR" property="href"/>
+        <result column="TARGET" jdbcType="VARCHAR" property="target"/>
+        <result column="ICON" jdbcType="VARCHAR" property="icon"/>
+        <result column="IS_SHOW" jdbcType="CHAR" property="isShow"/>
+        <result column="PERMISSION" jdbcType="VARCHAR" property="permission"/>
+        <!--<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />-->
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <!--<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />-->
+        <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="REMARKS" jdbcType="OTHER" property="remarks"/>
+        <!--<result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />-->
+        <result column="MOBILE_SHOW" jdbcType="CHAR" property="mobileShow"/>
+        <!--<result column="SHOW_MENU" jdbcType="VARCHAR" property="showMenu" />-->
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="MOBILE_ICON" jdbcType="VARCHAR" property="mobileIcon"/>
+        <result column="WX_SHOW" jdbcType="CHAR" property="wxShow"/>
+        <result column="MODEL_ID" jdbcType="VARCHAR" property="modelid"/>
+        <result column="DISCLAIMER" jdbcType="VARCHAR" property="disclaimer"/>
+        <result column="TAG" jdbcType="OTHER" property="tag"/>
+        <result column="MONITOR" jdbcType="OTHER" property="monitor"/>
+        <result column="OPENWAY" jdbcType="VARCHAR" property="openWay"/>
+        <result column="APPID" jdbcType="VARCHAR" property="appId"/>
+        <result column="USERNAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="PATH" jdbcType="VARCHAR" property="path"/>
+        <result column="useX5" jdbcType="VARCHAR" property="useX5"/>
+        <result column="APP_NAME" jdbcType="VARCHAR" property="appName"/>
+        <result column="android_download" jdbcType="VARCHAR" property="androidDownload"/>
+        <result column="ios_download" jdbcType="VARCHAR" property="iosDownload"/>
+        <result column="name_list" jdbcType="VARCHAR" property="nameList"/>
+        <result column="href_list" jdbcType="VARCHAR" property="hrefList"/>
+        <result column="mobile_icon_list" jdbcType="VARCHAR" property="mobileIconList"/>
+        <result column="openway_list" jdbcType="VARCHAR" property="openwayList"/>
+        <result column="username_list" jdbcType="VARCHAR" property="usernameList"/>
+        <result column="path_list" jdbcType="VARCHAR" property="pathList"/>
+        <result column="id_list" jdbcType="VARCHAR" property="idList"/>
+        <result column="app_name_list" jdbcType="VARCHAR" property="appNameList"/>
+        <result column="android_download_list" jdbcType="VARCHAR" property="androidDownloadList"/>
+        <result column="ios_download_list" jdbcType="VARCHAR" property="iosDownloadList"/>
+        <result column="banner" jdbcType="VARCHAR" property="banner"/>
+    </resultMap>
+
+    <!--菜单树结果集映射-->
+    <resultMap id="menuTree" type="com.unifs.sdbst.app.bean.menus.Menu">
+        <result column="id" property="id" jdbcType="VARCHAR"></result>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"></result>
+        <result column="NAME" jdbcType="OTHER" property="name"/>
+        <result column="SORT" jdbcType="DECIMAL" property="sort"/>
+        <result column="HREF" jdbcType="VARCHAR" property="href"/>
+        <result column="TARGET" jdbcType="VARCHAR" property="target"/>
+        <result column="ICON" jdbcType="VARCHAR" property="icon"/>
+        <result column="SHOW_MENU" jdbcType="VARCHAR" property="showMenu"/>
+        <result column="IS_SHOW" jdbcType="CHAR" property="isShow"/>
+        <result column="PERMISSION" jdbcType="VARCHAR" property="permission"/>
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="REMARKS" jdbcType="OTHER" property="remarks"/>
+        <result column="MOBILE_SHOW" jdbcType="CHAR" property="mobileShow"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="MOBILE_ICON" jdbcType="VARCHAR" property="mobileIcon"/>
+        <result column="WX_SHOW" jdbcType="CHAR" property="wxShow"/>
+        <result column="MODEL_ID" jdbcType="VARCHAR" property="modelid"/>
+        <result column="DISCLAIMER" jdbcType="VARCHAR" property="disclaimer"/>
+        <result column="TAG" jdbcType="OTHER" property="tag"/>
+        <result column="MONITOR" jdbcType="OTHER" property="monitor"/>
+        <result column="OPENWAY" jdbcType="VARCHAR" property="openWay"/>
+        <result column="APPID" jdbcType="VARCHAR" property="appId"/>
+        <result column="USERNAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="PATH" jdbcType="VARCHAR" property="path"/>
+        <result column="useX5" jdbcType="VARCHAR" property="useX5"/>
+        <result column="app_name" jdbcType="VARCHAR" property="appName"/>
+        <result column="android_download" jdbcType="VARCHAR" property="androidDownload"/>
+        <result column="ios_download" jdbcType="VARCHAR" property="iosDownload"/>
+        <collection column="id" property="children" ofType="com.unifs.sdbst.bean.menus.Menu"
+                    javaType="java.util.ArrayList" select="selectMenuChild">
+        </collection>
+    </resultMap>
+
+    <sql id="menuColumns">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids ,
+		a.name,
+		a.href,
+		a.target,
+		a.icon,
+		a.sort,
+		a.model_id as "modelid",
+		a.is_show,
+		a.mobile_show,
+		a.wx_show,
+		a.permission,
+		a.remarks,
+		a.type,
+		a.mobile_icon AS "mobileIcon",
+		a.disclaimer AS "disclaimer",
+-- 		a.create_by AS "createBy.id",
+		a.create_date,
+-- 		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.show_menu AS "showMenu.id",
+		a.tag,
+		a.monitor,
+		a.openway,
+		p.name AS "parent.name",
+		q.name AS "showMenu.name"
+	</sql>
+
+    <sql id="menuColumn">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.name,
+		a.href,
+		a.target,
+		a.icon,
+		a.sort,
+		a.model_id as "modelid",
+		a.is_show,
+		a.mobile_show,
+		a.wx_show,
+		a.permission,
+		a.remarks,
+		a.type,
+		a.mobile_icon AS "mobileIcon",
+		a.disclaimer AS "disclaimer",
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.show_menu AS "showMenu.id",
+		a.tag,
+		a.monitor,
+		a.openway
+	</sql>
+
+    <sql id="menuJoins">
+		LEFT JOIN sys_menu p ON p.id = a.parent_id
+		LEFT JOIN sys_menu q ON q.id = a.show_menu
+    </sql>
+
+    <!--<select id="getByUri" resultType="Menu">-->
+    <!--select <include refid="menuColumn"/>-->
+    <!--from sys_menu a-->
+    <!--where a.href like '%'||#{uri}||'%' and a.del_flag != '1'-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="getHref" resultType="Menu">-->
+    <!--SELECT-->
+    <!--ID AS "id",-->
+    <!--NAME AS "name",-->
+    <!--HREF AS "href"-->
+    <!--FROM-->
+    <!--SYS_MENU-->
+    <!--WHERE-->
+    <!--NAME = #{name}-->
+    <!--AND del_flag='0'-->
+    <!--</select>-->
+    <!---->
+    <!---->
+    <!--<select id="findMenuByName" resultType="Menu">-->
+    <!--select <include refid="menuColumn"/>-->
+    <!--from sys_menu a-->
+    <!--where a.name like '%'||#{name}||'%'-->
+    <!--</select>-->
+    <select id="findName" resultMap="BaseResultMap">
+        select * <!--<include refid="menuColumn"/>-->
+        from sys_menu a
+        where name =#{name} and del_flag = '0'
+        and MOBILE_SHOW= '1'
+        AND MOBILE_SHOW is not null
+        AND ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[=]]>4 OR
+        ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[>]]>4
+        AND a.HREF IS NOT NULL ))
+        <!-- AND href is not null -->
+        <!-- and WX_SHOW = '1' -->
+        UNION
+        select * <!--<include refid="menuColumn"/> -->
+        from SYS_MENU a
+        where tag =#{name} and del_flag = '0'
+        and MOBILE_SHOW= '1'
+        AND MOBILE_SHOW is not null
+        AND ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[=]]>4 OR
+        ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[>]]>4
+        AND a.HREF IS NOT NULL ))
+    </select>
+    <!--<select id="findOfInterface" resultType="Menu">-->
+    <!--select <include refid="menuColumn"/>-->
+    <!--from sys_menu a-->
+    <!--where type = #{monitorInterface}-->
+    <!--</select>-->
+    <!---->
+    <!---->
+    <!---->
+    <select id="findMenuByTag" resultMap="BaseResultMap">
+        select * <!--<include refid="menuColumn"/>-->
+        from sys_menu a
+        where name like '%'||#{tag}||'%' and del_flag = '0'
+        and MOBILE_SHOW= '1'
+        AND MOBILE_SHOW is not null
+        AND ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[=]]>4 OR
+        ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[>]]>4
+        AND a.HREF IS NOT NULL ))
+        <!-- AND href is not null -->
+        <!-- and WX_SHOW = '1' -->
+        UNION
+        select * <!--<include refid="menuColumn"/> -->
+        from SYS_MENU a
+        where tag like '%'||#{tag}||'%' and del_flag = '0'
+        and MOBILE_SHOW= '1'
+        AND MOBILE_SHOW is not null
+        AND ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[=]]>4 OR
+        ((nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))<![CDATA[>]]>4
+        AND a.HREF IS NOT NULL ))
+        <!-- AND href is not null -->
+    </select>
+    <!---->
+    <!---->
+    <!--<update id="setMonitor">-->
+    <!--update sys_menu a-->
+    <!--set monitor = #{DEL_FLAG_DELETE}-->
+    <!--where a.HREF is not NULL-->
+    <!--AND a.DEL_FLAG != '1'-->
+    <!--AND (a.MOBILE_SHOW=1 OR a.WX_SHOW=1)-->
+    <!--AND (a.HREF like '/app/menu%' OR a.HREF like '/api%' OR a.HREF LIKE '/government%')-->
+    <!--</update>-->
+    <!---->
+    <!---->
+    <select id="get" resultMap="BaseResultMap">
+        SELECT
+        *<!--<include refid="menuColumns"/>-->
+        FROM sys_menu a
+        <include refid="menuJoins"/>
+        WHERE a.id = #{id}
+    </select>
+    <!---->
+    <!--<select id="getByName" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumn"/>-->
+    <!--FROM sys_menu a-->
+    <!--WHERE a.name = #{name}-->
+    <!--<if test="sort!=null">-->
+    <!--and a.sort=#{sort}-->
+    <!--</if>-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="findAllList" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumns"/>-->
+    <!--FROM sys_menu a-->
+    <!--<include refid="menuJoins"/>-->
+    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL}-->
+    <!--ORDER BY a.sort-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="findMainMenu" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumns"/>-->
+    <!--FROM sys_menu a-->
+    <!--<include refid="menuJoins"/>-->
+    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL}  AND a.parent_ids LIKE '0,%,%,%,' -->
+    <!--</select>-->
+    <!---->
+    <select id="findChildsMenu" resultMap="BaseResultMap">
+        SELECT
+        *<!--<include refid="menuColumns"/>-->
+        FROM sys_menu a
+        <include refid="menuJoins"/>
+        WHERE a.parent_ids LIKE
+        '%,'||#{id}||',%'
+        AND a.del_flag = '0' and a.mobile_show = '1' order by a.sort
+    </select>
+    <!---->
+    <!--<select id="findPhoneParentIdsLike" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumn"/>-->
+    <!--FROM sys_menu a -->
+    <!--<where>-->
+    <!--<if test="parentIds!=null and parentIds!=''">			    -->
+    <!--and a.parent_ids LIKE  -->
+    <!--<if test="dbName == 'oracle'">#{parentIds}</if>-->
+    <!--<if test="dbName == 'mssql'">'%,'+#{parentIds}+',%'</if>-->
+    <!--<if test="dbName == 'mysql'">CONCAT('%,', #{parentIds}, ',%')</if>-->
+    <!--</if>-->
+    <!--<if test="mobileShow!=null and mobileShow!=''">-->
+    <!--and a.MOBILE_SHOW = #{mobileShow}-->
+    <!--</if>-->
+    <!--&lt;!&ndash; and a.del_flag = #{DEL_FLAG_NORMAL} &ndash;&gt;-->
+    <!--<if test="delFlag != '' and delFlag != null">-->
+    <!--AND  a.del_flag = #{DEL_FLAG_NORMAL} -->
+    <!--</if>-->
+    <!--</where>-->
+    <!--ORDER BY a.sort		 -->
+    <!--</select>-->
+    <!---->
+    <select id="findPhoneParentIdLike" resultMap="BaseResultMap">
+        SELECT
+        *<!--<include refid="menuColumn"/>-->
+        FROM sys_menu a
+        <where>
+            <if test="parentIds!=null and parentIds!=''">
+                and a.parent_ids LIKE
+                #{parentIds}
+            </if>
+            <if test="mobileShow!=null and mobileShow!=''">
+                AND a.MOBILE_SHOW = #{mobileShow}
+            </if>
+            <if test="wxShow!=null and wxShow!=''">
+                AND a.WX_SHOW = #{wxShow}
+            </if>
+            <!-- and a.del_flag = #{DEL_FLAG_NORMAL} -->
+            <!--<if test="delFlag != '' and delFlag != null">-->
+            AND a.del_flag = '0'
+            <!--</if>-->
+        </where>
+        ORDER BY a.sort
+    </select>
+
+    <select id="find1To3Menu" resultMap="BaseResultMap">
+        SELECT
+        *<!--<include refid="menuColumns"/>-->
+        FROM sys_menu a
+        <include refid="menuJoins"/>
+        WHERE
+        (nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))&lt;=4
+        <!--<if test="delFlag != '' and delFlag != null">-->
+        AND a.del_flag = 0 and a.mobile_show = '1' order by a.sort
+        <!--</if>-->
+    </select>
+
+    <!--<select id="find1To4Menu" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumns"/>-->
+    <!--FROM sys_menu a -->
+    <!--<include refid="menuJoins"/>		 -->
+    <!--WHERE  -->
+    <!--<if test="dbName == 'oracle'">(nvl(lengthb(a.parent_ids),0)-nvl(lengthb(replace(a.parent_ids,',',null)),0))&lt;=5</if>-->
+    <!--<if test="dbName == 'mysql'">length(a.parent_ids)-length(replace(a.parent_ids,',',''))&lt;=5</if>-->
+    <!--<if test="delFlag != '' and delFlag != null">-->
+    <!--AND a.del_flag = #{DEL_FLAG_NORMAL} -->
+    <!--</if>-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="findByParentIdsLike" resultType="Menu">-->
+    <!--SELECT-->
+    <!--a.id,-->
+    <!--a.parent_id AS "parent.id",-->
+    <!--a.parent_ids-->
+    <!--FROM sys_menu a-->
+    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}-->
+    <!--ORDER BY a.sort-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="findByUserId" resultType="Menu">-->
+    <!--SELECT DISTINCT-->
+    <!--<include refid="menuColumns"/>-->
+    <!--FROM sys_menu a-->
+    <!--<include refid="menuJoins"/>-->
+    <!--JOIN sys_role_menu rm ON rm.menu_id = a.id-->
+    <!--JOIN sys_role r ON r.id = rm.role_id AND r.useable='1'-->
+    <!--JOIN sys_user_role ur ON ur.role_id = r.id-->
+    <!--JOIN sys_user u ON u.id = ur.user_id AND u.id = #{userId}-->
+    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND r.del_flag = #{DEL_FLAG_NORMAL} AND u.del_flag = #{DEL_FLAG_NORMAL} -->
+    <!--ORDER BY a.sort-->
+    <!--</select>-->
+    <!---->
+    <!--<insert id="insert">-->
+    <!--INSERT INTO sys_menu(-->
+    <!--id, -->
+    <!--parent_id, -->
+    <!--parent_ids, -->
+    <!--name, -->
+    <!--href, -->
+    <!--target, -->
+    <!--icon, -->
+    <!--sort, -->
+    <!--model_id,-->
+    <!--is_show, -->
+    <!--mobile_show,-->
+    <!--wx_show,-->
+    <!--permission, -->
+    <!--disclaimer, -->
+    <!--create_by, -->
+    <!--create_date, -->
+    <!--update_by, -->
+    <!--update_date, -->
+    <!--remarks, -->
+    <!--del_flag,-->
+    <!--show_menu,-->
+    <!--type,-->
+    <!--mobile_icon,-->
+    <!--tag,-->
+    <!--monitor-->
+    <!--) VALUES (-->
+    <!--#{id}, -->
+    <!--#{parent.id}, -->
+    <!--#{parentIds}, -->
+    <!--#{name}, -->
+    <!--#{href}, -->
+    <!--#{target}, -->
+    <!--#{icon}, -->
+    <!--#{sort}, -->
+    <!--#{modelid}, -->
+    <!--#{isShow}, -->
+    <!--#{mobileShow},-->
+    <!--#{wxShow},-->
+    <!--#{permission}, -->
+    <!--#{disclaimer},-->
+    <!--#{createBy.id}, -->
+    <!--#{createDate}, -->
+    <!--#{updateBy.id}, -->
+    <!--#{updateDate}, -->
+    <!--#{remarks}, -->
+    <!--#{delFlag},-->
+    <!--#{showMenu.id},-->
+    <!--#{type},-->
+    <!--#{mobileIcon},-->
+    <!--#{tag},-->
+    <!--#{monitor}-->
+    <!--)-->
+    <!--</insert>-->
+    <!---->
+    <!--<update id="update">-->
+    <!--UPDATE sys_menu SET -->
+    <!--parent_id = #{parent.id}, -->
+    <!--parent_ids = #{parentIds}, -->
+    <!--name = #{name}, -->
+    <!--href = #{href}, -->
+    <!--target = #{target}, -->
+    <!--icon = #{icon}, -->
+    <!--sort = #{sort}, -->
+    <!--model_id = #{modelid},-->
+    <!--is_show = #{isShow}, -->
+    <!--mobile_show = #{mobileShow},-->
+    <!--wx_show = #{wxShow},-->
+    <!--permission = #{permission},-->
+    <!--disclaimer = #{disclaimer}, -->
+    <!--update_by = #{updateBy.id}, -->
+    <!--update_date = #{updateDate}, -->
+    <!--remarks = #{remarks},-->
+    <!--show_menu = #{showMenu.id},-->
+    <!--type = #{type},-->
+    <!--mobile_icon = #{mobileIcon},-->
+    <!--tag = #{tag},-->
+    <!--monitor = #{monitor}-->
+    <!--WHERE id = #{id}-->
+    <!--</update>-->
+    <!--<update id="updatePid">-->
+    <!--UPDATE sys_menu SET -->
+    <!--is_show = #{isShow}, -->
+    <!--mobile_show = #{mobileShow},-->
+    <!--wx_show = #{wxShow},-->
+    <!--update_date = #{updateDate}, -->
+    <!--monitor = #{monitor}-->
+    <!--WHERE PARENT_IDS LIKE  CONCAT (CONCAT('%',#{id}),'%')-->
+    <!--</update>-->
+    <!--<update id="updateParentIds">-->
+    <!--UPDATE sys_menu SET -->
+    <!--parent_id = #{parent.id}, -->
+    <!--parent_ids = #{parentIds}-->
+    <!--WHERE id = #{id}-->
+    <!--</update>-->
+    <!---->
+    <!--<update id="updateSort">-->
+    <!--UPDATE sys_menu SET -->
+    <!--sort = #{sort}-->
+    <!--WHERE id = #{id}-->
+    <!--</update>-->
+    <!---->
+    <!--<update id="delete">-->
+    <!--UPDATE sys_menu SET -->
+    <!--del_flag = #{DEL_FLAG_DELETE}-->
+    <!--WHERE id = #{id} OR parent_ids LIKE -->
+    <!--<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>-->
+    <!--<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>-->
+    <!--<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>-->
+    <!--</update>-->
+    <!--<delete id="deleteAll">-->
+    <!--delete from-->
+    <!--sys_menu-->
+    <!--where del_flag ='1'-->
+    <!--</delete>-->
+    <!---->
+    <!--<select id="findhs" resultType="Menu">-->
+    <!--SELECT-->
+    <!--a.id,-->
+    <!--a.parent_id AS "parent.id",-->
+    <!--a.parent_ids,-->
+    <!--a.name,-->
+    <!--a.href,-->
+    <!--a.target,-->
+    <!--a.icon,-->
+    <!--a.sort,-->
+    <!--a.model_id,-->
+    <!--a.is_show,-->
+    <!--a.mobile_show,-->
+    <!--a.wx_show,-->
+    <!--a.permission,-->
+    <!--a.remarks,-->
+    <!--a.type,-->
+    <!--a.mobile_icon AS "mobileIcon",-->
+    <!--a.disclaimer AS "disclaimer",-->
+    <!--a.create_by AS "createBy.id",-->
+    <!--a.create_date,-->
+    <!--a.update_by AS "updateBy.id",-->
+    <!--a.update_date,-->
+    <!--a.del_flag,-->
+    <!--a.show_menu AS "showMenu.id",-->
+    <!--a.tag-->
+    <!--FROM sys_menu a -->
+    <!--where a.del_flag ='1'-->
+    <!--<choose>-->
+    <!--<when test="page !=null and page.orderBy != null and page.orderBy != ''">-->
+    <!--ORDER BY ${page.orderBy}-->
+    <!--</when>-->
+    <!--<otherwise>-->
+    <!--ORDER BY a.update_date DESC-->
+    <!--</otherwise>-->
+    <!--</choose>-->
+    <!--</select>-->
+    <!--<delete id="deleteMenus">-->
+    <!--DELETE FROM -->
+    <!--SYS_MENU -->
+    <!--WHERE PARENT_IDS LIKE CONCAT (CONCAT('%',#{id}),'%')-->
+    <!--</delete>-->
+    <!--<delete id="deleteId">-->
+    <!--DELETE FROM -->
+    <!--SYS_MENU -->
+    <!--WHERE "ID" =#{id}-->
+    <!--</delete>-->
+    <!--<update id="updateAll">-->
+    <!--UPDATE  sys_menu set del_flag='0'-->
+    <!--WHERE del_flag='1'-->
+    <!--</update>-->
+    <!--<update id="updateMenus">-->
+    <!--UPDATE  SYS_MENU set del_flag='0'-->
+    <!--WHERE PARENT_IDS LIKE  CONCAT (CONCAT('%',#{id}),'%')-->
+    <!--</update>-->
+    <!--<update id="updateId">-->
+    <!--UPDATE  SYS_MENU set del_flag='0'-->
+    <!--WHERE "ID"=#{id}-->
+    <!--</update>-->
+    <!--<select id="findList" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumns"/>-->
+    <!--FROM sys_menu a-->
+    <!--<include refid="menuJoins"/>-->
+    <!--WHERE a.del_flag = '1'-->
+    <!--ORDER BY a.sort-->
+    <!--</select>-->
+    <!--&lt;!&ndash; 非政务事项模块 &ndash;&gt;-->
+    <!--<select id="findHrefMenu" resultType="Menu">-->
+    <!--SELECT-->
+    <!--<include refid="menuColumns"/>-->
+    <!--FROM sys_menu a-->
+    <!--<include refid="menuJoins"/>-->
+    <!--WHERE a.MODEL_ID is  NULL-->
+    <!--AND a.MOBILE_SHOW ='1'-->
+    <!--AND a.DEL_FLAG='0'-->
+    <!--AND a.HREF is not NULL-->
+    <!--</select>-->
+
+    <select id="getOneMenu" resultMap="BaseResultMap">
+		SELECT
+		*
+		FROM sys_menu a
+		WHERE
+			a.parent_id = '1' and a.mobile_show= '1'
+		AND a.del_flag = 0
+		and a.id !='1d9940770d004a88a892e814a09ae650' and a.id != 'a0a73ce261a9449a8fe54df7c6e435e0' and a.id != '057b4773d1944480b417866950ce0e2a'
+		order by a.sort
+	</select>
+
+    <!--查询菜单树-->
+    <select id="selectMenuTree" parameterType="String" resultMap="menuTree">
+        select * from sys_menu where
+        parent_id = #{_parameter,jdbcType=VARCHAR}
+        and is_show = 0
+        and del_flag = 0
+        and mobile_show = 1
+    </select>
+
+    <select id="selectMenuChild" parameterType="String" resultMap="menuTree">
+        select * from sys_menu where
+        parent_id = #{_parameter,jdbcType=VARCHAR}
+        and is_show = 0
+        and del_flag = 0
+        and mobile_show = 1
+    </select>
+
+    <select id="selectByParentId" parameterType="String" resultMap="BaseResultMap">
+		select * from sys_menu where
+        parent_id = #{_parameter,jdbcType=VARCHAR}
+        and del_flag = 0
+        and mobile_show = 1
+        order by sort
+	</select>
+
+</mapper>

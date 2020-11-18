@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="wui/css/weui.css"/>
+    <link rel="stylesheet" href="wui/css/weuix.css"/>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="wui/js/city-picker.min.js"></script>
+    <style type="text/css">
+        tr {
+            text-indent: 5px;
+        }
+
+        .brief {
+            /*line-height: 30px;*/
+            /*color: #95ccfd;*/
+            /*background: #1d73ca;*/
+            padding: 5% 6% 2% 6%;
+            /*font-size: 20px;*/
+            position: relative;
+        }
+
+        p.gonggao {
+            text-align: center;
+            font-size: 26px;
+            /*font-weight: 700;*/
+            margin-bottom: 10px;
+            line-height: 40px;
+        }
+
+        .brief .inscription {
+            text-align: right;
+        }
+
+        .weui-btn_default:not(.weui-btn_disabled):visited {
+            color: #1d73ca;
+        }
+
+        .weui-btn_default {
+            color: #1d73ca;
+        }
+
+        .weui-label {
+            font-weight: normal;
+        }
+
+        .weui-toptips {
+            height: 40px;
+            font-size: 18px;
+            line-height: 40px;
+        }
+
+        .weui-btn_primary:not(.weui-btn_disabled):active {
+            color: rgba(255, 255, 255, 0.6);
+            background-color: #10aeff;
+        }
+
+        .weui-form-li {
+            margin: 0 20px;
+        }
+
+        .weui-form-checkbox[type="radio"]:checked + label .weui-icon-radio {
+            background-color: #10aeff;
+            border: 1px solid #10aeff;
+        }
+
+        .selecth {
+            height: 30px;
+            width: 100%;
+            background: #fff;
+            border: 0;
+        }
+
+        .weui-dialog__btn {
+            color: #10aeff;
+        }
+
+        label.xrequired:after {
+            content: '* ';
+            color: red;
+        }
+    </style>
+
+</head>
+<body ontouchstart>
+
+<div id="detail">
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">检疫站点</label>
+                <em class="weui-form-preview__value" id="col1" style="font-size: 18px;color: red;"></em>
+                <input type="hidden" id="status">
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">车牌/交通班次</label>
+
+                <span class="weui-form-preview__value" id="carNumber"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">姓名</label>
+
+                <span class="weui-form-preview__value" id="name"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">手机号</label>
+
+                <span class="weui-form-preview__value" id="phone"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">身份证</label>
+
+                <span class="weui-form-preview__value" id="card"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">年龄</label>
+
+                <span class="weui-form-preview__value" id="age"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">性别</label>
+
+                <span class="weui-form-preview__value" id="sex"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">是否从湖北回到顺德</label>
+
+                <span class="weui-form-preview__value" id="toSd"></span>
+
+            </div>
+            <div class="weui-form-preview__item" id="divtime1">
+                <label class="weui-form-preview__label">返回时间</label>
+
+                <span class="weui-form-preview__value" id="returnDate"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">是否来自浙江温州</label>
+
+                <span class="weui-form-preview__value" id="zhejiang"></span>
+
+            </div>
+            <div class="weui-form-preview__item" id="divtime2">
+                <label class="weui-form-preview__label">返回时间</label>
+
+                <span class="weui-form-preview__value" id="zheDate"></span>
+
+            </div>
+            <div class="weui-form-preview__item" style="line-height: 1;">
+                <label class="weui-form-preview__label">是否密切接触人员</label>
+            </div>
+            <div class="weui-form-preview__item" style="line-height: 1;">
+                <label class="weui-form-preview__label">(共乘交通工具或共同居住)</label>
+
+                <span class="weui-form-preview__value" id="closePerson"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">现/暂住地</label>
+
+                <span class="weui-form-preview__value" id="address"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">体温</label>
+
+                <span class="weui-form-preview__value" id="temperature"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">同行人姓名</label>
+
+                <span class="weui-form-preview__value" id="name2"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">手机</label>
+
+                <span class="weui-form-preview__value" id="phone2"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">工作单位类型</label>
+
+                <span class="weui-form-preview__value" id="workType"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">工作单位/学校</label>
+
+                <span class="weui-form-preview__value" id="work"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">负责人</label>
+
+                <span class="weui-form-preview__value" id="workCharge"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">联系方式</label>
+
+                <span class="weui-form-preview__value" id="workPhone"></span>
+
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">入顺德原因</label>
+
+                <span class="weui-form-preview__value" id="content"></span>
+
+            </div>
+        </div>
+    </div>
+    <div class="weui-form-preview__hd">
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label" style="    font-weight: bold;color: #000000;">跟进处理措施</label>
+        </div>
+    </div>
+    <div class="weui-form-preview" style="padding-bottom: 50px;" id="genjin">
+
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">措施</label>
+                <span class="weui-form-preview__value" id="col2"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">时间</label>
+                <span class="weui-form-preview__value" id="time"></span>
+            </div>
+            <div class="weui-form-preview__item" id="div1">
+                <label class="weui-form-preview__label">公安部门工号/救护车车牌</label>
+                <span class="weui-form-preview__value" id="policeOperno"></span>
+            </div>
+            <div class="weui-form-preview__item" id="divyiyuan">
+                <label class="weui-form-preview__label">定点医院</label>
+                <span class="weui-form-preview__value" id="hospi"></span>
+            </div>
+            <div class="weui-form-preview__item" id="ho">
+                <label class="weui-form-preview__label">酒店</label>
+                <span class="weui-form-preview__value" id="jiudian"></span>
+            </div>
+            <div class="weui-form-preview__item" id="divcun">
+                <label class="weui-form-preview__label">镇街居委</label>
+                <span class="weui-form-preview__value" id="zjjw"></span>
+            </div>
+            <div class="weui-form-preview__item" id="div4">
+                <label class="weui-form-preview__label">过境、离境及劝返地点</label>
+                <span class="weui-form-preview__value" id="retrunPlace"></span>
+            </div>
+            <div id="divperson">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">接收人</label>
+                    <span class="weui-form-preview__value" id="receivedPerson"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">联系方式</label>
+                    <span class="weui-form-preview__value" id="receivedPhone"></span>
+                </div>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">备注</label>
+                <span class="weui-form-preview__value" id="beizhu"></span>
+            </div>
+
+        </div>
+    </div>
+    <div style="position: fixed;z-index: 3;padding: 0 15px;width: 90%;bottom: 0px;" id="appr_btn_group">
+
+    </div>
+</div>
+
+<div id="full" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup" style="color:#10aeff">关闭</a>
+                <h1 class="title">人员跟进</h1>
+            </div>
+        </div>
+        <div class="modal-content" style="background: #fff;">
+            <div class="weui-cells__title">请选择跟进处理措施</div>
+
+            <div class="weui-form">
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="response" id="response1" value="1" type="radio" checked>
+                    <label for="response1">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>转送定点医院</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="response" id="response2" value="2" type="radio">
+                    <label for="response2">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>酒店集中隔离</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="response" id="response3" value="3" type="radio">
+                    <label for="response3">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>社区居家隔离</p></div>
+                    </label>
+                </div>
+                <div class="weui-form-li iblock">
+                    <input class="weui-form-checkbox" name="response" id="response4" value="4" type="radio">
+                    <label for="response4">
+                        <i class="weui-icon-radio"></i>
+                        <div class="weui-form-text"><p>过境、离境及劝返</p></div>
+                    </label>
+                </div>
+            </div>
+            <br>
+            <div id="hospital">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">是否自驾</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-form-li iblock" style="margin: 0px;">
+                            <input class="weui-form-checkbox" name="f2" id="g1" value="是" type="radio" checked>
+                            <label for="g1">
+                                <i class="weui-icon-radio"></i>
+                                <div class="weui-form-text"><p>是</p></div>
+                            </label>
+                        </div>
+
+                        <div class="weui-form-li iblock">
+                            <input class="weui-form-checkbox" name="f2" id="g2" value="否" type="radio">
+                            <label for="g2">
+                                <i class="weui-icon-radio"></i>
+                                <div class="weui-form-text"><p>否</p></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-cell" id="gongan">
+                    <div class="weui-cell__hd"><label class="weui-label">公安部门工号</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入护送公安部门（工号）" type="text" id="gaoperno">
+                    </div>
+                </div>
+                <div class="weui-cell" id="jiuhuche" style="display: none">
+                    <div class="weui-cell__hd"><label class="weui-label">救护车车牌</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入护送救护车（车牌）" type="text" id="carnum">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">定点医院</label></div>
+                    <div class="weui-cell__bd">
+                        <select name="hospital" id="dhospital" class="selecth">
+                            <option value='南方医科大学顺德医院（顺德区第一人民医院）'>南方医科大学顺德医院（顺德区第一人民医院）</option>
+                            <option value='广州中医药大学顺德医院（顺德区中医院）'>广州中医药大学顺德医院（顺德区中医院）</option>
+                            <option value='广东医科大学顺德妇女儿童医院（顺德区妇幼保健院）'>广东医科大学顺德妇女儿童医院（顺德区妇幼保健院）</option>
+                            <option value='暨南大学附属口腔医院（顺德区大良医院）'>暨南大学附属口腔医院（顺德区大良医院）</option>
+                            <option value='暨南大学附属顺德医院（顺德区第二人民医院）'>暨南大学附属顺德医院（顺德区第二人民医院）</option>
+                            <option value='佛山市顺德区伦教医院'>佛山市顺德区伦教医院</option>
+                            <option value='广州中医药大学顺德医院附属勒流医院'>广州中医药大学顺德医院附属勒流医院</option>
+                            <option value='佛山市顺德区北滘医院'>佛山市顺德区北滘医院</option>
+                            <option value='广东医科大附属第三医院（顺德区龙江医院）'>广东医科大附属第三医院（顺德区龙江医院）</option>
+                            <option value='广州医科大学附属顺德医院（顺德区乐从医院）'>广州医科大学附属顺德医院（顺德区乐从医院）</option>
+                            <option value='南方医科大学顺德医院附属陈村医院'>南方医科大学顺德医院附属陈村医院</option>
+                            <option value='南方医科大学顺德医院附属杏坛医院'>南方医科大学顺德医院附属杏坛医院</option>
+                            <option value='广州中医药大学顺德医院附属均安医院'>广州中医药大学顺德医院附属均安医院</option>
+                            <option value='顺德区容桂街道新容奇医院'>顺德区容桂街道新容奇医院</option>
+                            <option value='广东同江医院'>广东同江医院</option>
+                        </select>
+                    </div>
+                </div>
+                <!--<div class="weui-cell">-->
+                <!--<div class="weui-cell__hd"><label class="weui-label">接收人</label></div>-->
+                <!--<div class="weui-cell__bd">-->
+                <!--<input class="weui-input" placeholder="请输入接收人姓名" type="text" id="department">-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="weui-cell">-->
+                <!--<div class="weui-cell__hd"><label class="weui-label">联系方式</label></div>-->
+                <!--<div class="weui-cell__bd">-->
+                <!--<input class="weui-input" placeholder="请输入接收人电话" type="tel" id="tell">-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+
+            <div id="hotel" style="display: none;">
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">公安部门工号</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入护送公安部门（工号）" type="text" id="gaoperno2">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">酒店</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入酒店名称" type="text" id="hospitalname">
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="home" style="display: none;">
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">镇街</label></div>
+                    <div class="weui-cell__bd">
+                        <select name="town" id="town" class="selecth">
+                            <option value='1'>大良街道</option>
+                            <option value='2'>容桂街道</option>
+                            <option value='3'>伦教街道</option>
+                            <option value='4'>勒流街道</option>
+                            <option value='5'>陈村镇</option>
+                            <option value='6'>北滘镇</option>
+                            <option value='7'>乐从镇</option>
+                            <option value='8'>龙江镇</option>
+                            <option value='9'>杏坛镇</option>
+                            <option value='10'>均安镇</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="weui-cell" id="zhenjie">
+                    <div class="weui-cell__hd"><label class="weui-label">居委/村委</label></div>
+                    <div class="weui-cell__bd">
+                        <select name="street" id="street" class="selecth">
+                            <option value="升平">升平</option>
+                            <option value="文秀">文秀</option>
+                            <option value="金榜">金榜</option>
+                            <option value="中区">中区</option>
+                            <option value="北区">北区</option>
+                            <option value="府又">府又</option>
+                            <option value="新桂">新桂</option>
+                            <option value="顺峰">顺峰</option>
+                            <option value="德和">德和</option>
+                            <option value="云路">云路</option>
+                            <option value="红岗">红岗</option>
+                            <option value="大门">大门</option>
+                            <option value="新松">新松</option>
+                            <option value="新滘">新滘</option>
+                            <option value="近良">近良</option>
+                            <option value="苏岗">苏岗</option>
+                            <option value="南江">南江</option>
+                            <option value="五沙">五沙</option>
+                            <option value="古鉴">古鉴</option>
+                            <option value="逢沙">逢沙</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="out" style="display: none;">
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">目的地</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入过境/离境去往" type="text" id="destination">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">备注</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="备注" type="text" id="col9">
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary bg-blue" href="javascript:" id="showTooltips">提交</a>
+            </div>
+            <!--<div class="weui-cell">-->
+            <!--<div class="weui-cell__hd"><label for="time-format" class="weui-label">时间</label></div>-->
+            <!--<div class="weui-cell__bd">-->
+            <!--<input class="weui-input" id="time-format" type="text" value="">-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+
+    </div>
+</div>
+<div id="half" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup">关闭</a>
+                <h1 class="title">跟进确认</h1>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="weui-cells weui-cells_form">
+
+                <!--<div id="">-->
+                <!--<div class="weui-cell">-->
+                <!--<div class="weui-cell__hd"><label class="weui-label">接收人</label></div>-->
+                <!--<div class="weui-cell__bd">-->
+                <!--<input class="weui-input" placeholder="请输入接收人姓名" type="text" id="received">-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <!--</div>-->
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">工号/姓名</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入工号/姓名" type="text" id="operno">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">联系方式</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入手机号" type="tel" id="tell">
+                    </div>
+                </div>
+                <div id="lijing">
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">移送接收单位</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" placeholder="请输入移送接收单位" type="text" id="place">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd">
+                            <label class="weui-label">单位接收人</label>
+                        </div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" placeholder="请输入移送接收人" type="text" id="person">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">联系方式</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" placeholder="请输入接收人电话" type="tel" id="receivedtell">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">车牌号</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" placeholder="请输入车牌号" type="text" id="carNums">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="weui-btn-area">
+                    <a class="weui-btn weui-btn_primary bg-blue" href="javascript:" id="updateTooltips">提交</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cun" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup">关闭</a>
+                <h1 class="title">村居人员跟进确认</h1>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">社区居家隔离</label></div>
+                    <div class="weui-cell__bd">
+                        <span class="weui-input" id="spancj" style="color: red;"></span>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">本村居纳管对象</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-form-li iblock" style="margin: 0px;">
+                            <input class="weui-form-checkbox" name="f22" id="g11" value="是" type="radio" checked>
+                            <label for="g11">
+                                <i class="weui-icon-radio"></i>
+                                <div class="weui-form-text"><p>是</p></div>
+                            </label>
+                        </div>
+
+                        <div class="weui-form-li iblock">
+                            <input class="weui-form-checkbox" name="f22" id="g21" value="否" type="radio">
+                            <label for="g21">
+                                <i class="weui-icon-radio"></i>
+                                <div class="weui-form-text"><p>否</p></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label xrequired">核查人员</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请填写姓名" type="text" id="hcname">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label xrequired xrequired">手机号</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入手机号" type="tel" id="hzphone">
+                    </div>
+                </div>
+                <div class="weui-cell weui-cell_vcode">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label xrequired">验证码</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="验证码" type="number" id="code">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <button class="weui-vcode-btn bg-blue" onclick="settime(this)" style="color: #10aeff">获取验证码
+                        </button>
+                    </div>
+                </div>
+                <div class="weui-cell" id="divben">
+                    <div style="    margin-top: 10px;">请在确认接收到该人员后，已将对象纳入管理，点击下方按钮</div>
+                </div>
+                <div id="divtown" style="display: none;">
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">所属镇街</label></div>
+                        <div class="weui-cell__bd">
+                            <select name="townnew" id="townnew" class="selecth">
+                                <option value='1'>大良街道</option>
+                                <option value='2'>容桂街道</option>
+                                <option value='3'>伦教街道</option>
+                                <option value='4'>勒流街道</option>
+                                <option value='5'>陈村镇</option>
+                                <option value='6'>北滘镇</option>
+                                <option value='7'>乐从镇</option>
+                                <option value='8'>龙江镇</option>
+                                <option value='9'>杏坛镇</option>
+                                <option value='10'>均安镇</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="weui-cell" id="divjuwei">
+                        <div class="weui-cell__hd"><label class="weui-label">居委/村委</label></div>
+                        <div class="weui-cell__bd">
+                            <select name="cunjuwei" id="cunjuwei" class="selecth">
+                                <option value="升平">升平</option>
+                                <option value="文秀">文秀</option>
+                                <option value="金榜">金榜</option>
+                                <option value="中区">中区</option>
+                                <option value="北区">北区</option>
+                                <option value="府又">府又</option>
+                                <option value="新桂">新桂</option>
+                                <option value="顺峰">顺峰</option>
+                                <option value="德和">德和</option>
+                                <option value="云路">云路</option>
+                                <option value="红岗">红岗</option>
+                                <option value="大门">大门</option>
+                                <option value="新松">新松</option>
+                                <option value="新滘">新滘</option>
+                                <option value="近良">近良</option>
+                                <option value="苏岗">苏岗</option>
+                                <option value="南江">南江</option>
+                                <option value="五沙">五沙</option>
+                                <option value="古鉴">古鉴</option>
+                                <option value="逢沙">逢沙</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="weui-btn-area">
+                    <a class="weui-btn weui-btn_primary bg-blue" href="javascript:" id="cunTooltips">提交</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+    });
+
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+    var info = [[${info}]];
+    var type = [[${type}]];
+
+    if (type == "1") {
+        $("#genjin").css("display", "none");
+        $("#appr_btn_group").html('<div class="weui-btn bg-blue open-popup" id="project_pass" style="width: 100%;" data-target="#full">人员跟进</div>');
+    } else if (type == "2") {
+        $("#appr_btn_group").html('<div class="weui-btn bg-blue open-popup" id="project_pass" style="width: 100%;" data-target="#half">人员跟进确定</div>');
+    } else {
+        $("#appr_btn_group").html('<div class="weui-btn bg-blue open-popup" id="project_pass" style="width: 100%;" data-target="#cun">村居人员跟进确定</div>');
+    }
+    var id = info.id;
+    var delPhone = [[${delPhone}]];
+
+    var result = info.col2;
+    if (result == "过境、离境及劝返") {
+        $("#div4").css("display", "block");
+        $("#divperson").css("display", "none");
+        $("#divcun").css("display", "none");
+        $("#ho").css("display", "none");
+        $("#divyiyuan").css("display", "none");
+        $("#lijing").css("display", "none");
+        $("#div1").css("display", "none");
+    } else if (result == "转送定点医院") {
+        $("#div4").css("display", "none");
+        $("#divperson").css("display", "none");
+        $("#divcun").css("display", "none");
+        $("#ho").css("display", "none");
+        $("#divyiyuan").css("display", "block");
+        $("#div1").css("display", "none");
+    } else if (result == "酒店集中隔离") {
+        $("#div4").css("display", "none");
+        $("#divperson").css("display", "none");
+        $("#divcun").css("display", "none");
+        $("#ho").css("display", "block");
+        $("#divyiyuan").css("display", "none");
+        $("#div1").css("display", "none");
+    } else if (result == "社区居家隔离") {
+        $("#div4").css("display", "none");
+        $("#divperson").css("display", "none");
+        $("#divcun").css("display", "block");
+        $("#ho").css("display", "none");
+        $("#divyiyuan").css("display", "none");
+        $("#div1").css("display", "none");
+    } else {
+        $("#div4").css("display", "none");
+        $("#divperson").css("display", "none");
+        $("#divcun").css("display", "none");
+        $("#ho").css("display", "none");
+        $("#divyiyuan").css("display", "none");
+        $("#div1").css("display", "none");
+    }
+    $("#carNumber").text(info.carNumber);
+    $("#name").text(info.name);
+    $("#phone").text(info.phone);
+    $("#card").text(info.card);
+    $("#sex").text(info.sex);
+    $("#age").text(info.age);
+    $("#address").text(info.address);
+    $("#temperature").text(info.temperature + "℃");
+    $("#name2").text(info.name2);
+    $("#phone2").text(info.phone2);
+    $("#content").text(info.content);
+    $("#work").text(info.work);
+    $("#workType").text(info.col4);
+    $("#workCharge").text(info.workCharge);
+    $("#col1").text(info.col1);
+    $("#toSd").text(info.toSd);
+    if ("是" == info.toSd) {
+        $("#divtime1").css("display", "block")
+    } else {
+        $("#divtime1").css("display", "none")
+    }
+    if ("是" == info.zhejiang) {
+        $("#divtime2").css("display", "block")
+    } else {
+        $("#divtime2").css("display", "none")
+    }
+    $("#closePerson").text(info.closePerson);
+    $("#returnDate").text(info.returnDate);
+    $("#zheDate").text(info.zjDate);
+    $("#zhejiang").text(info.zhejiang);
+    $("#workPhone").text(info.workPhone);
+
+    $("#col2").text(info.col2);
+    $("#policeOperno").text(info.policeOperno);
+    $("#hospi").text(info.hospital);
+    $("#retrunPlace").text(info.retrunPlace);
+    $("#receivedPerson").text(info.receivePerson);
+    $("#receivedPhone").text(info.receivePhone);
+    $("#jiudian").text(info.hospital);
+    $("#time").text(info.resplonTime);
+    if (info.townNew == '' || $.trim(info.townNew).length == 0) {
+        $("#zjjw").text(info.townName + info.town);
+        $("#spancj").text(info.townName + info.town);
+    } else {
+        $("#zjjw").text(info.col10 + info.townNew);
+        $("#spancj").text(info.col10 + info.townNew);
+    }
+    $("#beizhu").text(info.col9);
+
+    var respon = "转送定点医院";
+    $('input[type=radio][name=response]').change(function () {
+        if (this.value == '1') {
+            $("#hospital").css("display", "block");
+            $("#hotel").css("display", "none");
+            $("#home").css("display", "none");
+            $("#out").css("display", "none");
+            // $("#rece").css("display", "block");
+            respon = "转送定点医院"
+        } else if (this.value == '2') {
+            $("#hospital").css("display", "none");
+            $("#hotel").css("display", "block");
+            $("#home").css("display", "none");
+            $("#out").css("display", "none");
+            // $("#rece").css("display", "block");
+            respon = "酒店集中隔离"
+        } else if (this.value == '3') {
+            $("#hospital").css("display", "none");
+            $("#hotel").css("display", "none");
+            $("#home").css("display", "block");
+            $("#out").css("display", "none");
+            // $("#rece").css("display", "block");
+            respon = "社区居家隔离"
+        } else {
+            $("#hospital").css("display", "none");
+            $("#hotel").css("display", "none");
+            $("#home").css("display", "none");
+            $("#out").css("display", "block");
+            // $("#rece").css("display", "none");
+            respon = "过境、离境及劝返"
+        }
+    });
+    var isDrive = "是";
+    $('input[type=radio][name=f2]').change(function () {
+        if (this.value == '是') {
+            $("#gongan").css("display", "inline-flex");
+            $("#jiuhuche").css("display", "none");
+            isDrive = "是";
+        } else {
+            $("#gongan").css("display", "none");
+            $("#jiuhuche").css("display", "inline-flex");
+            isDrive = "否";
+        }
+    });
+    var isCun = "是";
+    $('input[type=radio][name=f22]').change(function () {
+        if (this.value == '是') {
+            $("#divtown").css("display", "none");
+            $("#divben").css("display", "block");
+            isCun = "是";
+        } else {
+            $("#divtown").css("display", "block");
+            $("#divben").css("display", "none");
+            isCun = "否";
+        }
+    });
+    var html1 = "<option value='南华'>南华</option>\n" +
+        "                            <option value='升平'>升平</option>\n" +
+        "                            <option value='文秀'>文秀</option>\n" +
+        "                            <option value='金榜'>金榜</option>\n" +
+        "                            <option value='中区'>中区</option>\n" +
+        "                            <option value='北区'>北区</option>\n" +
+        "                            <option value='府又'>府又</option>\n" +
+        "                            <option value='新桂'>新桂</option>\n" +
+        "                            <option value='顺峰'>顺峰</option>\n" +
+        "                            <option value='德和'>德和</option>\n" +
+        "                            <option value='云路'>云路</option>\n" +
+        "                            <option value='红岗'>红岗</option>\n" +
+        "                            <option value='大门'>大门</option>\n" +
+        "                            <option value='新松'>新松</option>\n" +
+        "                            <option value='新滘'>新滘</option>\n" +
+        "                            <option value='近良'>近良</option>\n" +
+        "                            <option value='苏岗'>苏岗</option>\n" +
+        "                            <option value='南江'>南江</option>\n" +
+        "                            <option value='五沙'>五沙</option>\n" +
+        "                            <option value='古鉴'>古鉴</option>\n" +
+        "                            <option value='逢沙'>逢沙</option>";
+    var html2 = "<option value='细滘'>细滘</option>\n" +
+        "                            <option value='海尾'>海尾</option>\n" +
+        "                            <option value='红星'>红星</option>\n" +
+        "                            <option value='幸福'>幸福</option>\n" +
+        "                            <option value='红旗'>红旗</option>\n" +
+        "                            <option value='大福基'>大福基</option>\n" +
+        "                            <option value='龙涌口'>龙涌口</option>\n" +
+        "                            <option value='四基'>四基</option>\n" +
+        "                            <option value='穗香'>穗香</option>\n" +
+        "                            <option value='马冈'>马冈</option>\n" +
+        "                            <option value='南区'>南区</option>\n" +
+        "                            <option value='容里'>容里</option>\n" +
+        "                            <option value='容边'>容边</option>\n" +
+        "                            <option value='扁滘'>扁滘</option>\n" +
+        "                            <option value='华口'>华口</option>\n" +
+        "                            <option value='小黄圃'>小黄圃</option>\n" +
+        "                            <option value='高黎'>高黎</option>\n" +
+        "                            <option value='桂洲'>桂洲</option>\n" +
+        "                            <option value='上佳市'>上佳市</option>\n" +
+        "                            <option value='容山'>容山</option>\n" +
+        "                            <option value='振华'>振华</option>\n" +
+        "                            <option value='卫红'>卫红</option>\n" +
+        "                            <option value='东风'>东风</option>\n" +
+        "                            <option value='朝阳'>朝阳</option>\n" +
+        "                            <option value='容新'>容新</option>\n" +
+        "                            <option value='德胜'>德胜</option>";
+    var html3 = "<option value='常教'>常教</option>\n" +
+        "                            <option value='三洲'>三洲</option>\n" +
+        "                            <option value='永丰'>永丰</option>\n" +
+        "                            <option value='鸡洲'>鸡洲</option>\n" +
+        "                            <option value='霞石'>霞石</option>\n" +
+        "                            <option value='熹涌'>熹涌</option>\n" +
+        "                            <option value='荔村'>荔村</option>\n" +
+        "                            <option value='羊额'>羊额</option>\n" +
+        "                            <option value='新塘'>新塘</option>\n" +
+        "                            <option value='仕版'>仕版</option>";
+    var html4 = "<option value='勒流居'>勒流居</option>\n" +
+        "                            <option value='新城'>新城</option>\n" +
+        "                            <option value='勒北'>勒北</option>\n" +
+        "                            <option value='东风'>东风</option>\n" +
+        "                            <option value='大晚'>大晚</option>\n" +
+        "                            <option value='光大'>光大</option>\n" +
+        "                            <option value='新明'>新明</option>\n" +
+        "                            <option value='黄连'>黄连</option>\n" +
+        "                            <option value='江义'>江义</option>\n" +
+        "                            <option value='扶闾'>扶闾</option>\n" +
+        "                            <option value='稔海'>稔海</option>\n" +
+        "                            <option value='上涌'>上涌</option>\n" +
+        "                            <option value='江村'>江村</option>\n" +
+        "                            <option value='南水'>南水</option>\n" +
+        "                            <option value='众涌'>众涌</option>\n" +
+        "                            <option value='龙眼'>龙眼</option>\n" +
+        "                            <option value='西华'>西华</option>\n" +
+        "                            <option value='富裕'>富裕</option>\n" +
+        "                            <option value='连杜'>连杜</option>\n" +
+        "                            <option value='新安'>新安</option>\n" +
+        "                            <option value='冲鹤'>冲鹤</option>\n" +
+        "                            <option value='裕源'>裕源</option>";
+    var html5 = "<option value='旧圩'>旧圩</option>\n" +
+        "                            <option value='勒竹'>勒竹</option>\n" +
+        "                            <option value='赤花'>赤花</option>\n" +
+        "                            <option value='锦龙'>锦龙</option>\n" +
+        "                            <option value='南涌'>南涌</option>\n" +
+        "                            <option value='合成'>合成</option>\n" +
+        "                            <option value='永兴'>永兴</option>\n" +
+        "                            <option value='花城'>花城</option>\n" +
+        "                            <option value='弼教'>弼教</option>\n" +
+        "                            <option value='石洲'>石洲</option>\n" +
+        "                            <option value='仙涌'>仙涌</option>\n" +
+        "                            <option value='庄头'>庄头</option>\n" +
+        "                            <option value='绀现'>绀现</option>\n" +
+        "                            <option value='大都'>大都</option>\n" +
+        "                            <option value='潭洲'>潭洲</option>";
+    var html6 = "<option value='北滘'>北滘</option>\n" +
+        "                            <option value='高村'>高村</option>\n" +
+        "                            <option value='西滘'>西滘</option>\n" +
+        "                            <option value='广教'>广教</option>\n" +
+        "                            <option value='三洪奇'>三洪奇</option>\n" +
+        "                            <option value='黄龙'>黄龙</option>\n" +
+        "                            <option value='槎涌'>槎涌</option>\n" +
+        "                            <option value='林头'>林头</option>\n" +
+        "                            <option value='莘村'>莘村</option>\n" +
+        "                            <option value='马龙'>马龙</option>\n" +
+        "                            <option value='水口'>水口</option>\n" +
+        "                            <option value='上僚'>上僚</option>\n" +
+        "                            <option value='三桂'>三桂</option>\n" +
+        "                            <option value='碧江'>碧江</option>\n" +
+        "                            <option value='西海'>西海</option>\n" +
+        "                            <option value='桃村'>桃村</option>\n" +
+        "                            <option value='顺江'>顺江</option>\n" +
+        "                            <option value='碧桂园'>碧桂园</option>\n" +
+        "                            <option value='君兰'>君兰</option>\n" +
+        "                            <option value='设计城'>设计城</option>";
+    var html7 = "<option value='新隆'>新隆</option>\n" +
+        "                            <option value='沙滘'>沙滘</option>\n" +
+        "                            <option value='葛岸'>葛岸</option>\n" +
+        "                            <option value='良教'>良教</option>\n" +
+        "                            <option value='上华'>上华</option>\n" +
+        "                            <option value='平步'>平步</option>\n" +
+        "                            <option value='小布'>小布</option>\n" +
+        "                            <option value='腾冲'>腾冲</option>\n" +
+        "                            <option value='荷村'>荷村</option>\n" +
+        "                            <option value='大墩'>大墩</option>\n" +
+        "                            <option value='小涌'>小涌</option>\n" +
+        "                            <option value='岳步'>岳步</option>\n" +
+        "                            <option value='良村'>良村</option>\n" +
+        "                            <option value='劳村'>劳村</option>\n" +
+        "                            <option value='道教'>道教</option>\n" +
+        "                            <option value='大罗'>大罗</option>\n" +
+        "                            <option value='路州'>路州</option>\n" +
+        "                            <option value='大闸'>大闸</option>\n" +
+        "                            <option value='水藤'>水藤</option>\n" +
+        "                            <option value='沙边'>沙边</option>\n" +
+        "                            <option value='罗沙'>罗沙</option>\n" +
+        "                            <option value='杨滘'>杨滘</option>\n" +
+        "                            <option value='乐居'>乐居</option>\n" +
+        "                            <option value='兴乐'>兴乐</option>\n" +
+        "                            <option value='东平南区'>东平南区（怡翠晋盛）</option>\n" +
+        "                            <option value='东平西区'>东平西区（依云水岸）</option>\n" +
+        "                            <option value='东平中区'>东平中区（金海M-city、保利西悦湾）</option>\n" +
+        "                            <option value='东平东区'>东平东区（保利东湾）</option>";
+    var html8 = "<option value='龙江居'>龙江居</option>\n" +
+        "                            <option value='龙山'>龙山</option>\n" +
+        "                            <option value='东涌'>东涌</option>\n" +
+        "                            <option value='世埠'>世埠</option>\n" +
+        "                            <option value='西溪'>西溪</option>\n" +
+        "                            <option value='陈涌'>陈涌</option>\n" +
+        "                            <option value='苏溪'>苏溪</option>\n" +
+        "                            <option value='坦西'>坦西</option>\n" +
+        "                            <option value='排沙'>排沙</option>\n" +
+        "                            <option value='文华'>文华</option>\n" +
+        "                            <option value='万安'>万安</option>\n" +
+        "                            <option value='东头'>东头</option>\n" +
+        "                            <option value='东海'>东海</option>\n" +
+        "                            <option value='仙塘'>仙塘</option>\n" +
+        "                            <option value='左滩'>左滩</option>\n" +
+        "                            <option value='西庆'>西庆</option>\n" +
+        "                            <option value='麦朗'>麦朗</option>\n" +
+        "                            <option value='沙富'>沙富</option>\n" +
+        "                            <option value='官田'>官田</option>\n" +
+        "                            <option value='旺岗'>旺岗</option>\n" +
+        "                            <option value='南坑'>南坑</option>\n" +
+        "                            <option value='集北'>集北</option>\n" +
+        "                            <option value='新华西'>新华西</option>";
+    var html9 = "<option value='齐杏'>齐杏</option>\n" +
+        "                            <option value='杏坛'>杏坛</option>\n" +
+        "                            <option value='马齐'>马齐</option>\n" +
+        "                            <option value='吕地'>吕地</option>\n" +
+        "                            <option value='雁园'>雁园</option>\n" +
+        "                            <option value='罗水'>罗水</option>\n" +
+        "                            <option value='桑麻'>桑麻</option>\n" +
+        "                            <option value='高赞'>高赞</option>\n" +
+        "                            <option value='上地'>上地</option>\n" +
+        "                            <option value='新联'>新联</option>\n" +
+        "                            <option value='海凌'>海凌</option>\n" +
+        "                            <option value='龙潭'>龙潭</option>\n" +
+        "                            <option value='逢简'>逢简</option>\n" +
+        "                            <option value='北水'>北水</option>\n" +
+        "                            <option value='吉祐'>吉祐</option>\n" +
+        "                            <option value='古朗'>古朗</option>\n" +
+        "                            <option value='南朗'>南朗</option>\n" +
+        "                            <option value='昌教'>昌教</option>\n" +
+        "                            <option value='马宁'>马宁</option>\n" +
+        "                            <option value='马东'>马东</option>\n" +
+        "                            <option value='西登'>西登</option>\n" +
+        "                            <option value='西北'>西北</option>\n" +
+        "                            <option value='路涌'>路涌</option>\n" +
+        "                            <option value='光辉'>光辉</option>\n" +
+        "                            <option value='光华'>光华</option>\n" +
+        "                            <option value='麦村'>麦村</option>\n" +
+        "                            <option value='东村'>东村</option>\n" +
+        "                            <option value='南华'>南华</option>\n" +
+        "                            <option value='安富'>安富</option>";
+    var html10 = "<option value='均安居'>均安居</option>\n" +
+        "                            <option value='仓门'>仓门</option>\n" +
+        "                            <option value='沙头'>沙头</option>\n" +
+        "                            <option value='天湖'>天湖</option>\n" +
+        "                            <option value='太平'>太平</option>\n" +
+        "                            <option value='南浦'>南浦</option>\n" +
+        "                            <option value='星槎'>星槎</option>\n" +
+        "                            <option value='沙浦'>沙浦</option>\n" +
+        "                            <option value='鹤峰'>鹤峰</option>\n" +
+        "                            <option value='三华'>三华</option>\n" +
+        "                            <option value='新华'>新华</option>\n" +
+        "                            <option value='天连'>天连</option>\n" +
+        "                            <option value='南沙'>南沙</option>";
+    var myhmtl = new Array()
+    myhmtl[0] = html1
+    myhmtl[1] = html2
+    myhmtl[2] = html3
+    myhmtl[3] = html4
+    myhmtl[4] = html5
+    myhmtl[5] = html6
+    myhmtl[6] = html7
+    myhmtl[7] = html8
+    myhmtl[8] = html9
+    myhmtl[9] = html10
+
+    $('#town').change(function () {
+        $("#street").html("");
+        // console.log($('#town option:selected').val())
+        $("#street").html(myhmtl[this.value - 1]);
+    })
+
+    $('#townnew').change(function () {
+        $("#cunjuwei").html("");
+        // console.log($('#town option:selected').val())
+        $("#cunjuwei").html(myhmtl[this.value - 1]);
+    })
+    $("#time-format").datetimePicker({
+        title: '自定义格式',
+        yearSplit: '年',
+        monthSplit: '月',
+        dateSplit: '日',
+        defaultValue: [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate(), new Date().getHours(), new Date().getMinutes()],
+        times: function () {
+            return [  // 自定义的时间
+                {
+                    values: (function () {
+                        var hours = [];
+                        for (var i = 0; i < 24; i++) hours.push(i > 9 ? i : '0' + i);
+                        return hours;
+                    })()
+                },
+                {
+                    divider: true,  // 这是一个分隔符
+                    content: '时'
+                },
+                {
+                    values: (function () {
+                        var minutes = [];
+                        for (var i = 0; i < 60; i++) minutes.push(i > 9 ? i : '0' + i);
+                        return minutes;
+                    })()
+                },
+                {
+                    divider: true,  // 这是一个分隔符
+                    content: '分'
+                }
+            ];
+        },
+        onChange: function (picker, values, displayValues) {
+            // console.log(values);
+        }
+    });
+    $("#showTooltips").click(function () {
+        var gaoperno = $('#gaoperno').val().trim();
+        var carnum = $('#carnum').val().trim();
+        var dhospital = $('#dhospital').val().trim();
+        var gaoperno2 = $('#gaoperno2').val().trim();
+        var received = "";
+        var receivedtell = "";
+        // var received = $('#received').val().trim();
+        // var receivedtell = $('#receivedtell').val().trim();
+        var hospitalname = $('#hospitalname').val().trim();
+        var destination = $('#destination').val().trim();
+        var town = $('#town option:selected').text();
+        var street = $('#street option:selected').val();
+
+        if (respon == "过境、离境及劝返") {
+            if (destination == "") {
+                $.toptip('请填写过境、离境及劝返地点');
+            } else {
+                updateData("", "", "", "", "", "", destination);
+            }
+        } else if (respon == "转送定点医院") {
+            if (isDrive == "是" && gaoperno == "") {
+                $.toptip('请填写护送公安部门（工号）');
+            } else if (isDrive == "否" && carnum == "") {
+                $.toptip('请填写护送救护车（车牌）');
+            } else if (dhospital == "") {
+                $.toptip('请输入定点医院');
+            } /*else if (received == "") {
+                $.toptip('请输入接收人');
+            } else if (receivedtell == "") {
+                $.toptip('请输入联系方式');
+            } */ else {
+                if (isDrive == "是") {
+                    updateData(gaoperno, dhospital, received, receivedtell, "", "", "");
+                } else {
+                    updateData(carnum, dhospital, received, receivedtell, "", "", "");
+                }
+            }
+        } else if (respon == "酒店集中隔离") {
+            if (gaoperno2 == "") {
+                $.toptip('请填写护送公安部门（工号）');
+            } else if (hospitalname == "") {
+                $.toptip('请输入酒店名称');
+            } /*else if (received == "") {
+                $.toptip('请输入接收人');
+            } else if (receivedtell == "") {
+                $.toptip('请输入联系方式');
+            } */ else {
+                updateData(gaoperno2, hospitalname, received, receivedtell, "", "", "");
+
+            }
+        } else if (respon == "社区居家隔离") {
+            if (town == "") {
+                $.toptip('请选择镇街');
+            } else if (street == "") {
+                $.toptip('请选择村居');
+            } /*else if (received == "") {
+                $.toptip('请输入接收人');
+            } else if (receivedtell == "") {
+                $.toptip('请输入联系方式');
+            } */ else {
+                updateData("", "", received, receivedtell, town, street, "");
+            }
+        }
+
+    });
+
+    $("#updateTooltips").click(function () {
+        var place = $('#place').val().trim();
+        var person = $('#person').val().trim();
+        var operno = $('#operno').val().trim();
+        var tell = $('#tell').val().trim();
+        var carNums = $('#carNums').val().trim();
+        // var received = $('#received').val().trim();
+        var receivedtell = $('#receivedtell').val().trim();
+        if (operno == "") {
+            $.toptip('请填写工号/姓名');
+        } else if (tell == "") {
+            $.toptip('请填写联系方式');
+        } else if (place == "" && (result == "转送定点医院" || result == "酒店集中隔离")) {
+            $.toptip('请填写移送接收单位');
+        } else if (person == "" && (result == "转送定点医院" || result == "酒店集中隔离")) {
+            $.toptip('请填写移送接收人');
+        } else if (receivedtell == "" && (result == "转送定点医院" || result == "酒店集中隔离")) {
+            $.toptip('请输入接收人联系方式');
+        } else if (carNums == "" && (result == "转送定点医院" || result == "酒店集中隔离")) {
+            $.toptip('请填写车牌号');
+        } /* else if (received == ""&& (result == "转送定点医院" || result == "酒店集中隔离")) {
+            $.toptip('请输入接收人'&& (result == "转送定点医院" || result == "酒店集中隔离"));
+        } */ else {
+            $.ajax({
+                url: basePath() + "/data/sjMedicalDrugs/ywRecordsUpdate",
+                type: "post",
+                data: {
+                    "place": place,
+                    "person": person,
+                    "operno": operno,
+                    "tell": tell,
+                    "carNum": carNums,
+                    "id": id,
+                    "delPhone": delPhone,
+                    "receivePhone": receivedtell,
+
+                    // "col3": getNowDate(),
+                },
+                beforeSend: function (xhr) {
+                    $.showLoading();
+                },
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.toast("成功提交，请稍候，正在为您重新跳转", "text");
+                        setTimeout(function () {
+                            // $("#full").css("display","none");
+                            history.back(-2)
+                            // parent.parent.window.location.reload();
+                        }, 3000);
+                    } else if (data.code == 0) {
+                        $.toast("身份失效！请重试", "text");
+                        window.location.href = basePath() + "/data/sjMedicalDrugs/workIn";
+                    }else {
+                        $.toast("没有加载到数据！请重试", "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据，请重试", "text");
+                }
+            });
+        }
+    })
+
+    $("#cunTooltips").click(function () {
+        var hcname = $("#hcname").val().trim();
+        var code = $('#code').val();
+        var tel = $('#hzphone').val();
+
+        if (hcname == "") {
+            $.toptip('请填写姓名');
+        } else if (!tel || !/(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/.test(tel)) {
+            $.toptip('请输入正确手机号');
+        } else if (!code || !/\d{6}/.test(code)) {
+            $.toptip('请输入六位手机验证码');
+        } else {
+            if (isCun == "是") {
+                $.confirm("您确定将对象纳入管理?", "确认收到?", function () {
+                    $.ajax({
+                        url: basePath() + "/data/sjMedicalDrugs/ywRecordsUpdate",
+                        type: "post",
+                        data: {
+                            "id": id,
+                            "delPhone": delPhone,
+                            "benOwn": isCun,
+                            "col11": hcname,
+                            "code": code,
+                            "col12": tel,
+                            // "col7": getNowDate(),
+                        },
+                        beforeSend: function (xhr) {
+                            $.showLoading();
+                        },
+                        success: function (data) {
+                            $.hideLoading();
+                            if (data.code == 200) {
+                                $.toast("成功提交，请稍候，正在为您重新跳转", "text");
+                                setTimeout(function () {
+                                    // $("#full").css("display","none");
+                                    history.back(-2)
+                                    // parent.parent.window.location.reload();
+                                }, 3000);
+                            } else if (data.code == 0) {
+                                $.toast("身份失效！请重试", "text");
+                                window.location.href = basePath() + "/data/sjMedicalDrugs/workIn";
+                            } else if (data.code == 400) {
+                                $.toast(data.msg, "text");
+                                var code = $("#weui-vcode-btn");
+                                code.text("获取验证码");
+                                countdown = 0;
+                            } else {
+                                $.toast(data.msg, "text");
+                            }
+                        },
+                        error: function () {
+                            $.hideLoading();
+                            $.toast("没有加载到数据，请重试", "text");
+                        }
+                    });
+                }, function () {
+                    //取消操作
+                });
+            } else {
+                var town = $('#townnew option:selected').text();
+                var street = $('#cunjuwei option:selected').val();
+                var cu = "";
+                if (info.townNew == '' || $.trim(info.townNew).length == 0) {
+                    cu = info.town;
+                } else {
+                    cu = info.townNew;
+                }
+                if (cu == street) {
+                    $.toast("本村居纳管对象，请选择 是 ", "text");
+                } else {
+                    $.confirm("对象所属" + town + street + "?", "确认更改?", function () {
+                        $.ajax({
+                            url: basePath() + "/data/sjMedicalDrugs/ywRecordsUpdate",
+                            type: "post",
+                            data: {
+                                "id": id,
+                                "delPhone": delPhone,
+                                "townNew": street,
+                                "benOwn": isCun,
+                                "col10": town,
+                                "col11": hcname,
+                                "code": code,
+                                "col12": tel,
+                            },
+                            beforeSend: function (xhr) {
+                                $.showLoading();
+                            },
+                            success: function (data) {
+                                $.hideLoading();
+                                if (data.code == 200) {
+                                    $.toast("成功提交，请稍候，正在为您重新跳转", "text");
+                                    setTimeout(function () {
+                                        // $("#full").css("display","none");
+                                        history.back(-2)
+                                        // parent.parent.window.location.reload();
+                                    }, 3000);
+                                } else if (data.code == 0) {
+                                    $.toast("身份失效！请重试", "text");
+                                    window.location.href = basePath() + "/data/sjMedicalDrugs/workIn";
+                                } else if (data.code == 400) {
+                                    $.toast(data.msg, "text");
+                                    var code = $("#weui-vcode-btn");
+                                    code.text("获取验证码");
+                                    countdown = 0;
+                                } else {
+                                    $.toast(data.msg, "text");
+                                }
+                            },
+                            error: function () {
+                                $.hideLoading();
+                                $.toast("没有加载到数据，请重试", "text");
+                            }
+                        });
+                    }, function () {
+                        //取消操作
+                    });
+                }
+
+            }
+        }
+    })
+
+    function updateData(policeOperno, hospital, receivePerson, receivePhone, townName, town, retrunPlace) {
+        $.ajax({
+            url: basePath() + "/data/sjMedicalDrugs/ywRecordsUpdate",
+            type: "post",
+            data: {
+                "policeOperno": policeOperno,
+                "hospital": hospital,
+                "receivePerson": receivePerson,
+                "receivePhone": receivePhone,
+                "townName": townName,
+                "town": town,
+                "retrunPlace": retrunPlace,
+                "id": id,
+                "delPhone": delPhone,
+                "col2": respon,
+                "townId": isDrive,
+                "col9": $("#col9").val().trim(),
+            },
+            beforeSend: function (xhr) {
+                $.showLoading();
+            },
+            success: function (data) {
+                $.hideLoading();
+                if (data.code == 200) {
+                    $.toast("成功提交，请稍候，正在为您重新跳转", "text");
+                    setTimeout(function () {
+                        // $("#full").css("display","none");
+                        history.back(-2)
+                        // parent.parent.window.location.reload();
+                    }, 3000);
+                } else if (data.code == 0) {
+                    $.toast("身份失效！请重试", "text");
+                    window.location.href = basePath() + "/data/sjMedicalDrugs/workIn";
+                }else {
+                    $.toast(data.msg, "text");
+                }
+            },
+            error: function () {
+                $.hideLoading();
+                $.toast("没有加载到数据，请重试", "text");
+            }
+        });
+    }
+
+    function getNowDate() {
+        //判断是否在前面加0
+        function getNow(s) {
+            return s < 10 ? '0' + s : s;
+        }
+
+        var myDate = new Date();
+
+        var year = myDate.getFullYear();        //获取当前年
+        var month = myDate.getMonth() + 1;   //获取当前月
+        var date = myDate.getDate();            //获取当前日
+
+
+        var h = myDate.getHours();              //获取当前小时数(0-23)
+        var m = myDate.getMinutes();          //获取当前分钟数(0-59)
+        var s = myDate.getSeconds();
+
+        var now = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ':' + getNow(m) + ":" + getNow(s);
+        console.log(now)
+        return now
+    }
+
+    var countdown = 60;
+
+    function settime2(obj) {
+        var code = $(obj);
+        if (countdown == 0) {
+            code.removeAttr('disabled');
+            code.text("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            code.text("重新发送(" + countdown + ")");
+            code.attr('disabled', true);
+            countdown--;
+        }
+        setTimeout(function () {
+            settime2(obj)
+        }, 1000);
+    }
+
+    function settime(obj) {
+
+        var tel = $("#hzphone").val();
+        if (!tel || !/(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/.test(tel)) {
+            $.toptip('请输入手机号');
+        } else {
+            var url = basePath() + "/public/sendPhoneCode?phone=" + tel;
+            $.showLoading();
+            settime2(obj);
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.toast("验证码已发送！请注意查收！", "text");
+                    } else if (data.code == 0) {
+                        $.toast(data.msg, "text");
+                        var code = $("#weui-vcode-btn");
+                        code.text("获取验证码");
+                        countdown = 0;
+                    } else {
+                        $.toast(data.msg, "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据", "text");
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

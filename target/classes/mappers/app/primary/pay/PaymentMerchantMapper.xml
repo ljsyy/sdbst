@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.pay.PaymentMerchantMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.pay.PaymentMerchant">
+        <id column="PROJECT_CODE" property="projectCode" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="PROJECT_NAME" property="projectName" jdbcType="VARCHAR"/>
+        <result column="BUSINESS_NAME" property="businessName" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from PAYMENT_MERCHANT
+    where PROJECT_CODE = #{projectCode,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.pay.PaymentMerchant">
+    insert into PAYMENT_MERCHANT (PROJECT_CODE, TYPE, PROJECT_NAME, 
+      BUSINESS_NAME, CREATE_DATE, UPDATE_DATE
+      )
+    values (#{projectCode,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{businessName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.pay.PaymentMerchant">
+    update PAYMENT_MERCHANT
+    set TYPE = #{type,jdbcType=VARCHAR},
+      PROJECT_NAME = #{projectName,jdbcType=VARCHAR},
+      BUSINESS_NAME = #{businessName,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+    where PROJECT_CODE = #{projectCode,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select PROJECT_CODE, TYPE, PROJECT_NAME, BUSINESS_NAME, CREATE_DATE, UPDATE_DATE
+    from PAYMENT_MERCHANT
+    where PROJECT_CODE = #{projectCode,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select PROJECT_CODE, TYPE, PROJECT_NAME, BUSINESS_NAME, CREATE_DATE, UPDATE_DATE
+    from PAYMENT_MERCHANT
+  </select>
+    <!--条件查询-->
+    <select id="selectByFactor" resultType="com.unifs.sdbst.app.bean.pay.PaymentMerchant">
+        select PROJECT_CODE projectCode, TYPE, BUSINESS_NAME||'-'|| PROJECT_NAME bussinessProjectName
+        from PAYMENT_MERCHANT
+        <where>
+            type=#{type,jdbcType=VARCHAR}
+            <if test="merchantName!=null and merchantName!=''">
+                and BUSINESS_NAME like #{merchantName}||'%'
+            </if>
+        </where>
+    </select>
+</mapper>

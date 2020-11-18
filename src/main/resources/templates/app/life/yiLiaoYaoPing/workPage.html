@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区联合检疫点登记管理系统</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="layui/back/view.css"/>
+    <link rel="stylesheet" href="layui/admin.css"/>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="layui/layui.all.js"></script>
+
+    <style type="text/css">
+        .layui-nav-item .layui-nav-child dd.layui-this a {
+            background-color: #177ce3;
+            background-repeat: repeat-y;
+            background-image: -moz-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -webkit-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -o-linear-gradient(left, #29adeb, #177ce3);
+            background-image: linear-gradient(left, #29adeb, #177ce3);
+        }
+    </style>
+
+</head>
+<body class="layui-view-body">
+<div class="layui-content" style="height: 100%;">
+
+
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData">导出数据</button>
+        </div>
+    </script>
+
+    <script>
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#test'
+                ,url:basePath()+'/data/sjMedicalDrugs/pageNum'
+                // ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                ,title: '用户数据表'
+                // ,height: 'full-200'
+                ,limit:10
+                ,cols: [ [
+                    {field:'col1', title:'检疫站点' ,width:300,fixed: 'left'}
+                    ,{field:'name', title:'姓名' ,width:150}
+                    ,{field:'phone', title:'手机号' ,width:150}
+                    ,{field:'sex', title:'性别' ,width:100}
+                    ,{field:'age', title:'年龄' ,width:100}
+                    ,{field:'address', title:'暂住地' ,width:200}
+                    ,{field:'temperature', title:'体温' ,width:100}
+                    ,{field:'toSd', title:'是否湖北返回' ,width:100}
+                    ,{field:'zhejiang', title:'是否温州返回',width:100 }
+                    ,{field:'col4', title:'单位类型' ,width:100}
+                    ,{field:'col5', title:'所属镇街村居' ,width:150}
+                    ,{field:'work', title:'单位名称' ,width:300}
+                    ,{field:'workCharge', title:'单位负责人' ,width:100}
+                    ,{field:'workPhone', title:'单位联系方式' ,width:100}
+                    ,{field:'content', title:'入顺德缘由',width:100 }
+
+                    ,{field:'returnDate', title:'返回时间' ,width:100}
+                    ,{field:'closePerson', title:'是否亲密接触',width:100 }
+                    ,{field:'name2', title:'同行人' ,width:100}
+                    ,{field:'phone2', title:'同行人联电',width:100 }
+                ] ]
+                ,page: true
+            });
+
+            //头工具栏事件
+            table.on('toolbar(test)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch(obj.event){
+                    case 'getCheckData':
+                        var data = checkStatus.data;
+                        layer.alert(JSON.stringify(data));
+                        break;
+                    case 'getCheckLength':
+                        var data = checkStatus.data;
+                        layer.msg('选中了：'+ data.length + ' 个');
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选': '未全选');
+                        break;
+
+                    //自定义头工具栏右侧图标 - 提示
+                    case 'LAYTABLE_TIPS':
+                        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function(obj){
+                var data = obj.data;
+                //console.log(obj)
+                if(obj.event === 'del'){
+                    layer.confirm('真的删除行么', function(index){
+                        obj.del();
+                        layer.close(index);
+                    });
+                } else if(obj.event === 'edit'){
+                    layer.prompt({
+                        formType: 2
+                        ,value: data.email
+                    }, function(value, index){
+                        obj.update({
+                            email: value
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

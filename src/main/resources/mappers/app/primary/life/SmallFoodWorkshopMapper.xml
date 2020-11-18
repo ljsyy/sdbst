@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.SmallFoodWorkshopMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.SmallFoodWorkshop">
+        <id column="REGISTER_CODE" property="registerCode" jdbcType="VARCHAR"/>
+        <result column="SOCIAL_CODE" property="socialCode" jdbcType="VARCHAR"/>
+        <result column="ADMINISTRATIVE_NAME" property="administrativeName" jdbcType="VARCHAR"/>
+        <result column="LICENSED_CONTENT" property="licensedContent" jdbcType="VARCHAR"/>
+        <result column="DELEGATE_NAME" property="delegateName" jdbcType="VARCHAR"/>
+        <result column="DECIDE_DATE" property="decideDate" jdbcType="TIMESTAMP"/>
+        <result column="CUTOFF_DATE" property="cutoffDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SMALL_FOOD_WORKSHOP
+    where REGISTER_CODE = #{registerCode,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.SmallFoodWorkshop">
+    insert into SMALL_FOOD_WORKSHOP (REGISTER_CODE, SOCIAL_CODE, ADMINISTRATIVE_NAME, 
+      LICENSED_CONTENT, DELEGATE_NAME, DECIDE_DATE, 
+      CUTOFF_DATE, CREATE_DATE, DEL_FLAG
+      )
+    values (#{registerCode,jdbcType=VARCHAR}, #{socialCode,jdbcType=VARCHAR}, #{administrativeName,jdbcType=VARCHAR}, 
+      #{licensedContent,jdbcType=VARCHAR}, #{delegateName,jdbcType=VARCHAR}, #{decideDate,jdbcType=TIMESTAMP}, 
+      #{cutoffDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.life.SmallFoodWorkshop">
+    update SMALL_FOOD_WORKSHOP
+    set SOCIAL_CODE = #{socialCode,jdbcType=VARCHAR},
+      ADMINISTRATIVE_NAME = #{administrativeName,jdbcType=VARCHAR},
+      LICENSED_CONTENT = #{licensedContent,jdbcType=VARCHAR},
+      DELEGATE_NAME = #{delegateName,jdbcType=VARCHAR},
+      DECIDE_DATE = #{decideDate,jdbcType=TIMESTAMP},
+      CUTOFF_DATE = #{cutoffDate,jdbcType=TIMESTAMP},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      DEL_FLAG = #{delFlag,jdbcType=VARCHAR}
+    where REGISTER_CODE = #{registerCode,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByKeyword" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select REGISTER_CODE, SOCIAL_CODE, ADMINISTRATIVE_NAME, LICENSED_CONTENT, DELEGATE_NAME, 
+    DECIDE_DATE, CUTOFF_DATE, CREATE_DATE, DEL_FLAG
+    from SMALL_FOOD_WORKSHOP
+    where REGISTER_CODE = #{_parameter,jdbcType=VARCHAR} or ADMINISTRATIVE_NAME=#{_parameter,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select REGISTER_CODE, SOCIAL_CODE, ADMINISTRATIVE_NAME, LICENSED_CONTENT, DELEGATE_NAME, 
+    DECIDE_DATE, CUTOFF_DATE, CREATE_DATE, DEL_FLAG
+    from SMALL_FOOD_WORKSHOP
+  </select>
+</mapper>

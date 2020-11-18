@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/*免责声明*/
+#disclaimer{box-sizing: border-box;width:80%; background-color:#fdf7ed; border-radius:10px;    transform: translateY(-50%);-webkit-transform: translateY(-50%);
+			 position:fixed; top:50%; left:10%; text-align:center; display:none;  border: solid 2px #bdbdbd;}
+#disclaimer .dis-bg{    position: absolute;height: 100%;width: 100%;left: 0;top: 0;z-index: -1;}
+#disclaimer .d-title{font-weight: 600;font-size: 16px;}
+#disclaimer .d-title img{    width: 50%;}
+#disclaimer .d-content{ text-align: left;padding-bottom: 10px;line-height: 25px;font-size: 16px;letter-spacing: 2px;}
+#disclaimer .d-btn{font-size: 16px;}
+#disclaimer .d-btn span{color: #fff;background: #f39e47;padding: 5px 0;width: 65%;border-radius: 5px;display: block;margin: auto;}
+#disclaimer .d-btn .d-btn-l{ width:50%; float:left;}
+#disclaimer .d-btn .d-btn-r{ width:50%; float:right;}
+#disclaimer .d-btn .d-btn-r a{ text-decoration: none; }

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 14px;">
+
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>办事详情</title>
+    <link href="wui/dist/style/weui.css" rel="stylesheet">
+    <!--<link href="css/app/fingertips/detail.css" rel="stylesheet">-->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <!--<link rel="stylesheet" href="swiper/dist/css/swiper.min.css">-->
+    <!--<script src="swiper/dist/js/swiper.min.js"></script>-->
+
+</head>
+
+<style>
+    body{
+        background-color: #ededed;
+    }
+    .weui-cell1 {
+        /*padding: 10px;*/
+        position: relative;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+    }
+    .weui-cell__bd1 {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+    }
+    .weui-label{
+        font-weight: bold;
+        font-size: 17px;
+    }
+    .tafter{
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .weui-navbar__item{
+        font-size: 14px;
+        line-height: 10px;
+    }
+    .page__hd {
+        padding: 20px;
+    }
+    .weui-form-preview__item.tafter{
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    /*.weui-form-preview__item .weui-form-preview__label{*/
+        /*font-weight: 700;*/
+        /*font-size: 18px;*/
+    /*}*/
+    .weui-form-preview__item{
+        line-height: 30px;
+        /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
+    }
+</style>
+
+<body >
+<div id="container"class="container"> <!---->
+
+    <div class="page__hd">
+        <p class="page__desc" style="text-align: center;font-size: 22px;font-weight: 700;">审批</p>
+    </div>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">办事状态</label>
+                <em class="weui-form-preview__value"></em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">寄送状态</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">代理人</label>
+                <em class="weui-form-preview__value"></em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">电话</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">证明类型</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">证明号码</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">申报对象</label>
+                <em class="weui-form-preview__value"></em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">身份类型</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">证件类型</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">证件号码</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">联系人</label>
+                <em class="weui-form-preview__value"></em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">电话</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">申请方式</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">通信地址</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">邮政编码</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">申报编号</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">事项类型</label>
+                <em class="weui-form-preview__value"></em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">事项编码</label>
+                <span class="weui-form-preview__value" id="matterCode"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">事项类型</label>
+                <span class="weui-form-preview__value" id="matterType"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">决定机构</label>
+                <span class="weui-form-preview__value" id="matterOrgName"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">承诺时限</label>
+                <span class="weui-form-preview__value" id="promisedDayNum"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">是否收费</label>
+                <span class="weui-form-preview__value" id="chargeFlag"></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">受理人</label>
+                <em class="weui-form-preview__value"></em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">受理时间</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">办理行政区域</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">办理大厅</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">办理申请时间</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">办理单位</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">承诺办结时间</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">收件方式名称</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">接件人</label>
+                <span class="weui-form-preview__value"></span>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+
+    function getData(pageNo,pageSize,statusString) {
+        var searcherType = $("#searcherType").val();
+        var certificateNum = $("#certificateNum").val();
+        $.ajax({
+            url:getRootPath()+"/app/fingertips/case/page",
+            // url:"http://218.104.177.2:8090/sdbst/app/fingertips/case/page",
+            data:{
+                "searcherType":searcherType,"certificateNum":certificateNum,"pageNo":pageNo,"pageSize":pageSize,"statusString":statusString,"orderBy":"create_time"
+            },
+            type:"post",
+            dataType:"json",
+            beforeSend:function(xhr){
+                $('#loadmore').show();
+            },
+            success:function (data) {
+                var html  = '';
+                if ("200"==data.code){
+                    $('#loadmore').hide();
+                    if (data.data.data.length == 0){
+                        html = '<div style="text-align: center">没有更多了</div>';
+                    } else {
+                        $(".weui-panel__ft").remove();
+                        for (var i = 0; i < data.data.data.length; i++) {
+                            html +='<div class="tafter" id="'+data.data.data[i].id+'">\n' +
+                                '    <div class="weui-cell1">\n' +
+                                '        <div class="weui-cell__hd">\n' +
+                                '            <label class="weui-label">'+ data.data.data[i].applicantName +'</label>\n' +
+                                '        </div>\n' +
+                                '    </div>\n' +
+                                '    <label class="weui-cell1" >\n' +
+                                '        <div class="weui-cell__bd1">\n' +
+                                '            <p>'+ data.data.data[i].matterName +'</p>\n' +
+                                '        </div>\n' +
+                                '    </label>\n' +
+                                '    <label class="weui-cell1" >\n' +
+                                '        <div class="weui-cell__bd">\n' +
+                                '           <p><span style="color: #007aff">['+statusType(data.data.data[i].status)+']</span>'  +
+                                '                        编辑于'+renderTime(data.data.data[i].createTime)+'</p>\n' +
+                                '        </div>\n' ;
+                                    if (data.data.data[i].status==17) {
+                                        html += '        <a href="javascript:;" onclick="delCase(\''+data.data.data[i].id+'\',\''+data.data.data[i].matterName+'\')"><div class="weui-cell__ft" style="margin-right: 5px;padding-right: 5px;">' +
+                                            '           <img src="img/fingertips/del.jpg" alt="" style="width: 10px;padding-right: 5px;">删除'+
+                                            '        </div></a>';
+                                    }
+                            html+='    </label>' +
+                                '</div>';
+
+                        }
+                        var more = '';
+                        var maxpage = Math.ceil(data.total / pagesize);
+                        sessionStorage['maxpage'] = maxpage;
+                        if(pageNo==maxpage){
+                            more = '<div class="weui-panel__ft">\n' +
+                                // '            <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">\n' +
+                                '                <div class="weui-cell__bd" id="getmore" style="text-align: center;font-size: 16px;padding: 16px;">没有更多数据了</div>\n' +
+                                // '            </a>\n' +
+                                '        </div>';
+                        }else {
+                            // more += '<div class="weui-cell__bd" id="getmore" onclick="getMoreData('+statusString+')">查看更多<i id="loading" class="weui-loading"></i></div>';
+                            more = '        <div class="weui-panel__ft">\n' +
+                                '            <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" style="text-align: center;">\n' +
+                                '                <div class="weui-cell__bd" id="getmore" onclick="getMoreData('+pageNo+','+statusString+')">查看更多<i id="loading" class="weui-loading" style="display: none;"></i></div>\n' +
+                                '            </a>\n' +
+                                '        </div>';
+                        }
+                        html += more;
+                    }
+                    $("#dataResult").append(html);
+                }else if ("5000"==data.code) {
+                    $("#dataResult").append("正在加载中ing");
+                }else {
+                    $("#dataResult").append(data.msg);
+                }
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        })
+    }
+</script>
+<script type="application/javascript">
+    function getStatusType(str){
+        if(str == "0"){
+            return "待审批"
+        }else if(str == "1"){
+            return "预接件补件"
+        }else if(str == "2"){
+            return "补件待重审"
+        }else if(str == "3"){
+            return "预接件退件"
+        }else if(str == "4"){
+            return "预受理"
+        }else if(str == "5"){
+            return "收件"
+        }else if(str == "6"){
+            return "补齐补正"
+        }else if(str == "7"){
+            return "待受理"
+        }else if(str == "8"){
+            return "受理"
+        }else if(str == "9"){
+            return "不予受理"
+        }else if(str == "10"){
+            return "受理后补齐补正"
+        }else if(str == "12"){
+            return "退件"
+        }else if(str == "13"){
+            return "在办"
+        }else if(str == "14"){
+            return "挂起"
+        }else if(str == "15"){
+            return "办结"
+        }else if(str == "16"){
+            return "作废"
+        }else if(str == "17"){
+            return "草稿"
+        }else if(str == "18"){
+            return "上报"
+        }else {
+            return "其他"
+        }
+    }
+    //时间格式化函数
+    function renderTime(date){
+        var dateee = new Date(date).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    }
+    function getApplicationType(str) {
+        if(str == "1"){
+            return "PC 端网站"
+        }else if(str == "2"){
+            return "微信"
+        }else if(str == "3"){
+            return "支付宝"
+        }else if(str == "4"){
+            return "APP"
+        }else if(str == "5"){
+            return "自助终端"
+        }else if(str == "6"){
+            return "其他"
+        }
+    }
+    function getApplicantType(str) {
+        if(str == "1"){
+            return "自然人"
+        }else if(str == "2"){
+            return "企业法人"
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/base.css"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/list.js"></script>
+    <script src="js/app/prompt.js"></script>
+    <title>政策列表</title>
+
+    <style>
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body, dd, dl, html, ol, p, ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 750px;
+        }
+
+        html, .container {
+            height: 100%;
+        }
+
+        html {
+            background: #fff;
+        }
+
+        body {
+            background: #F3F3F3;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .main {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: scroll;
+        }
+
+        .list {
+            background: white;
+            border-bottom: solid 1px #e5e5e5;
+        }
+
+        .life {
+        }
+
+        .right {
+        }
+
+        .right .title {
+            padding: 5px 10px 5px 9px;
+        }
+
+        .right .time {
+            padding: 2px 10px 5px 0px;
+            color: #999;
+            position: relative;
+            display: inline;
+            float: right;
+            font-size: 15px;
+        }
+
+        .askList {
+            border-bottom: solid 1px #bbbbbb;
+        }
+
+        .askList .title {
+            padding: 5px 10px;
+        }
+
+        .source {
+            padding: 2px 10px 5px 0px;
+            color: #999;
+            position: relative;
+            text-align: end;
+        }
+
+        .legal {
+            padding: 2px 10px 5px 8px;
+            color: #999;
+            position: relative;
+            display: inline-block;
+            font-size: 15px;
+        }
+
+        .policyTime {
+            padding: 2px 10px 5px 0px;
+            color: #999;
+            position: relative;
+            font-size: 15px;
+            text-align: end;
+        }
+
+        .search {
+            padding: 10px;
+            background: #fff;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .search input {
+            background: #F4F6F8;
+            border: 0;
+            width: 100%;
+            padding: 5px;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+
+        .search button {
+            border: 0;
+            background: #eb413d;
+            color: #fff;
+            padding: 5px;
+            width: 80%;
+            font-size: 17px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+
+
+    <!-- 获取政策列表 -->
+    <script type="text/javascript" th:inline="javascript">
+        var page = 0;
+        var type = [[${type}]]
+        var uri = basePath() + "/public/getJsonGet";
+
+        var ajaxdata = function () {
+
+            if (type == "PolicyList") {	//政策列表
+                document.title = '政策列表';
+            }
+            if (type == "PolicyHotList") {	//热门政策列表
+
+                document.title = '热门政策列表';
+            }
+            if (type == "BigdataList") {	//数据列表
+                document.title = '数据列表';
+            }
+            if (type == "FaqList") {	//在线咨询列表
+                document.title = '在线咨询列表';
+            }
+            if (type == "DepList") {	//获取机构列表
+                document.title = '机构列表';
+            }
+            if (type == "EptList") {	//获取企业列表
+                document.title = '企业列表';
+                $(".search").css("display", "block");
+            }
+
+            if (type == "superiorList") {	//获取上级政策
+                document.title = '上级政策';
+            }
+            //loading效果
+            mui.showLoading("加载中", "div");
+            $.ajax({
+                url: uri,
+                data: {"type": type},
+                type: "post",
+                dataType: "json",
+                async: true,
+                success: function (result) {
+                    mui.hideLoading(function () {
+                        console.log(result)
+                        choosefun(result, type);
+                    })
+                }
+            });
+        }
+
+        function choosefun(result, str) {
+            switch (str) {
+                case "PolicyList":	//政策列表
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=PolicyList'";
+                        $(".main").append(
+                            '<div class="list" onclick="' + href + '">' +
+                            '<div class="right">' +
+                            '<p class="title">' + json[i].title + '</p>' +
+                            '<p class="policyTime">' + json[i].publicDate + '</p>' +
+                            '</div>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+                case "PolicyHotList":	//热门政策列表
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=PolicyList'";
+                        $(".main").append(
+                            '<div class="list" onclick="' + href + '">' +
+                            '<div class="right">' +
+                            '<p class="title">' + json[i].title + '</p>' +
+                            '<p class="policyTime">' + json[i].publicDate + '</p>' +
+                            '</div>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+                case "BigdataList":	//数据列表
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=BigdataList'";
+                        var source;
+                        if (json[i].source == null || json[i].source == "") {
+                            source = "暂无记录";
+                        } else {
+                            source = json[i].source;
+                        }
+                        $(".main").append(
+                            '<div class="list" onclick="' + href + '">' +
+                            '<div class="right">' +
+                            '<p class="title">' + json[i].title + '</p>' +
+                            '<p class="policyTime">来源：' + source + '</p>' +
+                            '</div>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+                case "FaqList":	//在线咨询列表
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=FaqList'";
+                        $(".main").append(
+                            '<div class="askList" onclick="' + href + '">' +
+                            '<p class="title">' + json[i].title + '</p>' +
+                            '<p class="source">来源：' + json[i].typeName + '</p>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+                case "DepList":	//机构列表
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        //var href = "window.location.href='${ct}/government/qy/detail?id="+json[i].id+"*type=FaqList'";
+                        $(".main").append(
+                            '<div class="list" onclick="">' +
+                            '<div class="right">' +
+                            '<p class="title">' + json[i].name + '</p>' +
+
+                            '</div>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+                case "EptList":	//企业列表
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        var fddbr = json[i].fddbr;
+                        if (fddbr == "" || fddbr == null) {
+                            fddbr = "暂无记录";
+                        } else {
+                            fddbr = json[i].fddbr;
+                        }
+                        var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=EptList'";
+                        $(".main").append(
+                            '<div class="list" onclick="' + href + '">' +
+                            '<div class="right">' +
+                            '<p class="title">' + json[i].etpName + '</p>' +
+                            '<p class="legal">法人代表：' + fddbr + '</p>' +
+                            '<p class="time">注册时间：' + json[i].etpRegTime + '</p>' +
+                            '</div>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+                case "superiorList":	//上级政策
+                    var json = result.data;
+                    console.log(json)
+                    for (var i in json) {
+                        var source = json[i].source;
+                        if (source == "" || source == null) {
+                            source = "暂无记录";
+                        } else {
+                            source = json[i].source;
+                        }
+                        var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=superiorList'";
+                        $(".main").append(
+                            '<div class="askList" onclick="' + href + '">' +
+                            '<p class="title">' + json[i].title + '</p>' +
+                            '<p class="source">发布部门：' + json[i].source + '</p>' +
+                            '<p class="source">发布时间：' + json[i].publicDate + '</p>' +
+                            '</div>'
+                        )
+                    }
+                    break;
+
+            }
+        }
+
+
+        var url;
+        var data;
+
+        $(document).ready(function () {
+            //初始化弹框
+            prompt.load();
+            prompt.config({//不可填
+                contant: "#fff",//内容框颜色
+                close: "#000",//交叉字体颜色
+                title: "#000",//标题字体颜色
+                font: "#000",//内容字体颜色
+                button: "#eb413d",//按钮默认颜色
+            });
+
+            ajaxdata();
+            $(".main").bind("scroll", function () {
+                var bottom = $(this).scrollTop() + $(this).height();
+                if (bottom == $(this)[0].scrollHeight) {
+                    page = page + 20;
+                    ajaxdata();
+                }
+            });
+
+
+        });
+
+        var keyword;
+
+        function searchQY() {
+            mui.showLoading("加载中", "div");
+
+            page = 0;
+            if ($("#qyname").val() == "") {
+                keyword = "广东";
+            } else {
+                keyword = $("#qyname").val();
+            }
+
+            keyword = encodeURI(keyword);
+            url = "http://sdztc.shunde.gov.cn/QYZTCWS/common.do?";
+            data = "getEptList&start=" + page + "&limit=20*keyword=" + keyword;
+            $.ajax({
+                url: uri,
+                data: {"url": url + data, "type": ""},
+                type: "POST",
+                dataType: "json",
+                async: true,
+                success: function (result) {
+                    mui.hideLoading(function () {
+                        var json = result.data;
+                        console.log(json)
+                        if (json.length == 0) {
+                            prompt.open({
+                                title: "",
+                                text: "无查询结果",
+                                cancel: false,
+                                close: false,
+                                button: [
+                                    {
+                                        name: "确定",
+                                        callback: function () {
+                                            prompt.close();
+                                        }
+                                    }
+                                ]
+                            });
+                            return;
+                        }
+                        $(".main").html("");
+                        for (var i in json) {
+                            var fddbr = json[i].fddbr;
+                            if (fddbr == "" || fddbr == null) {
+                                fddbr = "暂无记录";
+                            } else {
+                                fddbr = json[i].fddbr;
+                            }
+                            var href = "window.location.href='" + basePath() + "/government/qy/detail?id=" + json[i].id + "&type=EptList'";
+                            $(".main").append(
+                                '<div class="list" onclick="' + href + '">' +
+                                '<div class="right">' +
+                                '<p class="title">' + json[i].etpName + '</p>' +
+                                '<p class="legal">法人代表：' + fddbr + '</p>' +
+                                '<p class="time">注册时间：' + json[i].etpRegTime + '</p>' +
+                                '</div>' +
+                                '</div>'
+                            )
+                        }
+                    })
+                }
+            });
+        }
+    </script>
+
+
+</head>
+<body>
+<div class="search">
+    <input type="text" id="qyname" placeholder="请输入关键字"/>
+    <center>
+        <button onclick="searchQY()">查询</button>
+    </center>
+</div>
+
+<div class="main">
+    <!-- <div class="list">
+        <div class="right">
+            <span>佛山市顺德区人才工作领导小组办公室关于确认蔡敬侠等同志为顺德区高层次人才的通知（2017年第5批次）</span>
+            <p>2017-06-20</p>
+        </div>
+    </div> -->
+</div>
+
+</body>
+</html>

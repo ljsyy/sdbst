@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0, user-scalable=yes">
+    <link rel="stylesheet" href="css/app/guideDetail.css"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/base.js"></script>
+    <style type="text/css">
+        .content {
+            overflow: scroll;
+        }
+
+        table {
+            WIDTH: 100% !important;
+        }
+
+        .content {
+            font-size: 16px !important;
+        }
+
+        .content span {
+            font-size: 16px !important;
+        }
+
+        .content p {
+            font-size: 16px !important;
+        }
+
+        .content font {
+            font-size: 16px !important;
+        }
+
+        img {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+    <title>详情页</title>
+</head>
+<body>
+<div class="container">
+    <!--内容-->
+    <div id="reportDetail-content">
+        <h3 style="font-size:16px;"></h3>
+        <div class="time"></div>
+        <hr/>
+        <div class="content"></div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    //获取id和foldId
+    var id = [[${id}]];
+    var foldId = [[${foldId}]];
+
+    var choose = [[${choose}]];
+    var url;
+    console.log(choose);
+    $(function () {
+        mui.showLoading("正在加载数据", "div");
+        if (typeof(choose) != "undefined" && choose == "1") {
+            $.ajax({
+                url: basePath() + "/data/newsDetail?id=" + id + "_" + foldId + "&mobileLogin=true",
+                type: "post",
+                dataType: "json",
+                async: true,
+                success: function (result) {
+                    mui.hideLoading(function () {
+                        var data = result.obj;
+                        //设置标题
+                        var bt = data.bt;
+                        if (bt.length > 10) {
+                            bt = bt.substring(0, 10) + "...";
+                        }
+                        $("title ").text(bt);
+
+                        //设置内容
+                        $("#reportDetail-content h3").text(data.bt);
+                        $("#reportDetail-content .time").html(data.cjrq + " " + data.cjsj);
+                        $("#reportDetail-content .content").html(data.content);
+                    });
+
+                }
+            });
+
+        } else if (choose == "2") {	//场景是服务
+            $.ajax({
+                url: basePath() + "/data/newsDetail?id=" + id + "&mobileLogin=true",
+                type: "post",
+                dataType: "json",
+                async: true,
+                success: function (result) {
+                    mui.hideLoading(function () {
+                        var data = result.obj;
+                        //设置标题
+                        var bt = data.bt;
+                        if (bt.length > 10) {
+                            bt = bt.substring(0, 10) + "...";
+                        }
+                        $("title ").text(bt);
+
+                        //设置内容
+                        $("#reportDetail-content h3").text(data.bt);
+                        $("#reportDetail-content .time").html(data.cjrq + " " + data.cjsj);
+                        $("#reportDetail-content .content").html(data.content);
+                    })
+                }
+            });
+
+
+        } else {
+
+            url = basePath() + "/data/newsDetail?id=" + id + "_" + foldId + "&jsonpcallback=?";
+            $.getJSON(url, function (result) {
+                mui.hideLoading(function () {
+                    console.log(result)
+                    if (result.success == false) {
+                        mui.toast("获取数据失败！");
+                    }
+                });
+
+                var obj = result.obj;
+
+                //判断旧详情接口能否查询到数据
+                if (obj.content == "内容加载失败！") {
+                    url = basePath() + "/data/newsDetail%3Fid=" + id + "_" + foldId + "%26mobileLogin=true";
+                    $.ajax({
+                        url: basePath() + "/data/newsDetail?id=" + id + "_" + foldId + "&mobileLogin=true",
+                        type: "post",
+                        dataType: "json",
+                        async: true,
+                        success: function (result) {
+                            mui.hideLoading(function () {
+                                obj = result.obj;
+
+                                console.log(obj);
+                                //设置标题
+                                var bt = obj.bt;
+                                if (bt.length > 10) {
+                                    bt = bt.substring(0, 10) + "...";
+                                }
+                                $("title ").text(bt);
+
+                                //设置内容
+                                $("#reportDetail-content h3").text(obj.bt);
+                                $("#reportDetail-content .time").html(obj.cjrq + " " + obj.cjsj);
+                                $("#reportDetail-content .content").html(obj.content);
+
+                                //附件不完整的拼接地址
+                                $('a').each(function () {
+
+                                    var href = $(this).attr('href');
+                                    //console.log(href);
+                                    if (href == undefined || href == "" || href == null) {
+                                        console.log(href)
+                                    } else {
+                                        if (href.indexOf("http") < 0) {
+                                            //console.log(href);
+                                            $(this).attr('href', 'http://www.shunde.gov.cn' + href);
+                                        }
+                                    }
+
+                                });
+                            });
+
+                        }
+                    });
+                } else {
+                    mui.hideLoading(function () {
+                        console.log(obj);
+                        //设置标题
+                        var bt = obj.bt;
+                        if (bt.length > 10) {
+                            bt = bt.substring(0, 10) + "...";
+                        }
+                        $("title ").text(bt);
+
+                        //设置内容
+                        $("#reportDetail-content h3").text(obj.bt);
+                        $("#reportDetail-content .time").html(obj.cjrq + " " + obj.cjsj);
+                        $("#reportDetail-content .content").html(obj.content);
+                    })
+                }
+
+
+            });
+
+        }
+
+    });
+</script>
+</html>
+

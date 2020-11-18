@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>5G WIFI</title>
+    <link href="mui/css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="mui/js/mui.min.js"></script>
+</head>
+<style>
+    * {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    #btn-down-left {
+        background-repeat: no-repeat;
+        border: 0px;
+        border-radius: 25px;
+        position: absolute;
+        bottom: 20%;
+        left: 20%;
+        width: 60%;
+        height: 6%;
+        padding-left: 20px;
+        -webkit-user-select: auto;
+        -moz-user-select: auto;
+    }
+
+    .btn-down-right {
+        border: 0px;
+        border-radius: 25px;
+        position: absolute;
+        bottom: 10%;
+        left: 20%;
+        width: 60%;
+        height: 6%;
+        background: #1eb0e9;
+    }
+
+    .container {
+        background: url("img/life/5gwifi.png") no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+    }
+</style>
+<body>
+<div class="container">
+    <input id="btn-down-left" placeholder="     请输入手机号"/>
+    <button class="btn-down-right" onclick="sendMsg()">获取WIFI密码</button>
+</div>
+</body>
+<script type="text/javascript">
+    function sendMsg() {
+        var phone = $("#btn-down-left").val();
+        if (phone == null || phone == '') {
+            mui.alert("请输入手机号！", "提示");
+            return;
+        }
+        //验证手机号是否正确
+        if (!(/^1[3456789]\d{9}$/.test(phone))) {
+            mui.alert("手机号有误！", "提示");
+            return;
+        }
+        //发起异步请求
+        $.ajax({
+            url: basePath() + "/life/sendWIFIInfo",
+            data: {
+                phone: phone
+            },
+            type: "post",
+            dataType: "json",
+            async: true,
+            success: function (res) {
+                if (res.code == 200) {
+                    mui.toast("WIFI密码已发送到您的手机上")
+                } else {
+                    mui.toast("获取WIFI密码失败！")
+                }
+            },
+            error: function (err) {
+                mui.toast("获取WIFI密码失败！！！")
+            }
+        })
+    }
+
+    //默认字体随屏幕宽度改变而改变，原开发屏幕比例为1rem=15.54px
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 12.5 * (clientWidth / 320) + 'px';
+                console.log(docEl.style.fontSize);
+            };
+        //文档加载完后马上执行一次适应不同大小屏幕
+        recalc();
+        //绑定缩放窗口大小行为时执行自适应函数
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+
+    function resize(idName) {
+        //设置image宽高为网页正文宽高
+        $("#" + idName).css("height", document.body.scrollHeight);
+        $("#" + idName).css("width", document.body.scrollWidth)
+    }
+
+    function classResize(idName) {
+        //设置image宽高为网页正文宽高
+        $("." + idName).css("height", $(window).height());
+        $("." + idName).css("width", $(window).width())
+    }
+
+    classResize("container");//背景图片div的id
+
+</script>
+</html>

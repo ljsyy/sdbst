@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/list.css"/>
+    <link rel="stylesheet" href="css/app/base.css"/>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/list.js"></script>
+
+    <title th:text="${ri.titleName}"></title>
+</head>
+<body>
+<div class="container">
+    <!-- &lt;!&ndash;头部&ndash;&gt;
+             <header id="head">
+                 <div class="headl retrun-icon">
+                     <svg class="icon" aria-hidden="true">
+                         <use xlink:href="#icon-toLeft-copy"></use>
+                     </svg>
+                 </div>
+                 <span id="title" th:text="${ri.titleName}"></span>
+                 <div class="headr"></div>
+             </header>
+             <div style="height: 50px">&nbsp;</div>-->
+    <!--内容-->
+    <div id="show" class="time-list"></div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    var url = [[${ri.url}]];
+
+    $(function () {
+        //初始化数据
+        var start = 0;
+        var first = true;
+        getJson(start, first);
+
+        //下拉到底,加载数据
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                start = start + 20;
+                first = false;
+                getJson(start, first);
+
+            }
+        });
+
+    });
+
+
+    //获取数据
+    function getJson(start, first) {
+
+        if (url == null || url == "") {
+            mui.toast("该栏目不存在！");
+            return;
+        }
+
+
+        mui.showLoading("加载中","div");
+        $.ajax({
+            url: basePath() + url + start,
+            type: "post",
+            dataType: "json",
+            success: function (result) {
+                mui.hideLoading(function () {
+                    console.log(result);
+                    var arr = result.obj;
+                    if (arr == null || arr == "" || typeof(arr) == "undefined") {
+                        if (first) {
+                            //mui.toast("没有加载到数据！");
+                            mui.toast("没有加载到数据！");
+                        } else {
+                            //mui.toast("已经加载到底部！");
+                            mui.toast("已经加载到底部！");
+                        }
+                    } else {
+                        showData(arr);
+                    }
+                });
+            }
+        });
+    }
+
+    //显示数据
+    function showData(arr) {
+        //跳转地址
+        var uri = "";
+
+        $(arr).each(function (i) {
+            //判断跳转地址
+            if (arr[i].href == "") {
+                //统计月报、分析、公报
+                if (url.indexOf("fid=7200039") > 0 || url.indexOf("fid=7200129") > 0 || url.indexOf("fid=7200125") > 0) {
+                    uri = basePath() + "/public/detail?id=" + arr[i].id + "&foldId=" + arr[i].fold_id + "&choose=1";
+                } else {
+                    uri = basePath() + "/public/detail?id=" + arr[i].id + "&foldId=" + arr[i].fold_id;
+                }
+            } else if (url.indexOf("fid=30006") > 0 && arr[i].href.indexOf(".pdf") >= 0) {
+                uri = arr[i].station_sh + arr[i].href;
+            } else {
+                //uri=arr[i].href.replace(/&/g,'*')+"&adapt=1";
+                uri = arr[i].href;
+            }
+
+            //网上调查
+            if (url.indexOf("fid=10375") > 0) {
+                uri = arr[i].href;
+            }
+            //信息公告
+            if (url.indexOf("fid=30006") > 0 && arr[i].href.indexOf(".pdf") >= 0) {
+                uri = arr[i].station_sh + arr[i].href;
+            }
+            /* //投标竞标-采购法律法规-法律法规  //政府招标采购
+             if(url.indexOf("fids=4200005,4200020,4200021")>0 || url.indexOf("fid=10429,4200000,4200014")>0 || url.indexOf("fid=10431,4200001")>0 || url.indexOf("fid=10993,4200014")>0 || url.indexOf("fid=10994,4200023")>0 || url.indexOf("fid=11566,4200003")>0){
+                 //uri=arr[i].station_sh+arr[i].href;
+                 uri = "http://www.sdggzy.cn/data/main.php?id="+arr[i].id+"-"+arr[i].fold_id;
+             }
+             */
+            var bt = arr[i].bt;
+            $(".container #show").append("<div class='list'><a href='" + uri + "'><div class='list-l'><div>" + bt + "</div><div class='time'>" + arr[i].cjrq + "</div></div><div class='list-r'>&nbsp;<img src='" + basePath() + "/img/interface/right.png' /></div></a></div>");
+        });
+    }
+
+
+</script>
+</html>
+

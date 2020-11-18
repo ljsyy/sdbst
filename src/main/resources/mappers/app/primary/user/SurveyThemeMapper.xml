@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.user.SurveyThemeMapper">
+	
+    <sql id="appSurveyThemeColumns">
+    	a.id AS "id",
+    	a.title AS "title",
+    	a.sort AS "sort",
+    	a.create_date AS "createDate",
+    	a.del_flag AS "delFlag"
+    </sql>
+    
+    <sql id="appSurveyThemeJoins">
+    </sql>
+	
+	<select id="get" resultType="com.unifs.sdbst.app.bean.user.SurveyTheme">
+		SELECT
+			<include refid="appSurveyThemeColumns"/>
+		FROM APP_SURVEY_THEME a
+			<include refid="appSurveyThemeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.user.SurveyTheme">
+		SELECT
+			<include refid="appSurveyThemeColumns" />
+		FROM APP_SURVEY_THEME a
+			<include refid="appSurveyThemeJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="getMaxSort" resultType="Integer">
+		select max(sort) from APP_SURVEY_THEME where del_flag = '0'
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO APP_SURVEY_THEME(
+			id,
+	    	title,
+	    	sort,
+	    	create_date,
+	    	del_flag
+		) VALUES (
+			#{id}, 
+			#{title},
+			#{sort},
+			#{createDate}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE APP_SURVEY_THEME SET 
+			title = #{title},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSort">
+		UPDATE APP_SURVEY_THEME SET 
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE APP_SURVEY_THEME SET 
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+
+	<select id="selectAll" resultType="com.unifs.sdbst.app.bean.user.SurveyTheme">
+		select * from APP_SURVEY_THEME where del_flag='0'
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<base th:href="${#request.getContextPath()}+'/'">
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" href="css/app/lawsAndRegu.css">
+	<link rel="stylesheet" href="css/app/base.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/list.js"></script>
+	<script src="js/base.js"></script>
+<title>规范性文件</title>
+
+
+</head>
+<body>
+<div class="container">
+    <!--头部-->
+    <!--内容-->
+    <div id="normativeFile-content">
+	    <div class='list'>
+	    	<a href="public/timeList?titleName=政府规范性文件">
+	    	<div class='list-l'><div>政府规范性文件</div></div>
+	    	<div class='list-r'>&nbsp;<img src='img/interface/right.png' /></div>
+	    	</a>
+    	</div>
+    	<div class='list'>
+	    	<a href="public/timeList?titleName=部门规范性文件">
+	    	<div class='list-l'><div>部门规范性文件</div></div>
+	    	<div class='list-r'>&nbsp;<img src='img/interface/right.png' /></div>
+	    	</a>
+    	</div>
+    </div>
+</div> 
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+body { background-color:#FFF; }
+
+.content { max-width:720px; padding:0px; margin:0px auto; }
+.content #info { font-size:16px; font-weight:500; background-color:#EEE; padding:8px 10px; }		 
+.content table tr td {  font-size:18px; font-weight:500; line-height:28px; border-bottom:1px solid #EEE; }
+.content table tr td img { vertical-align:middle; width:10px; height:16px; }
+.content table tr td select { width:90%; line-height:26px; padding:3px; border:0px;  
+							   font-size:16px; font-weight:500; }
+
+
+#container { max-width:720px; padding:10px; margin:0px auto; }
+#container table tr td { background-color:#EEE;
+				  		 font-size:16px; font-weight:500; }
+#container table tr td span { color:#F00; }
+#container .empty { line-height:30px; }
+#container .btn input { height: 37px;line-height: 37px;width: 100%;background: #f5f4f4;color: #dbdada;border: 0;border-radius: 5px;font-size: 16px;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti !important;}
+#container .btn input { padding-left: 0;text-align:center;background: #eb413d;color:#fff;}
+

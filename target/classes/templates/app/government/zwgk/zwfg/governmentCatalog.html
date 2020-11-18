@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<link rel="stylesheet" href="css/app/guideDetail.css" />
+<script src="js/app/lib/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+<style type="text/css">
+	.container { background-color:#EEE; }
+	html,body { height:100%; margin:0px; padding:0px; list-style-type:none;	
+				font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti; }
+	header { height:50px; background:#eb413d; text-align:center; color:#fff; line-height:50px; overflow: hidden;
+			 width:100%; font-size:16px; position:fixed; top:0px; left:0px; right:0px; }
+	header .headl { float:left; width:50px; height:50px; }
+	header .headl .icon { height:100%; margin-top:10px; width:2em; height:2em; vertical-align:middle; 
+						  fill:currentColor; overflow:hidden; font-size:15px; }
+	header span{font-size:18px;}
+	header .headr { float:right; width:50px; height:50px; margin-right:10px; }
+	
+	/& #catalog-content { margin-top: 50px; } &/
+</style>
+<script>
+	$(function(){
+		$(".retrun-icon").click(function(){
+			window.history.back();
+		});
+		
+	})
+</script>
+<title>政府信息公开目录</title>
+</head>
+<body>
+<div class="container">
+
+    <!--内容-->
+    <div id="catalog-content">
+        <div class="unit">主管部门</div>
+        <div class="list">
+        	<a href= "http://zwgk.shunde.gov.cn/ind.php?UnitID=10&gkml=1&adapt=1&title=顺德区人民政府办公室">
+        	<div class="list-l">顺德区人民政府办公室 </div>
+            <div class="list-r"> <img src="img/interface/right.png"/>&nbsp;&nbsp;</div>
+            </a>
+        </div>
+        
+        <div class="unit">政府部门</div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=720&gkml=1&adapt=1&title=区发展规划和统计局">
+            <div class="list-l">区发展规划和统计局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=723&gkml=1&adapt=1&title=区经济和科技促进局">
+        	<div class="list-l">区经济和科技促进局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=102&gkml=1&adapt=1&title=区教育局">
+            <div class="list-l">区教育局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=104&gkml=1&adapt=1&title=区公安局">
+        	<div class="list-l">区公安局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=721&gkml=1&adapt=1&title=区监察局">
+            <div class="list-l">区监察局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=725&gkml=1&adapt=1&title=区民政和人力资源社会保障局">
+        	<div class="list-l">区民政和人力资源社会保障局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=728&gkml=1&adapt=1&title=区司法局">
+            <div class="list-l">区司法局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=724&gkml=1&adapt=1&title=区财税局">
+        	<div class="list-l">区财税局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=719&gkml=1&adapt=1&title=区国土城建和水利局">
+            <div class="list-l">区国土城建和水利局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=726&gkml=1&adapt=1&title=区环境运输和城市管理局">
+        	<div class="list-l">区环境运输和城市管理局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=757&gkml=1&adapt=1&title=区农业局 ">
+            <div class="list-l">区农业局 </div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=12&gkml=1&adapt=1&title=区文化体育局">
+        	<div class="list-l">区文化体育局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=717&gkml=1&adapt=1&title=区卫生和计划生育局">
+            <div class="list-l">区卫生和计划生育局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=902&gkml=1&adapt=1&title=区审计局">
+        	<div class="list-l">区审计局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=727&gkml=1&adapt=1&title=区外事侨务局">
+            <div class="list-l">区外事侨务局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=716&gkml=1&adapt=1&title=区市场监督管理局">
+        	<div class="list-l">区市场监督管理局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=908&gkml=1&adapt=1&title=安全生产监督管理局">
+        	<div class="list-l">安全生产监督管理局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        
+       <div class="unit">直属事业单位</div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=411&gkml=1&adapt=1&title=区国资办">
+            <div class="list-l">区国资办</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=714&gkml=1&adapt=1&title=区社保基金管理局">
+        	<div class="list-l">区社保基金管理局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=210&gkml=1&adapt=1&title=顺德高新区管委会">
+            <div class="list-l">顺德高新区管委会</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=735&gkml=1&adapt=1&title=区公用事业管理局">
+        	<div class="list-l">区公用事业管理局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=734&gkml=1&adapt=1&title=区行政服务中心">
+            <div class="list-l">区行政服务中心</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=904&gkml=1&adapt=1&title=区公路局">
+        	<div class="list-l">区公路局</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=201&gkml=1&adapt=1&title=区档案局 ">
+            <div class="list-l">区档案局 </div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        
+        <div class="unit">各镇街、派出机构</div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=413&gkml=1&adapt=1&title=佛山新城、乐从镇">
+            <div class="list-l">佛山新城、乐从镇</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=739&gkml=1&adapt=1&title=“两德”合作区">
+        	<div class="list-l">“两德”合作区</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=427&gkml=1&adapt=1&title=大良街道">
+            <div class="list-l">大良街道</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=426&gkml=1&adapt=1&title=容桂街道">
+        	<div class="list-l">容桂街道</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=713&gkml=1&adapt=1&title=伦教街道">
+            <div class="list-l">伦教街道</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=710&gkml=1&adapt=1&title=勒流街道">
+        	<div class="list-l">勒流街道</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=704&gkml=1&adapt=1&title=陈村镇">
+            <div class="list-l">陈村镇</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=702&gkml=1&adapt=1&title=北滘镇">
+        	<div class="list-l">北滘镇</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=408&gkml=1&adapt=1&title=龙江镇">
+            <div class="list-l">龙江镇</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list b-line">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=418&gkml=1&adapt=1&title=杏坛镇">
+        	<div class="list-l">杏坛镇</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+        <div class="list">
+        	<a href="http://zwgk.shunde.gov.cn/ind.php?UnitID=417&gkml=1&adapt=1&title=均安镇">
+            <div class="list-l">均安镇</div>
+            <div class="list-r">&nbsp;<img src="img/interface/right.png" />&nbsp;</div>
+            </a>
+        </div>
+    </div>
+</div> 
+</body>
+</html>
+

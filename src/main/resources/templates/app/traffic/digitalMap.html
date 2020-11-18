@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+ <style type="text/css">
+   body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+   #allmap{width:100%;height:100%;}
+   p{margin-left:5px; font-size:14px;}
+   
+   .first{display:none;}
+	.list-first{
+		background: #fff;
+	    border-bottom: solid 1px #bbbbbb;
+	    padding: 15px;
+	}
+	.right{    
+		position: relative;
+	    float: right;
+	    height: 20px;
+	}
+	#location{    
+	    position: absolute;
+	    bottom: 34px;
+	    left: 18px;
+	    background: #eaeaea;
+	    height: 30px;
+	    width: 30px;
+	    border-radius: 5px;
+	    display: block;
+	    /* background-color: #fff; */
+	    filter: Alpha(Opacity=50);
+	    -moz-opacity: 0.5;
+	    opacity: 0.8;
+	}
+
+	.submit{    
+		position: absolute;
+	    top: 10px;
+	    right: 10px;
+	    background: #D68E00;
+	    color: white;
+	    padding: 5px;
+	    border-radius: 5px;
+	}
+ </style>
+ <script th:src="@{/js/jquery.js}" ></script>
+	<script th:src="@{/js/base.js}"></script>
+
+	<!--<link rel="stylesheet" href="/app/css/base.css" />-->
+
+<link rel="stylesheet" th:href="@{/js/app/plug/alertPopShow.css}">
+<script th:src="@{/js/app/plug/alertPopShow.js}"></script>
+<script th:src="@{/js/load-ani.js}"></script>
+<script th:src="@{/js/list.js}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+
+<title>电子眼分布</title>
+</head>
+<body>
+
+<!-- 地图 -->
+<div id="allmap" style="display:block;"></div>
+<div id="submit" class="submit" type="submit" onClick="window.location.href= basePath()+'/traffic/digital'">列表</div>
+
+<!-- 定位按钮 -->
+<div id="location" onclick="choose()"><img src="img/map/localicon.png" height="30"/></div>
+
+<!-- 列表 -->
+<div class="first"></div>
+  
+</body>
+</html>
+
+<!-- IOS定位专用 -->
+<script>
+var callLocationOfLatAndLong = function(){
+    var callInfo = JSON.stringify({"jianshu": "http://www.jianshu.com/users/55c8fdc3c6e7/latest_articles"});
+    aaa.getCall(callInfo);
+}
+
+var CallbackLocationOfLatAndLong = function(str){
+    str1 = str;	
+    return str1;
+}
+var alerCallback = function(){
+    alert('成功');
+}
+</script>
+
+<script type="text/javascript">
+var lng;
+var lat;
+var mlng;
+var mlat;
+var data_info = new Array();
+var str1;
+var map;
+var navigationControl;
+var mypoint;//我的位置
+//运行环境
+var runEnviron='${runEnviron}';
+
+//移动地图监听
+function dragzoom(drag){
+	map.clearOverlays();
+	var center = map.getCenter();    
+    //alert("地图中心点变更为：" + center.lng + ", " + center.lat);    
+    mlng = center.lng;
+    mlat = center.lat;
+    if(drag){
+    	var pt = new BMap.Point(mlng,mlat);
+    	var geoc = new BMap.Geocoder();
+    	geoc.getLocation(pt, function(rs){
+    		var addComp = rs.addressComponents;
+    		if(addComp.district == "顺德区")
+    			showListen();
+    		else
+    			webToast("显示该区域未开通，敬请期待","middle",800);
+    	}); 
+    }else{
+    	showListen();
+    }
+}
+function listen(){
+	map.addEventListener("dragend", function(){    
+		dragzoom(true);
+	});
+	map.addEventListener("zoomend", function(){ 
+		dragzoom(false);
+	});
+}
+
+//移动地图标记
+function showListen(){
+	load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+	$.ajax({
+ 		url:basePath()+"/traffic/getAll",
+ 		data:"lng=" + mlng + "&lat=" + mlat,
+ 		type: "POST",
+ 		dataType:"json",
+ 		async:true,
+ 		success:function(result){
+ 			//alert(mlng+","+mlat)
+ 			data_info=[];
+ 			var json = result.list;
+			var bounds = map.getBounds();
+			var sw = bounds.getSouthWest();
+			var ne = bounds.getNorthEast();
+			var toast = "显示该区域未开通，敬请期待";
+ 			load_ani.remove();
+ 			var json = result.list;
+ 			var getz = parseInt(map.getZoom());
+ 			var openshow = 10;
+ 			if(getz >= 16){
+				openshow = 40;
+			}
+			if(getz == 15){
+				openshow = 60;
+			}
+			if(getz == 14){
+				openshow = 80;
+			}
+			if(getz == 13){
+				openshow = 100;
+			}
+			if(json.length < openshow){
+				openshow = json.length;
+			}
+ 			for(var j = 0;j<openshow;j++){
+ 				data_info.push([json[j].lng,json[j].lat,json[j].address,json[j].type]);
+ 	 	 		area(json[j]);
+ 			}
+ 			var opts = {
+ 					width : 0,     // 信息窗口宽度
+ 					height: 0,     // 信息窗口高度
+ 					title : "" , // 信息窗口标题
+ 					enableMessage:true//设置允许信息窗发送短息
+ 			  	};
+ 			  	for(var i=0;i<data_info.length;i++){
+ 			  		var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+ 			  		var content = "类型："+ data_info[i][3] +"<br> 地址："+ data_info[i][2];
+ 			  		map.addOverlay(marker);               // 将标注添加到地图中
+ 			  		addClickHandler(content,marker);
+ 			  	}
+ 				  	
+ 			  	function addClickHandler(content,marker){
+ 			  		marker.addEventListener("click",function(e){
+ 			  			openInfo(content,e)}
+ 			  		);
+ 			  	}
+ 			  	function openInfo(content,e){
+ 			  		var p = e.target;
+ 			  		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+ 			  		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+ 			  		map.openInfoWindow(infoWindow,point); //开启信息窗口
+ 			  	}
+ 			function area(o){
+				var ln = o.lng;
+				var la = o.lat;
+				if(sw.lng < ln && ne.lng > ln && sw.lat < la && ne.lat > la ){
+					toast = "发现电子眼";
+				}
+			}
+			webToast(toast,"middle",800);
+			if(mypoint != undefined)
+				map.addOverlay(mypoint);
+ 		}
+	});
+      
+	
+}
+function choose(){	//判断系统
+	// load_ani.open("pointloading");//rect square dot cube dotGo scaleout pointloading
+	data_info = [];
+	//百度地图API功能
+	map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(113.303526, 22.80993), 15);
+	// 添加缩放地图控件
+	navigationControl = new BMap.NavigationControl({
+	  // 靠左上角位置
+	  anchor: BMAP_ANCHOR_TOP_LEFT,
+	  // LARGE类型
+	  type: BMAP_NAVIGATION_CONTROL_LARGE,
+	  // 启用显示定位
+	  enableGeolocation: false
+	});
+	map.addControl(navigationControl);
+	map.setMinZoom(13);
+	//map.setMaxZoom(16);
+	listen();
+	var u = navigator.userAgent; 
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端 
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+	if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+		//alert("wx");
+		wx();
+	}else{
+		if (isAndroid) {
+			//alert("Android");
+			window.setTimeout(function(){
+			    android()
+			},500);
+		}else if (isiOS) {
+			//alert("ios");
+            // window.setTimeout("ios()",500);
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r){
+                if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                    ios(r.point.lat,r.point.lng);
+                }else {
+                    alert('failed'+this.getStatus());
+                }
+            });
+		}
+	}
+}
+
+function ios(lat,lng){	//IOS使用
+	// aaa.callLocationOfLatAndLong();	//调用IOS调用返回值
+	//alert("APP传值："+str1);
+    // if (str1 )
+	// var paramArray = str1.split(",");
+	// lat = paramArray[0];
+	// lng = paramArray[1];
+
+	  var ggPoint = new BMap.Point(lng,lat);
+
+	   //坐标转换完之后的回调函数
+	  translateCallback = function (data){
+	    if(data.status === 0) {
+	      var marker = new BMap.Marker(data.points[0]);
+		  
+	      if(lat == "" || lng == ""){
+	    	  mlng = "113.303526";
+	    	  mlat = "22.80993";
+	      }else{
+	    	  map.setCenter(data.points[0]);
+		      mlng = data.points[0].lng;
+		      mlat = data.points[0].lat;
+		      //alert("转换完成")
+	      }
+
+	      $.ajax({
+	  		url:basePath()+"/traffic/getAll",
+	  		data:"lng=" + mlng + "&lat=" + mlat,
+	  		type: "POST",
+	  		dataType:"json",
+	  		async:false,
+	  		success:function(result){
+	  			//alert(mlng+","+mlat)
+	  			var json = result.list;
+	  			//console.log(json)
+	  			for(var j = 0;j<60;j++){
+	  				data_info.push([json[j].lng,json[j].lat,json[j].address,json[j].type]);
+	  			}
+	  		}
+	  	  });
+	      
+	      var opts = {
+		  			width : 0,     // 信息窗口宽度
+		  			height: 0,     // 信息窗口高度
+		  			title : "" , // 信息窗口标题
+		  			enableMessage:true//设置允许信息窗发送短息
+		  	};
+		  	for(var i=0;i<data_info.length;i++){
+		  		var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+		  		var content = "类型："+ data_info[i][3] +"<br> 地址："+ data_info[i][2];
+		  		map.addOverlay(marker);               // 将标注添加到地图中
+		  		addClickHandler(content,marker);
+		  	}
+		  	
+		  	function addClickHandler(content,marker){
+		  		marker.addEventListener("click",function(e){
+		  			openInfo(content,e)}
+		  		);
+		  	}
+		  	function openInfo(content,e){
+		  		var p = e.target;
+		  		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		  		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+		  		map.openInfoWindow(infoWindow,point); //开启信息窗口
+		  	}
+	      
+	      var pt = new BMap.Point(mlng, mlat);
+	      var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+	      mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+	      map.addOverlay(mypoint);              // 将标注添加到地图中
+	      load_ani.remove();
+	      //alert("标记完成");
+	    }
+	  }
+
+	  // setTimeout(function(){
+	  //     var convertor = new BMap.Convertor();
+	  //     var pointArr = [];
+	  //     pointArr.push(ggPoint);
+	  //     convertor.translate(pointArr, 1, 5, translateCallback)
+	  // }, 1000);
+    translateCallback({points:[ggPoint],status:0});
+
+}
+function android(){	//安卓使用
+    if (typeof myobj == "object") {
+        if(myobj.show() == null){
+            lng =  22.80613;//22.927904;
+            lat = 113.289986;//113.15105;
+        }else{
+            var paramArray = myobj.show().split(",");
+            lng = paramArray[0];
+            lat = paramArray[1];
+        }
+    }else {
+        lng =  22.80613;//22.927904;
+        lat = 113.289986;//113.15105;
+    }
+	  if(lat == "" || lng == ""){
+			// alert("请确保网络通畅并打开手机定位与权限");
+			webToast("请确保网络通畅并打开手机定位与权限","middle",3000);
+	  }
+    // var npointJ = 113.289986;
+    // var npointW = 22.80613;
+    // var ggPoint = new BMap.Point(npointJ,npointW);
+	  var ggPoint = new BMap.Point(lat,lng);
+
+	   //坐标转换完之后的回调函数
+	  translateCallback = function (data){
+	      // console.log(data);
+	    if(data.status === 0) {
+	      var marker = new BMap.Marker(data.points[0]);
+		  
+	      if(lat == "" || lng == ""){
+	    	  mlng = "113.303526";
+	    	  mlat = "22.80993";
+	      }else{
+	    	  map.setCenter(data.points[0]);
+		      mlng = data.points[0].lng;
+		      mlat = data.points[0].lat;
+	      }
+	      
+
+	      $.ajax({
+	  		url:basePath()+"/traffic/getAll",
+	  		data:"lng=" + mlng + "&lat=" + mlat,
+	  		type: "POST",
+	  		dataType:"json",
+	  		async:false,
+	  		success:function(result){
+	  			//alert(mlng+","+mlat)
+	  			var json = result.list;
+	  			//console.log(json)
+	  			for(var j = 0;j<60;j++){
+	  				data_info.push([json[j].lng,json[j].lat,json[j].address,json[j].type]);
+	  			}
+	  		}
+	  	  });
+	      
+	      var opts = {
+		  			width : 0,     // 信息窗口宽度
+		  			height: 0,     // 信息窗口高度
+		  			title : "" , // 信息窗口标题
+		  			enableMessage:true//设置允许信息窗发送短息
+		  	};
+		  	for(var i=0;i<data_info.length;i++){
+		  		var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+		  		var content = "类型："+ data_info[i][3] +"<br> 地址："+ data_info[i][2];
+		  		map.addOverlay(marker);               // 将标注添加到地图中
+		  		addClickHandler(content,marker);
+		  	}
+		  	
+		  	function addClickHandler(content,marker){
+		  		marker.addEventListener("click",function(e){
+		  			openInfo(content,e)}
+		  		);
+		  	}
+		  	function openInfo(content,e){
+		  		var p = e.target;
+		  		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		  		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+		  		map.openInfoWindow(infoWindow,point); //开启信息窗口
+		  	}
+	      
+	      var pt = new BMap.Point(mlng, mlat);
+	      var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+	      mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+	      map.addOverlay(mypoint);              // 将标注添加到地图中
+	      load_ani.remove();
+	    }
+	  }
+
+	  setTimeout(function(){
+	      var convertor = new BMap.Convertor();
+	      var pointArr = [];
+	      console.log(ggPoint)
+	      pointArr.push(ggPoint);
+	      convertor.translate(pointArr, 1, 5, translateCallback)
+	  }, 1000); 
+
+}
+function wx(){	//微信使用
+	var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){
+		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+			//var mk = new BMap.Marker(r.point);
+			//map.addOverlay(mk);
+			map.panTo(r.point);
+			//alert('您的位置：'+r.point.lng+','+r.point.lat);
+			var pt = new BMap.Point(r.point.lng, r.point.lat);
+			var myIcon = new BMap.Icon("img/map/qid.png", new BMap.Size(60,60));
+			mypoint = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+		      map.addOverlay(mypoint);              // 将标注添加到地图中
+			load_ani.remove();
+			
+			$.ajax({
+				url:basePath()+"/traffic/getAll",
+				data:"lng=" + r.point.lng + "&lat=" + r.point.lat,
+				type: "POST",
+				dataType:"json",
+				async:false,
+				success:function(result){
+					load_ani.remove();
+					var json = result.list;
+					//console.log(json)
+					for(var j = 0;j<60;j++){
+						data_info.push([json[j].lng,json[j].lat,json[j].address,json[j].type]);	
+					}
+				}
+			});
+	    
+		    var opts = {
+					width : 0,     // 信息窗口宽度
+					height: 0,     // 信息窗口高度
+					title : "" , // 信息窗口标题
+					enableMessage:true//设置允许信息窗发送短息
+			};
+			for(var i=0;i<data_info.length;i++){
+				var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+				var content = "类型："+ data_info[i][3] +"<br> 地址："+ data_info[i][2];
+				map.addOverlay(marker);               // 将标注添加到地图中
+				addClickHandler(content,marker);
+			}
+		
+			function addClickHandler(content,marker){
+				marker.addEventListener("click",function(e){
+					openInfo(content,e)}
+				);
+			}
+			function openInfo(content,e){
+				var p = e.target;
+				var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+				var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+				map.openInfoWindow(infoWindow,point); //开启信息窗口
+			}
+		}
+		else {
+			//alert('failed'+this.getStatus());
+			webToast("failed"+this.getStatus(),"middle",3000);
+		}        
+	});
+}
+
+function getType(){		//查询一类
+	$.ajax({ 
+		url: basePath()+"/traffic/getType",
+		type:"post",
+		dataType:"json",
+		async:false,
+		success:function(result){
+			//console.log(result.list)
+			var json = result.list;
+			for(var i in json){
+				var href = "window.location.href='"+basePath()+"/traffic/digitalList?typeid="+json[i].typeid+"&noHead=${param.noHead}'";
+				$(".first").append(
+					'<div class="list-first" onClick="'+href+'">'+json[i].type+
+					'<img class="right" src="img/interface/right.png" />'+
+					'</div>'		
+				);
+			}
+		}
+	});
+};
+
+
+$(document).ready(function(){
+    choose();
+	getType();
+	
+});
+</script>
+
+

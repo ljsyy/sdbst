@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>新型冠状病毒防控咨询</title>
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="wui/css/weui.css"/>
+    <link rel="stylesheet" href="wui/css/weuix.css"/>
+    <link rel="stylesheet" href="wui/css/jquery-weui.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/md5.min.js"></script>
+    <script type="text/javascript" src="wui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="wui/js/fastclick.js"></script>
+    <script type="text/javascript" src="wui/js/city-picker.min.js"></script>
+    <style type="text/css">
+
+    </style>
+
+</head>
+<body ontouchstart>
+<div class="container" style="background: url(img/life/h119.png);margin: 0 auto;width: 90%;">
+    <div class="weui-cell" style=" margin-top: 50px;">
+        <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入个人姓名" type="text" id="name">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd">
+            <label class="weui-label">手机号</label>
+        </div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入手机号" type="tel" id="phone">
+        </div>
+
+    </div>
+    <div class="weui-cell weui-cell_vcode">
+        <div class="weui-cell__hd">
+            <label class="weui-label">验证码</label>
+        </div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" placeholder="验证码" type="number" id="code">
+        </div>
+        <div class="weui-cell__ft">
+            <button class="weui-vcode-btn bg-blue" onclick="settime(this)" style="color: #10aeff">获取验证码</button>
+        </div>
+    </div>
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary bg-blue" href="javascript:" id="showTooltips">提交</a>
+    </div>
+</div>
+<div id="neirong" style="display: none">
+    <div id="refresh" class="weui-btn weui-btn_primary bg-blue"> 刷新</div>
+    <div id="table"></div>
+</div>
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+    });
+</script>
+
+<script>
+
+    var countdown = 60;
+
+    function settime2(obj) {
+        var code = $(obj);
+        if (countdown == 0) {
+            code.removeAttr('disabled');
+            code.text("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            code.text("重新发送(" + countdown + ")");
+            code.attr('disabled', true);
+            countdown--;
+        }
+        setTimeout(function () {
+            settime2(obj)
+        }, 1000);
+    }
+
+    function settime(obj) {
+
+        var tel = $("#phone").val();
+        if (!tel || !/1[3|4|5|7|8]\d{9}/.test(tel)) {
+            $.toptip('请输入手机号');
+        } else {
+            var url = basePath() + "/public/sendPhoneCode?phone=" + tel;
+            $.showLoading();
+            settime2(obj);
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    $.hideLoading();
+                    if (data.code == 200) {
+                        $.toast("验证码已发送！请注意查收！", "text");
+                    } else {
+                        $.toast("没有加载到数据", "text");
+                    }
+                },
+                error: function () {
+                    $.hideLoading();
+                    $.toast("没有加载到数据", "text");
+                }
+            });
+        }
+
+    }
+
+    $("#showTooltips").click(function () {
+        var tel = $('#phone').val();
+        var code = $('#code').val();
+        var name = $('#name').val();
+
+        if (!tel || !/1[3|4|5|7|8]\d{9}/.test(tel)) {
+            $.toptip('请输入手机号');
+        } else if (!code || !/\d{6}/.test(code)) {
+            $.toptip('请输入六位手机验证码');
+        } else if (name == "") {
+            $.toptip('请输入您的名字');
+        } else {
+            getDAta(tel,code,name);
+        }
+        // $.toptip('提交成功', 'success');
+    });
+
+    $("#refresh").click(function () {
+        var tel = $('#phone').val();
+        var code = $('#code').val();
+        var name = $('#name').val();
+        $("#table").html("");
+        getDAta(tel,code,name);
+    });
+    function getDAta(tel,code,name) {
+        $.ajax({
+            url: basePath() + "/data/sjMedicalDrugs/internetWord8180",
+            type: "post",
+            data: {
+                "data": "22838180",
+                "phnoe": tel,
+                "Code": code,
+                "name": hex_md5(name)
+            },
+            beforeSend: function (xhr) {
+                $.showLoading();
+            },
+            success: function (data) {
+                $.hideLoading();
+                if (data.code == 200) {
+                    $.toast("操作成功！", "text");
+                    // console.log(data)
+                    var html = '<table class="weui-table weui-table-2n" >\n' +
+                        '        <thead>\n' +
+                        '        <tr><th>姓名</th><th>手机号</th><th>地址</th><th>时间</th><th>留言内容</th></tr>\n' +
+                        '        </thead>\n' +
+                        '        <tbody >\n';
+                    $.each(data.data, function (i, val) {
+
+                        html += '        <tr><td title="姓名">' + val.name + '</td>' +
+                            '<td title="手机号">' + val.phone + '</td>' +
+                            '<td title="地址">' + val.proviceName + val.cityName + val.streetName + val.address + '</td>' +
+                            '<td title="时间">' + val.insertDate + '</td>' +
+                            '<td title="留言内容">' + val.content + '</td>' +
+                            '</tr>\n';
+                    })
+                    html += '        </tbody>\n' +
+                        '    </table>';
+
+                    $(".container").css("display", "none");
+                    $("#neirong").css("display", "block");
+                    $("#table").html(html);
+                } else if (data.code == 0) {
+                    $.toast(data.msg, "text");
+                    var code = $("#weui-vcode-btn");
+                    // code.removeAttr('disabled');
+                    code.text("获取验证码");
+                    countdown = 0;
+                } else {
+                    $.toast("没有加载到数据", "text");
+                }
+            },
+            error: function () {
+                $.hideLoading();
+                $.toast("没有加载到数据", "text");
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+body{ margin:0; padding:0; font-size:16px; color:#333; background-color:#e5e5e5; height:100%; min-height:600px; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+
+#head{ height:43px; line-height:43px; background-color:#4281cd; display:flex;
+	   align-items:center; text-align:center; font-weight:600; color:#FFF; }
+#head .head-l{ width:12%; }
+#head .head-l img{ width:13px; height:24px; vertical-align:middle; }
+#head .head-c{ width:76%; flex:1; }
+#head .head-r{ width:12%; }
+
+#show .util{ background:white; margin:10px 0px; padding:10px; }
+#show .util div{ line-height:35px; }
+#show .util img{ vertical-align:middle; padding-bottom:5px; margin-right:10px; }	
+#show .util textarea{ font-size:16px; letter-spacing:1px; resize:none; width:100%; height:130px; 
+					  margin:5px 0 5px 0; padding:0px; border:1px solid #d5d5d5; border-radius:3px; }
+
+.container { padding:10px; margin:0px; max-width:750px; background:white; }
+.container .phone{ line-height:40px; border-bottom:1px solid #999; }
+.container .phone input{ border:0; font-size:15px; width:50%; line-height:25px; text-indent:5px; }
+.container .sub{ margin:30px 0px; text-align:center; }
+.container .sub #btn{ color:#FFF; background-color:#4281cd; width:80%; height:40px; font-size:18px;
+					  font-weight:600; border:0; }
+
+
+
+
+
+				  
+					  
+					  

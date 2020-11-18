@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8" />
+    <title>有一个免费抽奖荣耀 V10 手机的机会，邀请你也来试试！</title>
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <style>
+        body{background:#f6f6f6;margin:0;background:#e0e7f7;font-family:"微软雅黑","宋体",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti}
+        a{text-decoration:none}
+        li,ol,ul{margin:0;padding:0;list-style:none}
+        #core{position:relative;width:100%;background: #4281cd;}
+        #core .title{position:relative;background:#fff;display:block}
+        #core .title a{position:relative;width:60%;margin:0 auto;display:block}
+        #core .title img{width:100%;box-sizing:border-box;vertical-align:middle}
+        #core .banner,#core .banner img{position:relative;width:100%}
+        #core .bgM{
+            width:100%;
+            margin:0 auto;
+            /* background:url(img/extension/bgM.jpg) center top no-repeat #e0e7f7; */
+            background-size:100% auto;
+            padding: 0.5rem 0 2rem 0;
+            background: #4281cd;
+        }
+        #core .bgM .content .csairmember{font-size:16px;color:#333;text-indent:2em;padding:20px 20px 20px 20px;margin:0}
+        #core .bgM .content .csairmember span{font-weight:700;color:#e44317}
+        #core .bgM .content .con2{overflow:hidden;margin-top:20px}
+        #core .bgM .content .con2 li{list-style-type:none;padding:0 20px 10px 20px;font-size:20px;font-weight:700;color:#FBE14E;text-align:center;line-height:30px}
+
+        #core .cj{
+            position: relative;
+            width: 100%;
+            height: 420px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            /* background-image: url(/shundemap/static/images/img/extension/cj.png); */
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            -moz-background-size: 100% 100%;
+            background: #4281cd;
+        }
+        #core .draw{
+            transform-origin: left top;
+            -webkit-transform-origin: left top;
+            -webkit-transform: scale(0.7);
+            transform: scale(0.7);
+            position: relative;
+            margin: 0 auto;
+            padding: 40px;
+            width: 460px;
+            height: 520px;
+            background-image: url(img/extension/cj.png);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        #core .draw .button,
+        .draw .item,
+        .draw img{width:75pt;height:75pt}
+        #core .draw .item{position:absolute}
+        #core .draw .item.lottery-unit-0{left: 5pc;top: 86px;}
+        #core .draw .item.lottery-unit-1{left: 220px;top: 86px;}
+        #core .draw .item.lottery-unit-2{right:5pc;top: 86px;}
+        #core .draw .item.lottery-unit-3{top:245px;right:5pc;}
+        #core .draw .item.lottery-unit-4{right:5pc;bottom:95px}
+        #core .draw .item.lottery-unit-5{bottom:95px;left:220px}
+        #core .draw .item.lottery-unit-6{bottom:95px;left:5pc;}
+        #core .draw .item.lottery-unit-7{top:245px;left:5pc;}
+        #core .draw .item{background:#e7c7e7}
+        #core .draw .item .choose{position:absolute;top:0;display:none}
+        #core .draw .item .choose.active{display:block}
+        #core .draw .button{position:absolute;top:54%;left:54%;margin-top:-50px;margin-left:-50px}
+        #core .draw .draw-btn{display:block;height:100%;border-radius:20px;background-color:transparent;color:#fff;text-align:center;text-decoration:none;font-weight:700;font-size:20px;line-height:75pt}
+        #core .draw .draw-btn:hover{background-color:transparent;}
+
+        #core .linehd{
+            /* background:url(img/extension/line.png) no-repeat center; */
+            width:100%;
+            height:30px;
+            margin:0 auto 0 auto;
+            text-align:center;
+        }
+        #core .linehd p{font-size:18px;color:#333;margin:0;padding:0;font-weight:700}
+        #core .jpsz{width:90%;margin:0 auto}
+        #core .jpsz .listt1{background:#939ae8;border-radius:5px;width:99%;min-height:143px}
+        #core .jpsz .bt1{font-size:18px;color:#fff;padding-top:8px;padding-left:10px}
+        #core .jpsz .line{width:98%;height:2px;border-bottom:#fff 1px dashed;margin:10px auto 0 auto}
+        #core .jpsz .jx li{font-size:16px;color:#fff;text-align:left;padding:5px 0 5px 16px;line-height:30px;overflow:hidden}
+        #core .jpsz .jx li div{float:left;margin-right:5px}
+        #core .jpsz .jx li .t{width:18%}
+        #core .jpsz .jx li .n{width:44%}
+        #core .jpsz .jx li .m{width:28.5%}
+        #core .jpsz .listt2{background:#939ae8;border-radius:5px;width:99%;min-height:264px;margin-top:18px}
+        #core .jpsz .bt2{font-size:18px;color:#fff;padding:8px 0 3px 30px;text-align:left}
+        #core .jpsz .listt2 .named{width:95%;height:200px;margin:0 auto;overflow-y: auto;background-color:#fff}
+        #core .jpsz .listt2 .named li{font-size:16px;color:#333;text-align:left;padding-left:20px;line-height:30px}
+        #core .hdgz{height:auto;overflow:hidden;padding:30px 0 0;background: #4281cd;}
+        #core .hdgz .hdgz01{width:96%;margin:0 auto 0 auto;padding:20px 0 30px 8px;color:#333}
+        #core .hdgz .hdgz01 li{font-size:16px;color:#fff;padding-left:27px;line-height:21px;margin-top:5px;position:relative}
+        #core .hdgz .hdgz01 span{
+            width:20px;
+            height:20px;
+            /* background-image:url(img/extension/point.png); */
+            color:#fff;
+            text-align:center;
+            position:absolute;
+            left:0;
+            top:0
+        }
+        #core .jpxq{position:relative;background: #4281cd;    padding: 0 15px;}
+        #core .jpxq .scrollUl{margin:20px auto 0 auto;text-align:center}
+        /*中奖弹框*/
+        #information{position:fixed;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2;display:none;}
+        #information .content{position: relative; width: 80%; margin: 41px auto; background: #fff; padding: 0 10px 10px; border-radius: 10px; font-size: 14px; min-width: 260px; max-width: 350px;}
+        #information .close-icon{position: absolute; top: -10px; right: -10px; color: #1eb0e9; font-weight: bold; font-size: 20px; width: 30px; height: 30px; background-color: #fff; border: 1px #EAEAEA solid; border-radius: 15px; text-align: center; line-height: 30px;}
+        #information .head,#information .getin{text-align: center; font-weight: bold; font-size: 18px; color: #1eb0e9; padding: 5px 0; border-top: 1px #EAEAEA solid;}
+        #information .getin{color: red;text-align: left;font-size: 14px;padding: 10px 0;}
+        #information .form .item {padding-bottom: 10px;    font-size: 14px;}
+        /*登陆弹框*/
+        #login{position:fixed;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2;display:none;}
+        #login .content{position: relative; width: 80%; margin: 41px auto; background: #fff; padding: 0 10px; border-radius: 10px; font-size: 14px; min-width: 260px; max-width: 350px;}
+        #login .dialog-head{text-align: center; font-weight: bold; font-size: 18px; color: #1eb0e9; padding: 15px 0; border-bottom: 1px #EAEAEA solid;}
+        #login .close-icon{position: absolute; top: -10px; right: -10px; color: #1eb0e9; font-weight: bold; font-size: 20px; width: 30px; height: 30px; background-color: #fff; border: 1px #EAEAEA solid; border-radius: 15px; text-align: center; line-height: 30px;}
+        #login .form
+        #information .form,{padding: 0 10px 10px;}
+        #login .form .item{padding-bottom: 10px;    font-size: 14px;}
+        #login .form .item .label,
+        #information .form .label{text-align: right;margin-right: 6px;line-height: 30px;display: inline-block;}
+        #login .form .item .label .input-box,
+        #information .form .item .label .input-box{width: 70%;display: inline-block;}
+        #login .form .item .input,
+        #information .form .item .input{padding: 5px 0;border: 1px solid #EAEAEA;text-indent: 3px;font-size: 14px;height: 20px;color: #999;width: 92%;}
+        #login .form .item .btn,
+        #information .form .item .btn{background-color: #ff9a14; border: 1px solid #ff9a14; color: white; line-height: 35px; border-radius: 10px; width: 55%; font-weight: bold; font-size: 14px; outline: none; margin: 0 auto;text-align: center;}
+        #login .dialog-foot{padding-bottom: 15px;}
+        #login .dialog-foot a{display: inline-block; width: 48%; text-align: center; color: #1eb0e9;}
+        /*活动奖品详情弹框*/
+        #dk{position:fixed;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2;display:none}
+        #dk .content{width:90%;position:absolute;margin:0 auto;left:0;right:0;background:#e0e7f7;box-sizing:border-box;padding:15px 10px;top:10%;max-height:350px}
+        #dk .content .title{background:#939ae8;padding:5px;font-size:24px;position:absolute;width:100px;text-align:center;color:#fff;left:0;right:0;margin:auto;border-radius:10px}
+        #dk .content .text{position:relative;background:#fff;margin:60px 0 0;padding:10px 0;box-sizing:border-box}
+        #dk .content .text p{padding:0 0 0 40px;color:#323232;font-size:17px;position:relative;margin:0}
+        #dk .content .text p span{position:absolute;left:20px;top:0}
+        #dk .close{position:absolute;right:10px}
+        /*提示框*/
+        #tishi{position:fixed;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2;display:none}
+        #tishi .content{width:90%;position:absolute;margin:0 auto;left:0;right:0;background:#fff;box-sizing:border-box;padding:15px 10px;top:10%;max-height:350px}
+        #tishi .dialog-head{text-align: center; font-weight: bold; font-size: 18px;}
+        /*提示框-可以关闭*/
+        #Otishi{position:fixed;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2;display:none}
+        #Otishi .content{width:90%;position:absolute;margin:0 auto;left:0;right:0;background:#fff;box-sizing:border-box;padding:15px 10px;top:10%;max-height:350px}
+        #Otishi .dialog-head{text-align: center; font-weight: bold; font-size: 18px;}
+        #Otishi .close-icon{position: absolute; top: -10px; right: -10px; color: #1eb0e9; font-weight: bold; font-size: 20px; width: 30px; height: 30px; background-color: #fff; border: 1px #EAEAEA solid; border-radius: 15px; text-align: center; line-height: 30px;}
+
+
+        .jpxq span{display: block;    padding: 5px 3px;    text-align: center;}
+
+        .zm{    position: absolute;
+            bottom: 16%;
+            width: 100%;}
+        marquee{
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+            height: 30px;}
+    </style>
+    <script>
+        function rangerandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        var lottery = {
+            index: 0,    //当前转动到哪个位置，起点位置
+            count: 0,     //总共有多少个位置
+            timer: 0,     //setTimeout的ID，用clearTimeout清除
+            speed: 20,    //初始转动速度
+            times: 0,     //转动次数
+            cycle: 50,    //转动基本次数：即至少需要转动多少次再进入抽奖环节
+            prize: -1,    //中奖位置
+            init:function(id){if($('#'+id).find('.lottery-unit').length>0){$lottery=$('#'+id);$units=$lottery.find('.lottery-unit');this.obj=$lottery;this.count=$units.length;$lottery.find('.lottery-unit.lottery-unit-'+this.index+" .choose").addClass('active')}},roll:function(){var index=this.index;var count=this.count;var lottery=this.obj;$(lottery).find('.lottery-unit.lottery-unit-'+index+" .choose").removeClass('active');index+=1;if(index>count-1){index=0};$(lottery).find('.lottery-unit.lottery-unit-'+index+" .choose").addClass('active');this.index=index;return false},stop:function(index){this.prize=index;return false}
+        };
+        function roll() {
+            lottery.times+=1;lottery.roll();
+            if(lottery.times>lottery.cycle+10&&lottery.prize==lottery.index){
+                clearTimeout(lottery.timer);
+                lottery.prize=-1;
+                lottery.times=0;
+                click=false;
+                vis_jp();
+            }else{if(lottery.times<lottery.cycle){lottery.speed-=10}else if(lottery.times==lottery.cycle){}else{if(lottery.times>lottery.cycle+10&&((lottery.prize==0&&lottery.index==7)||lottery.prize==lottery.index+1)){lottery.speed+=110}else{lottery.speed+=20}}if(lottery.speed<40){lottery.speed=40};lottery.timer=setTimeout(roll,lottery.speed)}return false;}
+        var click = false;
+        /**
+         * stop : 停止位置
+         */
+        var lottery = {
+            index: 0,    //当前转动到哪个位置，起点位置
+            count: 0,     //总共有多少个位置
+            timer: 0,     //setTimeout的ID，用clearTimeout清除
+            speed: 20,    //初始转动速度
+            times: 0,     //转动次数
+            cycle: 50,    //转动基本次数：即至少需要转动多少次再进入抽奖环节
+            prize: -1,    //中奖位置
+            init:function(id){
+                if($('#'+id).find('.lottery-unit').length>0){
+                    $lottery=$('#'+id);
+                    $units=$lottery.find('.lottery-unit');
+                    this.obj=$lottery;
+                    this.count=$units.length;
+                    $lottery.find('.lottery-unit.lottery-unit-'+this.index+" .choose").addClass('active');
+                }
+            },
+            roll:function(){
+                var index=this.index;
+                var count=this.count;
+                var lottery=this.obj;
+                $(lottery).find('.lottery-unit.lottery-unit-'+index+" .choose").removeClass('active');
+                index+=1;
+                if(index>count-1){index=0};
+                $(lottery).find('.lottery-unit.lottery-unit-'+index+" .choose").addClass('active');
+                this.index=index;return false
+            },
+            stop:function(index){this.prize=index;return false}
+        };
+        function roll() {
+            lottery.times+=1;lottery.roll();
+            if(lottery.times>lottery.cycle+10&&lottery.prize==lottery.index){
+                clearTimeout(lottery.timer);
+                lottery.prize=-1;
+                lottery.times=0;
+                click=false;
+                vis_jp();
+            }else{if(lottery.times<lottery.cycle){lottery.speed-=10}else if(lottery.times==lottery.cycle){}else{if(lottery.times>lottery.cycle+10&&((lottery.prize==0&&lottery.index==7)||lottery.prize==lottery.index+1)){lottery.speed+=110}else{lottery.speed+=20}}if(lottery.speed<40){lottery.speed=40};lottery.timer=setTimeout(roll,lottery.speed)}return false;}
+        var click = false;
+        var zjxi = "";
+        function cjButton(){
+            if(click){
+                return false
+            }else{
+                $.ajax({
+                    url: "${ct}/f/app/wx/luckDraw",
+                    type: "post",
+                    dataType: "json",
+                    async:false,
+                    success: function (result) {
+                        console.log(result)
+                        if(result.type == "0"){
+                            OtishiFn("未授权");
+                        }
+                        if(result.type == "1"){
+                            OtishiFn("未认证");
+                            visLogin();
+                        }
+                        if(result.type == "2"){
+                            //OtishiFn("没中奖");
+                            var nojz = [1,4,6];
+                            var num = parseInt(rangerandom(0, nojz.length));
+                            lottery.stop(nojz[num]);lottery.speed=100;roll();
+                            click=true;
+                        }
+                        if(result.type == "3"){
+                            //OtishiFn("中奖");
+                            var prizename = result.obj.name;
+                            var num = 3;
+                            if(prizename == "荣耀V10高配版"){
+                                num = 0;
+                            }
+                            if(prizename == "荣耀畅玩7X标配版"){
+                                num = 2;
+                            }
+                            if(prizename == "小米手环2"){
+                                num = 3;
+                            }
+                            if(prizename == "美的吸尘器"){
+                                num = 5;
+                            }
+                            if(prizename == "小米净化器2"){
+                                num = 7;
+                            }
+                            zjxi = prizename;
+                            lottery.stop(num);lottery.speed=100;roll();
+                            click=true;
+                        }
+                        if(result.type == "4"){
+                            OtishiFn("次数用完");
+                        }
+                        if(result.type == "5"){
+                            OtishiFn("您未关注公众号");
+                        }
+                    }
+                });
+                return false
+            }
+        }
+        //奖品弹框
+        function vis_jp(){
+            $("#information").css("display","block");
+            var active = $("#lottery .active");
+            var alt = active.attr("alt");
+            if(alt != ""){
+                $("#information .getin").text("恭喜您获取：" + zjxi);
+                $("#information .tx").css("display","block");
+            }else{
+                $("#information .getin").text("很遗憾，没有中奖喔，感谢您的参与。");
+                $("#information .tx").css("display","none");
+            }
+        }
+        function jpxx(){//提交
+            $.ajax({
+                url: "${ct}/f/app/wx/addAddress",
+                type: "post",
+                dataType: "json",
+                data: { 'address': $('#address').val(),'name':$('#userName').val(),'phone':$('#wxphone').val()} ,
+                async:false,
+                success: function (result) {
+                    if(result.type == "1" || result.type == "0"){
+                        OtishiFn(result.massage);
+                    }
+
+                    if(result.type == "1"){
+                        $('#information').hide();
+                    }
+                }
+            });
+        }
+        //进入登陆页面
+        function visLogin(){
+            window.location.href = "${ct}/f/extension/wx/login";
+        }
+        //进入注册页面
+        function visRegister(){
+            window.location.href = "${ct}/f/extension/wx/register";
+        }
+        /* function login(){
+            var passenger = {
+                    'loginName': $('#user').val(),
+                    'password': $('#password').val()
+                };
+            $.ajax({
+                url: '${ct}/f/app/wx/authentication',//请求地址
+                type: 'post',//请求类型
+                async: false,//表示异步，false为同步
+                data: passenger,
+                success: function (data) {//成功执行函数
+                    if (data.type == "0") {
+                        alert("数据错误");
+                    }else if(data.type == "1"){
+                        alert("已经登陆过");
+                    }else if(data.type == "2"){
+                        alert("登陆成功");
+                    }else if(data.type == "3"){
+                        alert("参数不能为空");
+                    }else if(data.type == "4"){
+                        alert("验证码错误");
+                    }
+                },
+                error: function (data) {
+                    alert('失败');
+                }
+            });
+        } */
+        //--main
+        function OtishiFn(str){
+            $("#Otishi").css("display","block");
+            $("#Otishi .dialog-head").text(str);
+        }
+        $(document).ready(function(){
+            //转盘初始化
+            lottery.init('lottery');
+            $.ajax({
+                url: '${ct}/f/app/wx/userPrizeList',//请求地址
+                type: 'get',//请求类型
+                async: false,//表示异步，false为同步
+                //data: passenger,
+                success: function (data) {//成功执行函数
+                    console.log(data.obj);
+                    var obj = data.obj;
+                    var str = "";
+                    for(var i in obj){
+                        str = str + (obj[i].nickname + '刚抽中了'+obj[i].prizename+'&nbsp&nbsp&nbsp');
+                    }
+                    $(".zm").append('<marquee>' + str + '</marquee>');
+
+                }
+
+            });
+
+        });
+        window.onload = function(){
+            /*$.ajax({
+                url: "${ct}/f/app/wx/wxInfo",
+                type: "post",
+                dataType: "json",
+                async:false,
+                success: function (result) {
+                    console.log(result)
+                    if(result.type == "0"){
+                        $("#tishi").css("display","block");
+                        $("#tishi .dialog-head").text("未授权");
+                    }else if(result.obj.subscribe == "0"){
+                        $("#tishi").css("display","block");
+                        $("#tishi .dialog-head").text("未关注");
+                        setTimeout(function(){
+                            window.location.href = "${ct}/f/extension/wx/follow";
+                        },1000);
+                    }else if(result.type == "2"){
+                        $("#identify").hide();
+                    }
+                }
+            });*/
+        }
+    </script>
+
+</head>
+
+<body>
+<!-- 提示框 -可以关闭 -->
+<div id="Otishi">
+    <div class="content">
+        <div class="dialog-head"></div>
+        <div class="close-icon" onclick='$("#Otishi").css("display","none");'>×</div>
+    </div>
+</div>
+<!-- 提示框-不可以关闭 -->
+<div id="tishi">
+    <div class="content">
+        <div class="dialog-head"></div>
+    </div>
+</div>
+<!-- 中奖弹框 -->
+<div id="information">
+    <div class="content">
+        <div class="getin"></div>
+        <div class="close-icon" onclick='$("#information").css("display","none");'>×</div>
+        <div class="for"></div>
+        <div class="tx" style="display:none;">
+            <div class="head">填写快递信息</div>
+            <div class="form">
+                <div class="item">
+                    <div class="input-box">
+                        <input class="input" id="userName" type="text"  placeholder="姓名">
+                        <input class="input" id="wxphone" type="text"  placeholder="电话号码">
+                        <input class="input" id="address" type="text"  placeholder="地址">
+                    </div>
+                </div>
+                <div class="help-text"></div>
+                <div class="item btn-box">
+                    <div class="btn" onclick="jpxx()" id="submit">提&nbsp;&nbsp;&nbsp;&nbsp;交</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 活动奖品详情弹框 -->
+<div id="dk">
+    <div class="content">
+        <img class="close" onclick='$("#dk").css("display","none");' src="img/extension/close.jpg" width="25rem" height="25rem">
+        <div class="title">123</div>
+        <div class="text"></div>
+    </div>
+</div>
+<div id="core">
+    <div class="title">
+        <div class="zm">
+            <!-- <marquee>滚动字幕内容&nbsp&nbsp&nbsp滚动字幕内容</marquee> -->
+        </div>
+        <img src="img/extension/head.png" />
+    </div>
+
+    <!--<div class="bgM">
+        <div class="content">
+            <div id="identify" class="con2">
+                <ul>
+                    <li id="identify1" style="    display: flex;">
+                        <div  onclick='visRegister()' style="border: solid 1px #FBE14E;border-radius: 30px;flex: 1;margin-right: 15px;">注册</div>
+                        <div  onclick='visLogin()' style="border: solid 1px #FBE14E;border-radius: 30px;flex: 1;margin-left: 15px;">登录</div>
+                    </li>
+                    <li class="con2_txt" style="color: #fff;font-size: 16px;    padding: 0 10px;">抽奖需要进行身份认证，提前做认证，抽奖更顺畅：</li>
+                </ul>
+            </div>
+        </div>
+    </div>-->
+    <div class="cj">
+        <div class="draw" id="lottery">
+            <li class="item lottery-unit lottery-unit-0" no="0">
+                <img src="img/extension/V10.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="中奖">
+            </li>
+            <li class="item lottery-unit lottery-unit-1" no="1">
+                <img src="img/extension/xxcy.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="">
+            </li>
+            <li class="item lottery-unit lottery-unit-2" no="2">
+                <img src="img/extension/7X.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="中奖">
+            </li>
+
+            <li class="item lottery-unit lottery-unit-3" no="3">
+                <img src="img/extension/sh.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="中奖">
+            </li>
+            <li class="item lottery-unit lottery-unit-4" no="4">
+                <img src="img/extension/xxcy.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="">
+            </li>
+            <li class="item lottery-unit lottery-unit-5" no="5">
+                <img src="img/extension/xcq.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="中奖">
+            </li>
+            <li class="item lottery-unit lottery-unit-6" no="6">
+                <img src="img/extension/xxcy.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="">
+            </li>
+            <li class="item lottery-unit lottery-unit-7" no="7">
+                <img src="img/extension/jhq.png" alt="">
+                <img class="choose" src="img/extension/bg2.png" alt="中奖">
+            </li>
+            <li class="button">
+                <div class="draw-btn" onclick="cjButton()"></div>
+            </li>
+        </div>
+
+
+    </div>
+    <div class="hdgz">
+        <div class="linehd">
+            <img src="img/extension/rule.png" style="width: 100%;" />
+        </div>
+        <div class="hdgz01">
+            <ul>
+                <li>
+                    <span>1、</span>活动时间：2018年3月25日——4月17日。</li>
+                <li>
+                    <span>2、</span>本次活动仅限顺德区内市民参加，儿童、婴儿不能参加。</li>
+                <li>
+                    <span>3、</span>市民在活动页面成功登陆，注册登录后即可参加抽奖活动，每位用户在微信页面只可抽奖一次。<!-- 把页面分享给微信好友或者朋友圈，每一位好友参与抽奖，即可获得多一次抽奖机会。 --></li>
+                <li>
+                    <span>4、</span>每位市民仅有一次中奖机会，同一手机号、微信号视为同一位市民。</li>
+                <li>
+                    <span>5、</span>若发现不符合活动规则或其他违反活动目的的作弊行为，“顺德民生百事通”有权取消此用户获得资格及其所获利益，并保留追究法律责任的权利。</li>
+                <li>
+                    <span>6、</span>获奖者需要填写真实的送货地址，我们将在中奖后7日内寄出奖品，收货地址统一在顺德区内。</li>
+            </ul>
+        </div>
+    </div>
+    <div class="jpxq">
+        <div class="linehd">
+            <p style="color:#ffcc66;">奖品情况</p>
+        </div>
+
+        <div style="width:100%;    display: inline-flex;color: #fff;">
+            <div style="border-right: solid 1px #ffcc66;border-top: solid 1px #ffcc66;width: 25%;">
+                <span>一等奖</span>
+                <span>二等奖</span>
+                <span>三等奖</span>
+                <span>四等奖</span>
+                <span>五等奖</span>
+            </div>
+            <div style="border-top: solid 1px #ffcc66;border-bottom: solid 1px #ffcc66;width: 50%;">
+                <span>荣耀 V10 手机</span>
+                <span>荣耀 畅玩7X手机</span>
+                <span>小米空气净化器</span>
+                <span>小米手环</span>
+                <span>美的（Midea）吸尘器</span>
+            </div>
+            <div style="border-left: solid 1px #ffcc66;border-top: solid 1px #ffcc66;width: 25%;">
+                <span>2台</span>
+                <span>3台</span>
+                <span>5台</span>
+                <span>20个</span>
+                <span>50台</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.data.SchoolMapper">
+
+    <select id="selectListByFactor" resultType="com.unifs.sdbst.app.bean.data.SchoolEntity">
+        select * from (select s.*,rownum as row_num from t_school s
+        <where>
+            RECORD_STATUS = 1
+            <if test="objzjname!=null and objzjname!=''">
+                and (s.zjname like #{objzjname}||'%')
+            </if>
+            <if test="objschool!=null and objschool!=''">
+                and (s.school like #{objschool}||'%')
+            </if>
+        </where>
+        ) where row_num between #{start} and #{end}
+    </select>
+
+</mapper>

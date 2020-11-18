@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>办事详情</title>
+    <link href="mui/css/mui.min.css" rel="stylesheet">
+    <link href="css/app/fingertips/detail.css?v=1.0.1" rel="stylesheet">
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/app/fingertips/detail.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <style>
+        .mui-popup {
+            height: 95%;
+            width: 90%;
+        }
+        .mui-popup-inner{
+            height: 90%;
+        }
+        .mui-popup-title+.mui-popup-text {
+            height: 100%;
+            overflow: scroll;
+            text-align: left;
+        }
+    </style>
+</head>
+<body style="width: 100%;height: 700px">
+<div id="app"><!---->
+    <div  class="guidance">
+        <div  class="content">
+            <div  class="title"><h3 id="finger_title"></h3>
+                <div  class="van-popup" style="border-radius: 0.1rem; z-index: 2009; display: none;">
+                    <div  class="guideBox">
+                        <p  class="guideTitle">办事指引</p>
+                    </div>
+                </div>
+                <div class="van-overlay" style="z-index: 2007; display: none;"></div>
+            </div>
+
+            <ul  class="list">
+                <li  class="showPart">
+                    <p  class="showPartItem"><span class="left" style="font-size: 0.3rem; color: rgb(0, 0, 0);">基本信息</span>
+                        <span  class="guide">办事指引</span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">事项性质</span>
+                        <span class="right matter_type"></span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">法定期限</span>
+                        <span class="law_limit_day">
+<!--                            <span class="right law_limit_type"></span>-->
+                        </span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">承诺期限</span>
+                        <span class="right promise_day">
+<!--                            <span class="right promise_type"></span>-->
+                        </span>
+                    </p>
+                    <p  class="showPartItem"><span  class="left">办件类型</span>
+                        <span class="right service_type"></span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">实施编码</span>
+                        <span class="right matter_code"></span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">实施主体性质</span>
+                        <span class="right org_type"></span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">实施机构</span>
+                        <span class="right org_name"></span>
+                    </p>
+                    <p class="showPartItem"><span  class="left">权力来源</span>
+                        <span class="right source_of_power"></span>
+                    </p>
+                    <p  style="height: 0.5rem;"></p>
+                    <p  class="showAll"><span onclick="toggleAll()">查看全部</span></p>
+                </li>
+                <li class="itemLi">
+                    <ul class="my-table-view" style="width: 100%;">
+                        <li class="mui-table-view-cell mui-collapse" style="padding: 11px 0px;">
+                            <a class="mui-navigate-right" href="#" style="margin:0 0 0 12px;">受理地址/时间</a>
+                            <div class="mui-collapse-content info close">
+                                <ul class="phone many">
+                                    <li>
+                                        <span class="left">受理时间</span>
+                                        <span class="rightSide accept_time"></span>
+                                    </li>
+                                    <li>
+                                        <span class="left">受理地址</span>
+                                        <span class="rightSide accept_address"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li  class="itemLi">
+                    <ul class="my-table-view" style="width: 100%;">
+                        <li class="mui-table-view-cell mui-collapse" style="padding: 11px 0px;">
+                            <a class="mui-navigate-right" href="#" style="margin:0 0 0 12px;">受理条件</a>
+                            <div class="mui-collapse-content info close">
+                                <ul class="phone many">
+                                    <li>
+<!--                                        <span class="left">时间</span>-->
+<!--                                        <span class="rightSide acceptTime">xxxx</span>-->
+                                        <span class="text_span apply_term"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li  class="itemLi" id="shenbao">
+                    <ul class="my-table-view" style="width: 100%;">
+                        <li class="mui-table-view-cell" style="padding: 11px 0px;">
+                            <span class="mui-navigate-right" style="margin:0 0 0 12px;">申报材料</span>
+<!--                    <div  class="itemLeft"> <span >申报材料</span></div>-->
+<!--                    <div style="margin-right: 3px;"><i class="van-icon van-icon-arrow" style="color: #bbb;"></i></div>-->
+                        </li>
+                    </ul>
+                </li>
+                <li  class="itemLi">
+                    <ul class="my-table-view" style="width: 100%;">
+                        <li class="mui-table-view-cell mui-collapse" style="padding: 11px 0px;">
+                            <a class="mui-navigate-right" href="#" style="margin:0 0 0 12px;">收费情况</a>
+                            <div class="mui-collapse-content info close">
+                                <ul class="phone many">
+                                    <li>
+                                        <span class="left">收费方式</span>
+                                        <span class="rightSide charge_type"></span>
+                                    </li>
+                                    <li>
+                                        <span class="left">收费依据</span>
+                                        <span class="rightSide charge_basis"></span>
+                                    </li>
+                                    <li>
+                                        <span class="left">收费标准</span>
+                                        <span class="rightSide charge_standard"></span>
+                                    </li>
+                                    <li>
+                                        <span class="text_span charge_flag">不收费</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li  class="itemLi">
+                    <ul class="my-table-view" style="width: 100%;">
+                        <li class="mui-table-view-cell mui-collapse" style="padding: 11px 0px;">
+                            <a class="mui-navigate-right" href="#" style="margin: 0 0 0 12px;">法定依据</a>
+                            <div class="mui-collapse-content info close">
+                                <ul class="phone many">
+                                    <li>
+                                        <span class="text_span according"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div  class="fill"></div>
+        <div  class="next">
+<!--            <button  class="back" onclick="yuyue()">网上预约</button>-->
+            <button  class="" id="managerInfo">网上办事</button>
+        </div>
+    </div>
+</div>
+
+<div class="van-toast van-toast--default van-toast--middle" style="z-index: 2008; display: none;">
+    <div class="van-loading van-loading--circular van-loading--white" style="color: white;"><span
+            class="van-loading__spinner van-loading__spinner--circular"><svg viewBox="25 25 50 50"
+                                                                             class="van-loading__circular"><circle
+            cx="50" cy="50" r="20" fill="none"></circle></svg></span></div>
+    <div class="van-toast__text">加载中...</div>
+</div>
+
+<div class="black_shade"></div>
+<!--<div id="test_run_warning">-->
+<!--    <h4>温馨提示</h4>-->
+<!--    <p>系统正处于测试阶段，在使用期间如发生系统问题，可以及时反馈告知后台开发人员，谢谢您的支持，祝你生活愉快。</p>-->
+<!--    <p id="test_run_close">确认</p>-->
+<!--</div>-->
+
+<div id="work_guide">
+    <h4>办事指引</h4>
+    <div>
+        <img src="" alt="加载失败">
+    </div>
+    <p>我知道了</p>
+</div>
+
+<script type="application/javascript" th:inline="javascript">
+    var matterCode = ""
+    var materialTitle = ""
+    $(function () {
+        var id = [[${id}]]
+        var dePhone = [[${dePhone}]]
+        var dePhoneEnc = [[${dePhoneEnc}]]
+        console.log(id);
+
+        //跳转申报材料页面
+        $("#shenbao").click(function () {
+            window.location.href="./app/fingertips/shenBao?matterId="+id+"&materialTitle="+materialTitle
+        })
+        //跳转网上办事页面
+        $("#managerInfo").click(function () {
+            var btn = ['取消','同意'];
+            var html =
+                '\n欢迎您使用指尖办平台进行行政审批事项网上申报！为更好地帮助您使用本平台提供的服务，现将网上申报须知说明如下：\n' +
+                '\n' +
+                '1.您在网上填写申报信息与上传材料时，请务必按照办事指南、材料范本等认真、准确地填写申报信息，并确保上传电子材料真实、无改动，不得伪造、变造，否则您将面临相应法律责任及网上申报被驳回风险。\n' +
+                '\n' +
+                '2.您上传的电子材料，后续如需提交纸质材料核实，请务必按照办事指南、材料范本等认真准备，保证提交的纸质材料与电子材料完全一致，不存在遗漏或改动，否则您的网上申报可能会被驳回。\n' +
+                '\n' +
+                '3.部分行政审批服务事项的申请材料较为复杂，暂无法进行网上申报，需您邮递或现场提交时，请务必按照办事指南、材料范本等要求准备，确保提交纸质材料的真实性、完整性，否则您的网上申报可能会被驳回。\n' +
+                '\n' +
+                '4.您所提交的网上申报我们会尽快按照有关规定予以审查，在网上申报提交成功后，请勿重复提交。\n' +
+                '\n' +
+                '5.您在网上申报过程中如遇有关事项的业务问题，请通过职权机关公布的办事指南等所载的联系方式获取帮助。\n' +
+                '\n' +
+                '<span style="color: #FF0000;padding-bottom: 40px;">* 请仔细阅读本申报须知。如同意本申报须知，请选中同意按钮，并且点击下一步，进行有关事项的网上申报。</span>';
+            mui.confirm(html, '网上申报须知', btn, function(e) {
+                if (e.index == 0){
+                    mui.toast('网上申报请同意本申报须知！')
+                } else {
+                    window.location.href="./app/fingertips/managerInfo?matterId="+id+"&matterCode="+matterCode+"&dePhone="+dePhone+"&dePhoneEnc="+dePhoneEnc
+                }
+                $("body").css({
+                    height:"100%",
+                    overflow:"auto"
+                })
+            })
+
+            $(".mui-popup-text").on("touchstart",function (e) {
+                e.stopPropagation();
+            })
+            $(".mui-popup-text").on("touchmove",function (e) {
+                e.stopPropagation();
+            })
+            $(".mui-popup-text").on("touchend",function (e) {
+                e.stopPropagation();
+            })
+            $("body").css({
+                height:"100%",
+                overflow:"hidden"
+            })
+        })
+        //试运行提示关闭
+        // $("#test_run_close").click(function (e) {
+        //     e.stopPropagation()
+        //     $(".black_shade").hide()
+        //     $("#test_run_warning").hide()
+        // })
+        //办事指引图
+        $(".list .guide").click(function (e) {
+            e.stopPropagation()
+            $(".black_shade").show()
+            $("#work_guide").show()
+        })
+        $("#work_guide>p").click(function (e) {
+            e.stopPropagation()
+            $(".black_shade").hide()
+            $("#work_guide").hide()
+        })
+
+        getDetailInfo(id);
+    })
+    function getDetailInfo(id){
+        $.ajax({
+            url:basePath()+"/app/fingertips/matter/detail",
+            // url:"http://isd1.shunde.gov.cn/sdbst/app/fingertips/matter/detail",
+            data:{
+                id:id
+            },
+            type:"get",
+            dataType:"json",
+            async:true,
+            success:function (data) {
+                //标题
+                $("#finger_title").text(data.data.matterName)
+                materialTitle = data.data.matterName
+                //事项性质
+                $(".matter_type").text(matterType(data.data.matterType));
+                //法定期限 和 单位
+                var law_limit_html = '<span class="right law_limit_type"></span>';
+                $(".law_limit_day").html(data.data.lawlimitDay + law_limit_html)
+                $(".law_limit_day").children(".law_limit_type").text(lawlimitTypeStr(data.data.lawlimitType))
+                //承诺期限
+                var promise_type_html = '<span class="right promise_type"></span>'
+                $(".promise_day").html(data.data.promiseDay + promise_type_html)
+                $(".promise_day").children(".promise_type").text(promiseType(data.data.promiseType))
+                //办件类型
+                $(".service_type").text(serviceType(data.data.serviceType));
+                //实施编码
+                $(".matter_code").text(data.data.matterCode)
+                //实施主体性质
+                $(".org_type").text(orgType(data.data.orgType))
+                //实施机构
+                $(".org_name").text(data.data.orgName)
+                //权力来源
+                $(".source_of_power").text(sourceOfPower(data.data.sourceOfPower))
+
+                //受理时间和地址
+                $(".accept_time").text(data.data.officeTime)
+                $(".accept_address").text(data.data.acceptAddress)
+                //受理条件
+                $(".apply_term").text(data.data.applyTerm)
+                //收费情况
+                if(data.data.chargeFlag == "1"){
+                    $(".charge_type").text(chargeType(data.data.chargeType))
+                    $(".charge_basis").text(chargeType(data.data.chargeBasis))
+                    $(".charge_standard").text(chargeType(data.data.chargeStandard))
+                    $(".charge_flag").parent().hide();
+                }else{
+                    $(".charge_type").parent().hide()
+                    $(".charge_basis").parent().hide()
+                    $(".charge_standard").parent().hide()
+                    $(".charge_flag").parent().show();
+                }
+                //法定依据
+                $(".according").text(data.data.according)
+
+                //事项编号
+                matterCode = data.data.matterCode
+
+                //办事指引图
+                $("#work_guide>div>img").attr("src",data.data.outFlowPics[0].url.replace("http://19.200.93.99", "http://support.shunde.gov.cn:9306"));
+                $(".list .guide").click()
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        })
+    }
+    function toggleAll(){
+        var height = parseFloat($(".showPart").css("height"));
+        if(height<200){
+            $(".showPart").animate({
+                height:"6rem"
+            })
+            $(".showAll>span").text("收起");
+        }else{
+            $(".showPart").animate({
+                height:"3rem"
+            })
+            $(".showAll>span").text("查看全部");
+        }
+    }
+    function matterType(str){
+        if(str == "01"){
+            return "行政许可"
+        }else if(str == "02"){
+            return "行政处罚"
+        }else if(str == "03"){
+            return "行政强制"
+        }else if(str == "04"){
+            return "行政征收"
+        }else if(str == "05"){
+            return "行政给付"
+        }else if(str == "06"){
+            return "行政奖励"
+        }else if(str == "07"){
+            return "行政确认"
+        }else if(str == "08"){
+            return "行政裁决"
+        }else if(str == "09"){
+            return "行政征用"
+        }else if(str == "10"){
+            return "其它行政权力"
+        }else if(str == "20"){
+            return "公告服务"
+        }
+    }
+    function lawlimitTypeStr(str){
+        if(str == "1"){
+            return "工作日"
+        }else if(str == "2"){
+            return "自然日"
+        }else if(str == "3"){
+            return "小时"
+        }else if(str == "4"){
+            return "周"
+        }else if(str == "5"){
+            return "月"
+        }else if(str == "6"){
+            return "年"
+        }
+    }
+    function promiseType(str){
+        if(str == "1"){
+            return "工作日"
+        }else if(str == "2"){
+            return "自然日"
+        }else if(str == "3"){
+            return "小时"
+        }else if(str == "4"){
+            return "周"
+        }else if(str == "5"){
+            return "月"
+        }else if(str == "6"){
+            return "年"
+        }
+    }
+    function serviceType(str){
+        if(str == "1"){
+            return "即办件"
+        }else if(str == "2"){
+            return "承诺件"
+        }else if(str == "3"){
+            return "联办件"
+        }
+    }
+    function orgType(str){
+        if(str == "1"){
+            return "法定机关"
+        }else if(str == "2"){
+            return "授权组织"
+        }else if(str == "3"){
+            return "受委托组织"
+        }
+    }
+    function sourceOfPower(str){
+        if(str == "1"){
+            return "本级行使"
+        }else if(str == "2"){
+            return "上级下放"
+        }else if(str == "3"){
+            return "上级授权"
+        }else if(str == "4"){
+            return "同级授权"
+        }else if(str == "5"){
+            return "上级委托"
+        }else if(str == "6"){
+            return "同级委托"
+        }
+    }
+    function chargeType(str){
+        if(str == "1"){
+            return "在线支付"
+        }else if(str == "2"){
+            return "现金支付"
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.fingertips.FingertipsUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.fingertips.FingertipsUserInfo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+    <result column="ACCOUNT_TYPE" property="accountType" jdbcType="VARCHAR" />
+    <result column="CID" property="cid" jdbcType="VARCHAR" />
+    <result column="CTYPE" property="ctype" jdbcType="VARCHAR" />
+    <result column="CLEVEL" property="clevel" jdbcType="VARCHAR" />
+    <result column="LINK_PERSON_CID" property="linkPersonCid" jdbcType="VARCHAR" />
+    <result column="LINK_PERSON_CTYPE" property="linkPersonCtype" jdbcType="VARCHAR" />
+    <result column="LINK_PERSON_NAME" property="linkPersonName" jdbcType="VARCHAR" />
+    <result column="LOGIN_TYPE" property="loginType" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ORIGIN" property="origin" jdbcType="VARCHAR" />
+    <result column="UUID" property="uuid" jdbcType="VARCHAR" />
+    <result column="UVERSION" property="uversion" jdbcType="VARCHAR" />
+    <result column="UFROM" property="ufrom" jdbcType="VARCHAR" />
+    <result column="INSERT_TIME" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.fingertips.FingertipsUserInfo" >
+    insert into APP_FINGERTIPS_USER_INFO (ID, ACCOUNT, ACCOUNT_TYPE, 
+      CID, CTYPE, CLEVEL, 
+      LINK_PERSON_CID, LINK_PERSON_CTYPE, LINK_PERSON_NAME, 
+      LOGIN_TYPE, MOBILE, NAME, 
+      ORIGIN, UUID, UVERSION, 
+      UFROM, INSERT_TIME, REMARK
+      )
+    values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{accountType,jdbcType=VARCHAR}, 
+      #{cid,jdbcType=VARCHAR}, #{ctype,jdbcType=VARCHAR}, #{clevel,jdbcType=VARCHAR}, 
+      #{linkPersonCid,jdbcType=VARCHAR}, #{linkPersonCtype,jdbcType=VARCHAR}, #{linkPersonName,jdbcType=VARCHAR}, 
+      #{loginType,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{origin,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{uversion,jdbcType=VARCHAR}, 
+      #{ufrom,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, ACCOUNT, ACCOUNT_TYPE, CID, CTYPE, CLEVEL, LINK_PERSON_CID, LINK_PERSON_CTYPE, 
+    LINK_PERSON_NAME, LOGIN_TYPE, MOBILE, NAME, ORIGIN, UUID, UVERSION, UFROM, INSERT_TIME, 
+    REMARK
+    from APP_FINGERTIPS_USER_INFO
+  </select>
+</mapper>

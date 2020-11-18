@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>顺德区发热门诊上报系统</title>
+    <meta name="decorator" content="blank"/>
+    <!--    <link rel="stylesheet" href="../../../../static/layui/back/demo.css"/>-->
+    <!--    <link rel="stylesheet" href="../../../../static/layui/admin.css"/>-->
+    <!--    <link rel="stylesheet" href="../../../../static/layui/css/layui.css"/>-->
+    <!--    <script type="text/javascript" src="../../../../static/js/jquery.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/js/base.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/wui/js/jquery-weui.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/wui/js/fastclick.js"></script>-->
+    <!--    <script type="text/javascript" src="../../../../static/layui/layui.all.js"></script>-->
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <link rel="stylesheet" href="layui/back/demo.css"/>
+    <link rel="stylesheet" href="layui/admin.css"/>
+    <link rel="stylesheet" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <!--    <script type="text/javascript" src="../static/wui/js/jquery-weui.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../static/wui/js/fastclick.js"></script>-->
+    <!--    <script type="text/javascript" src="layui/layui.all.js"></script>-->
+    <style type="text/css">
+        .layui-nav-item .layui-nav-child dd.layui-this a {
+            background-color: #177ce3;
+            background-repeat: repeat-y;
+            background-image: -moz-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -webkit-linear-gradient(left, #29adeb, #177ce3);
+            background-image: -o-linear-gradient(left, #29adeb, #177ce3);
+            background-image: linear-gradient(left, #29adeb, #177ce3);
+        }
+        .layui-laypage .layui-laypage-curr .layui-laypage-em{
+            background: #1b87e5 !important;
+        }
+        .layui-laypage a:hover{
+            color: #1b87e5 !important;
+        }
+        .layui-btn {
+            background-color: #1E9FFF;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-content" style="padding-top: 30px">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" autocomplete="off" class="layui-input" id="demoReload">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">身份证</label>
+            <div class="layui-input-inline">
+                <input type="text" name="card" autocomplete="off" class="layui-input" id="card">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <!--<label class="layui-form-label">-->
+            <button class="layui-btn layui-bg-blue" data-type="reload" id="testReload">搜索</button>
+            <!--</label>-->
+        </div>
+
+        <div class="layui-inline">
+        <label class="layui-form-label">
+            <button class="layui-btn layui-bg-blue" data-type="exportFile">导出数据</button>
+        </label>
+        </div>
+
+        <div class="layui-inline">
+            <button type="button" class="layui-btn layui-bg-blue" id="uploadExample">
+                <i class="layui-icon">&#xe67c;</i>上传.xlsx文件
+            </button>
+        </div>
+
+    </div>
+    <!--<div class="demoTable">-->
+    <!--<div class="layui-inline">-->
+    <!--<input class="layui-input" name="id" id="demoReload" autocomplete="off" placeholder="姓名">-->
+    <!--<input class="layui-input" name="id" id="card" autocomplete="off" placeholder="身份证">-->
+    <!--</div>-->
+    <!--<button class="layui-btn" data-type="reload">搜索</button>-->
+    <!--</div>-->
+
+<!--    <div class="layui-content" style="padding-bottom: 60px;">-->
+<!--        <table class="layui-hide" id="test" lay-filter="test"></table>-->
+<!--    </div>-->
+</div>
+<div class="layui-form " id="kssj"style="display: none;">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="startTime" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <!--<label class="layui-form-label">-->
+            <button class="layui-btn " data-type="sureTime">确定</button>
+            <!--</label>-->
+        </div>
+    </div>
+</div>
+
+<!--<button type="button" class="layui-btn" id="test1">-->
+<!--    <i class="layui-icon">&#xe67c;</i>上传文件-->
+<!--</button>-->
+<!--<script src="/static/build/layui.js"></script>-->
+<!--<script>-->
+<!--    layui.use('upload', function(){-->
+<!--        var upload = layui.upload;-->
+
+<!--        //执行实例-->
+<!--        var uploadInst = upload.render({-->
+<!--            elem: '#test1' //绑定元素-->
+<!--            ,url: '/upload/' //上传接口-->
+<!--            ,accept: 'xsl'-->
+<!--            ,size: 50000 //最大允许上传的文件大小-->
+<!--            ,done: function(res){-->
+<!--                //上传完毕回调-->
+<!--            }-->
+<!--            ,error: function(){-->
+<!--                //请求异常回调-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<!--删除-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!--    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+</script>
+
+<!--动态表单-->
+<script type="text/javascript" th:inline="none">
+    layui.use('table', function () {
+        table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , url: basePath() + '/data/hospital/clinic/detailList'
+            // ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , title: '用户数据表'
+            // ,height: 'full-200'
+            , limit: 10
+            , cols: [[
+                // {field: 'name', title: '姓名', width: 300, fixed: 'left'}
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'name', title: '姓名', width: 100}
+                , {field: 'idCode', title: '身份证号码', width: 180}
+                , {field: 'sex', title: '性别', width: 80}
+                , {field: 'age', title: '年龄', width: 80}
+                , {field: 'phone', title: '联系电话', width: 150}
+                , {field: 'col1', title: '地区', width: 100}
+                , {field: 'col4', title: '镇街', width: 100}
+                , {field: 'col3', title: '居住地址', width: 300}
+                , {field: 'operName', title: '社区/医院', width: 300}
+                , {field: 'fromWuhan', title: '发病前2周疫情发生地停留情况', width: 250}
+                , {field: 'fromOther', title: '其他', width: 130}
+                , {field: 'illTime', title: '发病时间', width: 150,sort:true}
+                , {field: 'doctorTime', title: '诊断时间', width: 150,sort:true}
+                , {field: 'diagnosis', title: '诊断', width: 130}
+                , {field: 'temperature', title: '体温', width: 80}
+                , {field: 'respiratory', title: '呼吸道症状', width: 130}
+                , {field: 'digestive', title: '消化道症状', width: 130}
+                , {field: 'traffic', title: '交通联合检疫', width: 130}
+                , {field: 'contacts', title: '密切接触者', width: 130}
+                , {field: 'toGuangdong', title: ' 湖北来粵人员', width: 130}
+                , {field: 'clinic', title: '发热门诊患者', width: 130}
+                , {field: 'noClinic', title: '非发热门诊患者', width: 130}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+            , page: true
+            , id: 'testReload'
+            ,skin: 'line' //行边框风格
+            ,even: true //开启隔行背景
+            ,size: 'sm'
+        });
+
+//头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            console.log(data)
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    $.ajax({
+                        url:basePath()+'/data/hospital/clinic/update',
+                        type:'post',
+                        data:{'id':data.id},
+                        dataType:"json",
+                        success:function(data){
+                            if(data.code == 200){
+                                layer.open({
+                                    title: '提示'
+                                    ,content: '删除成功'
+                                });
+
+                            }else if(data.code == 0){
+                                layer.msg();
+                                layer.open({
+                                    title: '提示'
+                                    ,content: '身份失效，请重新登录'
+                                });
+                                parent.window.location.href = basePath() + '/data/hospital/clinic/main';
+
+                            }else{
+                                layer.open({
+                                    title: '提示'
+                                    ,content: '录入失败'
+                                });
+                            }
+                        },
+                        error:function(e){
+                            layer.open({
+                                title: '提示'
+                                ,content: '录入失败'
+                            });
+                        }
+                    });
+                    obj.del();
+                });
+            } else if(obj.event === 'edit'){
+                layer.prompt({
+                    formType: 2
+                    ,value: data.email
+                }, function(value, index){
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+        var $ = layui.$, active = {
+            reload: function () {
+                console.log($('#demoReload').val());
+                console.log($("#card").val());
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        // key: {
+                        //     name: demoReload.val(),
+                        //     idCode:card.val()
+                        // }
+                        name: $('#demoReload').val(),
+                        idCode: $("#card").val()
+                    }
+                },
+                    'data'
+                );
+            },
+
+
+
+            exportFile:function () {
+                // exportCol=['名字','性别','身份证号码']
+
+                layer.open({
+                    title:'请选择开始时间',
+                    type: 1,
+                    content: $('#kssj'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    offset:['20%','40%'],
+                    area: ['500px', '40%']
+                });
+            },
+            sureTime:function () {
+                var doctorTime = $("#startTime").val();
+                if (doctorTime =='') {
+                    layer.msg('请选择时间',{icon: 2});
+                }else {
+                    layer.confirm('确定导出诊断时间'+doctorTime+'?', {icon: 3, title:'提示',offset:['20%','40%'],}, function(index){
+                        $.ajax({
+                            type:'post',
+                            url: basePath() + '/data/hospital/clinic/detailList',
+                            data: {
+                                page:1,
+                                limit:100000000,
+                                doctorTime:doctorTime,
+
+                            },
+                            success:function (res) {
+                                table.exportFile('testReload', res.data, 'xls');
+                            }
+                        });
+                        layer.closeAll();
+                    });
+                }
+            }
+        };
+
+        $('.layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    })
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime'
+        });
+    })
+
+</script>
+
+
+
+<!--文件上传-->
+<script>
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#uploadExample' //绑定元素
+            // ,url: 'http://localhost:8090/blog-web/user/uploadFile' //上传接口
+            ,url: basePath() + '/data/hospital/clinic/import' //上传接口
+            ,title: '请上传Excel格式文件'
+            ,accept: 'file'
+            ,exts: 'xlsx|excel'
+            ,done: function(res){
+                //上传完毕回调
+                if(res.code==200){
+                    layer.open({
+                        title: '提示'
+                        ,content: '录入成功'
+                        ,btn: ['我知道了']
+                        ,time:1000000
+                        ,yes: function(index){
+                            table.reload('testReload', {
+                                    page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                    , where: {
+                                        name: "",
+                                        idCode: "",
+                                    }
+                                },
+                                'data'
+                            );
+                            layer.close(index);
+                        }
+                    });
+
+
+                }else if (res.code==0){
+                    layer.open({
+                        title: '提示'
+                        ,content: '身份失效，请重新登录'
+                    });
+                }else {
+                    layer.open({
+                        title: '提示'
+                        ,content: '上传失败'
+                    });
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+                layer.open({
+                    title: '提示'
+                    ,content: '上传失败'
+                });
+            }
+        });
+        return false;
+    });
+</script>
+
+</body>
+</html>

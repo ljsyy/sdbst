@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <base th:href="${#request.getContextPath()}+'/'">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <script src="js/jquery.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="mui/css/mui.css">
+        <link rel="stylesheet" href="mui/css/mui.loading.css">
+        <script type="application/javascript" src="mui/js/mui.min.js"></script>
+        <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+        <link rel="stylesheet" href="css/base.css"/>
+        <link rel="stylesheet" href="css/app/menu.css"/>
+        <link rel="stylesheet" href="css/app/fourSilder.css"/>
+        <link rel="stylesheet" href="css/disclaimer.css"/>
+        <script src="js/base.js" type="text/javascript"></script>
+        <script src="js/app/lib/vue.js" type="text/javascript"></script>
+        <script src="js/app/fourSilder.js" type="text/javascript"></script>
+        <title th:text="${name}"></title>
+        <style>
+            .content {
+                padding: 0px;
+                margin: 0px auto;
+                background-color: #EEE;
+                overflow: scroll;
+            }
+
+            /*列表滑动*/
+            #window { /* margin-bottom: 10px; */
+                border-bottom: #E0E0E0 1px solid;
+                padding: 10px 0 10px 10px;
+                font-size: 16px;
+                font-weight: 500;
+                background-color: #FFF;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            #window_move {
+                display: inline;
+                margin-left: 0;
+            }
+
+            #window .transition {
+                -webkit-transition: margin-left 300ms linear 0s;
+                -moz-transition: margin-left 300ms linear 0s;
+                -ms-transition: margin-left 300ms linear 0s;
+                -o-transition: margin-left 300ms linear 0s;
+                transition: margin-left 300ms linear 0s;
+            }
+
+            #window a {
+                padding: 12px 5px 8px 5px;
+                margin: 0px 3px;
+                text-decoration: none;
+                color: #767676;
+                font-weight: 500;
+            }
+
+            #window a.red-color {
+                color: #4281cd;
+                border-bottom: 2px solid #4281cd;
+            }
+
+            .scroll-wrapper {
+                position: fixed;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                top: 46px;
+                -webkit-overflow-scrolling: touch;
+                overflow-y: scroll;
+            }
+
+            .scroll-wrapper iframe {
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            mui.showLoading("正在加载", "div");
+            document.onreadystatechange = function () {
+                if (document.readyState == "complete") {
+                    mui.hideLoading(function () {
+                    })
+                }
+            }
+        </script>
+        <script type="text/javascript"
+                src="http://api.map.baidu.com/api?v=2.0&ak=PhMjTdqU3rH4lbzEhq6byvBKlcV7vmWh"></script>
+        <div id="window">
+            <div id="window_move"></div>
+        </div>
+        <div id="change" class="content">
+            <div id="contant_page" v-html="msg"></div>
+        </div>
+        <!-- 免责声明 -->
+        <div id="disclaimer">
+            <div style="padding: 15px 10px;box-sizing: border-box;-webkit-box-sizing: border-box;">
+                <div class="d-title">
+                    <img src="img/disclaimer/wxts.jpg"/>
+                </div>
+                <div class="d-content">
+                    <strong style="color: #f0861b;">免责声明：</strong>
+                    <span></span>
+                </div>
+                <div class="d-btn">
+                    <div class="d-btn-l">
+                        <span>取消</span>
+                    </div>
+                    <div class="d-btn-r">
+                        <a href="">
+                            <span>同意</span>
+                        </a>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" th:inline="javascript">
+
+        var name = [[${name}]];
+        var windowSize;
+        var fourSliderJSonData;
+        var contantPage;
+        var windowMove;
+        var titleparentid;
+        var windowObject;
+        $(window).resize(windowSizeFn);
+
+        function windowSizeFn() {
+            var h = $(window).height();
+            var th = $("#window").outerHeight(true);
+        }
+
+        var contant = new Vue({
+            el: "#change",
+            data: {msg: ""},
+            methods: {
+                clickcheck: function (my) {
+                    //显示内容
+                    var num = my.index();
+                    //缓存
+                    sessionStorage.setItem('fourSlider', num);
+
+                    var sortarray = fourSliderJSonData.getjsonparentId(titleparentid[num].id, true);
+                    if (titleparentid[num].type == 'none') {
+                        if (titleparentid[num].name == "进度查询") {
+                            //contant.msg=contantMenuCheckFn('${ct}', '${param.noHead}');
+                            inPageFn(titleparentid[num].href);
+                            contant.msg = allHrefStr;
+                        }
+                        else if (name == '三农服务') {
+                            inPageFn(titleparentid[num].href);
+                            contant.msg = allHrefStr;
+                        } else if (name == '信访查询') {
+                            inPageFn(titleparentid[num].href);
+                            contant.msg = allHrefStr;
+                        }
+                    }
+                    //请选择
+                    if (titleparentid[num].type == 'bottomList' || titleparentid[num].type == undefined) {
+                        if (name == '交通资讯') {
+                            gjzxMenuFn(num);
+                            contant.msg = gjzxStr;
+                        } else if (name == '公交出行') {
+                            /*  gjcxMenuFn(num);
+                            contant.msg=gjcxStr; */
+                            inPageFn(titleparentid[num].href + '?id=');
+                            contant.msg = allHrefStr;
+                        } else if (name == '人事信息') {
+                            rsxxMenuFn(num, '');
+                            contant.msg = allHrefStr;
+                        } else if (name == '环境质量') {
+                            if (hjzlArray.length == 0) {
+                                hjzlPush(num, "综合");
+                            }
+                            hjzlMenuFn(num, "综合");
+                            //hjzlMenuFn---->contant.msg=hjzlStr;
+                        } else if (name == '政府部门电话') {
+                            contactMenuFn(num);
+                            contant.msg = contactStr;
+                        } else if (name == '办事预约') {
+                            inPageFn(titleparentid[num].href);
+                            contant.msg = allHrefStr;
+                        } else if (name == '违章处理') {
+                            inPageFn(titleparentid[num].href);
+                            contant.msg = allHrefStr;
+                        } else {
+                            contant.msg = defaultFormatFn(basePath(), "", "", sortarray, 'img/menu/xiala.png');
+                        }
+                    }
+                    //列表
+                    if (titleparentid[num].type == 'fourList' || titleparentid[num].type == 'textListno') {
+                        contant.msg = menuFourList(basePath(), "", "", sortarray, 'img/menu/note.png', 'img/menu/xiala.png');
+                    }
+                    //5级16宫格
+                    if (titleparentid[num].type == 'five16') {
+                        contant.msg = menu16Fn(basePath(), "", "", sortarray, 4, 'img?url=');
+                    }
+
+                }
+            }
+        });
+        //初始化
+        $(document).ready(function () {
+            //设置标题
+            /*  $("#title").text(name);
+             $("title").text(name); */
+            initLujingFn(basePath(), "");
+            windowSize = $("#change");
+            contantPage = $("#contant_page");
+            windowMove = $("#window_move");
+            windowSizeFn();
+            //jquery：获取json数据
+            fourSliderJSonData = new jsonObjectFn(basePath() + "/app/menu/findChildsMenu?id=" + [[${id}]], "fourSliderJSonData", "fourSliderJSonDataFn()", "five16JsonStop()");
+
+            //免责声明取消
+            $("#disclaimer .d-btn .d-btn-l").click(function () {
+                $("#disclaimer").hide();
+                $("#disclaimer .d-content span").text('');
+            });
+        });
+
+        function fourSliderJSonDataFn() {
+            windowMove.empty();
+            console.log("kaishi")
+            titleparentid = fourSliderJSonData.getjsonparentId([[${id}]], true);
+
+            for (var i = 0; i < titleparentid.length; i++) {
+                windowMove.append('<a onClick="contant.clickcheck($(this))" target="_self">' + titleparentid[i].name + '</a>');
+            }
+            //缓存
+            var cache = sessionStorage.getItem('fourSlider');
+            if (typeof(cache) == 'string' && cache != '') {
+                windowMove.find("a:eq(" + cache + ")").attr("class", "red-color");
+                contant.clickcheck(windowMove.find("a:eq(" + cache + ")"));
+            } else {
+                windowMove.find("a:eq(0)").attr("class", "red-color");
+                contant.clickcheck(windowMove.find("a:eq(0)"));
+            }
+
+            windowSizeFn()//重新调整大小
+        }
+
+        //ajax加载完毕时执行
+        function five16JsonStop() {
+            windowObject = new windowFn("#window");//点击的位置
+            windowObject.init();
+        }
+    </script>
+</html>

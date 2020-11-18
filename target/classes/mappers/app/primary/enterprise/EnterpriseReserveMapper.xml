@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.enterprise.EnterpriseReserveMapper">
+    <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.enterprise.EnterpriseReserve">
+        <result column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+        <result column="RESUMED_WORK_DATE" property="resumedWorkDate" jdbcType="TIMESTAMP"/>
+        <result column="TO_RESUME_WORK_DATE" property="toResumeWorkDate" jdbcType="TIMESTAMP"/>
+        <result column="PEOPLE_NUMBER" property="peopleNumber" jdbcType="DECIMAL"/>
+        <result column="RESUMED_WORK_NUMBER" property="resumedWorkNumber" jdbcType="DECIMAL"/>
+        <result column="NUMBER_MASKS" property="numberMasks" jdbcType="DECIMAL"/>
+        <result column="CONTACT_PERSON" property="contactPerson" jdbcType="VARCHAR"/>
+        <result column="PHONE_NUMBER" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="CREDIT_CODE" property="creditCode" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.unifs.sdbst.app.bean.enterprise.EnterpriseReserve">
+    insert into ENTERPRISE_RESERVE (NAME, TYPE, ADDRESS,
+      RESUMED_WORK_DATE, TO_RESUME_WORK_DATE,
+      PEOPLE_NUMBER, RESUMED_WORK_NUMBER, NUMBER_MASKS,
+      CONTACT_PERSON, PHONE_NUMBER, CREDIT_CODE,CREATE_DATE,ID
+      )
+    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{resumedWorkDate,jdbcType=TIMESTAMP}, #{toResumeWorkDate,jdbcType=TIMESTAMP},
+      #{peopleNumber,jdbcType=DECIMAL}, #{resumedWorkNumber,jdbcType=DECIMAL}, #{numberMasks,jdbcType=DECIMAL},
+      #{contactPerson,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{creditCode,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP},#{id,jdbcType=VARCHAR}
+      )
+  </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select NAME, TYPE, ADDRESS, RESUMED_WORK_DATE, TO_RESUME_WORK_DATE, PEOPLE_NUMBER,
+    RESUMED_WORK_NUMBER, NUMBER_MASKS, CONTACT_PERSON, PHONE_NUMBER, CREDIT_CODE
+    from ENTERPRISE_RESERVE
+  </select>
+
+    <select id="getLatestEnterpriseReserveByCreditCode" parameterType="String" resultMap="BaseResultMap">
+    select * from ( select ID,NAME, TYPE, ADDRESS, RESUMED_WORK_DATE, TO_RESUME_WORK_DATE, PEOPLE_NUMBER,
+        RESUMED_WORK_NUMBER, NUMBER_MASKS, CONTACT_PERSON, PHONE_NUMBER, CREDIT_CODE,CREATE_DATE
+        from ENTERPRISE_RESERVE where CREDIT_CODE = #{_parameter,jdbcType=VARCHAR}
+        order by CREATE_DATE desc
+    )
+    where rownum = 1
+    </select>
+
+    <select id="getEnterpriseReserveByCreditCode" parameterType="String" resultMap="BaseResultMap">
+    select ID,NAME, TYPE, ADDRESS, RESUMED_WORK_DATE, TO_RESUME_WORK_DATE, PEOPLE_NUMBER,
+    RESUMED_WORK_NUMBER, NUMBER_MASKS, CONTACT_PERSON, PHONE_NUMBER, CREDIT_CODE,CREATE_DATE
+    from ENTERPRISE_RESERVE where
+    to_date(to_char(CREATE_DATE,'yyyyMMdd'),'yyyyMMdd') > to_date(to_char(sysdate,'yyyyMMdd'),'yyyyMMdd') -3
+    and CREDIT_CODE = #{_parameter,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getEnterpriseReserveByCreditCodeSeven" parameterType="String" resultMap="BaseResultMap">
+    select ID,NAME, TYPE, ADDRESS, RESUMED_WORK_DATE, TO_RESUME_WORK_DATE, PEOPLE_NUMBER,
+    RESUMED_WORK_NUMBER, NUMBER_MASKS, CONTACT_PERSON, PHONE_NUMBER, CREDIT_CODE,CREATE_DATE
+    from ENTERPRISE_RESERVE where
+    to_date(to_char(CREATE_DATE,'yyyyMMdd'),'yyyyMMdd') > to_date(to_char(sysdate,'yyyyMMdd'),'yyyyMMdd') -7
+    and CREDIT_CODE = #{_parameter,jdbcType=VARCHAR}
+  </select>
+
+    <update id="update" parameterType="com.unifs.sdbst.app.bean.enterprise.EnterpriseReserve">
+        update ENTERPRISE_RESERVE
+        <set>
+            <if test="resumedWorkDate!=null">
+                RESUMED_WORK_DATE=#{resumedWorkDate},
+            </if>
+            <if test="resumedWorkDate==null">
+                RESUMED_WORK_DATE=null,
+            </if>
+            <if test="toResumeWorkDate!=null">
+                TO_RESUME_WORK_DATE=#{toResumeWorkDate},
+            </if>
+            <if test="toResumeWorkDate==null">
+                TO_RESUME_WORK_DATE=null,
+            </if>
+            <if test="updateDate!=null">
+                UPDATE_DATE=#{updateDate},
+            </if>
+            <if test="peopleNumber!=null and peopleNumber!=''">
+                PEOPLE_NUMBER=#{peopleNumber},
+            </if>
+            <if test="resumedWorkNumber!=null and resumedWorkNumber!=''">
+                RESUMED_WORK_NUMBER=#{resumedWorkNumber},
+            </if>
+            <if test="numberMasks!=null">
+                NUMBER_MASKS=#{numberMasks},
+            </if>
+            <if test="contactPerson!=null and contactPerson!=''">
+                CONTACT_PERSON=#{contactPerson},
+            </if>
+            <if test="phoneNumber!=null and phoneNumber!=''">
+                PHONE_NUMBER=#{phoneNumber},
+            </if>
+        </set>
+        where id=#{id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

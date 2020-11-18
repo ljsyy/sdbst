@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.menus.SysUserMenuMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.menus.SysUserMenu">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="MENU_IDS" jdbcType="VARCHAR" property="menuIds" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <!--<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />-->
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.menus.SysUserMenu">
+    insert into SYS_USER_MEUN (ID, MENU_IDS, UPDATE_BY, UPDATE_DATE)
+    values (#{id,jdbcType=VARCHAR}, #{menuIds,jdbcType=VARCHAR},
+      #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, MENU_IDS, remarks, UPDATE_BY, UPDATE_DATE
+    from SYS_USER_MEUN
+  </select>
+
+	<sql id="sysUsermenuColumns">
+		a.ID AS "id",
+		a.MENU_IDS AS "menuIds"
+	</sql>
+	<sql id="sysUsermenuJoins">
+	</sql>
+	<select id="get" resultType="com.unifs.sdbst.app.bean.menus.SysUserMenu">
+		SELECT
+		<include refid="sysUsermenuColumns"/>
+		FROM SYS_USER_MEUN a
+		<include refid="sysUsermenuJoins"/>
+		WHERE a.id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<update id="update">
+		UPDATE SYS_USER_MEUN SET
+			menu_ids = #{menuIds},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+</mapper>

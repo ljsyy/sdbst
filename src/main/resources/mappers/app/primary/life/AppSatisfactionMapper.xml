@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.AppSatisfactionMapper">
+	
+    <sql id="appSatisfactionColumns">
+    	a.id AS "id",
+    	a.title AS "title",
+    	a.sort AS "sort",
+    	a.option_a AS "optionA",
+    	a.option_b AS "optionB",
+    	a.option_c AS "optionC",
+    	a.option_d AS "optionD",
+    	
+    	a.count_a AS "countA",
+    	a.count_b AS "countB",
+    	a.count_c AS "countC",
+    	a.count_d AS "countD",
+    	a.create_date AS "createDate",
+    	a.del_flag AS "delFlag"
+    </sql>
+    
+    <sql id="appSatisfactionJoins">
+    </sql>
+	
+	<select id="get" resultType="com.unifs.sdbst.app.bean.life.Satisfaction">
+		SELECT
+			<include refid="appSatisfactionColumns"/>
+		FROM APP_SATISFACTION a
+			<include refid="appSatisfactionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.unifs.sdbst.app.bean.life.Satisfaction">
+		SELECT
+			<include refid="appSatisfactionColumns" />
+		FROM APP_SATISFACTION a
+			<include refid="appSatisfactionJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="getMaxSort" resultType="Integer">
+		select max(sort) from APP_SATISFACTION where del_flag = '0'
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO APP_SATISFACTION(
+			id,
+	    	title,
+	    	sort,
+	    	option_a,
+	    	option_b,
+	    	option_c,
+	    	option_d,
+	    	count_a,
+	    	count_b,
+	    	count_c,
+	    	count_d,
+	    	create_date,
+	    	del_flag
+		) VALUES (
+			#{id}, 
+			#{title},
+			#{sort},
+			#{optionA},
+			#{optionB}, 
+			#{optionC}, 
+			#{optionD},
+			#{countA},
+			#{countB},
+			#{countC},
+			#{countD},
+			#{createDate}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE APP_SATISFACTION SET 
+			title = #{title}, 
+			sort = #{sort},
+			option_a = #{optionA}, 
+			option_b = #{optionB}, 
+			option_c = #{optionC}, 
+			option_d = #{optionD}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSort">
+		UPDATE APP_SATISFACTION SET 
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateCount">
+		UPDATE APP_SATISFACTION SET 
+			<if test="countA !=null and countA !=''">count_a = count_a + #{countA}</if>
+			<if test="countB !=null and countB !=''">count_b = count_b + #{countB}</if>
+			<if test="countC !=null and countC !=''">count_c = count_c + #{countC}</if>
+			<if test="countD !=null and countD !=''">count_d = count_d + #{countD}</if>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="clearCount">
+		UPDATE APP_SATISFACTION SET 
+			count_a = 0,
+			count_b = 0,
+			count_c = 0,
+			count_d = 0
+		WHERE del_flag = '0'
+	</update>
+	
+	<update id="delete">
+		UPDATE APP_SATISFACTION SET 
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+</mapper>

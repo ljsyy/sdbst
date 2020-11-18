@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="decorator" content="blank"/>
+	<base th:href="${#request.getContextPath()}+'/'">
+
+	<script src="js/base.js" type="text/javascript"></script>
+
+	<link rel="stylesheet" href="css/app/detail.css"/>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/detail.js"></script>
+<style type="text/css">
+body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+.container {padding: 0;max-width: 750px;}
+ html,.container{height: 100%;}
+body{background: #F3F3F3;}
+a{text-decoration:none;color: #000;}
+
+.top{    background: #fff;}
+.main{}
+.line{
+	background: #fff;
+	margin-top: 10px;
+	padding: 10px;
+}
+.main .block{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    color: #757575;
+    line-height: 25px;
+}
+.main .name{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.main .click{    text-align: right;    padding-top: 5px;}
+.location{
+    margin: 0 5px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.long{
+    position: absolute;
+    right: 10px;
+}
+.long span{    vertical-align: super;}
+
+.ggzxc-map{position: relative;height: 35px;background: #fff;padding: 5px 5px 10px 5px;}
+.ggzxc-map .xuanzepos{background: #f6f6f6;height: 100%;border: solid 1.5px #C5C4C4;border-radius: 5px;    position: relative;}
+.ggzxc-map .xuanzepos img{    position: absolute;right: 10px;top: 5px;}
+.ggzxc-map .xuanzepos .pos-font{position:absolute;left:10px;line-height: 35px;}
+</style>
+
+<script>
+$(document).ready(function(){
+	
+	
+	start();
+});
+
+function start(){
+	var lng= getQueryString("lng");
+	var lat= getQueryString("lat");
+
+	$.ajax({
+		url:basePath()+"/life/vaccination",
+		data:{"lng":lng,"lat":lat},
+		type: "POST",
+		dataType:"json",
+		async:false,
+		success:function(result){
+			console.log(result)
+			for(var i in result){
+				
+				$(".main").append(
+					'<div class="line">'+
+						'<p class="name">'+result[i].point+'</p>'+
+						'<div class="long">'+
+							'<span>'+parseFloat(result[i].longx.toFixed(2))+'K</span>'+
+							'<img src="img/map/maplogn.jpg" height="23" />'+
+						'</div>'+
+						'<p class="block">'+
+							'电话：<span class="phone" onclick="getPhone($(this))">'+result[i].phone+'</span><br/>'+
+							'地址：'+result[i].address+'<br/>'+
+							'镇街：'+result[i].street+'<br/>'+
+							'接种类别：'+result[i].kind+'<br/>'+
+							'开诊时间：'+result[i].time+'<br/>'+
+							'是否24小时接种狂犬病疫苗：'+result[i].hours+'<br/>'+
+						'</p>'+
+						'<p class="click">展开∨</p>'+
+					'</div>'	
+				);
+			}
+			
+			$(".click").click(function(){
+				var text = $(this).text();
+				if(text == "展开∨"){
+					$(this).prev().css("display","block");
+					$(this).text("收起∧");
+				}else if(text == "收起∧"){
+					$(this).prev().css("display","-webkit-box");
+					$(this).text("展开∨");
+				}
+			});
+		}
+	});
+}
+
+function getPhone(my){
+	var phone = my.text();
+	console.log(phone);
+	window.location.href="tel:"+phone;
+
+}
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]);
+	return null;
+}
+</script>
+
+<title>疫苗接种医院信息</title>
+</head>
+
+<body>
+<a class="top" href="life/vaccinationMap">
+	<div class="ggzxc-map">
+		<div class="xuanzepos"><div class="pos-font">我的位置</div><img src="img/map/weizhi.png" height="25"/></div>
+	</div>
+</a>
+<div class="main">
+	
+</div>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src * ;img-src *">-->
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline';img-src 'self' http://support.shunde.gov.cn:9203">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>缴交电费</title>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/life/livingpay/ipay.css?v=1.0.1" rel="stylesheet" type="text/css">
+
+<body>
+
+<div class="mui-input-group">
+    <div id="base-div" style="margin-top: 5px">
+        <div class="mui-input-row" style="overflow: visible;">
+            <label class="label">缴费类型</label>
+            <div class="payTypeDiv" style="margin-top: 4px;">
+                <input type="text" id="payType" value="缴费类型" code="" readonly="readonly" />
+                <ul id="payTypeUl">
+                    <li code="0">缴费欠费</li>
+                    <li code="1">预存电费</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mui-input-row">
+            <label class="label">用户电号</label>
+            <input type="text" placeholder="请输入用户电号" class="mui-input-clear top" id="PayEleFeeAcNo">
+        </div>
+
+        <div class="mui-input-row" id="OweMoneyDiv" style="display: none;">
+            <label class="label" id="payTypeFlag"></label>
+            <input type="text" class="mui-input-clear top"  id="OweMoney">
+        </div>
+        <div class="mui-input-row" id="AcctNoDiv" style="display: none;">
+            <label class="label" >付款卡号/账号</label>
+            <input type="text" class="mui-input-clear top"   placeholder="请输入付款卡号/账号" id="AcctNo">
+        </div>
+
+        </div>
+        <div class="mui-button-row" style="margin-top: 20px;">
+            <button type="button" class="mui-btn mui-btn-primary" id="searchBtn" onclick="search()">查询</button>
+            <button type="button" class="mui-btn mui-btn-primary" id="doNextBtn" style="display: none;" onclick="confirmPay()">下一步</button>
+        </div>
+    </div>
+
+<form id="form1" name="MainForm" method="post" action="">
+    <INPUT type="hidden" name="transName" id="transName" value='iMPay' />
+    <INPUT type="hidden" name="Plain" id="Plain" value='' />
+    <INPUT type="hidden" name="Signature" id="Signature" value="" />
+</form>
+
+<input type="hidden" id="resultData" name="resultData" value="" />
+<input type="hidden" id="userId" name="userId" th:value="${userId}" />
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
+    提示:。
+</div>
+<script type="application/javascript" src="mui/js/mui.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+<!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+<script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+<script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+<script>
+
+    $(function(){
+        //证件类型点击
+        $(".payTypeDiv").click(function (e) {
+            e.stopPropagation()
+            if ($("#payTypeUl").is(":hidden")) {
+                $("#payTypeUl").show()
+            } else {
+                $("#payTypeUl").hide()
+            }
+        });
+        $("#payTypeUl>li").click(function (e) {
+            e.stopPropagation();
+            $("#payType").val($(this).text()).attr("code", $(this).attr("code"));
+            $("#payTypeUl").hide()
+        });
+    })
+
+    function confirmPay(){
+        $("button").attr("disabled", true);
+        //若是预存，校验金额是否输入，合法
+        var payType = $("#payType").attr("code");
+        payType = payType.trim().replace(/\s/g,"");
+
+        var TransAmount =  $("#OweMoney").val();
+        var reg =/\s/;
+        if(payType == 1){
+            if(TransAmount == "" || TransAmount == undefined){
+                mui.alert("请输入预存金额","提示");
+                $("button").attr("disabled", false);
+                return;
+            }
+            if(reg.test(TransAmount) || !isNumber(TransAmount)){
+                mui.alert("请输入正确的金额","提示");
+                $("button").attr("disabled", false);
+                return;
+            }
+        }
+       // alert(TransAmount);
+        //校验付款卡号
+        var AcctNo = $("#AcctNo").val();
+        AcctNo = AcctNo.trim().replace(/\s/g,"");
+        if(AcctNo == ""){
+            mui.alert("请输入卡号","提示");
+            $("#confirmPay").attr("disabled", false);
+            return ;
+        }
+        //将金额设置进数据
+        var resultData = $("#resultData").val();
+        var mesg = eval('(' + resultData + ')');
+        mesg.TransAmount = TransAmount;
+        //alert();
+        //请求后台，获取plain，及签名
+        var message = {
+            "data":JSON.stringify(mesg),
+            "payType":"iElePay",
+            "AcctNo":$("#AcctNo").val()
+        };
+        $.ajax({
+            url: basePath() + "/livingPay/getPayParam?userId="+$("#userId").val(), /*接口域名地址*/
+            type: 'post',
+            data: JSON.stringify(message),
+            contentType: "application/json",
+            dataType:"json",
+            async:true,
+            success: function (res) {
+                if(res.code == 200){
+                    var result =  res.data;
+                    $("#Plain").val(result.Plain);
+                    //console.log(result.Plain);
+                    $("#Signature").val(result.Signature);
+                    //console.log(result.Signature);
+                    $("#form1").submit();
+                }else{
+                    mui.alert(res.data,"提示");
+
+                    return;
+                }
+                $("button").attr("disabled", false);
+            },
+            error:function(err){
+
+            }
+        })
+        //$("button").attr("disabled", false);
+    }
+
+
+    function isNumber(value) {
+        return !Number.isNaN(Number(value))
+    }
+
+    function search(){
+        $("button").attr("disabled", true);
+        var payType = $("#payType").attr("code");
+        payType = payType.trim().replace(/\s/g,"");
+        if(payType == ""){
+            mui.alert("请选择缴费类型","提示");
+            $("button").attr("disabled", false);
+            return;
+        }
+        var PayEleFeeAcNo = $("#PayEleFeeAcNo").val();
+        PayEleFeeAcNo = PayEleFeeAcNo.trim().replace(/\s/g,"");
+        if(PayEleFeeAcNo == ""){
+            mui.alert("请输入用户电号","提示");
+            $("button").attr("disabled", false);
+            return;
+        }
+        //查询接口
+        $.post(basePath() + "/livingPay/payQuery",{"PayEleFeeAcNo":PayEleFeeAcNo,"PayType":payType,"DistrictNo":"120","queryType":"iElePayQry"},function(result){
+            // console.log(result);
+            //console.log(result);
+            var resultData = result.data;
+            console.log(resultData);
+            if(result.code == 200){
+                $("#OweMoneyDiv").show();
+                $("#AcctNoDiv").show();
+                $("#resultData").val(resultData);//设置提交的值
+                var mesg = eval('(' + resultData + ')');
+                $("#form1").attr("action",mesg.payAddr);//设置提交地址
+                if(payType == 0){
+                    $("#payTypeFlag").text("应缴金额");
+                    $("#OweMoney").val(mesg.OweMoney);
+                    $('#OweMoney').attr("readonly","readonly")//将input元素设置为readonly
+                }else if(payType == 1){
+                    $("#payTypeFlag").text("预存金额");
+                    $("#OweMoney").val("");
+                    $('#OweMoney').removeAttr("readonly");//去除input元素的readonly属性
+                }
+                $("#doNextBtn").show();
+            }else{
+                mui.alert(resultData,"提示");
+                $("#PayOrder").attr("disabled", false);
+                return;
+            }
+            $("button").attr("disabled", false);
+        });
+
+    }
+</script>
+</body>
+</html>

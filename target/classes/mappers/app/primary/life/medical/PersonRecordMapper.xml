@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.medical.PersonRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.medical.PersonRecord" >
+    <result column="SITE_CODE" property="siteCode" jdbcType="VARCHAR" />
+    <result column="SITE_NAME" property="siteName" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="COL1" property="col1" jdbcType="VARCHAR" />
+    <result column="COL2" property="col2" jdbcType="VARCHAR" />
+    <result column="COL3" property="col3" jdbcType="VARCHAR" />
+    <result column="COL4" property="col4" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.medical.PersonRecord" >
+    insert into APP_HOSPITAL_NAME (SITE_CODE, SITE_NAME, PHONE, 
+      NAME, TYPE, COL1, COL2, 
+      COL3, COL4)
+    values (#{siteCode,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{col1,jdbcType=VARCHAR}, #{col2,jdbcType=VARCHAR}, 
+      #{col3,jdbcType=VARCHAR}, #{col4,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select SITE_CODE, SITE_NAME, PHONE, NAME, TYPE, COL1, COL2, COL3, COL4
+    from APP_HOSPITAL_NAME_2
+  </select>
+
+  <select id="getPersonByPhone" resultMap="BaseResultMap" >
+     select SITE_CODE, SITE_NAME, PHONE, NAME, TYPE, COL1, COL2, COL3, COL4
+    from APP_HOSPITAL_NAME where  col1 = '0'
+    <if test="phone != null and phone != ''">
+      and PHONE=#{phone}
+    </if>
+  </select>
+</mapper>

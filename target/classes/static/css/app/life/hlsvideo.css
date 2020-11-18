@@ -1,0 +1,388 @@
+*{
+	-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html{width: 100%;height:100%}
+body {
+    width: 100%;
+    height: 100%;
+    background: #f6f6f6;
+}
+.clearfix::after{
+	display: block;
+    content: "";
+    clear: both;
+}
+.tab-ele{
+	float:left;
+	width: 100px;
+    height: 30px;
+    line-height: 30px;
+    border: #a7a299 1px;
+    border-style: solid;
+	border-bottom-width: 0px;
+	text-align: center;
+	border-radius: 5px 5px 0px 0px;
+	cursor: pointer;
+}
+.tab-ele.active{
+	background-color: #a5c2f6;
+    border-style: inset;
+}
+.video-show-div{
+	width: 100%;
+    height: 100%;
+	float: left;
+}
+.hls-video-show{
+	width:100%;
+	height:100%;
+	position: relative;
+	padding-right: 300px;
+}
+.video-js {
+    width: 100%!important;
+    height: 100%!important;
+}
+.hls-video-show-utils {
+	position: absolute;
+	right:0px;
+	top:0px;
+	width: 300px;
+    height: 500px;
+	border-left: black solid 1px;
+}
+.hls-video-show-div{
+	width:100%;
+	height:100%;
+}
+.play-ctrl-title {
+	width:100%;
+	color: #333;
+    background-color: #f5f5f5;
+	border-radius:0px 5px 0px 0px;
+	height: 32px;
+	border-bottom: #ddd solid 1px;
+    line-height: 32px;
+    padding-left: 5px;
+    font-size: 15px;
+}
+.play-ctrl{
+	font-size: 12px;
+    padding: 9px 0px 0px 10px;
+    height: 50px;
+	background-color: white;
+}
+.meu8input{
+	border-radius: 5px;
+    height: 33px;
+    width: 130px;
+    border-style: groove;
+}
+.meu8playbtn{
+	border-radius: 18px;
+    height: 33px;
+    width: 65px;
+}
+.code-preview-title{
+	width:100%;
+	color: #333;
+    background-color: #f5f5f5;
+	border-bottom: #ddd solid 1px;
+	border-top: #ddd solid 1px;
+	border-radius:0px 5px 0px 0px;
+	height: 32px;
+    line-height: 32px;
+    padding-left: 5px;
+    font-size: 15px;
+}
+.code-preview{
+    color: #000;
+	height: 348px;
+	font-size: 12px;
+    background-color: #e5eecc;
+    padding: 5px;
+    border: 1px solid #d4d4d4;
+	border-top: 0px;
+	line-height: 20px;
+	border-radius:0px 0px 5px 0px;
+    background-image: -webkit-linear-gradient(#fff,#e5eecc 100px);
+    background-image: linear-gradient(#fff,#e5eecc 100px);
+}
+.code-keyword{
+	/*font-weight:bold;*/
+	font-style: oblique;
+	color: #c42525;
+}
+.code-variable{
+	color: #e1ac54;
+}
+.code-string{
+    color: #3fa56a;
+}
+#hlsplayrecord-cam .cam-container {position: relative;     height: 105px;overflow: hidden;width:1060px;margin-left:auto;margin-right:auto;}
+#hlsplayrecord-cam .cam-container .timeline {
+	background-image: url(../img/cam-timeaxis.png); width: 960px; height: 65px; margin: 0px auto 10px; position: relative; background-position: 0px 37px; background-repeat: no-repeat;
+}
+#hlsplayrecord-cam .cam-container .timeline #timespan {
+	position: absolute; top: 37px; left: 0px; width: 953px; height: 6px; background: url(../img/cam-timeline.png) repeat-x; border-radius: 5px;
+}
+#hlsplayrecord-cam .cam-container .timeline #timespan #camplaylistcon {
+	position: absolute; top: -24px; width: 953px; height: 30px; overflow: hidden;
+}
+#hlsplayrecord-cam .cam-container .timeline #timespan #camClipNeedle {
+	position: absolute; top: -27px; left: 662px; z-index: 2; cursor: pointer;
+}
+
+#hlsplayrecord-cam .cam-container #selectTimespan {
+	width:960px;margin-left:100px;margin-right:auto;
+}
+
+#hlsplayrecord-cam .cam-container #selectTimespan #cam_time_1 {
+    outline: none; width: 72px; height: 28px; top: 0px; line-height: 0px; background-color: rgb(187, 187, 187); background-position: initial initial; background-repeat: initial initial;
+}
+
+#hlsplayrecord-cam .cam-container #selectTimespan #cam_time_24{
+     outline: none; width: 72px; height: 28px; top: 0px; line-height: 0px; background-color: rgb(19, 105, 197);
+}
+
+#hlsplayrecord-cam{
+    position: absolute;
+    bottom: 0px;
+}
+.hlsplayrecord-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+.hls-record-show-div{
+	width:100%;
+	height:100%;
+	padding-bottom: 105px;
+	position:relative;
+}
+.time_select_div {
+	float: left;
+}
+.camvodSelectDay{
+    float: left;
+	margin-left: 50px!important;
+}
+.btn {
+    display: inline-block;
+    padding: 0px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+	height:24px;
+}
+.btn:hover, .btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+.btn:hover, .btn:focus, .btn:active, .btn.active {
+    color: #333;
+    background-color: #ebebeb;
+    border-color: #adadad;
+}
+.record-play-ctrl{
+	font-size: 12px;
+    padding: 9px 0px 0px 10px;
+    height: 80px;
+    background-color: white;
+}
+.record-code-preview{
+	color: #000;
+    height: 224px;
+    font-size: 12px;
+    background-color: #e5eecc;
+    margin: 0 0 5px 0;
+    padding: 5px;
+    border: 1px solid #d4d4d4;
+    border-top: 0px;
+    line-height: 20px;
+    border-radius: 0px 0px 5px 0px;
+    background-image: -webkit-linear-gradient(#fff,#e5eecc 100px);
+    background-image: linear-gradient(#fff,#e5eecc 100px);
+}
+.playlistinput {
+	border-radius: 5px;
+    height: 33px;
+    width: 130px;
+    border-style: groove;
+}
+.vjs-control-bar{
+    display:none!important;
+}
+
+.main-container {
+    width:100%;
+    height: 100%;
+    position: relative;
+    padding: 20px 0px 0px 250px;
+}
+.hls-title {
+    position: absolute;
+    top:0px;
+    left: 0px;
+}
+.left-info {
+    position: absolute;
+    top:20px;
+    left: 0px;
+    bottom:0px;
+    right:0px;
+    width:250px;
+    padding: 155px 0px 0px 0px;
+}
+.cms-config {
+    height:155px;
+    margin:0px!important;
+    position: absolute;
+    top:0px;
+    left: 0px;
+    right: 0px;
+}
+.cms-config .panel-heading{
+    height:45px!important;
+}
+.cms-config .panel-body{
+    height:108px!important;
+}
+.vides-tabs{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 0px;
+}
+.tab-div {
+    position: absolute;
+    top:0px;
+    left:0px;
+    height:30px;
+    right: 0px;
+}
+.video-quality{
+    float:right;
+}
+.conf-title{
+    display: inline-block;width:60px;
+}
+.conf-val{
+    width: 155px;
+    font-size: 12px;
+}
+.videolist {
+    height: 100%;
+    position: relative;
+    padding:45px 0px 0px 0px;
+    margin:0px!important;
+}
+.videolist .panel-heading{
+    position: absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    height:45px!important;
+}
+.videolist .panel-body{
+    height:100%!important;
+    overflow-y: scroll;
+    padding: 5px 2px!important;
+}
+.vides-tabs .panel{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 45px 0px 0px 0px;
+    margin:0px!important;
+}
+.vides-tabs .panel .panel-heading{
+    position: absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    height:45px!important;
+}
+.vides-tabs .panel .panel-body{
+    height:100%!important;
+}
+ul.ztree{
+    margin:0px;
+}
+.ztree ul{
+    margin:0px;
+    padding-left: 10px!important;
+}
+
+.ztree li span.button.areaSkin_ico_open{margin-right:2px; background: url(../img/ico-area.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.areaSkin_ico_close{margin-right:2px; background: url(../img/ico-area.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.areaSkin_ico_docu{margin-right:2px; background: url(../img/ico-area.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.camSkinOnline_ico_docu{margin-right:2px; background: url(../img/cameraOnline.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.camSkinOffline_ico_docu{margin-right:2px; background: url(../img/cameraOffline.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle;background-position-x: 2px;}
+
+.video-show{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 42px;
+}
+.video-show .video-show-nav{
+    height: 42px;
+    position: absolute;
+    top:0px;
+    left: 0px;
+    right: 0px;
+}
+.video-show .video-show-main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.video-show .nav-tabs>li>a {
+    background-color: rgb(235, 235, 235);
+}
+.video-show .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff!important;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.layui-layer-loading .layui-layer-loading1 {
+    width: 250px!important;
+    padding-left: 44px!important;
+    line-height: 37px!important;
+}
+
+div.hlsVideoBody{
+    padding : 0px 0px 105px 0px;
+    height: 100%;
+    width: 100%;
+}
+
+.videoShowMainFrame {
+    width: 100%;
+    height: 100%;
+    border-width: 0px;
+}

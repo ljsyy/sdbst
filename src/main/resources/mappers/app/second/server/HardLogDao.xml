@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.second.server.HardLogDao">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.server.HardLog">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="CPU" jdbcType="VARCHAR" property="cpu" />
+    <result column="DISK" jdbcType="VARCHAR" property="disk" />
+    <result column="MEMORY" jdbcType="VARCHAR" property="memory" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="DEL_FLAG" jdbcType="DECIMAL" property="delFlag" />
+    <result column="COL" jdbcType="VARCHAR" property="col" />
+    <result column="DOWN" jdbcType="VARCHAR" property="down" />
+    <result column="NETWORK" jdbcType="VARCHAR" property="network" />
+    <result column="TOMCAT" jdbcType="VARCHAR" property="tomcat" />
+    <result column="REDIS" jdbcType="VARCHAR" property="redis" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.server.HardLog">
+    insert into SYS_HARD_LOG (ID, IP, CPU, 
+      "DISK", MEMORY, CREATE_DATE, 
+      DEL_FLAG, COL, DOWN,
+      NETWORK, TOMCAT, REDIS
+      )
+    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{cpu,jdbcType=VARCHAR}, 
+      #{disk,jdbcType=VARCHAR}, #{memory,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=DECIMAL}, #{col,jdbcType=VARCHAR}, #{down,jdbcType=VARCHAR},
+      #{network,jdbcType=DECIMAL}, #{tomcat,jdbcType=VARCHAR}, #{redis,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.unifs.sdbst.app.bean.server.HardLog">
+    insert into SYS_HARD_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="ip != null">
+        IP,
+      </if>
+      <if test="cpu != null">
+        CPU,
+      </if>
+      <if test="disk != null">
+        "DISK",
+      </if>
+      <if test="memory != null">
+        MEMORY,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="delFlag != null">
+        DEL_FLAG,
+      </if>
+      <if test="col != null">
+        COL,
+      </if>
+      <if test="col1 != null">
+        COL1,
+      </if>
+      <if test="col2 != null">
+        COL2,
+      </if>
+      <if test="tomcat != null">
+        TOMCAT,
+      </if>
+      <if test="redis != null">
+        REDIS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="cpu != null">
+        #{cpu,jdbcType=VARCHAR},
+      </if>
+      <if test="disk != null">
+        #{disk,jdbcType=VARCHAR},
+      </if>
+      <if test="memory != null">
+        #{memory,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="col != null">
+        #{col,jdbcType=VARCHAR},
+      </if>
+      <if test="col1 != null">
+        #{col1,jdbcType=VARCHAR},
+      </if>
+      <if test="col2 != null">
+        #{col2,jdbcType=DECIMAL},
+      </if>
+      <if test="tomcat != null">
+        #{tomcat,jdbcType=VARCHAR},
+      </if>
+      <if test="redis != null">
+        #{redis,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <update id="update">
+    update sys_hard_log t set t.del_flag=1  where t.del_flag is null or t.del_flag =0
+    </update>
+
+  <select id="selectNewLog" resultType="com.unifs.sdbst.app.bean.server.HardLog">
+    select *
+    from SYS_HARD_LOG t
+   where t.del_flag = 0
+     and (t.cpu > 10 or
+         regexp_substr((regexp_substr(disk, '[^\(]+', 1, 2)), '[^\%]+', 1, 1) > 60 or
+         regexp_substr((regexp_substr(memory, '[^\(]+', 1, 2)), '[^\%]+', 1, 1) > 30 or
+         regexp_substr((regexp_substr(memory, '[^\(]+', 1, 2)), '[^\%]+', 1, 1) = 0 )
+  </select>
+</mapper>

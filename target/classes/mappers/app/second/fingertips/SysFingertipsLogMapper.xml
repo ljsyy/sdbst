@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.second.fingertips.SysFingertipsLogMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.fingertips.SysFingertipsLog" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="OPERATE_NAME" property="operateName" jdbcType="VARCHAR" />
+    <result column="UUID" property="uuid" jdbcType="VARCHAR" />
+    <result column="JSON_DATA" property="jsonData" jdbcType="CLOB" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from SYS_FINGERTIPS_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.fingertips.SysFingertipsLog" >
+    insert into SYS_FINGERTIPS_LOG (ID, PHONE, CREATE_DATE, 
+      OPERATE_NAME, UUID, JSON_DATA
+      )
+    values (#{id,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{operateName,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{jsonData,jdbcType=CLOB}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.fingertips.SysFingertipsLog" >
+    update SYS_FINGERTIPS_LOG
+    set PHONE = #{phone,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      OPERATE_NAME = #{operateName,jdbcType=VARCHAR},
+      UUID = #{uuid,jdbcType=VARCHAR},
+      JSON_DATA = #{jsonData,jdbcType=CLOB}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select ID, PHONE, CREATE_DATE, OPERATE_NAME, UUID, JSON_DATA
+    from SYS_FINGERTIPS_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, PHONE, CREATE_DATE, OPERATE_NAME, UUID, JSON_DATA
+    from SYS_FINGERTIPS_LOG
+  </select>
+</mapper>

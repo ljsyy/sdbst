@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1,er-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>政府部门电话</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/base.js}"></script>
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background: #f7f7f7;}
+        body{}
+        a{text-decoration:none;color: #000;}
+
+        .container{}
+        .line{
+            background: #fff;
+            padding: 7px;
+            border-bottom: 2px #f4f6f8 solid;
+        }
+        .line .name{text-align: center;padding-top: 10px;}
+        .line .phone{color: #888888;}
+        .line .email{color: #888888;}
+        .call{
+            padding-left: 5px;
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- <div class="line">
+        <p class="name">佛山市顺德区人民政府办公室-企业服务促进库</p>
+        <p class="phone">电话：<span>0757-22832519</span></p>
+        <p class="email">邮箱：暂无</p>
+    </div>
+    <div class="line">
+        <p class="name">佛山市顺德区人民政府办公室-企业服务促进库</p>
+        <p class="phone">电话：<span>0757-22832519</span></p>
+        <p class="email">邮箱：暂无</p>
+    </div> -->
+
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        var dep_name = [[${dep_name}]];
+        getDepartmentContactByDepName(dep_name)
+    });
+    var phone;
+    function getPhone(my){
+        phone = my.prev().text();
+        if(phone.indexOf("、") > 0){
+            //alert();
+            var paramArray = phone.split("、");
+            phone1 = paramArray[0];
+            phone2 = paramArray[1];
+            console.log(phone1+","+phone2);
+
+            //初始化弹框
+            prompt.load();
+            prompt.config({//不可填
+                contant: "#fff",//内容框颜色
+                close: "#000",//交叉字体颜色
+                title: "#000",//标题字体颜色
+                font: "#000",//内容字体颜色
+                button: "#eb413d",//按钮默认颜色
+            });
+            prompt.open({
+                title:"",
+                text: "请选择号码",
+                cancel: false,
+                close: false,
+                button: [
+                    {
+                        name: phone1,
+                        callback: function () {
+                            phone = phone1;
+                            console.log(phone);
+                            prompt.close();
+                            call();
+                        }
+                    },
+                    {
+                        name: phone2,
+                        callback: function () {
+                            phone = phone2;
+                            console.log(phone);
+                            prompt.close();
+                            call();
+                        }
+                    }
+                ]
+            });
+        }else if(phone.indexOf("（") > 0){
+            //alert();
+            var paramArray = phone.split("（");
+            phone = paramArray[0];
+            console.log(phone);
+            call();
+        }else if(phone.indexOf("(") > 0){
+            //alert();
+            var paramArray = phone.split("(");
+            phone = paramArray[0];
+            console.log(phone);
+            call();
+        }else{
+            call();
+        }
+    }
+    function call(){
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(typeof(runEnviron) != "undefined" && runEnviron == 'wx'){
+            //alert("wx");
+            window.location.href="tel:"+phone;
+        }else{
+            if (isAndroid) {
+                //alert("Android");
+                myobj.callServerPhone(phone);
+            }else if (isiOS) {
+                //alert("ios");
+                window.location.href="tel:"+phone;
+            }
+        }
+    }
+    function getDepartmentContactByDepName(dep_name){
+        $.ajax({
+            url: basePath()+'/department/getDepartmentContactByDepName',
+            type: 'GET',
+            data:{
+                dep_name:dep_name
+            },
+            dataType: 'json',
+            async:false,
+            success: function(data) {
+                var list = data.data;
+                var html = '<div class="line"><p class="name">'+dep_name+'</p></div>';
+                if(list.length === 0){
+                    html += '<div class="line"><div class="phone"><p style="text-align: center;"><span>信息更新中...</span></p></div></div>';
+                }else {
+                    for (var i in list) {
+                        html += '<div class="line"><div class="phone"><p>' + list[i].name + '：<span>' + list[i].value + '</span>';
+                        if (list[i].name.indexOf("电话") >= 0) {
+                            html += '<img class="call" src="' + basePath() + '/img/department/phone.png" onclick="getPhone($(this))" />'
+                        }
+                        html += '</p></div></div>';
+                    }
+                }
+                $(".container").html(html);
+            },
+            error: function(data) {
+                console.error(data);
+            }
+        })
+    }
+</script>
+</html>

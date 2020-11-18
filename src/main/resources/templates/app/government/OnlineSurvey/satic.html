@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>问卷调查</title>
+    <link rel="stylesheet" href="css/app/bounced.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <style>
+        body{font: 12px/1.5 tahoma,arial,\5b8b\4f53,sans-serif;background: #4281cd;font-family: "微软雅黑";margin:0;}
+        p{margin: 0;}
+        ul, li {list-style: none;}
+        select{  -webkit-appearance:none; /*去除系统默认的样式*/-webkit-tap-highlight-color: rgba(0, 0, 0, 0);   /* 点击高亮的颜色*/}
+        .TopBgTitle {background-color: #4281cd;    padding: 10px 10px;width: 100%;    box-sizing: border-box;}
+        .TopBgTitle .wj_title {width: 84%;overflow: hidden;margin: auto;color: #ffffff;padding: 0px 0;font-size: 21px;font-weight: bold;text-align: center;}
+        .main{background:#fff;}
+        .h1-title{text-align: center;font-size: 25px;font-weight: bold;}
+        .information{padding: 5px 12px;}
+
+        .information .list {margin: 15px auto;padding: 0 10px;height: 38px;border: 1px #a6a6a6 solid;border-radius: 5px;text-align: left;font-size: 18px;}
+        .information .list input{width: 100%;height: 100%;outline: 0;border: none;background: 0 0;color:#a6a6a6;letter-spacing: 1px;}
+        .information .list select{width: 100%;height: 100%;outline: 0;border: none;    color: #a6a6a6;    background: #fff;}
+        .information .list input:focus{color:#000}
+        .information .list select:focus{color:#000}
+        .phone_content{padding: 5px 12px;background: #fff;}
+        .phone_content .question,.phone_content .area{margin-top: 13px;font-size: 16px;margin: 0 0 20px 0;}
+        .phone_content .topic_con{line-height: 20px;}
+        .phone_content .unstyled{margin: 5px 0 5px 0;padding: 0;border: 1px solid #d5d5d5;border-radius: 3px;}
+        .phone_content .unstyled li{border-color: #fff;background: #fff;font-size: 16px;min-height: 41px;border-bottom: 1px solid #ebebeb;}
+        .phone_content .unstyled li:last-child{border-bottom: 0px solid #fff!important;}
+        .phone_content .unstyled li .checked_wrap{padding: 10px 10px 10px 40px;position: relative;}
+        .phone_content .unstyled li .checked_wrap .i{display: block;position: absolute;left: 10px;top: 9px;width: 20px;height: 20px;border-radius: 50%;border: 1px solid rgba(0, 0, 0, 0.2);}
+        .phone_content .unstyled li .checked_wrap .i i{display:block;left:0;bottom:0;top:0;right:0;width:9pt;height:9pt;position:absolute;margin:auto;background:#fff;border-radius:50%;-webkit-transition:.4s;transition:.4s;}
+        .phone_content .unstyled li .checked_wrap .i.check{    border-color: #4281cd;}
+        .phone_content .unstyled li .checked_wrap .i.check i{background: #4281cd;}
+        .phone_content .unstyled li .checked_wrap .o{white-space: pre;}
+
+        .phone_content .unstyled li .d_dx_checked_wrap{padding: 10px 10px 10px 55px;position: relative;}
+        .phone_content .unstyled li .d_dx_checked_wrap .dan_duoxuan{position:absolute;left: 9px;top: 13px;width: 35px;height: 20px;overflow: hidden;}
+        .phone_content .unstyled li .d_dx_checked_wrap .dan_duoxuan span{text-align: center;display: block;height: 100%;width: 100%;position: absolute;background: #fff;border: 1px solid rgba(0, 0, 0, 0.2);}
+        .phone_content .unstyled li .d_dx_checked_wrap .dan_duoxuan select{border: none;position: absolute;opacity: 0;}
+
+        textarea{font-size: 16px;letter-spacing: 1px;resize: none;width: 100%;height: 100px;margin: 5px 0 5px 0;padding: 0;border: 1px solid #d5d5d5;border-radius: 3px;}
+
+        .button{box-sizing: border-box;border-width: 1px;border-style: solid;border-color: #4281cd;color: #ffffff;text-align: center;background-color:#4281cd;width: 100%;padding:5px;font-size: 16px;}
+    </style>
+</head>
+<body>
+<!-- <div class="TopBgTitle">
+    <div class="wj_title">
+        <p style="text-align: center;">在线调研</p>
+    </div>
+</div> -->
+<div class="main">
+    <div class="h1-title">个人信息</div>
+    <div class="information">
+        <div class="list"><input id="name" type="text" placeholder="名字"></div>
+        <div class="list"><input id="age" type="text" placeholder="年龄"></div>
+        <div class="list">
+            <select id="sex">
+                <option value ="">==性别==</option>
+                <option value ="男">男</option>
+                <option value="女">女</option>
+            </select>
+        </div>
+        <div class="list">
+            <select id="education">
+                <option value ="">==学历==</option>
+                <option value ="初中">初中</option>
+                <option value="高中/中专">高中/中专</option>
+                <option value="大专">大专</option>
+                <option value="本科">本科</option>
+                <option value="硕士">硕士</option>
+                <option value="博士">博士</option>
+            </select>
+        </div>
+        <div class="list"><input id="iphone" type="text" maxlength="11" placeholder="手机号码"></div>
+        <div class="list"><input id="industry" type="text" placeholder="行业"></div>
+    </div>
+    <div class="h1-title">问卷调查</div>
+    <div class="phone_content">
+        <!-- <div class="question">
+            <div class="topic_title">html5（H5）吗？</div>
+            <div class="topic_con">
+                <ul class="unstyled">
+                    <li>
+                        <div class="checked_wrap"><i></i><span>知道</span></div>
+                    </li>
+                    <li>
+                        <div class="checked_wrap"><i></i><span>不知道</span></div>
+                    </li>
+                </ul>
+            </div>
+        </div> -->
+        <!--<div> class="question">
+                <div class="topic_title">您更希望在APP内看到什么方面的内容？</div>
+                <div class="topic_con">
+                        <textarea id="area_content"></textarea>
+                </div>
+        </div> -->
+    </div>
+    <div style="padding:0 10px;"><div class="button" onclick="submit()">提  交</div></div>
+</div>
+</body>
+</html>
+<script>
+    //单选题
+    function dTitle(id,num,title,option){
+        var str = "";
+        str += '<div id="' + id + '" class="question" check="-1"><div class="topic_title">' + num + "、" + title + '</div><div class="topic_con"><ul class="unstyled">'
+        for(var a = 0; a < option.length; a++){
+            str += '<li class="dan"><div class="checked_wrap"><span class="i"><i></i></span><span class="o">' + option[a] + '</span></div></li>'
+        }
+        str += '</ul></div></div>';
+        $(".phone_content").append(str);
+    }
+    var ajaxdata = '';
+    $(document).ready(function(){
+        name = '#name';
+        age = '#age';
+        sex = '#sex';
+        iphone = '#iphone';
+        education ='#education';
+        industry = '#industry';
+
+
+
+        $.ajax({
+            url:basePath()+"/app/satisfy/getSatisfactionList",
+            type:"get",
+            async:false,
+            dataType:"json",
+            success:function(result){ajaxdata = result.data;}
+        });
+        console.log(ajaxdata);
+        //单选题
+        for(var t = 0; t < 6; t++){
+            var answer = new Array();
+            if( ajaxdata[t].optionA != null){
+                answer.push(ajaxdata[t].optionA);
+            }
+            if( ajaxdata[t].optionB != null){
+                answer.push(ajaxdata[t].optionB);
+            }
+            if( ajaxdata[t].optionC != null){
+                answer.push(ajaxdata[t].optionC);
+            }
+            if( ajaxdata[t].optionD != null){
+                answer.push(ajaxdata[t].optionD);
+            }
+            dTitle(ajaxdata[t].id,(t + 1),ajaxdata[t].title,answer);
+            arr.push(ajaxdata[t].id);
+        }
+        //特殊题
+        var str = '';
+        var duo = "<select onchange='select($(this))'><option value=''>==请选择==</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select>";
+        str += '<div class="question"><div class="topic_title">7、"' +  ajaxdata[6].title + '</div><div class="topic_con"><ul class="unstyled">';
+        str += '<li><div class="d_dx_checked_wrap"><div class="dan_duoxuan"><span id="' + ajaxdata[7].id + '" check="-1"></span>' + duo + '</div><span>' + ajaxdata[7].title + '</span></div></li>';
+        str += '<li><div class="d_dx_checked_wrap"><div class="dan_duoxuan"><span id="' + ajaxdata[8].id + '" check="-1"></span>' + duo + '</div><span>' + ajaxdata[8].title + '</span></div></li>';
+        str += '<li><div class="d_dx_checked_wrap"><div class="dan_duoxuan"><span id="' + ajaxdata[9].id + '" check="-1"></span>' + duo + '</div><span>' + ajaxdata[9].title + '</span></div></li>';
+        str += '<li><div class="d_dx_checked_wrap"><div class="dan_duoxuan"><span id="' + ajaxdata[10].id + '" check="-1"></span>' + duo + '</div><span>' + ajaxdata[10].title + '</span></div></li>';
+        str += '<li><div class="d_dx_checked_wrap"><div class="dan_duoxuan"><span id="' + ajaxdata[11].id + '" check="-1"></span>' + duo + '</div><span>' + ajaxdata[11].title + '</span></div></li>';
+        str += '</ul></div></div>';
+        arr.push(ajaxdata[7].id);
+        arr.push(ajaxdata[8].id);
+        arr.push(ajaxdata[9].id);
+        arr.push(ajaxdata[10].id);
+        arr.push(ajaxdata[11].id);
+
+        str += '<div class="area"><div class="topic_title">8、' + ajaxdata[12].title + '</div><div class="topic_con"><textarea id="area_content1"></textarea></div></div>';
+        str += '<div class="area"><div class="topic_title">9、' + ajaxdata[13].title + '</div><div class="topic_con"><textarea id="area_content2"></textarea></div></div>';
+        $(".phone_content").append(str);
+        //-------------------单选题
+        $(".question .topic_con .unstyled li.dan").bind("click",function(){
+            var parent = $(this).parent();
+            var qparent = parent.parent().parent();
+            var index = parseInt($(this).index()) + 1;
+            qparent.attr("check",index);
+            parent.find("span").removeClass("check");
+            $(this).find("span").addClass("check");
+        });
+    });
+    function select(my){
+        var parent = my.parent();
+        parent.find("span").text(my.val());
+        parent.find("span").attr("check",my.val());
+    }
+
+    var arr = new Array();
+
+    var name = '';
+    var age = '';
+    var sex = '';
+    var iphone = '';
+    var education ='';
+    var industry = '';
+
+
+    var advice = '';
+    var otherAdvice = '';
+    function submit(){
+
+        //个人信息
+        if($(name).val() == ""){
+            //alert("个人信息->名字，不能为空。");
+            webToast("个人信息->名字，不能为空。","middle",1000);
+            return false;
+        }
+
+        var regAge = new RegExp("^[0-9]*$");
+        if($(age).val() == ""){
+            webToast("个人信息->年龄，不能为空。","middle",1000);
+            return false;
+        }
+        if(!regAge.test($(age).val())){
+            $(age).val("");
+            //alert("个人信息->年龄，年龄输入错误。");
+            webToast("个人信息->年龄，年龄输入错误。","middle",1000);
+            return false;
+        }
+
+        if($(sex).val() == ""){
+            //alert("个人信息->性别，不能为空。");
+            webToast("个人信息->性别，不能为空。","middle",1000);
+            return false;
+        }
+
+        if($(education).val() == ""){
+            //alert("个人信息->学历，不能为空。");
+            webToast("个人信息->学历，不能为空。","middle",1000);
+            return false;
+        }
+
+        var regIphone =/^1[3|4|5|7|8|9][0-9]\d{8}$/;
+        if($(iphone).val() == ""){
+            //alert("个人信息->手机号码，不能为空。");
+            webToast("个人信息->手机号码，不能为空。","middle",1000);
+            return false;
+        }
+        if(!regIphone.test($(iphone).val())){
+            $(iphone).val("");
+            //alert("个人信息->手机号码，手机号码输入错误。");
+            webToast("个人信息->手机号码，手机号码输入错误。","middle",1000);
+            return false;
+        }
+
+
+        if($(industry).val() == ""){
+            //alert("个人信息->行业，不能为空。");
+            webToast("个人信息->行业，不能为空。","middle",1000);
+            return false;
+        }
+
+
+
+        //问卷调查
+        var nosub = false;
+        var arrL = arr.length;
+        var newArr = new Array();
+        for(var i = 0; i < arrL; i++){
+            var c = $("#" + arr[i]).attr("check");
+            if(c == '-1'){
+                nosub = true;
+                break;
+            }
+            if(c == 1){
+                newArr.push(arr[i] + "-A");
+            }
+            if(c == 2){
+                newArr.push(arr[i] + "-B");
+            }
+            if(c == 3){
+                newArr.push(arr[i] + "-C");
+            }
+            if(c == 4){
+                newArr.push(arr[i] + "-D");
+            }
+        }
+        if(newArr.length != arrL){
+            nosub = true;
+        }
+        if($("#area_content1").val() == "" && $("#area_content2").val() == ""){
+            nosub = true;
+        }
+        if(nosub){
+            //alert("填写相关内容!")
+            webToast("填写相关内容!","middle",1000);
+            return false;
+        }
+        /*     var test = {"ids":newArr,"name":$(name).val(),"age":$(age).val(),"sex":$(sex).val(),"phone":$(iphone).val(),"education":$(education).val(),"industry":$(industry).val(),"advice":$("#area_content1").val()+d.getTime(),"otherAdvice":$("#area_content2").val()+d.getTime()}
+               console.log(test); */
+
+        //--------ajax
+        $.ajax({
+            url:basePath()+"/app/satisfy/satisfySubmit",
+            type:"post",
+            data:{"ids":newArr,"name":$(name).val(),"age":$(age).val(),"sex":$(sex).val(),"phone":$(iphone).val(),"education":$(education).val(),"industry":$(industry).val(),"advice":$("#area_content1").val(),"otherAdvice":$("#area_content2").val()},
+            dataType:"json",
+            success:function(result){
+                var data = result;
+                //console.log(result);
+                //alert(data.msg);
+                webToast(data.msg,"middle",1000);
+                setTimeout(function(){
+                    window.location.href=basePath()+'/government/OnlineSurvey/index';
+                },1000);
+            }
+        });
+
+
+    }
+</script>

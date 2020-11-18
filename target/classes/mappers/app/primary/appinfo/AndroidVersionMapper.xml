@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unifs.sdbst.app.dao.primary.appinfo.AndroidVersionMapper" >
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.appinfo.AndroidVersion" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="VERSIONCODE" property="versioncode" jdbcType="VARCHAR" />
+    <result column="VERSIONNAME" property="versionname" jdbcType="VARCHAR" />
+    <result column="UPDATESTATUS" property="updatestatus" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_BY" property="createBy" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="MODIFYCONTENT" property="modifycontent" jdbcType="VARCHAR" />
+    <result column="UPDATE_BY" property="updateBy" jdbcType="VARCHAR" />
+    <result column="DOWNLOADURL" property="downloadurl" jdbcType="VARCHAR" />
+    <result column="APKSIZE" property="apksize" jdbcType="VARCHAR" />
+    <result column="APKMD5" property="apkmd5" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.appinfo.AndroidVersion" >
+    insert into APP_ANDROID_VERSION (ID, NAME, VERSIONCODE, 
+      VERSIONNAME, UPDATESTATUS, CREATE_DATE, 
+      CREATE_BY, UPDATE_DATE, MODIFYCONTENT, 
+      UPDATE_BY, DOWNLOADURL, APKSIZE, 
+      APKMD5, TYPE)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{versioncode,jdbcType=VARCHAR}, 
+      #{versionname,jdbcType=VARCHAR}, #{updatestatus,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{modifycontent,jdbcType=VARCHAR}, 
+      #{updateBy,jdbcType=VARCHAR}, #{downloadurl,jdbcType=VARCHAR}, #{apksize,jdbcType=VARCHAR}, 
+      #{apkmd5,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, NAME, VERSIONCODE, VERSIONNAME, UPDATESTATUS, CREATE_DATE, CREATE_BY, 
+    UPDATE_DATE, MODIFYCONTENT, UPDATE_BY, DOWNLOADURL, APKSIZE, APKMD5, TYPE
+    from APP_ANDROID_VERSION order by UPDATE_DATE desc
+  </select>
+</mapper>

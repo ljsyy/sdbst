@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>行程查询</title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<style>
+    * {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .btn-down-one {
+        border: 0px;
+        position: absolute;
+        bottom: 19%;
+        left: 10%;
+        width: 80%;
+    }
+
+    .btn-down-two {
+        border: 0px;
+        position: absolute;
+        bottom: 12%;
+        left: 10%;
+        width: 80%;
+    }
+
+    .btn-down-three {
+        border: 0px;
+        position: absolute;
+        bottom: 5%;
+        left: 10%;
+        width: 80%;
+    }
+    .container{
+        background: url("img/epidemic/ic-background.png") no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+    }
+</style>
+<body>
+<div class="container" >
+    <img class="btn-down-one" src="img/epidemic/button1.png" onclick="jump('liantong')">
+    <img class="btn-down-two" src="img/epidemic/button2.png" onclick="jump('dianxin')">
+    <img class="btn-down-three" src="img/epidemic/button3.png" onclick="jump('yidong')">
+</div>
+</body>
+<script type="text/javascript">
+    function jump(type) {
+        if(type=='liantong'){
+            window.location.href="http://search.cubigdata.cn:32533/?from=singlemessage&isappinstalled=0#/checkPage";
+        }else if(type=='dianxin'){
+            window.location.href="https://gis.ctinm.189.cn/ctlbsapp/queryHelper/queryHelper.html";
+        }else {
+            window.location.href="https://app.10086.cn/activity/epidemicQuery/index.html";
+        }
+    }
+    //默认字体随屏幕宽度改变而改变，原开发屏幕比例为1rem=15.54px
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 12.5 * (clientWidth / 320) + 'px';
+                console.log(docEl.style.fontSize);
+            };
+        //文档加载完后马上执行一次适应不同大小屏幕
+        recalc();
+        //绑定缩放窗口大小行为时执行自适应函数
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+
+
+
+    })(document, window);
+
+    function resize(idName){
+        //设置image宽高为网页正文宽高
+        $("#"+idName).css("height",document.body.scrollHeight);
+        $("#"+idName).css("width",document.body.scrollWidth)
+    }
+    function classResize(idName){
+        //设置image宽高为网页正文宽高
+        $("."+idName).css("height",$(window).height());
+        $("."+idName).css("width",$(window).width())
+    }
+    classResize("container");//背景图片div的id
+
+</script>
+</html>

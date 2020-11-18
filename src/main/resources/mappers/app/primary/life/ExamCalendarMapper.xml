@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.ExamCalendarMapper">
+	
+	<select id="getAll" resultType="com.unifs.sdbst.app.bean.life.ExamCalendar">
+   		select * from EXAMCALENDAR  
+   	</select>
+
+	<insert id="insert">
+		insert into EXAMCALENDAR(
+			ID,
+			EXAMNAME,
+			EXAMTIME,
+			SIGNUPTIME,
+			EXAMTIMETAG,
+			MONTHTAG
+		)values (
+			#{id},
+			#{examname},
+			#{examtime},
+			#{signuptime},
+			#{examtimetag},
+			#{monthtag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE EXAMCALENDAR SET 	
+			EXAMNAME = #{examname},
+			EXAMTIME = #{examtime},
+			SIGNUPTIME = #{signuptime},
+			EXAMTIMETAG = #{examtimetag},
+			MONTHTAG = #{monthtag}
+		WHERE ID = #{id}
+	</update>
+	
+	<delete id="delete">
+   		delete from EXAMCALENDAR where ID = #{id} 
+   	</delete>
+   	
+   	<select id="getById" resultType="com.unifs.sdbst.app.bean.life.ExamCalendar">
+   		select * from EXAMCALENDAR where ID = #{id}
+   	</select>
+   	
+   	<!-- <update id="update">
+		UPDATE HJZL SET 	
+			RESULT = #{result}
+		WHERE TYPE = #{type}
+	</update> -->
+	
+</mapper>

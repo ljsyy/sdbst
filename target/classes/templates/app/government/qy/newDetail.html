@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>详情</title>
+    <meta name="decorator" content="blank"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+    <%-- <link rel="stylesheet" href="mui/css/mui.min.css"> --%>
+    <script src="mui/js/mui.min.js"></script>
+    <script src="js/app/load-ani.js"></script>
+
+    <style>
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background: #edeef0;}
+        body{background: #edeef0;}
+        a{text-decoration:none;color: #000;}
+
+        .info{background: #fff;margin-bottom: 10px;}
+        .title{font-size: 20px;text-align: center;padding: 10px;}
+        .list{width: 100%;padding: 10px;box-sizing: border-box;display: -webkit-inline-box;border-bottom: solid 2px #cacaca;font-size: 16px;}
+        .list .left{width: 25%;align-items: center;display: flex;}
+        .list .right{width: 75%;text-align: right;color: #888888;}
+
+        .deatil{background: #fff;margin-bottom: 10px;}
+        .titleList{padding: 10px;font-size: 15px;border-bottom: solid 2px #cacaca;}
+        .titleList .redBlock{width: 3px;background: #ea413c;height: 15px;display: -webkit-inline-box;vertical-align: middle;}
+        .titleList .sTitle{vertical-align: middle;}
+        .content{padding: 10px;font-size: 15px;color: #888888;}
+        .phone{color: #ea413c !important;}
+        .content img{width: 100%;height: auto;}
+        .content a{display: block;color: #eb413d;padding-bottom: 5px;}
+    </style>
+
+    <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function(){
+            getDetail();
+        });
+
+        function getDetail(){
+
+            $.ajax({
+                url: basePath()+"/qy/train/detail?id="+[[${id}]],
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(result){
+                    console.log(result)
+                    if(result.errorCode == 0){
+                        var data = result.data;
+                        var attachmentList = result.data.attachmentList;
+                        var refer;	//解读人
+                        if(data.refer == "" || data.refer == undefined ||data.refer == null){
+                            refer = "暂无记录";
+                        }else{
+                            refer = data.refer;
+                        }
+                        var referPhone;	//咨询电话
+                        if(data.referPhone == "" || data.referPhone == undefined ||data.referPhone == null){
+                            referPhone = "暂无记录";
+                        }else{
+                            referPhone = data.referPhone;
+                        }
+                        var pubUnit;	//发表单位
+                        if(data.pubUnit == "" || data.pubUnit == undefined ||data.pubUnit == null){
+                            pubUnit = "暂无记录";
+                        }else{
+                            pubUnit = data.pubUnit;
+                        }
+                        var publicDate;	//发表日期
+                        if(data.publicDate == "" || data.publicDate == undefined ||data.publicDate == null){
+                            publicDate = "暂无记录";
+                        }else{
+                            publicDate = data.publicDate;
+                        }
+                        var keyword;	//关键字
+                        if(data.keyword == "" || data.keyword == undefined ||data.keyword == null){
+                            keyword = "暂无记录";
+                        }else{
+                            keyword = data.keyword;
+                        }
+                        var source;	//解读科室
+                        if(data.source == "" || data.source == undefined ||data.source == null){
+                            source = "暂无记录";
+                        }else{
+                            source = data.source;
+                        }
+                        $("#info").append(
+                            '<p class="title">'+data.title+'</p>'+
+                            '<div class="list">'+
+                            '<p class="left">发表单位</p>'+
+                            '<p class="right">'+pubUnit+'</p>'+
+                            '</div>'+
+                            '<div class="list">'+
+                            '<p class="left">发表日期</p>'+
+                            '<p class="right">'+publicDate+'</p>'+
+                            '</div>'+
+                            '<div class="list">'+
+                            '<p class="left">关键字</p>'+
+                            '<p class="right">'+keyword+'</p>'+
+                            '</div>'+
+                            '<div class="list">'+
+                            '<p class="left">解读科室</p>'+
+                            '<p class="right">'+source+'</p>'+
+                            '</div>'+
+                            '<div class="list">'+
+                            '<p class="left">解读人</p>'+
+                            '<p class="right">'+refer+'</p>'+
+                            '</div>'+
+                            '<div class="list" style="border:0;">'+
+                            '<p class="left">咨询电话</p>'+
+                            '<p class="right phone">'+referPhone+'</p>'+
+                            '</div>	'
+                        );
+
+                        var digest;	//摘要、解读
+                        if(data.digest == "" || data.digest == undefined ||data.digest == null){
+                            digest = "暂无记录";
+                        }else{
+                            digest = data.digest;
+                        }
+                        $("#digest").append(digest);
+
+                        var description;	//正文
+                        if(data.description == "" || data.description == undefined ||data.description == null){
+                            description = "暂无记录";
+                        }else{
+                            description = data.description;
+                        }
+                        $("#content").append(description);
+
+                        if(attachmentList.length == 0){
+                            $("#attachment").append("暂无附件");
+                        }else{
+                            for(var i in attachmentList){
+                                $("#attachment").append(
+                                    '<a href="'+attachmentList[i].path+'">'+attachmentList[i].name+'</a>'
+                                );
+                            }
+                        }
+
+                    }else{
+                        webToast(result.errorMsg,"middle",1000);
+                        return;
+                    }
+                }
+            });
+
+        }
+    </script>
+
+</head>
+<body>
+
+<!-- 标题、单位、电话等 -->
+<div class="info" id="info">
+
+</div>
+
+<!-- 摘要/解读 -->
+<div class="deatil">
+    <div class="titleList">
+        <div class="redBlock"></div>
+        <span class="sTitle">摘要/解读</span>
+    </div>
+    <div class="content" id="digest"></div>
+</div>
+
+<!-- 正文 -->
+<div class="deatil">
+    <div class="titleList">
+        <div class="redBlock"></div>
+        <span class="sTitle">正文</span>
+    </div>
+    <div class="content" id="content"></div>
+</div>
+
+<!-- 相关附件 -->
+<div class="deatil">
+    <div class="titleList">
+        <div class="redBlock"></div>
+        <span class="sTitle">相关附件</span>
+    </div>
+    <div class="content" id="attachment">
+
+    </div>
+</div>
+
+</body>
+</html>

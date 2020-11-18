@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.second.server.DataBackupLogMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.server.DataBackup">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="BACK_TIME" jdbcType="TIMESTAMP" property="backTime" />
+    <result column="OPERATE_TIME" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, BACK_TIME, OPERATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from DATA_BACKUP_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from DATA_BACKUP_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.server.DataBackup">
+    insert into DATA_BACKUP_LOG (ID,BACK_TIME, OPERATE_TIME)
+    values (#{id,jdbcType=VARCHAR},#{backTime,jdbcType=TIMESTAMP}, #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.unifs.sdbst.app.bean.server.DataBackup" useGeneratedKeys="true">
+    insert into DATA_BACKUP_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="backTime != null">
+        BACK_TIME,
+      </if>
+      <if test="operateTime != null">
+        OPERATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="backTime != null">
+        #{backTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.unifs.sdbst.app.bean.server.DataBackup">
+    update DATA_BACKUP_LOG
+    <set>
+      <if test="backTime != null">
+        BACK_TIME = #{backTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateTime != null">
+        OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.server.DataBackup">
+    update DATA_BACKUP_LOG
+    set BACK_TIME = #{backTime,jdbcType=TIMESTAMP},
+      OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

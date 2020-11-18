@@ -1,0 +1,39 @@
+
+.title li{
+    background:#f39b71 ;
+}
+.title li a{
+    color: white;
+}
+li.active{
+    background: #ffffff!important;
+    color:#f39b71!important;
+}
+.logo,.logosearch{
+    background: url("../images/logo.png")no-repeat;
+    background-size: 100% 100%;
+}
+.scanCode{
+    background: url("../images/scan_qrcode3.gif")no-repeat;
+    background-size: 100% 100%;
+}
+li.ac{
+    background:#f39b72 ;
+    color: white;
+    border: 0!important;
+}
+.payB button{
+    background:#f39b72;
+}
+.active a{
+    color: #f39b72;
+}
+.alert_btn{
+    color: #f39b71;
+}
+.orangeC{
+    color: #f39b71!important;
+}
+.underLine{
+    text-decoration: underline;
+}

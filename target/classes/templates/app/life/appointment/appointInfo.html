@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="decorator" content="blank"/>
+    <link rel="stylesheet" href="css/app/base.css" />
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.min.js"></script>
+    <script type="application/javascript" src="mui/js/mui.loading.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/list.js"></script>
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <script src="js/app/plug/alertPopShow.js"></script>
+
+    <title>个人信息/修改密码</title>
+
+    <style>
+
+        body, dd, dl, html, ol, p, ul {margin: 0;padding: 0;list-style-type: none;font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;}
+        .container {padding: 0;max-width: 750px;}
+        html,.container{height: 100%;}
+        html{background:#fff;}
+        body{background: #F3F3F3;}
+        a{text-decoration:none;color: #000;}
+        .container{text-align: center;}
+
+        .title{width: 100%;height: 40px;background: white;}
+        .title ul{display: -webkit-box;}
+        .title li{width: 50%;}
+        .title p{text-align: center;line-height: 40px;}
+        .main{margin-top: 10px;}
+        .main #left{}
+        .main #right{display: none;}
+
+        .list{
+            background: white;
+            display: flex;
+            padding: 15px;
+            border-bottom: solid 1px #e4e4e4;
+        }
+        .list input{
+            outline: none;
+            border: none;
+            flex: 1;
+            text-align: right;    color: darkgrey;
+        }
+        .list select{
+            outline: none;
+            border: none;
+            flex: 1;
+            text-align: right;
+            direction: rtl;
+            position: fixed;
+            right: 15px;
+            color: darkgrey;
+        }
+        .submit{
+            background: #77BDA8;
+            width: 90%;
+            height: 40px;
+            line-height: 40px;
+            font-size: 20px;
+            border-radius: 8px;
+            color: white;
+        }
+        .main{background: white;}
+        center{background: white;    margin-top: 25px;}
+    </style>
+
+    <script>
+        function click_l(){
+            $("#left").css("display","block");//显示div
+            $("#right").css("display","none");//隐藏div
+            $("#left_p").css("color","#6BB39D");//左字体变绿
+            $("#left_p").css("border-bottom","solid 2px #6BB39D");//左下划线变绿
+            $("#right_p").css("color","black");//右字体变黑
+            $("#right_p").css("border-bottom","solid 0px #6BB39D");//右下划线消失
+        }
+        function click_r(){
+            $("#left").css("display","none");//隐藏div
+            $("#right").css("display","block");//显示div
+            $("#left_p").css("color","black");//左字体变黑
+            $("#left_p").css("border-bottom","solid 0px #6BB39D");//左下划线消失
+            $("#right_p").css("color","#6BB39D");//右字体变绿
+            $("#right_p").css("border-bottom","solid 2px #6BB39D");//右下划线变绿
+        }
+
+    </script>
+
+    <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function(){
+            getInfo();
+        });
+
+        function getInfo(){
+            var data = {
+                empi: "${appoinctlogin.empi}",
+            };
+            mui.showLoading("","div");
+            $.ajax({
+                url:basePath()+"/life/booking/getJsonAsRhin",
+                data:"data=" + encodeURIComponent(JSON.stringify(data)),
+                type: "POST",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    mui.hideLoading(function () {
+                        if (result.resultStatus == "01") {
+                            var json = result.resultInfo;
+                            $("#left").append(
+                                '<div class="list"><span>居民姓名：</span><input type="text" id="" readonly="readonly" value=' + json.userName + ' /></div>' +
+                                '<div class="list"><span>性别：</span><input type="text" id="" readonly="readonly" value=' + json.sex + ' /></div>' +
+                                '<div class="list"><span>身份证号：</span><input type="text" id="" readonly="readonly" value=' + json.idNumber + ' /></div>' +
+                                '<div class="list"><span>手机号：</span><input type="text" id="" readonly="readonly" value=' + json.contactTelephoneNumber + ' /></div>'
+                            );
+                        } else {
+                            alert(result.errorMsg)
+                        }
+                    });
+                }
+            });
+        }
+
+        function submitClick(){
+            var oldPwd = $("#oldPwd").val();//旧密码
+            var newPwd = $("#newPwd").val();//新密码
+            var confPwd = $("#confPwd").val();//确认密码
+            if(oldPwd == "" || newPwd == ""  || confPwd == ""){
+                //alert("请填入内容")
+                webToast("请填入内容","middle",600);
+                return ;
+            }
+
+            var data = {
+                empi: "${appoinctlogin.empi}",
+                oldPwd: oldPwd,  //旧密码
+                newPwd: newPwd,  //新密码
+                confPwd: confPwd//确认密码
+            };
+
+            console.log(JSON.stringify(data));
+            mui.showLoading("","div");
+            var type=[[${type}]];
+            $.ajax({
+                url:basePath()+"/life/booking/getJsonIdentityRegister",
+                data:"data=" + encodeURIComponent(JSON.stringify(data)),
+                type: "POST",
+                dataType:"json",
+                async:true,
+                success:function(result){
+                    mui.hideLoading(function () {
+                        if (result.resultStatus == "01") {
+                            webToast("修改成功", "middle", 600);
+                            if (type == "book") {
+                                window.location.href = basePath()+"/life/appoint/login?type=book";
+                            } else if (type == "health") {
+                                window.location.href = basePath()+"/life/appoint/login?type=health";
+                            }
+                        } else {
+                            //alert(result.errorMsg)
+                            webToast(result.errorMsg, "middle", 600);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+
+<div class="title">
+    <ul>
+        <li id="left_click" onClick="click_l()"><p id="left_p" style="color: #6BB39D; border-bottom: solid 2px #6BB39D;">个人信息</p></li>
+        <li id="right_click" onClick="click_r()"><p id="right_p">修改密码</p></li>
+    </ul>
+</div>
+
+<div class="main">
+    <!-- 个人信息 -->
+    <div id="left">
+        <!-- <div class="list">
+            <span>姓名：</span>
+            <input type="text" id="" readonly="readonly" value=${appoinctlogin.personName} />
+        </div>
+        <div class="list">
+            <span>手机号：</span>
+            <input type="text" id="" readonly="readonly" value=${appoinctlogin.mobile} />
+        </div>
+        <div class="list">
+            <span>身份证号：</span>
+            <input type="text" id="" readonly="readonly" value=${appoinctlogin.idCard} />
+        </div>
+        <div class="list">
+            <span>邮箱：</span>
+            <input type="text" id="" readonly="readonly" value=${appoinctlogin.email} />
+        </div> -->
+
+    </div>
+
+    <!-- 修改密码 -->
+    <div id="right">
+        <div class="list">
+            <span>旧密码：</span>
+            <input type="password" id="oldPwd" placeholder="请输入旧密码" maxlength="10" />
+        </div>
+        <div class="list">
+            <span>新密码：</span>
+            <input type="password" id="newPwd" placeholder="请输入6-20位新密码" />
+        </div>
+        <div class="list">
+            <span>确认密码：</span>
+            <input type="password" id="confPwd" placeholder="再次输入新密码" maxlength="18" />
+        </div>
+
+
+        <center>
+            <div class="submit" onclick="submitClick()" type="submit">提交</div>
+        </center>
+
+    </div>
+</div>
+
+
+</body>
+</html>

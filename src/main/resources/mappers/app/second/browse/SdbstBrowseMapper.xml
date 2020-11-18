@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.second.browse.SdbstBrowseMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.browse.SdbstBrowse">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="MODEL_ID" jdbcType="VARCHAR" property="modelId" />
+    <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="INSERT_FLAG" jdbcType="CHAR" property="insertFlag" />
+    <result column="CONFIRM_TIME" jdbcType="TIMESTAMP" property="confirmTime" />
+    <result column="IS_FALSE" jdbcType="CHAR" property="isFalse" />
+    <result column="CUR_VERSIONS" jdbcType="VARCHAR" property="curVersions" />
+    <result column="APP_TYPES" jdbcType="VARCHAR" property="appTypes" />
+    <result column="IS_USER" jdbcType="CHAR" property="isUser" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="OPERATOR_IP" jdbcType="VARCHAR" property="operatorIp" />
+    <result column="BRAND" jdbcType="VARCHAR" property="brand" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="CHANNEL" jdbcType="VARCHAR" property="channel" />
+    <result column="FOOT_PRINT" jdbcType="VARCHAR" property="footPrint" />
+    <result column="M_URL" jdbcType="VARCHAR" property="mUrl" />
+    <result column="M_NAME" jdbcType="VARCHAR" property="mName" />
+    <result column="M_ID" jdbcType="VARCHAR" property="mId" />
+    <result column="M_PARENT_IDS" jdbcType="VARCHAR" property="mParentIds" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.browse.SdbstBrowse">
+    insert into SDBST_BROWSE (ID, MODEL_ID, PHONE_CODE, 
+      CREATE_TIME, PHONE_NUMBER, INSERT_FLAG, 
+      CONFIRM_TIME, IS_FALSE, CUR_VERSIONS, 
+      APP_TYPES, IS_USER, AREA, 
+      OPERATOR_IP, BRAND, USER_ID, 
+      CHANNEL, FOOT_PRINT, M_URL, 
+      M_NAME, M_ID, M_PARENT_IDS,IP
+      )
+    values (#{id,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, #{phoneCode,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{phoneNumber,jdbcType=VARCHAR}, #{insertFlag,jdbcType=CHAR}, 
+      #{confirmTime,jdbcType=TIMESTAMP}, #{isFalse,jdbcType=CHAR}, #{curVersions,jdbcType=VARCHAR}, 
+      #{appTypes,jdbcType=VARCHAR}, #{isUser,jdbcType=CHAR}, #{area,jdbcType=VARCHAR}, 
+      #{operatorIp,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{channel,jdbcType=VARCHAR}, #{footPrint,jdbcType=VARCHAR}, #{mUrl,jdbcType=VARCHAR}, 
+      #{mName,jdbcType=VARCHAR}, #{mId,jdbcType=VARCHAR}, #{mParentIds,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, MODEL_ID, PHONE_CODE, CREATE_TIME, PHONE_NUMBER, INSERT_FLAG, CONFIRM_TIME, 
+    IS_FALSE, CUR_VERSIONS, APP_TYPES, IS_USER, AREA, OPERATOR_IP, BRAND, USER_ID, CHANNEL, 
+    FOOT_PRINT, M_URL, M_NAME, M_ID, M_PARENT_IDS
+    from SDBST_BROWSE
+  </select>
+
+  <select id="getData" resultType="java.lang.Integer" >
+    SELECT count(a.phone_code) as c
+    FROM sdbst_browse a
+    WHERE
+    TO_CHAR (a.create_time, 'yyyy-mm-dd') LIKE CONCAT (#{dateMonth}, '%')
+    AND a.phone_code = #{phoneCode}
+    AND a.model_id = #{modelId}
+    <!-- AND a."foot_print" is null -->
+  </select>
+</mapper>

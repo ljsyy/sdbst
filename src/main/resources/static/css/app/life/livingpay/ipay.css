@@ -1,0 +1,62 @@
+.payTypeDiv,.payTypeDiv_enterprise,.payTypeDiv_applicant,.hallDiv{
+    position: relative;
+    float: left;
+}
+.payTypeDiv:after,.payTypeDiv_enterprise:after,.payTypeDiv_applicant:after,.hallDiv:after{
+    font-family: Muiicons;
+    font-size: inherit;
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    right:10px;
+    display: inline-block;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    text-decoration: none;
+    color: #bbb;
+    -webkit-font-smoothing: antialiased;
+    content: '\e581';
+}
+#payType,#payType_enterprise,#payType_applicant,#hall,#scene{
+    max-width: 200px;
+    height: 40px;
+    border: 1px solid #bbb;
+    border-radius: 2px;
+    padding: 0 10px;
+    font-size: 15px;
+}
+#payTypeUl,#payTypeUl_enterprise,#payTypeUl_applicant,#hallUI{
+    display: none;
+    position: absolute;
+    width: 100%;
+    z-index: 10000;
+    top: 24px;
+    left: 0px;
+    border-radius: 2px;
+    border: 1px solid #bbb;
+    padding: 0 10px;
+    background: #fff;
+}
+#payTypeUl>li,#payTypeUl_enterprise>li,#payTypeUl_applicant>li,#hallUI>li{
+    height: 32px;
+    line-height: 30px;
+}
+#base-div{
+    display: block;
+}
+.let label,.label{
+    padding: 15px 10px 15px 15px !important;
+    color: #929292;
+    font-size: 15px;
+}
+.mui-input-row{
+    height: 48px !important;
+}
+div.mui-radio.mui-input-row.mui-left:after{
+    height: 0 !important;
+}
+
+
+#detail-div,#enterprise-div,#save-next-div,#save-commit-dive,#address_list,#address_operate{
+    display: none;
+}

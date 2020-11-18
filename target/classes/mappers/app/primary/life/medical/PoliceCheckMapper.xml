@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.medical.PoliceCheckMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.medical.PoliceCheck">
+    <result column="SYSTEMID" jdbcType="VARCHAR" property="systemid" />
+    <result column="TOWN_ID" jdbcType="VARCHAR" property="townId" />
+    <result column="TOWN_NAME" jdbcType="VARCHAR" property="townName" />
+    <result column="SITE_ID" jdbcType="VARCHAR" property="siteId" />
+    <result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+    <result column="CAR_NUMBER" jdbcType="VARCHAR" property="carNumber" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ID_CARD" jdbcType="VARCHAR" property="idCard" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="FROM_HUBEI" jdbcType="VARCHAR" property="fromHubei" />
+    <result column="FROM_WENZHOU" jdbcType="VARCHAR" property="fromWenzhou" />
+    <result column="FROM_DATE" jdbcType="TIMESTAMP" property="fromDate" />
+    <result column="CLOSE_PERSON" jdbcType="VARCHAR" property="closePerson" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="TEMPERATURE" jdbcType="VARCHAR" property="temperature" />
+    <result column="OTHER_NAME" jdbcType="VARCHAR" property="otherName" />
+    <result column="OTHER_PHONE" jdbcType="VARCHAR" property="otherPhone" />
+    <result column="CHARGE_SD" jdbcType="VARCHAR" property="chargeSd" />
+    <result column="STREET" jdbcType="VARCHAR" property="street" />
+    <result column="COUNTRY" jdbcType="VARCHAR" property="country" />
+    <result column="SCHOOL" jdbcType="VARCHAR" property="school" />
+    <result column="CONTACT_PERSON" jdbcType="VARCHAR" property="contactPerson" />
+    <result column="CONTACT_PHONE" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="INSERT_DATE" jdbcType="TIMESTAMP" property="insertDate" />
+    <result column="AUTHORIZATION" jdbcType="VARCHAR" property="authorization" />
+    <result column="TIMESTAMP" jdbcType="VARCHAR" property="timestamp" />
+    <result column="COL1" jdbcType="VARCHAR" property="col1" />
+    <result column="COL2" jdbcType="VARCHAR" property="col2" />
+    <result column="COL3" jdbcType="VARCHAR" property="col3" />
+    <result column="DATE1" jdbcType="TIMESTAMP" property="date1" />
+    <result column="DATE2" jdbcType="TIMESTAMP" property="date2" />
+    <result column="DATE3" jdbcType="TIMESTAMP" property="date3" />
+    <result column="SCHOOL_TYPE" jdbcType="VARCHAR" property="schoolType" />
+    <result column="SCCJSJ" jdbcType="TIMESTAMP" property="sccjsj" />
+    <result column="TXRQ" jdbcType="TIMESTAMP" property="txrq" />
+    <result column="ZJZL" jdbcType="VARCHAR" property="zjzl" />
+    <result column="MZ" jdbcType="VARCHAR" property="mz" />
+    <result column="OPERMEASURE" jdbcType="VARCHAR" property="opermeasure" />
+    <result column="JCS1" jdbcType="VARCHAR" property="jcs1" />
+    <result column="JCS1XXQK" jdbcType="VARCHAR" property="jcs1xxqk" />
+    <result column="JCS2" jdbcType="VARCHAR" property="jcs2" />
+    <result column="JCS2XXQK" jdbcType="VARCHAR" property="jcs2xxqk" />
+    <result column="SFFR" jdbcType="VARCHAR" property="sffr" />
+    <result column="ZGTW" jdbcType="VARCHAR" property="zgtw" />
+    <result column="SFQTZZ" jdbcType="VARCHAR" property="sfqtzz" />
+    <result column="SFGRBD" jdbcType="VARCHAR" property="sfgrbd" />
+    <result column="QTZZXL" jdbcType="VARCHAR" property="qtzzxl" />
+    <result column="GJCLCS" jdbcType="VARCHAR" property="gjclcs" />
+    <result column="RQ1" jdbcType="TIMESTAMP" property="rq1" />
+    <result column="HSD1" jdbcType="VARCHAR" property="hsd1" />
+    <result column="JSD1" jdbcType="VARCHAR" property="jsd1" />
+    <result column="JSR1LXDH" jdbcType="VARCHAR" property="jsr1lxdh" />
+    <result column="JSR1XM" jdbcType="VARCHAR" property="jsr1xm" />
+    <result column="RQ2" jdbcType="TIMESTAMP" property="rq2" />
+    <result column="HSD2" jdbcType="VARCHAR" property="hsd2" />
+    <result column="JSD2" jdbcType="VARCHAR" property="jsd2" />
+    <result column="JSR2XM" jdbcType="VARCHAR" property="jsr2xm" />
+    <result column="JSR2LXDH" jdbcType="VARCHAR" property="jsr2lxdh" />
+    <result column="YSJSDW" jdbcType="VARCHAR" property="ysjsdw" />
+    <result column="GH" jdbcType="VARCHAR" property="gh" />
+    <result column="YSJSR" jdbcType="VARCHAR" property="ysjsr" />
+    <result column="CPH" jdbcType="VARCHAR" property="cph" />
+    <result column="JSRLXFS" jdbcType="VARCHAR" property="jsrlxfs" />
+    <result column="YWRYQM" jdbcType="VARCHAR" property="ywryqm" />
+    <result column="YWRYDH" jdbcType="VARCHAR" property="ywrydh" />
+    <result column="DBMJQM" jdbcType="VARCHAR" property="dbmjqm" />
+    <result column="ZBMJDH" jdbcType="VARCHAR" property="zbmjdh" />
+    <result column="ZBMJQRRQ" jdbcType="TIMESTAMP" property="zbmjqrrq" />
+    <result column="SFBH" jdbcType="VARCHAR" property="sfbh" />
+    <result column="BZ" jdbcType="VARCHAR" property="bz" />
+    <result column="ZXZT" jdbcType="VARCHAR" property="zxzt" />
+    <result column="DJSJ" jdbcType="TIMESTAMP" property="djsj" />
+    <result column="XGSJ" jdbcType="TIMESTAMP" property="xgsj" />
+    <result column="DJR_ID" jdbcType="VARCHAR" property="djrId" />
+    <result column="XGR_ID" jdbcType="VARCHAR" property="xgrId" />
+    <result column="CFD" jdbcType="VARCHAR" property="cfd" />
+    <result column="MDD" jdbcType="VARCHAR" property="mdd" />
+    <result column="APP_CODE" jdbcType="VARCHAR" property="appCode" />
+    <result column="APP_NAME" jdbcType="VARCHAR" property="appName" />
+    <result column="REMARK1" jdbcType="VARCHAR" property="remark1" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+    <result column="REMARK3" jdbcType="VARCHAR" property="remark3" />
+    <result column="REMARK4" jdbcType="VARCHAR" property="remark4" />
+    <result column="REMARK5" jdbcType="VARCHAR" property="remark5" />
+    <result column="REMARK6" jdbcType="VARCHAR" property="remark6" />
+    <result column="REMARK7" jdbcType="VARCHAR" property="remark7" />
+    <result column="REMARK8" jdbcType="VARCHAR" property="remark8" />
+    <result column="REMARK9" jdbcType="VARCHAR" property="remark9" />
+    <result column="REMARK10" jdbcType="VARCHAR" property="remark10" />
+    <result column="REMARK11" jdbcType="VARCHAR" property="remark11" />
+    <result column="REMARK12" jdbcType="VARCHAR" property="remark12" />
+    <result column="REMARK13" jdbcType="VARCHAR" property="remark13" />
+    <result column="REMARK14" jdbcType="VARCHAR" property="remark14" />
+    <result column="REMARK15" jdbcType="VARCHAR" property="remark15" />
+    <result column="REMARK_DATE1" jdbcType="TIMESTAMP" property="remarkDate1" />
+    <result column="REMARK_DATE2" jdbcType="TIMESTAMP" property="remarkDate2" />
+    <result column="REMARK_DATE3" jdbcType="TIMESTAMP" property="remarkDate3" />
+    <result column="REMARK_DATE4" jdbcType="TIMESTAMP" property="remarkDate4" />
+    <result column="REMARK_DATE5" jdbcType="TIMESTAMP" property="remarkDate5" />
+
+      <result column="ZZSBSJ" jdbcType="TIMESTAMP" property="zzsbsj" />
+      <result column="RYLB" jdbcType="VARCHAR" property="rylb" />
+      <result column="LHJYZDLX" jdbcType="VARCHAR" property="lhjyzdlx" />
+
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.medical.PoliceCheck">
+    insert into APP_POLICE_CHECK (SYSTEMID, TOWN_ID, TOWN_NAME, 
+      SITE_ID, SITE_NAME, CAR_NUMBER, 
+      NAME, PHONE, ID_CARD, 
+      AGE, SEX, FROM_HUBEI, 
+      FROM_WENZHOU, FROM_DATE, CLOSE_PERSON, 
+      ADDRESS, TEMPERATURE, OTHER_NAME, 
+      OTHER_PHONE, CHARGE_SD, STREET, 
+      COUNTRY, SCHOOL, CONTACT_PERSON, 
+      CONTACT_PHONE, CONTENT, INSERT_DATE, 
+      AUTHORIZATION, TIMESTAMP, COL1, 
+      COL2, COL3, DATE1, 
+      DATE2, DATE3, SCHOOL_TYPE, 
+      SCCJSJ, TXRQ, ZJZL, 
+      MZ, OPERMEASURE, JCS1, 
+      JCS1XXQK, JCS2, JCS2XXQK, 
+      SFFR, ZGTW, SFQTZZ, 
+      SFGRBD, QTZZXL, GJCLCS, 
+      RQ1, HSD1, JSD1, 
+      JSR1LXDH, JSR1XM, RQ2, 
+      HSD2, JSD2, JSR2XM, 
+      JSR2LXDH, YSJSDW, GH, 
+      YSJSR, CPH, JSRLXFS, 
+      YWRYQM, YWRYDH, DBMJQM, 
+      ZBMJDH, ZBMJQRRQ, SFBH, 
+      BZ, ZXZT, DJSJ, XGSJ, 
+      DJR_ID, XGR_ID, CFD, 
+      MDD, APP_CODE, APP_NAME, 
+      REMARK1, REMARK2, REMARK3, 
+      REMARK4, REMARK5, REMARK6, 
+      REMARK7, REMARK8, REMARK9, 
+      REMARK10, REMARK11, REMARK12, 
+      REMARK13, REMARK14, REMARK15, 
+      REMARK_DATE1, REMARK_DATE2, REMARK_DATE3, 
+      REMARK_DATE4, REMARK_DATE5,ZZSBSJ,RYLB,LHJYZDLX)
+    values (#{systemid,jdbcType=VARCHAR}, #{townId,jdbcType=VARCHAR}, #{townName,jdbcType=VARCHAR}, 
+      #{siteId,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{age,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{fromHubei,jdbcType=VARCHAR}, 
+      #{fromWenzhou,jdbcType=VARCHAR}, #{fromDate,jdbcType=TIMESTAMP}, #{closePerson,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{temperature,jdbcType=VARCHAR}, #{otherName,jdbcType=VARCHAR}, 
+      #{otherPhone,jdbcType=VARCHAR}, #{chargeSd,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}, #{contactPerson,jdbcType=VARCHAR}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{insertDate,jdbcType=TIMESTAMP}, 
+      #{authorization,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR}, #{col1,jdbcType=VARCHAR}, 
+      #{col2,jdbcType=VARCHAR}, #{col3,jdbcType=VARCHAR}, #{date1,jdbcType=TIMESTAMP}, 
+      #{date2,jdbcType=TIMESTAMP}, #{date3,jdbcType=TIMESTAMP}, #{schoolType,jdbcType=VARCHAR}, 
+      #{sccjsj,jdbcType=TIMESTAMP}, #{txrq,jdbcType=TIMESTAMP}, #{zjzl,jdbcType=VARCHAR}, 
+      #{mz,jdbcType=VARCHAR}, #{opermeasure,jdbcType=VARCHAR}, #{jcs1,jdbcType=VARCHAR}, 
+      #{jcs1xxqk,jdbcType=VARCHAR}, #{jcs2,jdbcType=VARCHAR}, #{jcs2xxqk,jdbcType=VARCHAR}, 
+      #{sffr,jdbcType=VARCHAR}, #{zgtw,jdbcType=VARCHAR}, #{sfqtzz,jdbcType=VARCHAR}, 
+      #{sfgrbd,jdbcType=VARCHAR}, #{qtzzxl,jdbcType=VARCHAR}, #{gjclcs,jdbcType=VARCHAR}, 
+      #{rq1,jdbcType=TIMESTAMP}, #{hsd1,jdbcType=VARCHAR}, #{jsd1,jdbcType=VARCHAR}, 
+      #{jsr1lxdh,jdbcType=VARCHAR}, #{jsr1xm,jdbcType=VARCHAR}, #{rq2,jdbcType=TIMESTAMP}, 
+      #{hsd2,jdbcType=VARCHAR}, #{jsd2,jdbcType=VARCHAR}, #{jsr2xm,jdbcType=VARCHAR}, 
+      #{jsr2lxdh,jdbcType=VARCHAR}, #{ysjsdw,jdbcType=VARCHAR}, #{gh,jdbcType=VARCHAR}, 
+      #{ysjsr,jdbcType=VARCHAR}, #{cph,jdbcType=VARCHAR}, #{jsrlxfs,jdbcType=VARCHAR}, 
+      #{ywryqm,jdbcType=VARCHAR}, #{ywrydh,jdbcType=VARCHAR}, #{dbmjqm,jdbcType=VARCHAR}, 
+      #{zbmjdh,jdbcType=VARCHAR}, #{zbmjqrrq,jdbcType=TIMESTAMP}, #{sfbh,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR}, #{zxzt,jdbcType=VARCHAR}, #{djsj,jdbcType=TIMESTAMP}, #{xgsj,jdbcType=TIMESTAMP}, 
+      #{djrId,jdbcType=VARCHAR}, #{xgrId,jdbcType=VARCHAR}, #{cfd,jdbcType=VARCHAR}, 
+      #{mdd,jdbcType=VARCHAR}, #{appCode,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR}, 
+      #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, 
+      #{remark4,jdbcType=VARCHAR}, #{remark5,jdbcType=VARCHAR}, #{remark6,jdbcType=VARCHAR}, 
+      #{remark7,jdbcType=VARCHAR}, #{remark8,jdbcType=VARCHAR}, #{remark9,jdbcType=VARCHAR}, 
+      #{remark10,jdbcType=VARCHAR}, #{remark11,jdbcType=VARCHAR}, #{remark12,jdbcType=VARCHAR}, 
+      #{remark13,jdbcType=VARCHAR}, #{remark14,jdbcType=VARCHAR}, #{remark15,jdbcType=VARCHAR}, 
+      #{remarkDate1,jdbcType=TIMESTAMP}, #{remarkDate2,jdbcType=TIMESTAMP}, #{remarkDate3,jdbcType=TIMESTAMP}, 
+      #{remarkDate4,jdbcType=TIMESTAMP}, #{remarkDate5,jdbcType=TIMESTAMP}, #{zzsbsj,jdbcType=TIMESTAMP}, #{rylb,jdbcType=VARCHAR}, #{lhjyzdlx,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select SYSTEMID, TOWN_ID, TOWN_NAME, SITE_ID, SITE_NAME, CAR_NUMBER, NAME, PHONE, 
+    ID_CARD, AGE, SEX, FROM_HUBEI, FROM_WENZHOU, FROM_DATE, CLOSE_PERSON, ADDRESS, TEMPERATURE, 
+    OTHER_NAME, OTHER_PHONE, CHARGE_SD, STREET, COUNTRY, SCHOOL, CONTACT_PERSON, CONTACT_PHONE, 
+    CONTENT, INSERT_DATE, AUTHORIZATION, TIMESTAMP, COL1, COL2, COL3, DATE1, DATE2, DATE3, 
+    SCHOOL_TYPE, SCCJSJ, TXRQ, ZJZL, MZ, OPERMEASURE, JCS1, JCS1XXQK, JCS2, JCS2XXQK, 
+    SFFR, ZGTW, SFQTZZ, SFGRBD, QTZZXL, GJCLCS, RQ1, HSD1, JSD1, JSR1LXDH, JSR1XM, RQ2, 
+    HSD2, JSD2, JSR2XM, JSR2LXDH, YSJSDW, GH, YSJSR, CPH, JSRLXFS, YWRYQM, YWRYDH, DBMJQM, 
+    ZBMJDH, ZBMJQRRQ, SFBH, BZ, ZXZT, DJSJ, XGSJ, DJR_ID, XGR_ID, CFD, MDD, APP_CODE, 
+    APP_NAME, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, REMARK6, REMARK7, REMARK8, 
+    REMARK9, REMARK10, REMARK11, REMARK12, REMARK13, REMARK14, REMARK15, REMARK_DATE1, 
+    REMARK_DATE2, REMARK_DATE3, REMARK_DATE4, REMARK_DATE5,ZZSBSJ,RYLB,LHJYZDLX
+    from APP_POLICE_CHECK
+  </select>
+
+    <select id="getPoliceBySysId" resultMap="BaseResultMap">
+select *
+    from APP_POLICE_CHECK
+    where COL2 = #{col2,jdbcType=VARCHAR}
+  </select>
+
+    <update id="updatePoliceBySysId">
+        update APP_POLICE_CHECK
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="townId != null">TOWN_ID=#{townId,jdbcType=VARCHAR},</if>
+            <if test="townName != null">TOWN_NAME=#{townName,jdbcType=VARCHAR},</if>
+            <if test="siteId != null">SITE_ID=#{siteId,jdbcType=VARCHAR},</if>
+            <if test="siteName != null">SITE_NAME=#{siteName,jdbcType=VARCHAR},</if>
+
+            <if test="appCode != null">APP_CODE=#{appCode,jdbcType=VARCHAR},</if>
+            <if test="appName != null">APP_NAME=#{appName,jdbcType=VARCHAR},</if>
+
+            <if test="carNumber != null">CAR_NUMBER=#{carNumber,jdbcType=VARCHAR},</if>
+            <if test="name != null">NAME=#{name,jdbcType=VARCHAR},</if>
+            <if test="phone != null">PHONE=#{phone,jdbcType=VARCHAR},</if>
+            <if test="idCard != null">ID_CARD=#{idCard,jdbcType=VARCHAR},</if>
+            <if test="age != null">AGE=#{age,jdbcType=VARCHAR},</if>
+            <if test="sex != null">SEX=#{sex,jdbcType=VARCHAR},</if>
+            <if test="fromHubei != null">FROM_HUBEI=#{fromHubei,jdbcType=VARCHAR},</if>
+            <if test="fromWenzhou != null">FROM_WENZHOU=#{fromWenzhou,jdbcType=VARCHAR},</if>
+            <if test="fromDate != null">FROM_DATE=#{fromDate,jdbcType=TIMESTAMP},</if>
+            <if test="closePerson != null">CLOSE_PERSON=#{closePerson,jdbcType=VARCHAR},</if>
+            <if test="address != null">ADDRESS=#{address,jdbcType=VARCHAR},</if>
+            <if test="temperature != null">TEMPERATURE=#{temperature,jdbcType=VARCHAR},</if>
+            <if test="otherName != null">OTHER_NAME=#{otherName,jdbcType=VARCHAR},</if>
+            <if test="otherPhone != null">OTHER_PHONE=#{otherPhone,jdbcType=VARCHAR},</if>
+            <if test="chargeSd != null">CHARGE_SD=#{chargeSd,jdbcType=VARCHAR},</if>
+            <if test="street != null">STREET=#{street,jdbcType=VARCHAR},</if>
+            <if test="country != null">COUNTRY=#{country,jdbcType=VARCHAR},</if>
+            <if test="school != null">SCHOOL=#{school,jdbcType=VARCHAR},</if>
+            <if test="contactPerson != null">CONTACT_PERSON=#{contactPerson,jdbcType=VARCHAR},</if>
+            <if test="contactPhone != null">CONTACT_PHONE=#{contactPhone,jdbcType=VARCHAR},</if>
+            <if test="content != null">CONTENT=#{content,jdbcType=VARCHAR},</if>
+
+            <if test="authorization != null">AUTHORIZATION=#{authorization,jdbcType=VARCHAR},</if>
+            <if test="timestamp != null">TIMESTAMP=#{timestamp,jdbcType=VARCHAR},</if>
+            <if test="col1 != null">COL1=#{col1,jdbcType=VARCHAR},</if>
+            <if test="col2 != null">COL2=#{col2,jdbcType=VARCHAR},</if>
+            <if test="col3 != null">COL3=#{col3,jdbcType=VARCHAR},</if>
+            <if test="date1 != null">DATE1=#{date1,jdbcType=TIMESTAMP},</if>
+            <if test="date2 != null">DATE2=#{date2,jdbcType=TIMESTAMP},</if>
+            <if test="date3 != null">DATE3=#{date3,jdbcType=TIMESTAMP},</if>
+            <if test="schoolType != null">SCHOOL_TYPE=#{schoolType,jdbcType=VARCHAR},</if>
+            <if test="sccjsj != null">SCCJSJ=#{sccjsj,jdbcType=TIMESTAMP},</if>
+            <if test="txrq != null">TXRQ=#{txrq,jdbcType=TIMESTAMP},</if>
+            <if test="zjzl != null">ZJZL=#{zjzl,jdbcType=VARCHAR},</if>
+            <if test="opermeasure != null">OPERMEASURE=#{opermeasure,jdbcType=VARCHAR},</if>
+            <if test="mz != null">MZ=#{mz,jdbcType=VARCHAR},</if>
+            <if test="jcs1 != null">JCS1=#{jcs1,jdbcType=VARCHAR},</if>
+            <if test="jcs2 != null">JCS2=#{jcs2,jdbcType=VARCHAR},</if>
+            <if test="jcs1xxqk != null">JCS1XXQK=#{jcs1xxqk,jdbcType=VARCHAR},</if>
+            <if test="jcs2xxqk != null">JCS2XXQK=#{jcs2xxqk,jdbcType=VARCHAR},</if>
+            <if test="sffr != null">SFFR=#{sffr,jdbcType=VARCHAR},</if>
+            <if test="zgtw != null">ZGTW=#{zgtw,jdbcType=VARCHAR},</if>
+            <if test="sfqtzz != null">SFQTZZ=#{sfqtzz,jdbcType=VARCHAR},</if>
+            <if test="sfgrbd != null">SFGRBD=#{sfgrbd,jdbcType=VARCHAR},</if>
+            <if test="qtzzxl != null">QTZZXL=#{qtzzxl,jdbcType=VARCHAR},</if>
+            <if test="gjclcs != null">GJCLCS=#{gjclcs,jdbcType=VARCHAR},</if>
+            <if test="rq1 != null">RQ1=#{rq1,jdbcType=TIMESTAMP},</if>
+            <if test="hsd1 != null">HSD1=#{hsd1,jdbcType=VARCHAR},</if>
+            <if test="jsd1 != null">JSD1=#{jsd1,jdbcType=VARCHAR},</if>
+            <if test="jsr1lxdh != null">JSR1LXDH=#{jsr1lxdh,jdbcType=VARCHAR},</if>
+            <if test="jsr1xm != null">JSR1XM=#{jsr1xm,jdbcType=VARCHAR},</if>
+            <if test="rq2 != null">RQ2=#{rq2,jdbcType=TIMESTAMP},</if>
+            <if test="hsd2 != null">HSD2=#{hsd2,jdbcType=VARCHAR},</if>
+            <if test="jsd2 != null">JSD2=#{jsd2,jdbcType=VARCHAR},</if>
+            <if test="jsr2xm != null">JSR2XM=#{jsr2xm,jdbcType=VARCHAR},</if>
+            <if test="jsr2lxdh != null">JSR2LXDH=#{jsr2lxdh,jdbcType=VARCHAR},</if>
+            <if test="ysjsdw != null">YSJSDW=#{ysjsdw,jdbcType=VARCHAR},</if>
+            <if test="gh != null">GH=#{gh,jdbcType=VARCHAR},</if>
+            <if test="ysjsr != null">YSJSR=#{ysjsr,jdbcType=VARCHAR},</if>
+            <if test="cph != null">CPH=#{cph,jdbcType=VARCHAR},</if>
+            <if test="jsrlxfs != null">JSRLXFS=#{jsrlxfs,jdbcType=VARCHAR},</if>
+
+            <if test="ywryqm != null">YWRYQM=#{ywryqm,jdbcType=VARCHAR},</if>
+            <if test="ywrydh != null">YWRYDH=#{ywrydh,jdbcType=VARCHAR},</if>
+            <if test="dbmjqm != null">DBMJQM=#{dbmjqm,jdbcType=VARCHAR},</if>
+            <if test="zbmjdh != null">ZBMJDH=#{zbmjdh,jdbcType=VARCHAR},</if>
+            <if test="zbmjqrrq != null">ZBMJQRRQ=#{zbmjqrrq,jdbcType=TIMESTAMP},</if>
+            <if test="sfbh != null">SFBH=#{sfbh,jdbcType=VARCHAR},</if>
+            <if test="bz != null">BZ=#{bz,jdbcType=VARCHAR},</if>
+            <if test="zxzt != null">ZXZT=#{zxzt,jdbcType=VARCHAR},</if>
+            <if test="djsj != null">DJSJ=#{djsj,jdbcType=TIMESTAMP},</if>
+            <if test="xgsj != null">XGSJ=#{xgsj,jdbcType=TIMESTAMP},</if>
+            <if test="djrId != null">DJR_ID=#{djrId,jdbcType=VARCHAR},</if>
+            <if test="xgrId != null">XGR_ID=#{xgrId,jdbcType=VARCHAR},</if>
+            <if test="cfd != null">CFD=#{cfd,jdbcType=VARCHAR},</if>
+            <if test="mdd != null">MDD=#{mdd,jdbcType=VARCHAR},</if>
+
+            <if test="remark1 != null">REMARK1=#{remark1,jdbcType=VARCHAR},</if>
+            <if test="remark2 != null">REMARK2=#{remark2,jdbcType=VARCHAR},</if>
+            <if test="remark3 != null">REMARK3=#{remark3,jdbcType=VARCHAR},</if>
+            <if test="remark4 != null">REMARK4=#{remark4,jdbcType=VARCHAR},</if>
+            <if test="remark5 != null">REMARK5=#{remark5,jdbcType=VARCHAR},</if>
+            <if test="remark6 != null">REMARK6=#{remark6,jdbcType=VARCHAR},</if>
+            <if test="remark7 != null">REMARK7=#{remark7,jdbcType=VARCHAR},</if>
+            <if test="remark8 != null">REMARK8=#{remark8,jdbcType=VARCHAR},</if>
+            <if test="remark9 != null">REMARK9=#{remark9,jdbcType=VARCHAR},</if>
+            <if test="remark10 != null">REMARK10=#{remark10,jdbcType=VARCHAR},</if>
+            <if test="remark11 != null">REMARK11=#{remark11,jdbcType=VARCHAR},</if>
+            <if test="remark12 != null">REMARK12=#{remark12,jdbcType=VARCHAR},</if>
+            <if test="remark13 != null">REMARK13=#{remark13,jdbcType=VARCHAR},</if>
+            <if test="remark14 != null">REMARK14=#{remark14,jdbcType=VARCHAR},</if>
+            <if test="remark15 != null">REMARK15=#{remark15,jdbcType=VARCHAR},</if>
+
+            <if test="remarkDate1 != null">REMARK_DATE1=#{remarkDate1,jdbcType=VARCHAR},</if>
+            <if test="remarkDate2 != null">REMARK_DATE2=#{remarkDate2,jdbcType=VARCHAR},</if>
+            <if test="remarkDate3 != null">REMARK_DATE3=#{remarkDate3,jdbcType=VARCHAR},</if>
+            <if test="remarkDate4 != null">REMARK_DATE4=#{remarkDate4,jdbcType=VARCHAR},</if>
+            <if test="remarkDate5 != null">REMARK_DATE5=#{remarkDate5,jdbcType=VARCHAR},</if>
+
+            <if test="zzsbsj != null">ZZSBSJ=#{zzsbsj,jdbcType=VARCHAR},</if>
+            <if test="rylb != null">RYLB=#{rylb,jdbcType=VARCHAR},</if>
+            <if test="lhjyzdlx != null">LHJYZDLX=#{lhjyzdlx,jdbcType=VARCHAR},</if>
+
+        </trim>
+        where col2=#{col2,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="getMessageTotal" resultType="java.util.Map">
+        select '登记总数' type, count(0) as num
+        from app_police_check a
+        where  DJSJ &gt;= (TRUNC(SYSDATE)+ 21/24)-1 and  DJSJ &lt;= (TRUNC(SYSDATE)+ 21/24) and zxzt= '正常'
+        union
+        SELECT b.show_name type, sum(nvl(cn, 0)) num
+        FROM (SELECT decode(opermeasure, '', '待核查', opermeasure) type,
+        count(0) cn
+        FROM app_police_check
+        where  DJSJ &gt;= (TRUNC(SYSDATE)+ 21/24)-1 and  DJSJ &lt;= (TRUNC(SYSDATE)+ 21/24) and zxzt= '正常'
+        group by decode(opermeasure, '', '待核查', opermeasure)) a,
+        oper_messure_record b
+        where b.names = a.type(+)
+        group by b.show_name
+    </select>
+
+</mapper>

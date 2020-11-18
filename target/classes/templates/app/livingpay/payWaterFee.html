@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/life/livingpay/ipay.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <title>缴交水费</title>
+</head>
+<body>
+
+<div class="mui-input-group">
+    <div id="base-div" style="margin-top: 5px">
+        <div class="mui-input-row">
+            <label class="label">用户编号</label>
+            <input type="text" placeholder="请输入用户编号" class="mui-input-clear top" id="payWaterFeeNo">
+        </div>
+
+        <div id="detailDiv" style="display: none;">
+            <div class="mui-input-row" >
+                <label class="label" >客户名称</label>
+                <input type="text" class="mui-input-clear top"  id="CustomName" readonly>
+            </div>
+
+            <div class="mui-input-row" >
+                <label class="label" > 应缴总金额</label>
+                <input type="text" class="mui-input-clear top"  id="Amount" readonly>
+            </div>
+
+            <div class="mui-input-row">
+                <label class="label" >付款卡号/账号</label>
+                <input type="text" class="mui-input-clear top"   placeholder="请输入付款卡号/账号" id="AcctNo">
+            </div>
+        </div>
+    </div>
+
+    <div class="mui-button-row" style="margin-top: 20px;">
+        <button type="button" class="mui-btn mui-btn-primary" id="searchBtn" onclick="search()">查询</button>
+        <button type="button" class="mui-btn mui-btn-primary" id="doNextBtn" style="display: none;" onclick="confirmPay()">下一步</button>
+    </div>
+
+</div>
+<form id="form1" name="MainForm" method="post" action="">
+    <INPUT type="hidden" name="transName" id="transName" value='iMPay' />
+    <INPUT type="hidden" name="Plain" id="Plain" value='' />
+    <INPUT type="hidden" name="Signature" id="Signature" value="" />
+</form>
+<input type="hidden" id="resultData" name="resultData" value="" />
+<input type="hidden" id="userId" name="userId" th:value="${userId}" />
+
+
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
+    提示:。
+</div>
+<!--
+<div class="alert_bg alert" style="display: none;">
+    <div class="alert_content">
+        <p class="alert_info">
+            提示:
+        </p>
+        <button class="alert_btn Btop" style="height: 2rem">确定</button>
+    </div>
+</div>
+-->
+</body>
+<script type="application/javascript" src="mui/js/mui.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+<!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+<script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+<script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+<script>
+
+    /*
+    $(function(){
+        $(".alert_btn").click(function(){
+            $(".alert").hide();
+        });
+        $(".explain").click(function(){
+            $(".alert").show();
+        });
+    })
+*/
+
+
+    function confirmPay(){
+        $("button").attr("disabled", true);
+        var AcctNo = $("#AcctNo").val();
+        AcctNo = AcctNo.trim().replace(/\s/g,"");
+        if(AcctNo == ""){
+            mui.alert("请输入卡号","提示");
+            $("button").attr("disabled", false);
+            return ;
+        }
+        var message = {
+            "data":$("#resultData").val(),
+            "payType":"iPayWaterFee",
+            "AcctNo":$("#AcctNo").val()
+        };
+
+        //后台组织付款参数
+        $.ajax({
+            url: basePath() + "/livingPay/getPayParam?userId="+$("#userId").val(), /*接口域名地址*/
+            type: 'post',
+            data: JSON.stringify(message),
+            contentType: "application/json",
+            dataType:"json",
+            async:true,
+            success: function (res) {
+                if(res.code == 200){
+                    var result =  res.data;
+                    $("#Plain").val(result.Plain);
+                    //console.log(result.Plain);
+                    $("#Signature").val(result.Signature);
+                    //console.log(result.Signature);
+                    $("#form1").submit();
+                }else{
+                    mui.alert(res.data,"提示");
+                    $("button").attr("disabled", false);
+                    return;
+                }
+            },
+            error:function(err){
+                $("#button").attr("disabled", false);
+            }
+        })
+    }
+
+    function  search() {
+        var payWaterFeeNo = $("#payWaterFeeNo").val();
+        payWaterFeeNo = payWaterFeeNo.trim().replace(/\s/g,"");
+        if(payWaterFeeNo == ""){
+            mui.alert("请输入用户编号","提示");
+            return;
+        }
+        //查询接口
+        $.post(basePath() + "/livingPay/payQuery",{"PayWaterFeeNo":payWaterFeeNo,"queryType":"iWaterOweQuery"},function(result){
+           // console.log(result);
+            //console.log(result);
+            var resultData = result.data;
+             if(result.code == 200){
+               $("#detailDiv").show();
+               $("#doNextBtn").show();
+               $("#resultData").val(resultData);
+               var mesg = eval('(' + resultData + ')');
+               $("#form1").attr("action",mesg.payAddr);
+               $("#CustomName").val(mesg.CustomName);
+               $("#Amount").val(mesg.Amount);
+
+                /*
+               var dataList = mesg.List;
+                if(dataList.length > 0){
+                    for(var i = 0; i < dataList.length; i++){
+                        var htmlStr = "<hr style= \"border:1px dashed rgba(192,192,192,0.5);margin-top: 20px\" />";
+                        var dataStr = dataList[i];
+                        htmlStr +="<div style='margin-top: 5px'>";
+                        htmlStr +="<div>水费年月："+dataStr.PayeWaterDate+"</div>";
+                        htmlStr +="<div>起码："+dataStr.StartWaterNum+"</div>";
+                        htmlStr +="<div>止码："+dataStr.EndWaterNum+"</div>";
+                        htmlStr +="<div>调整量："+dataStr.AlterWaterNum+"</div>";
+                        htmlStr +="<div>使用水量："+dataStr.UseWaterNum+"</div>";
+                        htmlStr +="<div>基本水费："+dataStr.WaterAmount+"元</div>";
+                        htmlStr +="<div>代收费用："+dataStr.CollectionWaterAmount+"元</div>";
+                        htmlStr +="<div>垃圾费："+dataStr.RubbishAmount+"元</div>";
+                        htmlStr +="<div>垃圾费违约金："+dataStr.RubbishBreakAmount+"元</div>";
+                        htmlStr +="<div>水费违约金："+dataStr.WaterBreakAmount+"元</div>";
+                        htmlStr += "</div>";
+                    }
+                    $("#dataList").html(htmlStr);
+                }
+
+                 */
+            }else{
+                 mui.alert(resultData,"提示");
+                 $("#PayOrder").attr("disabled", false);
+                 return;
+             }
+        });
+    }
+
+
+    function selectPlatform(typeId){
+        if(document.getElementById(typeId)){
+            $("#"+typeId).attr("checked",true);
+        }
+    }
+
+    function toPayPage(url){
+        window.location = url;
+    }
+    function getQueryVariable(url,variable) {
+        try{
+            var vars = url.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+        }catch (e) {
+
+        }
+        return null;
+    }
+</script>
+</html>
+
+
+
+

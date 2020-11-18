@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unifs.sdbst.app.dao.primary.life.bank.BankServiceMapper">
+  <resultMap id="BaseResultMap" type="com.unifs.sdbst.app.bean.life.BankEntity.BankService">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="SERVICE_WAY" jdbcType="VARCHAR" property="serviceWay" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="SERVICE_NAME" jdbcType="VARCHAR" property="serviceName" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unifs.sdbst.app.bean.life.BankEntity.BankService">
+    insert into BANK_SERVICE (ID, SERVICE_WAY, SERVICE_TYPE,
+      SERVICE_NAME)
+    values (#{id,jdbcType=VARCHAR}, #{serviceWay,jdbcType=VARCHAR}, #{serviceType,jdbcType=VARCHAR},
+      #{serviceName,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, SERVICE_WAY, SERVICE_TYPE, SERVICE_NAME
+    from BANK_SERVICE
+  </select>
+
+  <select id="getServiceList" resultMap="BaseResultMap">
+    select * from bank_service
+    order by service_type,id
+  </select>
+
+</mapper>

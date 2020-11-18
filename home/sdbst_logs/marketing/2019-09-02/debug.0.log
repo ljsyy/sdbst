@@ -1,0 +1,4 @@
+[DEBUG] 2019-09-02 11:45:15 [http-nio-0.0.0.0-8080-exec-9:230128:com.unifs.sdbst.app.dao.primary.cms.ArticleMapper.findList_COUNT:159] - ==>  Preparing: SELECT count(0) FROM cms_article a JOIN sys_user u ON u.id = a.create_by JOIN cms_category c ON c.id = a.category_id WHERE a.del_flag = ?
+[DEBUG] 2019-09-02 11:45:15 [http-nio-0.0.0.0-8080-exec-9:230236:com.unifs.sdbst.app.dao.primary.cms.ArticleMapper.findList_COUNT:159] - ==> Parameters: 2(String)
+[DEBUG] 2019-09-02 11:47:52 [http-nio-0.0.0.0-8080-exec-7:387382:com.unifs.sdbst.app.dao.primary.cms.ArticleMapper.findList_COUNT:159] - ==>  Preparing: SELECT count(0) FROM cms_article a JOIN sys_user u ON u.id = a.create_by JOIN cms_category c ON c.id = a.category_id WHERE a.del_flag = ?
+[DEBUG] 2019-09-02 11:47:52 [http-nio-0.0.0.0-8080-exec-7:387384:com.unifs.sdbst.app.dao.primary.cms.ArticleMapper.findList_COUNT:159] - ==> Parameters: 2(String)
