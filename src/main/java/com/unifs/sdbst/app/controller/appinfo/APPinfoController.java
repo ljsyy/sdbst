@@ -24,6 +24,7 @@ public class APPinfoController {
     private AppinfoService appinfoService;
 
 
+
     @RequestMapping(value = "getCurrentVersion")
     @ResponseBody
     public String getCurrentVersion(AppVersion appVersion, HttpServletRequest request, HttpServletResponse response) {
