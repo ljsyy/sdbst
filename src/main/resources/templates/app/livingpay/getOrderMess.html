@@ -90,6 +90,7 @@
         if(isAndroid){
             try{
                 //调用安卓方法
+                window.myobj.closeWV();
             }catch(e){
                 mui.alert("网络异常","提示");
             }
@@ -97,6 +98,8 @@
             window.location.href="&funT=closeWebView";
         }
     }
+
+
 
 
 </script>
