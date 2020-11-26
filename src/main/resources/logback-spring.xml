@@ -2,8 +2,7 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd" debug="false"
                scan="true" scanPeriod="30 second">
     <property name="PROJECT" value="marketing" />
-    <!--<property name="ROOT" value="/home/sdbst_logs/${PROJECT}/" />-->
-    <property name="ROOT" value="F:\\logs" />
+    <property name="ROOT" value="/home/sdbst_logs/${PROJECT}/" />
     <!-- 单个日志文件超过50MB自动切分 -->
     <property name="FILESIZE" value="50MB" />
     <!-- 日志最大保留30天 -->
