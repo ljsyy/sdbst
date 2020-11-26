@@ -2,7 +2,8 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd" debug="false"
                scan="true" scanPeriod="30 second">
     <property name="PROJECT" value="marketing" />
-    <property name="ROOT" value="/home/sdbst_logs/${PROJECT}/" />
+    <!--<property name="ROOT" value="/home/sdbst_logs/${PROJECT}/" />-->
+    <property name="ROOT" value="F:\\logs" />
     <!-- 单个日志文件超过50MB自动切分 -->
     <property name="FILESIZE" value="50MB" />
     <!-- 日志最大保留30天 -->
@@ -105,6 +106,27 @@
         </rollingPolicy>
     </appender>
 
+    <!-- monitor监控日志输入到文件中  -->
+    <appender name="monitorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ROOT}/monitor.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${FILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.unifs.sdbst.app.task.MonitorTask" level="INFO" additivity="true">
+        <appender-ref ref="monitorAppender"/>
+    </logger>
 
     <!-- mapper层debug日志,输出sql日志 -->
     <!--    <logger name="DAO mapper包名" level="DEBUG"></logger> -->
