@@ -5,9 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.unifs.sdbst.app.common.constant.GlobalURL;
 import com.unifs.sdbst.app.utils.HttpUtil;
 import com.unifs.sdbst.app.utils.IdGen;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -18,16 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @version V1.0
@@ -120,9 +111,9 @@ public class MonitorTask {
         int successCount = 0;//访问成功的链接数
         int failCount = 0;//访问失败的链接数
         int noCount = 0;//无需校验的链接数
-        StringBuilder successHref = new StringBuilder();
+        //StringBuilder successHref = new StringBuilder();
         StringBuilder failHref = new StringBuilder();
-        StringBuilder noHref = new StringBuilder();
+        //StringBuilder noHref = new StringBuilder();
         StringBuilder failName = new StringBuilder();
         System.out.println("开始校验---checkHotBannerHref："+arrayType+"--"+hrefType+",homeDataObject:"+homeDataObject.toString());
         JSONArray menuArray = homeDataObject.getJSONArray(arrayType);
@@ -171,11 +162,11 @@ public class MonitorTask {
                     }
                     if(checkResult.contains("200")){
                         successCount++;
-                        successHref.append(",").append(href).append("---").append(name);
+                        //successHref.append(",").append(href).append("---").append(name);
                     }
                 }else{
                     noCount++;
-                    noHref.append(",").append(href).append("---").append(name);
+                    //noHref.append(",").append(href).append("---").append(name);
                 }
             }
         }
