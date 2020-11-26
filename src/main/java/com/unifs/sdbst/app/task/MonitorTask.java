@@ -60,13 +60,13 @@ public class MonitorTask {
     public void monitorFindTask() throws UnsupportedEncodingException {
         //根据find1To3Menu获取接口路径
         String findMenuJson = HttpUtil.sendGet(monitorMenuPath, "", "");
-        System.out.println("findMenuJson:"+findMenuJson);
+        //System.out.println("findMenuJson:"+findMenuJson);
         if("".equals(findMenuJson)){
             System.out.println("访问路径："+findMenuJson+"返回结果为null，无法获取对应接口路径信息，请检查url路径配置是否准确");
             return;
         }
         JSONObject findJsonObject = JSONObject.parseObject(findMenuJson);
-        log.info("---开始find1To3Menu模块---");
+        log.info("---开始校验find1To3Menu模块---");
         String findResult = checkHotBannerHref(findJsonObject,"data","href");
         System.out.println("在find1To3Menu中，"+findResult);
         //分割除访问失败的具体链接，发送短信警告，并将链接详情写入监控文件中
@@ -77,7 +77,7 @@ public class MonitorTask {
     public void monitorHomeTask() throws UnsupportedEncodingException {
         //根据homeMenuData获取接口路径
         String homeMenuJson = HttpUtil.sendGet(monitorHomePath, monitorHomeParam, "");
-        System.out.println("homeMenuJson:"+homeMenuJson);
+        //System.out.println("homeMenuJson:"+homeMenuJson);
         if("".equals(homeMenuJson)){
             System.out.println("访问路径："+homeMenuJson+"返回结果为null，无法获取对应接口路径信息，请检查url路径配置是否准确");
             return;
@@ -244,9 +244,7 @@ public class MonitorTask {
         String phone=monitorMobile;
         String[] phoneList = phone.split(",");
         for(String subPhone : phoneList){
-            String content = "【i顺德监控】[" +
-                    warningMessage +
-                    "] 链接访问失败。";
+            String content = "【i顺德监控】[" + warningMessage + "] 链接访问失败。";
             System.out.println("发送短信中"+ content +subPhone);
             HttpUtil.sendPost(GlobalURL.SMS_BASE_URL + "&phones=" + subPhone + "&content=" + URLEncoder.encode(content, "gb2312")
                     +"&sendUserName=&sendUserUuid=&sendDepUuid=&sendDepName=&relateDocUuid=" + IdGen.uuid() + "&sendPhone=", null);
@@ -265,7 +263,6 @@ public class MonitorTask {
         if(failCountStr.matches("^[0-9]*$")){
             int failCount = Integer.parseInt(failCountStr);
             if(failCount>0){
-                System.out.println("findResult:"+findResult);
                 String subFindResult = findResult.substring(findResult.indexOf("访问失败的具体链接名称：")+13);
                 System.out.println("failCount:"+failCount);
                 System.out.println("subFindResult:"+subFindResult);
