@@ -203,6 +203,7 @@ public class LivingPayController {
                              ){
         ModelAndView mav = new ModelAndView();
         PayOrder n_payOrder=new PayOrder();
+        String payOrderUserName="XXX";
         try{
             if(link != null && link.length()>0) {
                 //用户信息
@@ -210,13 +211,14 @@ public class LivingPayController {
                 JSONObject jsonObject = JSONObject.parseObject(string);
                 String identity = (String)jsonObject.get("link_person_cid");
                 String phone = (String)jsonObject.get("mobile");
+                payOrderUserName=(String)jsonObject.get("link_person_name");
                 User user = userService.selectByFactor(phone, identity, null);
                 if(user != null){
                     n_payOrder.setUserId(user.getId());
                 }
             }
-            n_payOrder.setUserId("");
-            n_payOrder.setStatus("0");
+            //n_payOrder.setUserId("");
+            n_payOrder.setStatus("1");
             List<PayOrder> orderList = payOrderService.getOrderList(n_payOrder);
             List<PayOrder> newOrderList=new ArrayList<PayOrder>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
@@ -240,6 +242,7 @@ public class LivingPayController {
                     newOrderList.add(newPayOrder);
                 }
             }
+            mav.addObject("userName",payOrderUserName);
             mav.addObject("orderList",newOrderList);
             mav.setViewName("app/livingpay/getOrderList");
         }catch (Exception e){
