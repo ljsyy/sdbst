@@ -2,9 +2,7 @@ package com.unifs.sdbst.app.task;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.unifs.sdbst.app.common.constant.GlobalURL;
 import com.unifs.sdbst.app.utils.HttpUtil;
-import com.unifs.sdbst.app.utils.IdGen;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -15,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -42,12 +41,11 @@ public class MonitorTask {
     private String monitorHomeParam;
     @Value("${monitor.base.mobile}")
     private String monitorMobile;
-    //    @Autowired
-//    private MenuMapper menuMapper;
+    @Value("${monitor.base.sendMsg}")
+    private String monitorMessagePath;
     private static final Logger log = LoggerFactory.getLogger(MonitorTask.class);
 
-//    @Scheduled(cron="0 0 0/1 * * ?")
-//    @Scheduled(cron="0 0/30 * * * ?")
+//    @Scheduled(cron="0 0 8,13,18 * * ?")
     public void monitorFindTask() throws UnsupportedEncodingException {
         //根据find1To3Menu获取接口路径
         String findMenuJson = HttpUtil.sendGet(monitorMenuPath, "", "");
@@ -64,7 +62,7 @@ public class MonitorTask {
         warningResult(findResult);
     }
 
-//    @Scheduled(cron="0 15/30 * * * ?")
+//    @Scheduled(cron="0 15 8,13,18 * * ?")
     public void monitorHomeTask() throws UnsupportedEncodingException {
         //根据homeMenuData获取接口路径
         String homeMenuJson = HttpUtil.sendGet(monitorHomePath, monitorHomeParam, "");
@@ -235,11 +233,11 @@ public class MonitorTask {
         String phone=monitorMobile;
         String[] phoneList = phone.split(",");
         for(String subPhone : phoneList){
-            String content = "【i顺德监控】[" + warningMessage + "] 链接访问失败。";
-            System.out.println("发送短信中"+ content +subPhone);
-            HttpUtil.sendPost(GlobalURL.SMS_BASE_URL + "&phones=" + subPhone + "&content=" + URLEncoder.encode(content, "gb2312")
-                    +"&sendUserName=&sendUserUuid=&sendDepUuid=&sendDepName=&relateDocUuid=" + IdGen.uuid() + "&sendPhone=", null);
-
+            System.out.println("发送短信中"+ URLEncoder.encode(warningMessage,"utf-8") +subPhone);
+            String sendResult = HttpUtil.sendGet(monitorMessagePath, "warningMessage="+URLEncoder.encode(warningMessage,"utf-8")+"&subPhone="+subPhone, "");
+            if(sendResult==null || sendResult.contains("error:")){
+                log.error("发送短信接口："+monitorMessagePath+"?warningMessage="+URLEncoder.encode(warningMessage,"utf-8")+"&subPhone="+subPhone+" 请求异常，请及时处理");
+            }
         }
     }
 
