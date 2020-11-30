@@ -14,6 +14,7 @@ import com.unifs.sdbst.app.bean.menus.SysUserMenu;
 import com.unifs.sdbst.app.bean.menus.SysWorkMenu;
 import com.unifs.sdbst.app.bean.menus.view.HomeMenuView;
 import com.unifs.sdbst.app.bean.menus.vo.HomeMenuVo;
+import com.unifs.sdbst.app.common.constant.GlobalURL;
 import com.unifs.sdbst.app.enums.RespCode;
 import com.unifs.sdbst.app.service.LogService;
 import com.unifs.sdbst.app.service.appinfo.AppinfoService;
@@ -38,6 +39,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 
@@ -914,6 +918,7 @@ public class AppMenuController {
 
         /*防疫专栏数据*/
         Menu menu = appMenuService.epidemicColumnMenu("1d9940770d004a88a892e814a09ae650");
+
         view.setEpidemicColumn(menu);
 
         /*app注册登录模式获取*/
@@ -1104,6 +1109,21 @@ public class AppMenuController {
 
     }
 
+    //i顺德接口监控发送短信
+    @RequestMapping(value ="sendMonitorMessage")
+    @ResponseBody
+    public String sendMessage(String warningMessage, String subPhone) throws UnsupportedEncodingException {
+        System.out.println("---发送短信接口---");
+        String content = "【i顺德监控】[" + URLDecoder.decode(warningMessage,"utf-8") + "] 链接访问失败。";
+        String sendResult = "";
+        if(!"".equals(subPhone) && !"".equals(content)){
+            System.out.println("手机号码："+subPhone+"，短信内容："+content);
+            sendResult = HttpUtil.sendPost(GlobalURL.SMS_BASE_URL + "&phones=" + subPhone + "&content=" + URLEncoder.encode(content,"gb2312")
+                            +"&sendUserName=&sendUserUuid=&sendDepUuid=&sendDepName=&relateDocUuid=" + IdGen.uuid() + "&sendPhone=", null);
+            return sendResult;
+        }
+        return "error:发送短信内容或手机号码为空";
+    }
 
 }
 
