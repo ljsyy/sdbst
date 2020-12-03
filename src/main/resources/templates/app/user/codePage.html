@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="font-size: 58.5938px;">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src * ;img-src *">-->
+    <!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline';img-src 'self' http://support.shunde.gov.cn:9203">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>输入验证码</title>
+    <link rel="stylesheet" href="mui/css/mui.css">
+    <link rel="stylesheet" href="mui/css/mui.loading.css">
+    <link href="framework7/css/font-awesome.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.min.css" rel="stylesheet">
+    <link href="framework7/css/framework7.ios.colors.min.css" rel="stylesheet">
+    <link href="framework7/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/fingertips/managerInfo.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="css/app/life/livingpay/ipay.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.7-dist/css/bootstrap.css"/>
+    <style>
+        /*弹框验证码*/
+        .ipt-fake-box {
+            text-align: center;
+        }
+        .input {
+            display: inline-block;
+        }
+        .input:last-child {
+            border-right: 1px solid #999;
+        }
+        input.my_input {
+            border-top: 1px solid #999;
+            border-bottom: 1px solid #999;
+            border-left: 1px solid #999;
+            width: 45px;
+            height: 45px;
+            outline: none;
+            font-family: inherit;
+            font-size: 28px;
+            font-weight: inherit;
+            text-align: center;
+            line-height: 45px;
+            color: #c2c2c2;
+            background: rgba(255, 255, 255, 0);
+        }
+    </style>
+<body>
+
+<div class="mui-input-group">
+    <div id="base-div" style="margin-top: 5px">
+
+
+            <h4 class="modal-title" id="myModalLabel" th:text="'验证码发送至 '+${phone}"> </h4>
+
+
+
+        <div class="modal-body settingBody">
+            <div class="ipt-box-nick mb15-nick">
+                <div class="ipts-box-nick">
+                    <div class="ipt-fake-box">
+                        <input type="tel" class="my_input" id="firstInput" maxlength="1">
+                        <input type="tel" class="my_input" maxlength="1" id="firstInput1">
+                        <input type="tel" class="my_input" maxlength="1" id="firstInput2">
+                        <input type="tel" class="my_input" maxlength="1" id="firstInput3">
+                        <input type="tel" class="my_input" maxlength="1" id="firstInput4">
+                        <input type="tel" class="my_input" maxlength="1" id="firstInput5">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer settingFooter" id="myfooters">
+            <div id="btnSendCode">
+                <div>验证码错误 <span id="againSend">重新发送</span></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<input type="hidden"  id="user_info" name="resultData" th:value="${user_info}" />
+<input type="hidden" id="resultData" name="resultData" value="" />
+<script type="application/javascript" src="mui/js/mui.min.js"></script>
+<script type="application/javascript" src="mui/js/mui.loading.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="framework7/js/framework7.min.js"></script>
+<!--    <script type="text/javascript" src="framework7/js/cityCode.js"></script>-->
+<script type="text/javascript" src="framework7/js/regionsObject.js"></script>
+<script type="text/javascript" src="framework7/js/cityPicker.js"></script>
+<script>
+
+    var phone = "";
+    phone = [[${phone}]];
+    var InterValObj = "";
+    $(function(){
+
+        var active = 0;
+        var inputBtn = document.querySelectorAll('.my_input');
+        for (var i = 0; i < inputBtn.length; i++) {
+            inputBtn[i].addEventListener('click', function () {
+                inputBtn[active].focus();
+            }, false);
+            inputBtn[i].addEventListener('focus', function () {
+                this.addEventListener('keyup', listenKeyUp, false);
+            }, false);
+            inputBtn[i].addEventListener('blur', function () {
+                this.removeEventListener('keyup', listenKeyUp, false);
+            }, false);
+        }
+
+        /**
+         * 监听键盘的敲击事件
+         */
+        function listenKeyUp() {
+            if (/^[0-9]*$/g.test(this.value)) {
+                if (!isNaN(this.value) && this.value.length != 0) {
+                    if (active < 5) {
+                        active += 1;
+                    }
+                    inputBtn[active].focus();
+                } else if (this.value.length == 0) {
+                    if (active > 0) {
+                        active -= 1;
+                    }
+                    inputBtn[active].focus();
+                }
+                if (active >= 5) {
+                    //执行其他操作  获取6个输入的值
+                    var codeSix = $('#firstInput').val() + $('#firstInput1').val() + $('#firstInput2').val() + $('#firstInput3').val() + $('#firstInput4').val() + $('#firstInput5').val();
+                    console.log('输入完整，执行操作');
+
+                    if (codeSix && codeSix.length == '6') {
+                        //输入6个数值了，执行输入完成的动作，这里比方说输入完成要做一个验证码的验证
+                        var params = {
+                            "code":codeSix,
+                            "phone":phone
+                        };
+                        $.ajax({
+                            type: "post",
+                            url:  basePath() +"/public/checkCode",
+                            contentType: 'application/json',
+                            data: JSON.stringify(params),
+                            dataType:"json",
+                            async:true,
+                            //接口成功回调
+                            success: function (result) {
+                                if (result.code == 200 || result.code == 200) {
+                                    //如果输入的验证码和手机短信的验证码一致，则隐藏弹框，并执行验证通过后的回调
+                                    //$('#applyPhone').modal('hide');
+                                    allSuccess();//成功后的回调，这里换成你自己的操作
+                                } else {
+                                    //讲input下方的提示语改成接口返回的错误信息，并让用户重新发送验证码
+                                    var strs = ['<div>' + result.msg + '   <span id="againSend">重新发送</span></div>'].join("");
+                                    $('#btnSendCode').html(strs);
+                                    window.clearInterval(InterValObj);//直接清除定时器
+                                    //input框全部清除，并将第一个框定位焦点
+                                    $('#firstInput').val('');
+                                    $('#firstInput1').val('');
+                                    $('#firstInput2').val('');
+                                    $('#firstInput3').val('');
+                                    $('#firstInput4').val('');
+                                    $('#firstInput5').val('');
+                                    active = 0;
+                                    $('#firstInput').focus();
+                                    //点击再次发送按钮，重新调取发送验证码接口
+                                    $('#againSend').bind('click', function () {
+                                        getPhoneCode();
+                                        active = 0;
+                                        $('#firstInput').focus();
+                                    });
+                                }
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                    }
+                }
+            } else {
+                this.value = '';
+            }
+        }
+        //触发验证码获取接口
+        getPhoneCode();
+
+
+    });
+
+
+
+    //获取验证码
+    function getPhoneCode() {
+        window.clearInterval(InterValObj);//停止计时器
+        //验证码倒计时
+        var count = 60; //间隔函数，1秒执行
+        var curCount = count;
+        $("#btnSendCode").html(curCount + "秒后可重新发送");
+        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+        //timer处理函数
+        function SetRemainTime() {
+            if (curCount == 0) {
+                window.clearInterval(InterValObj);//停止计时器
+                $("#btnSendCode").removeAttr("disabled");//启用按钮
+                $("#btnSendCode").html("重新发送验证码");
+                active = 0;
+                $('#btnSendCode').bind('click', function () {
+                    getPhoneCode();
+                    active = 0;
+                    $('#firstInput').focus();
+                });
+            }
+            else {
+                curCount--;
+                $("#btnSendCode").html(curCount + "秒后可重新发送");
+            }
+        }
+
+        var url = basePath() + "/public/sendQyLoginCode";
+        var param = {
+             "phone":phone
+        };
+        console.log(JSON.stringify(param));
+        //用ajax获取验证码
+        $.ajax({
+            type: "post",
+            url: url,
+            data: JSON.stringify(param),
+            contentType: "application/json",
+            dataType:"json",
+            async:true,
+            success: function (result) {
+                console.log(result.code);
+                if (result.code == '200') {
+                    console.log(result.data);
+                    //发送验证码成功回调
+                    $('#firstInput').focus();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function allSuccess(){
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+        var userInfo = $("#user_info").val();
+
+        var url = "https://qyfw.shunde.gov.cn/sdtoon-enterprise-service-static/m/index.html#/";
+        if(isAndroid){
+            //安卓
+            window.myobj.qyLogin(userInfo,url,"企业服务平台");
+        }else if(isiOS){
+
+        }
+
+    }
+
+</script>
+</body>
+</html>

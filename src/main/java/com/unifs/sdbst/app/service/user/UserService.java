@@ -850,4 +850,11 @@ public class UserService {
         return  userMapper.selectByFactor(phone, identity, loginName);
      }
 
+     public int update(User user){
+         return  userMapper.update(user);
+     }
+
+     public int addUser(User user){
+        return  userMapper.insert(user);
+     }
 }
