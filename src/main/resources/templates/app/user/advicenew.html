@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>投诉建议</title>
+    <link rel="stylesheet" href="css/app/advice.css" />
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <link href="weui/css/weui.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="weui/css/weuix.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/plug/alertPopShow.js"></script>
+
+    <script src="weui/js/zepto.min.js"></script>
+    <style type="text/css">
+        .container .sub #btn{border-radius: 5px;}
+        .container textarea{padding: 3px;box-sizing: border-box;}
+        .appAdvice{
+
+            height: 40px;
+            margin-top: 20px;
+            margin-left: 10px;
+            border-bottom: 1px solid #d5d5d6;
+        }
+        .notAppAdvice{
+
+            height: 40px;
+            border-bottom: 1px solid #d5d5d6;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+    </style>
+    <script>
+        function toAppAdvice(){
+            var link=$("#link").val();
+            window.location.href="a6e134fe0f96e84ff16f0aeb3aa118d0f04b1f1c46a6f15f029a0ff910da8fdff02f68837ae9d071d98567a5eb454f08bf47a3a6a544ec2bad8f0d7c356aa193f28e6b76ab9ac83398c2710d3bbd7c6a7b4e301c2680f678a9a66b90a46f3c32b"+basePath() + "/app/personal/appAdvice?link="+link; /*接口域名地址*/
+        }
+
+
+    </script>
+</head>
+<body ontouchstart>
+<div class="page-bd">
+    <div class="weui-cells" style="margin-top: 0px">
+        <a class="weui-cell weui-cell_access" href="a6e134fe0f96e84ff16f0aeb3aa118d0f04b1f1c46a6f15f029a0ff910da8fdff02f68837ae9d071d98567a5eb454f08bf47a3a6a544ec2bad8f0d7c356aa193f28e6b76ab9ac83398c2710d3bbd7c6a7b4e301c2680f678a9a66b90a46f3c32bhttp://sdbst2.shunde.gov.cn:8090/sdbst/app/personal/appAdvice">
+            <div class="weui-cell__bd">
+                <p>对APP的建议</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="a6e134fe0f96e84ff16f0aeb3aa118d0f04b1f1c46a6f15f029a0ff910da8fdff02f68837ae9d071d98567a5eb454f08bf47a3a6a544ec2bad8f0d7c356aa193f28e6b76ab9ac83398c2710d3bbd7c6a7b4e301c2680f678a9a66b90a46f3c32bhttp://sdbst2.shunde.gov.cn/sdbst/consultingComplaint.html">
+            <div class="weui-cell__bd">
+                <p>非APP的建议</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <input type="hidden" id="link" name="link" th:value="${link}" />
+</body>
+</html>
+
+
+
+
