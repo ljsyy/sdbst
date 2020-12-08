@@ -14,5 +14,7 @@ public interface AdviceMapper {
 
     List<Advice> selectAll();
 
+    List<Advice> selectAllByAdvice(Advice record);
+
     int updateByPrimaryKey(Advice record);
 }
