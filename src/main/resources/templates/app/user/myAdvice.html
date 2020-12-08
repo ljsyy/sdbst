@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>建议与反馈</title>
+    <link rel="stylesheet" href="css/app/advice.css" />
+    <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
+    <link href="weui/css/weui.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <link href="weui/css/weuix.css?v=1.0.1" rel="stylesheet" type="text/css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/app/plug/alertPopShow.js"></script>
+
+    <script src="weui/js/zepto.min.js"></script>
+    <style type="text/css">
+        .container .sub #btn{border-radius: 5px;}
+        .container textarea{padding: 3px;box-sizing: border-box;}
+        .appAdvice{
+
+            height: 40px;
+            margin-top: 20px;
+            margin-left: 10px;
+            border-bottom: 1px solid #d5d5d6;
+        }
+        .notAppAdvice{
+
+            height: 40px;
+            border-bottom: 1px solid #d5d5d6;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+        .div-advice-createDate{
+            margin-bottom: 5px;
+        }
+        .div-advice-xian{
+            background-color: #868686;
+            height: 1px;
+        }
+        .div-advice{
+            background-color: #efeff4;
+            margin: 15px;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .content-text{
+            width: 82%;
+            display: inline-block;
+            vertical-align:top;
+        }
+        .content-title{
+            width: 16%;
+            display: inline-block;
+            vertical-align:top;
+        }
+        .label-title{
+            font-weight: 900;
+        }
+        .label-advice-replyContent{
+            line-height: 10px;
+            word-wrap:break-word
+        }
+        .label-advice-content{
+            line-height: 10px;
+            word-wrap:break-word
+        }
+        .div-advice-content{
+            margin-bottom: 5px;
+        }
+        .div-advice-replyContent{
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body ontouchstart>
+
+<div th:if="${#lists.isEmpty(adviceList)}">
+    <div class="mui-tr-date" >
+        <div style="text-align: center;">
+            <label class="label-tr-top" th:text="暂无数据"></label>
+        </div>
+    </div>
+</div>
+<div th:each="Advice:${adviceList}" class="mui-list">
+    <div class="div-advice">
+        <div class="div-advice-createDate">
+            <label class="label-advice-createDate" th:text="${#dates.format(Advice.createDate,'yyyy-MM-dd  HH:mm:ss')}"></label>
+        </div>
+        <div class="div-advice-content">
+            <div class="content-title">
+                <label class="label-title">描述：</label>
+            </div>
+            <div class="content-text">
+                <label class="label-advice-content" th:text="${Advice.content}"></label>
+            </div>
+        </div>
+        <div class="div-advice-xian">
+            &nbsp;
+        </div>
+        <div class="div-advice-replyContent">
+            <div class="content-title">
+                <label class="label-title">回复：</label>
+            </div>
+            <div class="content-text">
+                <label class="label-advice-replyContent" th:text="${Advice.replyContent}"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
+

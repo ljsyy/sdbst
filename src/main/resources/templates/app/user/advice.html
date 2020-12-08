@@ -4,7 +4,7 @@
     <base th:href="${#request.getContextPath()}+'/'">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>投诉建议</title>
+    <title>建议与反馈</title>
     <link rel="stylesheet" href="css/app/advice.css" />
     <link rel="stylesheet" href="js/app/plug/alertPopShow.css">
     <script src="js/jquery.min.js"></script>
@@ -29,6 +29,13 @@
             });
             //提交
             $(".container .sub #btn").click(function() {
+
+                $("#btn").attr("disabled","disabled");
+                $("#btn").css({"background-color":"#f5f5f5"});
+                $("#btn").css({"border-color":"#d9d9d9"});
+                $("#btn").css({"color":"rgba(0,0,0,.25)"});
+                var link=$("#link").val();
+                var urlparams=$("#urlparams").val();
                 //获取投诉和建议的内容
                 var content=$(".container #advice").val();
                 content=content.replace(/(^\s*)|(\s*$)/g, "");
@@ -50,19 +57,34 @@
                 }
                 //提交
                 $.ajax({
-                    url:basePath()+"/app/personal/adviceSubmit",
+                    url:basePath()+"/app/personal/adviceSubmit?link="+link+"&urlparams="+urlparams,
                     type:"post",
                     data:{"content":content, "phone":phone},
                     dataType:"json",
                     success:function(result){
                         console.log(result);
-                        webToast("提交成功，感谢您宝贵的建议，我们会努力做得更好！","middle",2000);
+                        webToast("提交成功，感谢您宝贵的建议，我们会努力做得更好！","middle",5000);
                         //window.history.back(); 	//返回上一页
                         //goback();
 
                         //提交成功，清空内容和电话
                         //$(".container #advice").val('');
                         //$(".container .phone #phone").val('');
+                        var a=61;
+                        var b = setInterval(function(){
+                            if(a > 0){
+                                a--;
+                                //$("#btn").val("您已提交");
+                            }else{
+                                $("#btn").removeAttr("disabled");
+                                $("#btn").css({"background-color":"#4281cd"});
+                                $("#btn").css({"border-color":""});
+                                $("#btn").css({"color":"#FFF"});
+                                //$("#btn").val("提 交");
+                                clearInterval(b);
+                            }
+                        },1000);
+
                     }
                 });
 
@@ -89,13 +111,15 @@
 </head>
 <body>
 <div class="container">
-    <div class="advice">投诉和建议：</div>
+    <div class="advice">我的建议：</div>
     <textarea rows="6" cols="35" placeholder="请输入" name="advice" id="advice" maxlength="150"></textarea>
-    <div class="phone">
-        联系方式（可选）：<input type="text" id="phone" placeholder="请输入联系方式" th:value="${phone}" maxlength="11" size="20" />
-    </div>
+    <!--<div class="phone">-->
+        <!--联系方式（可选）：<input type="text" id="phone" placeholder="请输入联系方式" th:value="${phone}" maxlength="11" size="20" />-->
+    <!--</div>-->
     <div class="sub"><input type="button" value="提 交" id="btn"/></div>
 </div>
+<input type="hidden" id="link" name="link" th:value="${link}" />
+<input type="hidden" id="urlparams" name="urlparams" th:value="${urlparams}" />
 <!--<div id="contact">客服电话：<a href="tel:0757-29938911">0757-22835563</a></div>-->
 
 </body>

@@ -34,32 +34,37 @@
     </style>
     <script>
         function toAppAdvice(){
+            var urlparams=$("#urlparams").val();
             var link=$("#link").val();
-            window.location.href="a6e134fe0f96e84ff16f0aeb3aa118d0f04b1f1c46a6f15f029a0ff910da8fdff02f68837ae9d071d98567a5eb454f08bf47a3a6a544ec2bad8f0d7c356aa193f28e6b76ab9ac83398c2710d3bbd7c6a7b4e301c2680f678a9a66b90a46f3c32b"+basePath() + "/app/personal/appAdvice?link="+link; /*接口域名地址*/
+            window.location.href=basePath() + "/app/personal/adviceNew?link="+link+"&urlparams="+urlparams; /*接口域名地址*/
         }
-
-
+        function toMyAppAdvice(){
+            var urlparams=$("#urlparams").val();
+            var link=$("#link").val();
+            window.location.href=basePath() + "/app/personal/MyAdvice?link="+link+"&urlparams="+urlparams; /*接口域名地址*/
+        }
     </script>
 </head>
 <body ontouchstart>
 <div class="page-bd">
     <div class="weui-cells" style="margin-top: 0px">
-        <a class="weui-cell weui-cell_access" href="a6e134fe0f96e84ff16f0aeb3aa118d0f04b1f1c46a6f15f029a0ff910da8fdff02f68837ae9d071d98567a5eb454f08bf47a3a6a544ec2bad8f0d7c356aa193f28e6b76ab9ac83398c2710d3bbd7c6a7b4e301c2680f678a9a66b90a46f3c32bhttp://sdbst2.shunde.gov.cn:8090/sdbst/app/personal/appAdvice">
+        <a class="weui-cell weui-cell_access" onclick="toAppAdvice();">
             <div class="weui-cell__bd">
-                <p>对APP的建议</p>
+                <p>提交建议</p>
             </div>
             <div class="weui-cell__ft">
             </div>
         </a>
-        <a class="weui-cell weui-cell_access" href="a6e134fe0f96e84ff16f0aeb3aa118d0f04b1f1c46a6f15f029a0ff910da8fdff02f68837ae9d071d98567a5eb454f08bf47a3a6a544ec2bad8f0d7c356aa193f28e6b76ab9ac83398c2710d3bbd7c6a7b4e301c2680f678a9a66b90a46f3c32bhttp://sdbst2.shunde.gov.cn/sdbst/consultingComplaint.html">
+        <a class="weui-cell weui-cell_access" onclick="toMyAppAdvice();">
             <div class="weui-cell__bd">
-                <p>非APP的建议</p>
+                <p>我的建议</p>
             </div>
             <div class="weui-cell__ft">
             </div>
         </a>
     </div>
     <input type="hidden" id="link" name="link" th:value="${link}" />
+    <input type="hidden" id="urlparams" name="urlparams" th:value="${urlparams}" />
 </body>
 </html>
 
