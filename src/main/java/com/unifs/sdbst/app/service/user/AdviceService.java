@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @version V1.0
@@ -26,5 +27,8 @@ public class AdviceService {
         advice.preInsert();
         advice.setCreateDate(new Date());
         adviceMapper.insert(advice);
+    }
+    public List<Advice> selectAllByAdvice(Advice advice){
+        return adviceMapper.selectAllByAdvice(advice);
     }
 }
