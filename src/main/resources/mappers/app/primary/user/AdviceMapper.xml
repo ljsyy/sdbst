@@ -8,6 +8,9 @@
     <result column="VERSIONS" jdbcType="VARCHAR" property="versions" />
     <result column="TYPE" jdbcType="VARCHAR" property="type" />
     <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="REPLY_DATE" jdbcType="TIMESTAMP" property="replyDate" />
+    <result column="REPLY_CONTENT" jdbcType="VARCHAR" property="replyContent" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from APP_ADVICE
@@ -15,10 +18,11 @@
   </delete>
   <insert id="insert" parameterType="com.unifs.sdbst.app.bean.user.Advice">
     insert into APP_ADVICE (ID, CONTENT, PHONE, 
-      VERSIONS, TYPE, CREATE_DATE
+      VERSIONS, TYPE, CREATE_DATE,USER_ID,REPLY_CONTENT,REPLY_DATE
       )
     values (#{id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{versions,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+      #{versions,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+      #{userId,jdbcType=VARCHAR}, #{replyContent,jdbcType=VARCHAR}, #{replyDate,jdbcType=TIMESTAMP}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.unifs.sdbst.app.bean.user.Advice">
@@ -27,16 +31,32 @@
       PHONE = #{phone,jdbcType=VARCHAR},
       VERSIONS = #{versions,jdbcType=VARCHAR},
       TYPE = #{type,jdbcType=VARCHAR},
-      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      REPLY_DATE = #{replyDate,jdbcType=TIMESTAMP},
+      REPLY_CONTENT = #{replyContent,jdbcType=VARCHAR},
+      USER_ID= #{userId,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select ID, CONTENT, PHONE, VERSIONS, TYPE, CREATE_DATE
+    select ID, CONTENT, PHONE, VERSIONS, TYPE, CREATE_DATE,USER_ID,REPLY_CONTENT,REPLY_DATE
     from APP_ADVICE
     where ID = #{id,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select ID, CONTENT, PHONE, VERSIONS, TYPE, CREATE_DATE
+    select ID, CONTENT, PHONE, VERSIONS, TYPE, CREATE_DATE,USER_ID,REPLY_CONTENT,REPLY_DATE
     from APP_ADVICE
+  </select>
+  <select id="selectAllByAdvice" resultMap="BaseResultMap">
+    select ID, CONTENT, PHONE, VERSIONS, TYPE, CREATE_DATE,USER_ID,REPLY_CONTENT,REPLY_DATE
+    from APP_ADVICE
+    <where>
+      <if test="userId != null and userId != ''">
+        AND USER_ID = #{userId}
+      </if>
+      <if test="id != null and id != ''">
+        AND Id = #{id}
+      </if>
+    </where>
+    ORDER BY  CREATE_DATE DESC
   </select>
 </mapper>
