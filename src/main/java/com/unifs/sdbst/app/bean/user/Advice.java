@@ -25,4 +25,10 @@ public class Advice extends DataEntity<Advice> {
 
     private String type;
 
+    private String userId;//用户id
+
+    private String replyContent;//回复信息
+
+    private String replyDate;//回复时间
+
 }
