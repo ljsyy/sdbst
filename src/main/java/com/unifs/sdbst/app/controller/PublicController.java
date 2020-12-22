@@ -171,7 +171,7 @@ public class PublicController {
 
                     map.put("code","200");
                     map.put("data",JSON.toJSONString(user));
-                    map.put("code_url","http://isd3.shunde.gov.cn/sdbst/public/codePage");
+                    map.put("code_url","http://isd1.shunde.gov.cn/sdbst/public/codePage");
                     map.put("code_name","输入验证码");
                     map.put("businessType","corpQRCode_update");
                     return JSON.toJSONString(map);
