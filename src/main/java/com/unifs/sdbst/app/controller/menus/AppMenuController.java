@@ -2,6 +2,7 @@ package com.unifs.sdbst.app.controller.menus;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.exceptions.ClientException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.unifs.sdbst.app.annotation.ControlLog;
@@ -1123,6 +1124,17 @@ public class AppMenuController {
             return sendResult;
         }
         return "error:发送短信内容或手机号码为空";
+    }
+
+    @Autowired
+    private AliyunPushUtil aliyunPushUtil;
+    //阿里云推送测试api接口
+    @RequestMapping(value ="pushAliyun")
+    @ResponseBody
+    public void pushAliyun(String targetValue, String title, String body, String popupTitle, String popupBody) throws ClientException {
+        System.out.println("---阿里云推送开始---");
+        aliyunPushUtil.pushAliyun("ACCOUNT", targetValue, "http://isd1.shunde.gov.cn/sdbst/public/detail?id=447821&foldId=7230043", title, body, popupTitle, popupBody, 12);
+        System.out.println("---阿里云推送结束---");
     }
 
 }
