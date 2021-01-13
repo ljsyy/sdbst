@@ -8,6 +8,7 @@ import com.unifs.sdbst.app.bean.life.livingPay.Agribusiness;
 import com.unifs.sdbst.app.bean.life.livingPay.PayOrder;
 
 import com.unifs.sdbst.app.bean.user.User;
+import com.unifs.sdbst.app.dao.primary.user.UserMapper;
 import com.unifs.sdbst.app.enums.RespCode;
 import com.unifs.sdbst.app.service.life.LivingPayService;
 import com.unifs.sdbst.app.service.life.PayOrderService;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,8 @@ public class LivingPayController {
 
 
 
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private PayOrderService payOrderService;
 
@@ -142,10 +146,7 @@ public class LivingPayController {
             JSONObject jsonObject1 = JSONObject.parseObject(resultData);
             jsonObject1.put("AcctNo",AcctNo);
 
-            System.out.println("fshpayType================:"+payType);
-            System.out.println("fshjsonObject1================:"+jsonObject1);
             String payData = livingPayService.getPayData(jsonObject1, payType);
-            System.out.println(payData);
             String sign = SignatureService.sign(payData);
             HashMap<String ,Object> map = new HashMap<>();
             map.put("Plain",payData);
@@ -199,7 +200,8 @@ public class LivingPayController {
     @ResponseBody
     @RequestMapping("/getOrderList")
     public ModelAndView getOrderList(@RequestParam(name="actionType",required = false) String actionType ,
-                             @RequestParam(name = "link",required = false) String link
+                                     @RequestParam(name = "link",required = false) String link,
+                                     @RequestParam(name = "userId",required = false) String userId
                              ){
         ModelAndView mav = new ModelAndView();
         PayOrder n_payOrder=new PayOrder();
@@ -217,8 +219,14 @@ public class LivingPayController {
                     n_payOrder.setUserId(user.getId());
                 }
             }
-            //n_payOrder.setUserId("");
             n_payOrder.setStatus("1");
+            if(userId !=null&&link==null){
+                User user = userMapper.selectById(userId);
+                if(user != null){
+                    n_payOrder.setUserId(user.getId());
+                    payOrderUserName=user.getLoginName();
+                }
+            }
             List<PayOrder> orderList = payOrderService.getOrderList(n_payOrder);
             List<PayOrder> newOrderList=new ArrayList<PayOrder>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
@@ -267,12 +275,6 @@ public class LivingPayController {
         try{
             n_payOrder.setId(id);
             PayOrder order = payOrderService.getOrderMess(n_payOrder);
-            System.out.println("ffffffffffffffffff");
-            System.out.println(order.getDdbh());
-            System.out.println(order.getCreateDate());
-            System.out.println(order.getSourceType());
-            System.out.println(order.getUserId());
-            System.out.println(order.getStatus());
             List<PayOrder> orderList=new ArrayList<PayOrder>();
             orderList.add(order);
             mav.addObject("orderList",orderList);
@@ -333,7 +335,6 @@ public class LivingPayController {
         String PlainStr="";
         String SignatureStr="";
         HashMap<String ,String> PlainMap = new HashMap<>();
-        Plain="LegalDepId=01|PlatNo=iShunde|MerchantDateTime=20201016111440|OrderId=sd20201014173713|MerchantId=908441160000235|TermCode=|MerchantUrl=http%3A%2F%2Fsdbst.shunde.gov.cn%2Fsdbst%2FlivingPay%2FnonTax%2FcallbackPage|TranAbbr=MBER|PayTrsCode=iPayForEducationFee|TrsCode=iMPay|SchoolNo=0001|StudentPayeeNo=201930107|StudentName=测试学生7";
 
         try{
             //解析参数
@@ -345,7 +346,6 @@ public class LivingPayController {
                         PlainMap.put(PlainArrStr.substring(0, PlainArrStr.indexOf("=")), PlainArrStr.substring(PlainArrStr.indexOf("=")).replace("=",""));
                     }
                 }
-                System.out.println(PlainMap.get("OrderId"));
                 if(!"".equals(PlainMap.get("OrderId"))){
                     PayOrder payOrder = new PayOrder();
                     payOrder.setStatus("1");
@@ -361,10 +361,21 @@ public class LivingPayController {
                     mav.addObject("orderList",orderList);
                     mav.addObject("payStatus","1");
                 }
-                //mav.addObject("PayTrsCode",PlainMap.get("PayTrsCode"));
                 mav.setViewName("app/livingpay/getOrderMess");
-                //mav.setViewName("app/livingpay/PayForBack");
             }else{
+//                PayOrder payOrder = new PayOrder();
+//                //payOrder.setStatus("1");
+//                payOrder.setDdbh(ddbh);
+//                payOrderService.updateStatusByDdbh(payOrder);
+//                mav.addObject("OrderId",ddbh);
+//                PayOrder n_payOrder=new PayOrder();
+//                n_payOrder.setDdbh(ddbh);
+//                PayOrder order = payOrderService.getOrderMess(n_payOrder);
+//                List<PayOrder> orderList=new ArrayList<PayOrder>();
+//                orderList.add(order);
+//                mav.addObject("orderList",orderList);
+//                mav.addObject("payStatus","1");
+                mav.addObject("ddbh",ddbh);
                 mav.setViewName("app/livingpay/nonTaxCallBack");
             }
         }catch(Exception e){
@@ -430,23 +441,61 @@ public class LivingPayController {
      */
     @ResponseBody
     @RequestMapping("/updateOrder")
-    public Resp updateOrder(PayOrder n_payOrder){
-        Resp resp = null;      //返回对象声明
+    public ModelAndView updateOrder(PayOrder n_payOrder,
+                            @RequestParam(name="ddbh",required = false) String ddbh,
+                            @RequestParam(name="fee",required = false) String fee){
+        //Resp resp = null;      //返回对象声明
+        ModelAndView mav = new ModelAndView();
         try{
+
+            System.out.println("into pay_order update ");
             //通过订单编号查询
-            List<PayOrder> payOrderList = payOrderService.getOrderList(n_payOrder);
+            List<PayOrder> payOrderList = null;
+            if(!"".equals(ddbh)){
+                n_payOrder.setDdbh(ddbh);
+                n_payOrder.setFee(fee);
+            }
+            String newFee=n_payOrder.getFee();
+            if("".equals(newFee)){
+                return mav;
+            }
+            if(newFee.indexOf(".")<0){
+                System.out.println("into pay_order change fee");
+                if(newFee.length()==1){
+                    newFee="00"+newFee;
+                }else if(newFee.length()==2){
+                    newFee="0"+newFee;
+                }else if(newFee.length()<1){
+                    return mav;
+                }
+                String newFee1=newFee.substring(0,newFee.length()-2);
+                String newFee2=newFee.substring(newFee.length()-2,newFee.length());
+                newFee=newFee1+"."+newFee2;
+                n_payOrder.setFee(newFee);
+            }
+            payOrderList=payOrderService.getOrderList(n_payOrder);
             //更新
             if(!CollectionUtils.isEmpty(payOrderList)){
+                System.out.println("into pay_order update fee");
                 PayOrder payOrder = payOrderList.get(0);
                 payOrder.setFee(n_payOrder.getFee());
+                payOrder.setStatus("1");
                 payOrderService.update(payOrder);
-                resp = new Resp(RespCode.SUCCESS);
+
+                List<PayOrder> orderList=new ArrayList<PayOrder>();
+                orderList.add(payOrder);
+                mav.addObject("orderList",orderList);
+                mav.addObject("payStatus","1");
+                System.out.println(newFee);
+                mav.setViewName("app/livingpay/getOrderMess");
+                //resp = new Resp(RespCode.SUCCESS);
+
             }
         }catch(Exception e){
             e.printStackTrace();
-            resp = new Resp(RespCode.WARN);
+            //resp = new Resp(RespCode.WARN);
         }
-        return resp;
+        return mav;
     }
 
     /**
