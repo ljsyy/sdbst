@@ -376,6 +376,18 @@
             <version>4.0.0-RC1</version>
         </dependency>
 
+        <!-- 阿里云推送OpenAPI -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-push</artifactId>
+            <version>3.13.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>[4.3.2,5.0.0)</version>
+        </dependency>
+
     </dependencies>
 
     <build>
