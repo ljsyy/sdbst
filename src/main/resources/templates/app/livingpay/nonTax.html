@@ -77,10 +77,14 @@
 
             <div  class="clearfix pt5 lh divcss6 divcss7" style="justify-content: center">
                 &nbsp;
-                <input type="radio" name="jylx"  value="03021" />行政事业收费
+                <input type="radio" name="jylx"  value="03021" />&nbsp;行政事业收费
                 &nbsp;
                 &nbsp;
-                <input type="radio"  name="jylx"  value="03023"  />行政事业处罚
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <input type="radio"  name="jylx"  value="03023"  />&nbsp;行政事业处罚
 
 
             </div>
@@ -104,12 +108,16 @@
                 </div>
             </div>
             <div style="margin-top: 1px">
-                    <span style="color: red;font-size: 12px">
-                        提示:请正确选择通知书类型，否则将会导致缴费失败。行政事业收费(例如学费、身份证工本费等)， 行政事业处罚(例如交罚、行政处罚等)。
+                    <span style="color: red;font-size: 12px" id="prompt">
+                        提示：请正确选择通知书类型，否则将会导致缴费失败。行政事业收费（例如学费、身份证工本费等），行政事业处罚（例如交罚、行政处罚等）。如有疑问，请拨打咨询电话：020-62327966、95533。
                     </span>
 
             </div>
 
+            <div  style="margin: 20px 0 0 15px;">
+                <input type="radio" name="statement" id="statement"  value="0"   style=" right:5px;"/>
+                &nbsp;<span>我已阅读并同意<a href="javascript:statement()" class="explain">《i顺德生活缴费服务协议》</a></span>
+            </div>
             <div  style="margin-top: 15px; display: none">
                 <a href="javascript:void(0)" class="explain">《声明》</a>
             </div>
@@ -170,8 +178,8 @@
 
 <input type="hidden" id="userId" name="userId" th:value="${userId}" />
 
-<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
-    提示:。
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem;font-size: 12px;left: 40%;color: #0765cc;"  onclick="toPayList()">
+    缴费记录
 </div>
 <!--
 <div class="alert_bg alert" style="display: none;">
@@ -210,6 +218,12 @@
             $("#confirmPay").attr("disabled", false);
             return ;
         }
+        var statement = $("input[name='statement']:checked").val();
+        if (statement=="" || statement== undefined) {
+            mui.alert("请勾选《i顺德生活缴费服务协议》","提示");
+            $("#confirmPay").attr("disabled", false);
+            return;
+        }
         var message = {
             "data":$("#resultData").val(),
             "payType":"iPayForNontaxFee",
@@ -246,6 +260,12 @@
 
     function doNext(){
         $("#PayOrder").attr("disabled", true);
+        var statement = $("input[name='statement']:checked").val();
+        if (statement=="" || statement== undefined) {
+            mui.alert("请勾选《i顺德生活缴费服务协议》","提示");
+            $("#PayOrder").attr("disabled", false);
+            return;
+        }
         var platform = $("input[name='platform']:checked").val();
         if(platform == "2"){
             rcBank();
@@ -325,9 +345,24 @@
     function ccBank() {
         var tzsbh = $("#tzsbh").val();
         tzsbh = tzsbh.trim().replace(/\s/g,"");
+        if(tzsbh == ""){
+            mui.alert("请输入通知书编号","提示");
+            $("#PayOrder").attr("disabled", false);
+            return ;
+        }
         var zxdwbh = $("#zxdwbh").val();
+        if(zxdwbh == ""){
+            mui.alert("请输入执行单位编码","提示");
+            $("#PayOrder").attr("disabled", false);
+            return ;
+        }
         zxdwbh = zxdwbh.trim().replace(/\s/g,"");
         var jylx = $("input[name='jylx']:checked").val();
+        if(jylx == "" || jylx == undefined){
+            mui.alert("请选择交易类型","提示");
+            $("#PayOrder").attr("disabled", false);
+            return ;
+        }
         var platform = $("input[name='platform']:checked").val();
         //调用app方法
         //判断系统
@@ -381,8 +416,10 @@
         }
         if(typeId == "yl"){
            $("#zxdwbhDiv").hide();
+           $("#prompt").text("提示：请正确选择通知书类型，否则将会导致缴费失败。行政事业收费（例如学费、身份证工本费等），行政事业处罚（例如交罚、行政处罚等）。如有疑问，请拨打咨询电话：0757-22223388。");
         }else{
             $("#zxdwbhDiv").show();
+            $("#prompt").text("提示：请正确选择通知书类型，否则将会导致缴费失败。行政事业收费（例如学费、身份证工本费等），行政事业处罚（例如交罚、行政处罚等）。如有疑问，请拨打咨询电话：020-62327966、95533。");
         }
     }
 
@@ -400,6 +437,19 @@
 
         }
         return null;
+    }
+    function toPayList(){
+        var userId=$("#userId").val();
+        //userId='7d557734db354bebbb4467485e559fa1';
+        if(userId==''){
+            mui.alert("请先登录！","提示");
+            return;
+        }else{
+            window.location.href="/sdbst/livingPay/getOrderList?userId="+userId;
+        }
+    }
+    function statement(){
+        window.location.href="/sdbst/payAgreement.html";
     }
 </script>
 </html>

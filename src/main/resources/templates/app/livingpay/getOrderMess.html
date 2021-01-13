@@ -28,6 +28,7 @@
             <img th:case="'iElePay'" src="img/life/dianfee.png" style="height: 50px;width: 50px;">
             <img th:case="'iPayWaterFee'" src="img/life/shuifee.png" style="height: 50px;width: 50px;">
             <img th:case="'iPayForNontaxFee'" src="img/life/feishuifee.png" style="height: 50px;width: 50px;">
+            <img th:case="'nonTax'" src="img/life/feishuifee.png" style="height: 50px;width: 50px;">
             <img th:case="'iPayForEducationFee'" src="img/life/xuezafee.png" style="height: 50px;width: 50px;">
             <img th:case="'*'" src="img/life/qitafee.png" style="height: 50px;width: 50px;">
         </div>
@@ -43,10 +44,10 @@
                 <label class="" th:case="'1'">缴费成功</label>
             </label>
         </div>
-        <div   class="mui-tr">
-            <label class="mui-label-title">缴费单号</label>
-            <label  class="mui-label-mess" th:text="${orderMess.ddbh}"></label>
-        </div>
+        <!--<div   class="mui-tr">-->
+            <!--<label class="mui-label-title">缴费单号</label>-->
+            <!--<label  class="mui-label-mess" maxlength="10" th:text="${orderMess.ddbh}"></label>-->
+        <!--</div>-->
         <div  class="mui-tr">
             <label class="mui-label-title">缴费类型</label>
             <label class="" th:switch="${orderMess.sourceType}" >
@@ -54,6 +55,7 @@
                 <label class="mui-label-mess" th:case="'iPayWaterFee'">水费</label>
                 <label class="mui-label-mess" th:case="'iPayForNontaxFee'">非税</label>
                 <label class="mui-label-mess" th:case="'iElePay'">电费</label>
+                <label class="mui-label-mess" th:case="'nonTax'">非税</label>
                 <label class="mui-label-mess" th:case="'iPayRepairFundQry'">维修资金</label>
                 <label class="mui-label-mess" th:case="'*'">其他</label>
             </label>

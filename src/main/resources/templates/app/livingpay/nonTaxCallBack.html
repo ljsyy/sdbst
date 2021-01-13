@@ -190,7 +190,7 @@
 <div>
 
     <div>
-        <!--订单编号：<p th:text="${ddbh}"></p>-->
+        <!--<订单编号：<p th:text="${ddbh}"></p>-->
     </div>
 </div>
 </body>
@@ -215,7 +215,7 @@
             //安卓
             window.NonTaxSdk.getPayFee(messJson);
         }else if(isiOS){
-
+            window.location.href="&funT=getPayFee&data="+messJson;
         }
     })
 </script>

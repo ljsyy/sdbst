@@ -24,6 +24,13 @@
 
 
 
+<div th:if="${#lists.isEmpty(orderList)}">
+    <div class="" >
+        <div style="text-align: center;padding-top:20px; ">
+            <label class="label-tr-top" th:text="暂无数据"></label>
+        </div>
+    </div>
+</div>
 <div th:each="PayOrder:${orderList}" class="mui-list">
     <div th:if="${PayOrder.time} ne ''  ">
         <div class="mui-tr-date" >
@@ -37,6 +44,7 @@
             <img th:case="'iElePay'" src="img/life/dianfee.png" style="height: 50px;width: 50px;">
             <img th:case="'iPayWaterFee'" src="img/life/shuifee.png" style="height: 50px;width: 50px;">
             <img th:case="'iPayForNontaxFee'" src="img/life/feishuifee.png" style="height: 50px;width: 50px;">
+            <img th:case="'nonTax'" src="img/life/feishuifee.png" style="height: 50px;width: 50px;">
             <img th:case="'iPayForEducationFee'" src="img/life/xuezafee.png" style="height: 50px;width: 50px;">
             <img th:case="'*'" src="img/life/qitafee.png" style="height: 50px;width: 50px;">
         </div>
@@ -46,6 +54,7 @@
                     <label class="label-type" th:case="'iPayForEducationFee'">教育费</label>
                     <label class="label-type" th:case="'iPayWaterFee'">水费</label>
                     <label class="label-type" th:case="'iPayForNontaxFee'">非税</label>
+                    <label class="label-type" th:case="'nonTax'">非税</label>
                     <label class="label-type" th:case="'iElePay'">电费</label>
                     <label class="label-type" th:case="'iPayRepairFundQry'">维修资金</label>
                     <label class="label-type" th:case="'*'">其他</label>

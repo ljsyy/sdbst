@@ -59,10 +59,15 @@
         </div>
 
     </div>
-    <div class="mui-button-row" style="margin-top: 20px;">
-        <button type="button" class="mui-btn mui-btn-primary" id="searchBtn" onclick="search()">查询</button>
-        <button type="button" class="mui-btn mui-btn-primary" id="doNextBtn" style="display: none;" onclick="confirmPay()">下一步</button>
+    <div  style="margin: 20px 0 0 15px;">
+        <input type="radio" name="statement" id="statement"  value="0"   style=" right:5px;"/>
+        &nbsp;<span>我已阅读并同意<a href="javascript:statement()" class="explain">《i顺德生活缴费服务协议》</a></span>
     </div>
+    <div class="mui-button-row" style="margin-top: 10px;">
+        <button type="button" class="mui-btn mui-btn-primary" id="searchBtn" onclick="search()" style="width: 95%;">下一步</button>
+        <button type="button" class="mui-btn mui-btn-primary" id="doNextBtn" style="display: none;width: 95%;" onclick="confirmPay()">下一步</button>
+    </div>
+    <div style=" bottom:0;margin: 0 0 0 0.2rem;font-size: 12px;padding: 10px 0 0 0;">温馨提示：如有疑问，请拨打咨询电话：0757-22223388。</div>
 </div>
 
 <form id="form1" name="MainForm" method="post" action="">
@@ -73,8 +78,8 @@
 
 <input type="hidden" id="resultData" name="resultData" value="" />
 <input type="hidden" id="userId" name="userId" th:value="${userId}" />
-<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem">
-    提示:。
+<div style="position:fixed; bottom:0;margin: auto 0.5rem 0.5rem 0.5rem;padding: 0 0.4rem;font-size: 12px;left: 30%;color: #0765cc;" onclick="toPayList()">
+    缴费记录
 </div>
 <script type="application/javascript" src="mui/js/mui.min.js"></script>
 <script type="application/javascript" src="mui/js/mui.loading.js"></script>
@@ -134,6 +139,12 @@
             mui.alert("请输入卡号","提示");
             $("button").attr("disabled", false);
             return ;
+        }
+        var statement = $("input[name='statement']:checked").val();
+        if (statement=="" || statement== undefined) {
+            mui.alert("请勾选《i顺德生活缴费服务协议》","提示");
+            $("button").attr("disabled", false);
+            return;
         }
         //请求后台，获取plain，及签名
         var message = {
@@ -199,6 +210,12 @@
             $("button").attr("disabled", false);
             return;
         }
+        var statement = $("input[name='statement']:checked").val();
+        if (statement=="" || statement== undefined) {
+            mui.alert("请勾选《i顺德生活缴费服务协议》","提示");
+            $("button").attr("disabled", false);
+            return;
+        }
         //查询接口
         $.post(basePath() + "/livingPay/payQuery",{"SchoolNo":SchoolNo,"StudentPayeeNo":StudentPayeeNo,"queryType":"iPayForEducationFeeQry"},function(result){
             // console.log(result);
@@ -224,6 +241,19 @@
 
         });
 
+    }
+    function toPayList(){
+        var userId=$("#userId").val();
+        //userId='7d557734db354bebbb4467485e559fa1';
+        if(userId==''){
+            mui.alert("请先登录！","提示");
+            return;
+        }else{
+            window.location.href="/sdbst/livingPay/getOrderList?userId="+userId;
+        }
+    }
+    function statement(){
+        window.location.href="/sdbst/payAgreement.html";
     }
 </script>
 </body>
