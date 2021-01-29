@@ -223,6 +223,7 @@
             var resultData = result.data;
             console.log(resultData);
             if(result.code == 200){
+                $("#searchBtn").hide();
                 $("#detailDiv").show();
                 $("#resultData").val(resultData);//设置提交的值
                 var mesg = eval('(' + resultData + ')');

@@ -154,7 +154,8 @@
             //console.log(result);
             var resultData = result.data;
              if(result.code == 200){
-               $("#detailDiv").show();
+                 $("#searchBtn").hide();
+                 $("#detailDiv").show();
                $("#doNextBtn").show();
                $("#resultData").val(resultData);
                var mesg = eval('(' + resultData + ')');
